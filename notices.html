@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Notices - MockTest Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --shadow: 0 2px 10px rgba(0,0,0,0.06);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .nav-brand i {
+            font-size: 24px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 26px;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Stats Row */
+        .stats-mini {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-mini-card {
+            flex: 1;
+            min-width: 100px;
+            background: white;
+            border-radius: 14px;
+            padding: 14px 18px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-mini-card .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: #6366f1;
+        }
+
+        .stat-mini-card .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.25s;
+            background: transparent;
+            color: #64748b;
+        }
+
+        .filter-tab.active {
+            background: #6366f1;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+        }
+
+        .filter-tab:hover:not(.active) {
+            background: #f1f5f9;
+        }
+
+        .filter-tab .count {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 4px;
+        }
+
+        /* Notice List */
+        .notice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .notice-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid #6366f1;
+            transition: all 0.25s;
+            animation: fadeIn 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notice-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notice-card.new-notice {
+            border-left-color: #10b981;
+        }
+
+        .notice-card.new-notice::before {
+            content: 'NEW';
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: #10b981;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .notice-card.warning-notice {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .notice-card.feature-notice {
+            border-left-color: #8b5cf6;
+        }
+
+        .notice-card.announcement-notice {
+            border-left-color: #0ea5e9;
+        }
+
+        .notice-card.update-notice {
+            border-left-color: #6366f1;
+        }
+
+        /* Notice Header */
+        .notice-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        .notice-icon-big {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .notice-headline {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--dark);
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+
+        .notice-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .notice-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Notice Body */
+        .notice-body {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-top: 10px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* Type Badges */
+        .type-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-new { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-feature { background: #e0e7ff; color: #3730a3; }
+        .badge-update { background: #e0f2fe; color: #075985; }
+        .badge-announcement { background: #ede9fe; color: #5b21b6; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #64748b;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            box-shadow: var(--shadow);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .skeleton .skeleton-line {
+            height: 14px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .skeleton .skeleton-line.short { width: 60%; }
+        .skeleton .skeleton-line.medium { width: 80%; }
+
+        /* Quick Action Buttons */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #334155;
+        }
+
+        .quick-action-btn:hover {
+            border-color: #6366f1;
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .quick-action-btn i {
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .notice-card {
+                padding: 16px;
+            }
+            .notice-icon-big {
+                width: 40px;
+                height: 40px;
+                font-size: 17px;
+                border-radius: 12px;
+            }
+            .notice-headline {
+                font-size: 14px;
+            }
+            .page-header h1 {
+                font-size: 20px;
+            }
+            .filter-tabs {
+                gap: 4px;
+                padding: 6px;
+            }
+            .filter-tab {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            .notice-card.new-notice::before {
+                top: 8px;
+                right: 10px;
+                font-size: 8px;
+                padding: 2px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>MockTest Pro</span>
+        </div>
+        <a href="dashboard.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>📢 Notices & Updates</h1>
+            <p>Stay updated with the latest announcements and features</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="quick-action-btn" onclick="scrollToLatest()">
+                <i class="fas fa-bolt"></i> Latest
+            </button>
+            <button class="quick-action-btn" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-play-circle"></i> Take Test
+            </button>
+            <button class="quick-action-btn" onclick="window.location.href='chat.html'">
+                <i class="fas fa-comments"></i> Community Chat
+            </button>
+        </div>
+
+        <!-- Stats Mini -->
+        <div class="stats-mini">
+            <div class="stat-mini-card">
+                <div class="stat-number" id="totalNotices">0</div>
+                <div class="stat-label">Total Notices</div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-number" id="newNotices">0</div>
+                <div class="stat-label">New Updates</div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-number" id="featureNotices">0</div>
+                <div class="stat-label">New Features</div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs" id="filterTabs">
+            <button class="filter-tab active" onclick="filterNotices('all', this)">
+                📋 All <span class="count" id="countAll">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterNotices('new', this)">
+                🆕 New <span class="count" id="countNew">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterNotices('feature', this)">
+                ⭐ Features <span class="count" id="countFeature">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterNotices('update', this)">
+                🔄 Updates <span class="count" id="countUpdate">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterNotices('warning', this)">
+                ⚠️ Alerts <span class="count" id="countWarning">0</span>
+            </button>
+            <button class="filter-tab" onclick="filterNotices('announcement', this)">
+                📣 Announcements <span class="count" id="countAnnouncement">0</span>
+            </button>
+        </div>
+
+        <!-- Notice List -->
+        <div class="notice-list" id="noticeList">
+            <!-- Loading skeletons -->
+            <div class="skeleton">
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line" style="width:40%;"></div>
+            </div>
+            <div class="skeleton">
+                <div class="skeleton-line" style="width:70%;"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line" style="width:50%;"></div>
+            </div>
+            <div class="skeleton">
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line" style="width:45%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ NOTICES DATA ============
+        const NOTICES_DATA = [
+            {
+                id: 1,
+                headline: "🧪 CUET Chemistry Mock Tests Added!",
+                notification: "New bilingual CUET Chemistry mock tests with 20 extremely hard questions covering Organic mechanisms, d-block trends, and physical chemistry. Features include swipe navigation, language toggle (English/Hindi), and detailed explanations for each question.",
+                date: "2025-03-15",
+                time: "10:30 AM",
+                type: "new",
+                icon: "flask",
+                color: "#7c3aed"
+            },
+            {
+                id: 2,
+                headline: "💬 Community Chat Feature Launched!",
+                notification: "Now you can discuss with fellow students in real-time! Use the Chat button on your dashboard to join conversations, ask doubts, share tips, and help others. Admin support is also available for quick assistance. Build your study network today!",
+                date: "2025-03-14",
+                time: "04:00 PM",
+                type: "feature",
+                icon: "comments",
+                color: "#6366f1"
+            },
+            {
+                id: 3,
+                headline: "🌐 Bilingual Tests Now Available!",
+                notification: "All CUET and SSC mock tests now support both English and Hindi languages. You can toggle language anytime during the test using the language button. All explanations and solutions are also available in both languages for better understanding.",
+                date: "2025-03-13",
+                time: "11:00 AM",
+                type: "feature",
+                icon: "language",
+                color: "#f97316"
+            },
+            {
+                id: 4,
+                headline: "📱 Swipe Navigation Added to Tests!",
+                notification: "We've added intuitive swipe navigation to all mock tests. Now you can simply swipe left or right on the question card to move between questions. This makes mobile test-taking much smoother and faster. Try it out in the new CUET Chemistry test!",
+                date: "2025-03-12",
+                time: "03:30 PM",
+                type: "update",
+                icon: "hand-pointer",
+                color: "#0ea5e9"
+            },
+            {
+                id: 5,
+                headline: "🔍 Answer Review System Enhanced!",
+                notification: "The answer review system has been upgraded with filtering options. Now you can filter questions by All, Correct, Wrong, or Unanswered. Each question shows your answer, the correct answer, and detailed explanations to help you learn from mistakes.",
+                date: "2025-03-10",
+                time: "02:00 PM",
+                type: "update",
+                icon: "magnifying-glass",
+                color: "#8b5cf6"
+            },
+            {
+                id: 6,
+                headline: "📢 Server Maintenance Schedule",
+                notification: "The platform will undergo scheduled maintenance on Sunday, March 20 from 2:00 AM to 6:00 AM IST. During this period, some services may be temporarily unavailable. We apologize for any inconvenience caused.",
+                date: "2025-01-12",
+                time: "06:00 PM",
+                type: "warning",
+                icon: "triangle-exclamation",
+                color: "#f59e0b"
+            },
+            {
+                id: 7,
+                headline: "🏆 Updated Leaderboard System",
+                notification: "The leaderboard has been redesigned with new features! Now you can see your percentile ranking, compare scores with other students, and track your improvement over time. The leaderboard updates in real-time after every test submission.",
+                date: "2025-01-11",
+                time: "02:00 PM",
+                type: "update",
+                icon: "trophy",
+                color: "#fbbf24"
+            },
+            {
+                id: 8,
+                headline: "📊 Enhanced Result Analytics",
+                notification: "Track your progress with our new detailed analytics dashboard. View subject-wise performance breakdown, time management statistics, accuracy trends, and improvement graphs across multiple test attempts. Data-driven preparation for better results!",
+                date: "2025-01-05",
+                time: "11:30 AM",
+                type: "update",
+                icon: "chart-line",
+                color: "#6366f1"
+            },
+            {
+                id: 9,
+                headline: "🎯 New Practice Mode Available",
+                notification: "Introducing Practice Mode! Solve questions at your own pace without any time pressure. Each question comes with instant feedback and detailed explanations. Perfect for concept building and revision. Access it from your dashboard.",
+                date: "2025-01-03",
+                time: "09:00 AM",
+                type: "new",
+                icon: "book-open",
+                color: "#10b981"
+            },
+            {
+                id: 10,
+                headline: "📱 Mobile App Coming Soon!",
+                notification: "We're excited to announce that a dedicated MockTest Pro mobile app is in development! Features will include offline test support, push notifications for new tests, daily practice questions, and seamless sync with your web account. Stay tuned for the launch date!",
+                date: "2025-01-08",
+                time: "12:00 PM",
+                type: "announcement",
+                icon: "mobile-screen",
+                color: "#ec4899"
+            }
+        ];
+
+        let allNotices = [];
+        let currentFilter = 'all';
+
+        // ============ LOAD NOTICES ============
+        function loadNotices() {
+            try {
+                // Try to fetch from JSON file first
+                fetch('notices.json')
+                    .then(res => res.json())
+                    .then(notices => {
+                        allNotices = notices;
+                        processNotices();
+                    })
+                    .catch(() => {
+                        // Fallback to embedded data
+                        allNotices = NOTICES_DATA;
+                        processNotices();
+                    });
+            } catch (e) {
+                // Final fallback
+                allNotices = NOTICES_DATA;
+                processNotices();
+            }
+        }
+
+        function processNotices() {
+            // Sort by date and time (newest first)
+            allNotices.sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + a.time);
+                const dateB = new Date(b.date + ' ' + b.time);
+                return dateB - dateA;
+            });
+
+            updateStats();
+            updateFilterCounts();
+            renderNotices(allNotices);
+        }
+
+        // ============ STATS ============
+        function updateStats() {
+            document.getElementById('totalNotices').textContent = allNotices.length;
+            
+            const newCount = allNotices.filter(n => n.type === 'new').length;
+            const featureCount = allNotices.filter(n => n.type === 'feature').length;
+            
+            document.getElementById('newNotices').textContent = newCount;
+            document.getElementById('featureNotices').textContent = featureCount;
+        }
+
+        function updateFilterCounts() {
+            document.getElementById('countAll').textContent = allNotices.length;
+            document.getElementById('countNew').textContent = allNotices.filter(n => n.type === 'new').length;
+            document.getElementById('countFeature').textContent = allNotices.filter(n => n.type === 'feature').length;
+            document.getElementById('countUpdate').textContent = allNotices.filter(n => n.type === 'update').length;
+            document.getElementById('countWarning').textContent = allNotices.filter(n => n.type === 'warning').length;
+            document.getElementById('countAnnouncement').textContent = allNotices.filter(n => n.type === 'announcement').length;
+        }
+
+        // ============ RENDER NOTICES ============
+        function renderNotices(notices) {
+            const container = document.getElementById('noticeList');
+
+            if (notices.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <h3>No notices found</h3>
+                        <p>No notices match the selected filter.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = notices.map((n, i) => {
+                const noticeDate = new Date(n.date + ' ' + n.time);
+                const dateStr = noticeDate.toLocaleDateString('en-IN', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                const timeStr = noticeDate.toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+
+                const badgeClass = 'badge-' + (n.type || 'new');
+                const cardClass = getCardClass(n.type);
+                const timeAgoText = getTimeAgo(noticeDate);
+
+                return `
+                <div class="notice-card ${cardClass}" style="animation-delay:${i * 0.08}s">
+                    <div class="notice-card-header">
+                        <div class="notice-icon-big" style="background:${n.color || '#6366f1'}20; color:${n.color || '#6366f1'}">
+                            <i class="fas fa-${n.icon || 'bell'}"></i>
+                        </div>
+                        <div style="flex:1; min-width:0;">
+                            <div class="notice-headline">${n.headline}</div>
+                            <div class="notice-meta">
+                                <span><i class="far fa-calendar"></i> ${dateStr}</span>
+                                <span><i class="far fa-clock"></i> ${timeStr}</span>
+                                ${timeAgoText ? `<span style="color:#6366f1;font-weight:600;"><i class="fas fa-circle" style="font-size:5px;"></i> ${timeAgoText}</span>` : ''}
+                                <span class="type-badge ${badgeClass}">${getTypeLabel(n.type)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notice-body">${n.notification}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function getCardClass(type) {
+            const classes = {
+                'new': 'new-notice',
+                'warning': 'warning-notice',
+                'feature': 'feature-notice',
+                'announcement': 'announcement-notice',
+                'update': 'update-notice'
+            };
+            return classes[type] || '';
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                'new': 'NEW',
+                'warning': 'ALERT',
+                'feature': 'FEATURE',
+                'announcement': 'ANNOUNCEMENT',
+                'update': 'UPDATE'
+            };
+            return labels[type] || type.toUpperCase();
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor(diff / (1000 * 60));
+
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hr ago`;
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+            if (days < 365) return `${Math.floor(days / 30)} months ago`;
+            return '';
+        }
+
+        // ============ FILTER ============
+        function filterNotices(type, btn) {
+            currentFilter = type;
+
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Filter notices
+            let filtered = allNotices;
+            if (type !== 'all') {
+                filtered = allNotices.filter(n => n.type === type);
+            }
+
+            renderNotices(filtered);
+
+            // Scroll to top of list
+            document.getElementById('noticeList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ============ SCROLL TO LATEST ============
+        function scrollToLatest() {
+            // Reset filter to all
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.filter-tab').classList.add('active');
+            currentFilter = 'all';
+            renderNotices(allNotices);
+            
+            // Scroll to first notice
+            setTimeout(() => {
+                const firstNotice = document.querySelector('.notice-card');
+                if (firstNotice) {
+                    firstNotice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Highlight briefly
+                    firstNotice.style.boxShadow = '0 0 0 3px #6366f1';
+                    setTimeout(() => {
+                        firstNotice.style.boxShadow = '';
+                    }, 2000);
+                }
+            }, 300);
+        }
+
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNotices();
+            
+            // Auto-refresh every 5 minutes
+            setInterval(loadNotices, 300000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel - MockTest Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --dark: #1e293b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #1e293b;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-right: 1px solid #334155;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 12px;
+            background: #334155;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .sidebar button:hover, .sidebar button.active {
+            background: #6366f1;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #334155;
+        }
+
+        .stat-card h3 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .chat-panel {
+            background: #1e293b;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .msg-bubble {
+            background: #334155;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 70%;
+        }
+
+        .msg-bubble.user-msg {
+            align-self: flex-start;
+        }
+
+        .msg-bubble .user {
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .msg-bubble .text {
+            font-size: 13px;
+        }
+
+        .msg-bubble .time {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .admin-reply-area {
+            padding: 14px;
+            border-top: 1px solid #334155;
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-reply-area select {
+            padding: 10px;
+            border-radius: 8px;
+            background: #334155;
+            color: white;
+            border: 1px solid #475569;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .admin-reply-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #334155;
+            color: white;
+            border: 1px solid #475569;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .admin-reply-area button {
+            padding: 10px 20px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            font-size: 13px;
+        }
+
+        th {
+            background: #334155;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .badge-success { background: #065f46; color: #6ee7b7; }
+        .badge-warning { background: #78350f; color: #fbbf24; }
+        .badge-info { background: #1e3a5f; color: #93c5fd; }
+
+        /* NEW: Action Buttons */
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin: 0 2px;
+            transition: 0.2s;
+        }
+
+        .btn-edit {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #818cf8;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+        }
+
+        /* NEW: Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #334155;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 14px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .modal .form-group input, .modal .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: #334155;
+            color: white;
+            border: 1px solid #475569;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+        }
+
+        .modal .modal-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .modal .modal-btns button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-save:hover { background: #059669; }
+
+        .btn-cancel {
+            background: #64748b;
+            color: white;
+        }
+
+        .btn-cancel:hover { background: #475569; }
+
+        /* NEW: Confirm Dialog */
+        .confirm-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .confirm-dialog.active {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #334155;
+            max-width: 400px;
+        }
+
+        .confirm-box p {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .confirm-box .confirm-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 12px; }
+            .sidebar button { font-size: 11px; padding: 8px; white-space: nowrap; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2><i class="fas fa-shield-halved"></i> Admin Panel</h2>
+        <button class="active" onclick="switchAdminTab('dashboard')">
+            <i class="fas fa-chart-pie"></i> Dashboard
+        </button>
+        <button onclick="switchAdminTab('chats')">
+            <i class="fas fa-comments"></i> Manage Chats
+        </button>
+        <button onclick="switchAdminTab('users')">
+            <i class="fas fa-users"></i> Users
+        </button>
+        <button onclick="switchAdminTab('results')">
+            <i class="fas fa-clipboard-list"></i> Results
+        </button>
+        <button onclick="logout()" style="background:#dc2626;margin-top:auto;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <div class="main-content">
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboardTab">
+            <h2 style="margin-bottom:20px;">📊 Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p>Total Users</p>
+                    <h3 id="totalUsers">--</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Total Tests Taken</p>
+                    <h3 id="totalTests">--</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Chat Messages</p>
+                    <h3 id="totalChats">--</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Active Today</p>
+                    <h3 id="activeToday">--</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chats Tab -->
+        <div class="tab-content" id="chatsTab">
+            <h2 style="margin-bottom:16px;">💬 Live Chat Management</h2>
+            <div class="chat-panel">
+                <div class="chat-messages" id="adminChatMessages">
+                    <p style="color:#94a3b8;">Loading chats...</p>
+                </div>
+                <div class="admin-reply-area">
+                    <select id="replyToSelect">
+                        <option value="">Reply to all</option>
+                    </select>
+                    <input type="text" id="adminReplyInput" placeholder="Type reply..." onkeypress="if(event.key==='Enter')sendAdminReply()">
+                    <button onclick="sendAdminReply()"><i class="fas fa-reply"></i> Reply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div class="tab-content" id="usersTab">
+            <h2 style="margin-bottom:16px;">👥 Registered Users</h2>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Mobile</th>
+                            <th>State</th>
+                            <th>Preparing For</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr><td colspan="7" style="text-align:center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Results Tab -->
+        <div class="tab-content" id="resultsTab">
+            <h2 style="margin-bottom:16px;">📋 All Test Results</h2>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Test Code</th>
+                            <th>Score</th>
+                            <th>Accuracy</th>
+                            <th>Correct/Wrong</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        <tr><td colspan="7" style="text-align:center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal-overlay" id="editUserModal">
+        <div class="modal">
+            <h3><i class="fas fa-edit"></i> Edit User</h3>
+            <input type="hidden" id="editUsername">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="editName">
+            </div>
+            <div class="form-group">
+                <label>Mobile</label>
+                <input type="text" id="editMobile">
+            </div>
+            <div class="form-group">
+                <label>State</label>
+                <input type="text" id="editState">
+            </div>
+            <div class="form-group">
+                <label>Preparing For</label>
+                <input type="text" id="editPreparingFor">
+            </div>
+            <div class="form-group">
+                <label>Target Exam</label>
+                <input type="text" id="editTargetExam">
+            </div>
+            <div class="form-group">
+                <label>Education</label>
+                <input type="text" id="editEducation">
+            </div>
+            <div class="modal-btns">
+                <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                <button class="btn-save" onclick="saveUserEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Dialog -->
+    <div class="confirm-dialog" id="confirmDialog">
+        <div class="confirm-box">
+            <p id="confirmMessage">Are you sure you want to delete this?</p>
+            <div class="confirm-btns">
+                <button class="btn-cancel" onclick="closeConfirmDialog()">No</button>
+                <button class="btn-delete" id="confirmDeleteBtn" onclick="">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbya3ER-Cb71xpak-gm1-wLREfPajBxaPBG8TPKLlLgXcwn_P89vBIN_hptN4LFFqe8X4Q/exec';
+
+        // Check admin login
+        if (localStorage.getItem('admin') !== 'true') {
+            const username = prompt('Admin Username:');
+            const password = prompt('Admin Password:');
+            
+            if (username === 'admin' && password === '1001') {
+                localStorage.setItem('admin', 'true');
+            } else {
+                alert('Invalid credentials!');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Global variable to hold pending delete info
+        let pendingDelete = { type: '', id: '' };
+
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(tab + 'Tab').classList.add('active');
+            event.target.closest('button').classList.add('active');
+
+            if (tab === 'chats') loadAdminChats();
+            if (tab === 'users') loadAllUsers();
+            if (tab === 'results') loadAllResults();
+            if (tab === 'dashboard') loadDashboardStats();
+        }
+
+        async function loadDashboardStats() {
+            try {
+                const [usersRes, resultsRes, chatsRes] = await Promise.all([
+                    fetch(`${API_URL}?action=getAllUsers`),
+                    fetch(`${API_URL}?action=getAllResults`),
+                    fetch(`${API_URL}?action=getChats&limit=1000`)
+                ]);
+
+                const usersData = await usersRes.json();
+                const resultsData = await resultsRes.json();
+                const chatsData = await chatsRes.json();
+
+                document.getElementById('totalUsers').textContent = usersData.total || 0;
+                document.getElementById('totalTests').textContent = resultsData.total || 0;
+                document.getElementById('totalChats').textContent = chatsData.chats?.length || 0;
+                document.getElementById('activeToday').textContent = '--';
+            } catch (e) {
+                console.error('Dashboard error:', e);
+            }
+        }
+
+        async function loadAdminChats() {
+            try {
+                const response = await fetch(`${API_URL}?action=getChats&limit=100`);
+                const data = await response.json();
+
+                if (data.success && data.chats) {
+                    const container = document.getElementById('adminChatMessages');
+                    const select = document.getElementById('replyToSelect');
+
+                    const users = [...new Set(data.chats.map(c => c.username))];
+                    select.innerHTML = '<option value="">Reply to all</option>';
+                    users.forEach(u => {
+                        const userChat = data.chats.find(c => c.username === u);
+                        select.innerHTML += `<option value="${u}">${userChat?.name || u}</option>`;
+                    });
+
+                    container.innerHTML = data.chats.map(chat => {
+                        const isAdmin = chat.isAdmin === 'true';
+                        const time = new Date(chat.timestamp).toLocaleTimeString('en-IN', {
+                            hour: '2-digit', minute: '2-digit', hour12: true
+                        });
+
+                        return `
+                        <div class="msg-bubble ${isAdmin ? '' : 'user-msg'}" style="${isAdmin ? 'background:#1e3a5f;align-self:flex-end;' : ''}">
+                            <div class="user" style="color:${isAdmin ? '#fbbf24' : '#93c5fd'}">
+                                ${chat.name || 'User'}
+                                ${isAdmin ? ' (Admin)' : ''}
+                            </div>
+                            <div class="text">${chat.message}</div>
+                            <div class="time">${time} | ${chat.username}</div>
+                        </div>`;
+                    }).join('');
+
+                    container.scrollTop = container.scrollHeight;
+                }
+            } catch (e) {
+                console.error('Chat load error:', e);
+            }
+        }
+
+        async function sendAdminReply() {
+            const replyTo = document.getElementById('replyToSelect').value;
+            const message = document.getElementById('adminReplyInput').value.trim();
+
+            if (!message) return;
+
+            try {
+                const params = new URLSearchParams({
+                    action: 'adminReply',
+                    replyTo: replyTo,
+                    message: message
+                });
+
+                await fetch(API_URL + '?' + params.toString());
+                document.getElementById('adminReplyInput').value = '';
+                loadAdminChats();
+            } catch (e) {
+                console.error('Reply error:', e);
+            }
+        }
+
+        async function loadAllUsers() {
+            try {
+                const response = await fetch(`${API_URL}?action=getAllUsers`);
+                const data = await response.json();
+
+                if (data.success && data.users) {
+                    const tbody = document.getElementById('usersTableBody');
+                    tbody.innerHTML = data.users.map(user => `
+                        <tr>
+                            <td>${user.name}</td>
+                            <td>@${user.username}</td>
+                            <td>${user.mobile}</td>
+                            <td>${user.state || '--'}</td>
+                            <td><span class="badge badge-info">${user.preparingFor || '--'}</span></td>
+                            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                            <td>
+                                <button class="action-btn btn-edit" onclick='openEditModal(${JSON.stringify(user).replace(/'/g, "&#39;")})'>
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="action-btn btn-delete" onclick='confirmDeleteUser("${user.username}")'>
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error('Users error:', e);
+            }
+        }
+
+        async function loadAllResults() {
+            try {
+                const response = await fetch(`${API_URL}?action=getAllResults`);
+                const data = await response.json();
+
+                if (data.success && data.results) {
+                    const tbody = document.getElementById('resultsTableBody');
+                    tbody.innerHTML = data.results.slice(0, 50).map(r => `
+                        <tr>
+                            <td>${r.name} (@${r.username})</td>
+                            <td>${r.testCode}</td>
+                            <td><span class="badge badge-success">${r.score}/${r.totalMarks}</span></td>
+                            <td>${r.accuracy}%</td>
+                            <td>✅${r.correct} ❌${r.wrong}</td>
+                            <td>${new Date(r.date).toLocaleDateString()}</td>
+                            <td>
+                                <button class="action-btn btn-delete" onclick='confirmDeleteResult("${r.timestamp}")'>
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error('Results error:', e);
+            }
+        }
+
+        // ==================== EDIT USER FUNCTIONS ====================
+        function openEditModal(user) {
+            document.getElementById('editUsername').value = user.username;
+            document.getElementById('editName').value = user.name || '';
+            document.getElementById('editMobile').value = user.mobile || '';
+            document.getElementById('editState').value = user.state || '';
+            document.getElementById('editPreparingFor').value = user.preparingFor || '';
+            document.getElementById('editTargetExam').value = user.targetExam || '';
+            document.getElementById('editEducation').value = user.education || '';
+            document.getElementById('editUserModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editUserModal').classList.remove('active');
+        }
+
+        async function saveUserEdit() {
+            const username = document.getElementById('editUsername').value;
+            const name = document.getElementById('editName').value.trim();
+            const mobile = document.getElementById('editMobile').value.trim();
+            const state = document.getElementById('editState').value.trim();
+            const preparingFor = document.getElementById('editPreparingFor').value.trim();
+            const targetExam = document.getElementById('editTargetExam').value.trim();
+            const education = document.getElementById('editEducation').value.trim();
+
+            const params = new URLSearchParams({
+                action: 'editUser',
+                username: username,
+                name: name,
+                mobile: mobile,
+                state: state,
+                preparingFor: preparingFor,
+                targetExam: targetExam,
+                education: education
+            });
+
+            try {
+                const response = await fetch(API_URL + '?' + params.toString());
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('User updated successfully!');
+                    closeEditModal();
+                    loadAllUsers();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (e) {
+                alert('Failed to update user. Please try again.');
+                console.error('Edit error:', e);
+            }
+        }
+
+        // ==================== DELETE FUNCTIONS ====================
+        function confirmDeleteUser(username) {
+            pendingDelete = { type: 'user', id: username };
+            document.getElementById('confirmMessage').textContent = `Are you sure you want to delete user "${username}"? This cannot be undone.`;
+            document.getElementById('confirmDialog').classList.add('active');
+            document.getElementById('confirmDeleteBtn').onclick = executeDelete;
+        }
+
+        function confirmDeleteResult(timestamp) {
+            pendingDelete = { type: 'result', id: timestamp };
+            document.getElementById('confirmMessage').textContent = 'Are you sure you want to delete this result? This cannot be undone.';
+            document.getElementById('confirmDialog').classList.add('active');
+            document.getElementById('confirmDeleteBtn').onclick = executeDelete;
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById('confirmDialog').classList.remove('active');
+            pendingDelete = { type: '', id: '' };
+        }
+
+        async function executeDelete() {
+            const type = pendingDelete.type;
+            const id = pendingDelete.id;
+
+            let params;
+            if (type === 'user') {
+                params = new URLSearchParams({ action: 'deleteUser', username: id });
+            } else if (type === 'result') {
+                params = new URLSearchParams({ action: 'deleteResult', timestamp: id });
+            } else {
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL + '?' + params.toString());
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(data.message || 'Deleted successfully!');
+                    closeConfirmDialog();
+                    if (type === 'user') loadAllUsers();
+                    if (type === 'result') loadAllResults();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (e) {
+                alert('Failed to delete. Please try again.');
+                console.error('Delete error:', e);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('admin');
+            window.location.href = 'index.html';
+        }
+
+        // Initial load
+        loadDashboardStats();
+        setInterval(() => {
+            if (document.getElementById('chatsTab').classList.contains('active')) {
+                loadAdminChats();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

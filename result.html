@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result - MockTest Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .result-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-screen {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        .loading-spinner {
+            width: 50px; height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .score-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            text-align: center;
+            animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .user-avatar {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 18px;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 15px;
+        }
+
+        .result-emoji {
+            font-size: 70px;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .result-title {
+            font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 4px;
+        }
+        .test-badge {
+            display: inline-block;
+            background: #e0e7ff; color: #4f46e5;
+            padding: 5px 16px; border-radius: 20px;
+            font-weight: 700; font-size: 13px; margin-bottom: 10px;
+        }
+        .exam-badge {
+            display: inline-block;
+            background: #fef3c7; color: #92400e;
+            padding: 4px 14px; border-radius: 20px;
+            font-weight: 600; font-size: 12px; margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            margin: 0 auto 20px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: white;
+            box-shadow: 0 12px 30px rgba(99,102,241,0.35);
+        }
+        .score-circle .big { font-size: 36px; font-weight: 900; line-height: 1; }
+        .score-circle .small { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .stat-item {
+            background: #f8fafc;
+            padding: 15px 10px;
+            border-radius: 14px;
+            text-align: center;
+        }
+        .stat-item i { font-size: 18px; margin-bottom: 4px; }
+        .stat-item .val { font-size: 20px; font-weight: 800; color: var(--dark); }
+        .stat-item .lbl { font-size: 10px; color: #64748b; font-weight: 500; margin-top: 2px; }
+
+        .percentile-box {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .percentile-header {
+            display: flex; justify-content: space-between;
+            font-size: 13px; font-weight: 600; color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .percentile-bar {
+            height: 8px; background: #e2e8f0;
+            border-radius: 10px; overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .percentile-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 10px;
+            transition: width 1.2s ease;
+        }
+        .percentile-details {
+            display: flex; justify-content: space-between;
+            flex-wrap: wrap; gap: 4px;
+            font-size: 11px; color: #64748b;
+        }
+        .percentile-details strong { color: var(--primary); }
+
+        .perf-tag {
+            display: inline-block;
+            padding: 8px 22px; border-radius: 25px;
+            font-weight: 700; font-size: 14px; margin-bottom: 15px;
+        }
+        .tag-excellent { background: #d1fae5; color: #065f46; }
+        .tag-good { background: #dbeafe; color: #1e40af; }
+        .tag-average { background: #fef3c7; color: #92400e; }
+        .tag-poor { background: #fee2e2; color: #991b1b; }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn {
+            padding: 13px; border-radius: 13px;
+            border: none; font-weight: 700; font-size: 13px;
+            cursor: pointer; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            gap: 7px;
+        }
+        .btn-full { grid-column: 1 / -1; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .btn-review { background: #0ea5e9; color: white; }
+        .btn-outline { background: white; border: 2px solid #e2e8f0; color: var(--dark); }
+        .btn-dark { background: #1e293b; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .btn:active { transform: translateY(0); }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.1s both;
+        }
+        .card-title {
+            font-size: 18px; font-weight: 800; color: var(--dark);
+            margin-bottom: 15px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .attempts-list {
+            display: flex; flex-direction: column; gap: 8px;
+            max-height: 350px; overflow-y: auto;
+        }
+        .attempt-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .attempt-item.current {
+            background: #eef2ff;
+            border: 2px solid #6366f1;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.15);
+        }
+        .attempt-left { display: flex; align-items: center; gap: 12px; }
+        .attempt-num {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px;
+            background: #e2e8f0; color: var(--dark);
+        }
+        .attempt-item.current .attempt-num {
+            background: #6366f1; color: white;
+        }
+        .attempt-info .date { font-size: 11px; color: #64748b; }
+        .attempt-info .label { font-weight: 600; color: var(--dark); }
+        .attempt-right { text-align: right; }
+        .attempt-right .pts { font-weight: 700; font-size: 15px; color: var(--primary); }
+        .attempt-right .acc { font-size: 11px; color: #64748b; }
+        .current-badge {
+            background: #6366f1; color: white;
+            padding: 2px 10px; border-radius: 10px;
+            font-size: 10px; font-weight: 700; margin-left: 6px;
+        }
+        .improved-badge {
+            background: #10b981; color: white;
+            padding: 2px 10px; border-radius: 10px;
+            font-size: 10px; font-weight: 700; margin-left: 4px;
+        }
+
+        .lb-list {
+            display: flex; flex-direction: column; gap: 8px;
+            max-height: 400px; overflow-y: auto;
+        }
+        .lb-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: #f8fafc;
+        }
+        .lb-item.you {
+            background: #eef2ff;
+            border: 2px solid #6366f1;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.15);
+        }
+        .lb-rank {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px; flex-shrink: 0;
+        }
+        .rank-1 { background: #fbbf24; color: #78350f; font-size: 18px; }
+        .rank-2 { background: #e2e8f0; color: #475569; font-size: 18px; }
+        .rank-3 { background: #fed7aa; color: #7c2d12; font-size: 18px; }
+        .rank-other { background: #f1f5f9; color: #64748b; }
+
+        .lb-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; flex-shrink: 0;
+        }
+        .lb-item.you .lb-avatar {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+        .lb-info { flex: 1; min-width: 0; }
+        .lb-name {
+            font-weight: 600; font-size: 14px; color: var(--dark);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .lb-meta { font-size: 11px; color: #64748b; }
+        .lb-stat { text-align: right; flex-shrink: 0; }
+        .lb-stat .score { font-weight: 700; font-size: 15px; color: var(--dark); }
+        .lb-stat .acc { font-size: 11px; color: #64748b; }
+        .you-tag {
+            background: #6366f1; color: white;
+            padding: 2px 10px; border-radius: 10px;
+            font-size: 10px; font-weight: 700; margin-left: 6px;
+        }
+
+        /* Review Section */
+        .review-question {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+        }
+        .review-question.correct-answer {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        .review-question.wrong-answer {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+        .review-question.unanswered {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+        .review-q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+        .review-q-num {
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        .review-q-status {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .review-q-text {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        .review-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .review-option {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 2px solid #e2e8f0;
+            background: white;
+        }
+        .review-option.user-selected {
+            border-color: #6366f1;
+            background: #eef2ff;
+        }
+        .review-option.correct-opt {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+        .review-option.wrong-user {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+        .review-explanation {
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: #fef3c7;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #92400e;
+        }
+
+        .review-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center; align-items: center;
+            padding: 15px;
+        }
+        .review-overlay.show { display: flex; }
+        .review-container {
+            width: 100%; max-width: 850px;
+            height: 90vh;
+            background: white; border-radius: 20px;
+            overflow: hidden; position: relative;
+        }
+        .review-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px;
+            background: #1e293b; color: white;
+        }
+        .review-header button {
+            background: rgba(255,255,255,0.2);
+            border: none; color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%; cursor: pointer;
+            font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .review-frame {
+            width: 100%; height: calc(100% - 56px);
+            border: none;
+        }
+
+        .empty-state {
+            text-align: center; color: #94a3b8; padding: 30px; font-size: 14px;
+        }
+        .empty-state i { font-size: 40px; margin-bottom: 10px; display: block; }
+
+        .confetti-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: -1;
+        }
+
+        .review-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 4px;
+        }
+        .review-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: 0.2s;
+            border: none;
+            background: transparent;
+            color: #64748b;
+        }
+        .review-tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        @media (max-width: 480px) {
+            .score-card { padding: 25px 15px; }
+            .result-title { font-size: 24px; }
+            .score-circle { width: 120px; height: 120px; }
+            .score-circle .big { font-size: 30px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .btn-row { grid-template-columns: 1fr; }
+            .stat-item .val { font-size: 17px; }
+            .review-options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Loading your result...</p>
+    </div>
+
+    <div class="result-wrapper" id="mainContent" style="display: none;">
+        <!-- Score Card -->
+        <div class="score-card">
+            <div class="user-row">
+                <div class="user-avatar" id="userAvatar">S</div>
+                <span class="user-name" id="userNameDisplay">Student</span>
+            </div>
+            
+            <div class="result-emoji" id="resultEmoji">🎉</div>
+            <h1 class="result-title">Test Completed!</h1>
+            <div class="test-badge" id="testCodeDisplay">📝 TEST</div>
+            <div class="exam-badge" id="examTypeDisplay" style="display:none;"></div>
+
+            <div class="score-circle">
+                <div class="big" id="scoreDisplay">0/0</div>
+                <div class="small">Your Score</div>
+            </div>
+
+            <div class="perf-tag" id="perfTag">Loading...</div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-bullseye" style="color:#10b981;"></i>
+                    <div class="val" id="accuracyDisplay">0%</div>
+                    <div class="lbl">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-check-circle" style="color:#6366f1;"></i>
+                    <div class="val" id="correctDisplay">0</div>
+                    <div class="lbl">Correct</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-times-circle" style="color:#ef4444;"></i>
+                    <div class="val" id="wrongDisplay">0</div>
+                    <div class="lbl">Wrong</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock" style="color:#f59e0b;"></i>
+                    <div class="val" id="timeDisplay">--</div>
+                    <div class="lbl">Time</div>
+                </div>
+            </div>
+
+            <div class="percentile-box">
+                <div class="percentile-header">
+                    <span>📊 Your Percentile</span>
+                    <span><strong id="percentileText">--</strong></span>
+                </div>
+                <div class="percentile-bar">
+                    <div class="percentile-fill" id="percentileFill" style="width: 0%"></div>
+                </div>
+                <div class="percentile-details">
+                    <span>🏅 Rank: <strong id="yourRank">--</strong></span>
+                    <span>👥 Total: <strong id="totalParticipants">--</strong></span>
+                    <span>✅ Better than <strong id="betterThan">--</strong></span>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary btn-full" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-home"></i> Back to Dashboard
+                </button>
+                <button class="btn btn-review" onclick="openReview()">
+                    <i class="fas fa-search"></i> Review Answers
+                </button>
+                <button class="btn btn-outline" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-redo"></i> Try More
+                </button>
+                <button class="btn btn-dark" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Answer Review Card -->
+        <div class="card" id="reviewCard">
+            <div class="card-title">
+                <i class="fas fa-search" style="color:#6366f1;"></i>
+                Answer Review
+            </div>
+            <div class="review-tabs">
+                <button class="review-tab active" onclick="filterReview('all', this)">All</button>
+                <button class="review-tab" onclick="filterReview('correct', this)">✅ Correct</button>
+                <button class="review-tab" onclick="filterReview('wrong', this)">❌ Wrong</button>
+                <button class="review-tab" onclick="filterReview('unanswered', this)">⏭️ Unanswered</button>
+            </div>
+            <div id="answerReview" style="max-height:600px;overflow-y:auto;">
+                <div class="empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading answer review...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Previous Attempts Card -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-history" style="color:#6366f1;"></i>
+                Your Previous Attempts - <span id="progressTestCode">TEST</span>
+            </div>
+            <div class="attempts-list" id="attemptsList">
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>Loading attempts...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-trophy" style="color:#fbbf24;"></i>
+                Leaderboard - <span id="lbTestCode">TEST</span>
+            </div>
+            <div class="lb-list" id="leaderboardList">
+                <div class="empty-state">
+                    <i class="fas fa-trophy"></i>
+                    <p>Loading leaderboard...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Overlay Modal -->
+    <div class="review-overlay" id="reviewOverlay">
+        <div class="review-container">
+            <div class="review-header">
+                <span>📝 Review Answers</span>
+                <button onclick="closeReview()"><i class="fas fa-times"></i></button>
+            </div>
+            <iframe id="reviewFrame" class="review-frame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbya3ER-Cb71xpak-gm1-wLREfPajBxaPBG8TPKLlLgXcwn_P89vBIN_hptN4LFFqe8X4Q/exec';
+
+        // URL Parameters
+        const params = new URLSearchParams(window.location.search);
+        const score = parseFloat(params.get('score')) || 0;
+        const total = parseFloat(params.get('total')) || 100;
+        const accuracy = parseFloat(params.get('accuracy')) || 0;
+        const testCode = params.get('testCode') || 'TEST';
+        const timeTakenSec = parseInt(params.get('timeTaken')) || 0;
+        const correct = parseInt(params.get('correct')) || 0;
+        const wrong = parseInt(params.get('wrong')) || 0;
+        const attempted = parseInt(params.get('attempted')) || 0;
+        const unanswered = parseInt(params.get('unanswered')) || 0;
+        const examType = params.get('examType') || '';
+
+        const user = JSON.parse(localStorage.getItem('user')) || { username: 'student', name: 'Student' };
+
+        // Display current result
+        document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+        document.getElementById('userNameDisplay').textContent = user.name;
+        document.getElementById('testCodeDisplay').textContent = testCode;
+        document.getElementById('progressTestCode').textContent = testCode;
+        document.getElementById('lbTestCode').textContent = testCode;
+        
+        if (examType) {
+            document.getElementById('examTypeDisplay').textContent = '📚 ' + examType;
+            document.getElementById('examTypeDisplay').style.display = 'inline-block';
+        }
+        
+        document.getElementById('scoreDisplay').textContent = `${score}/${total}`;
+        document.getElementById('accuracyDisplay').textContent = `${accuracy}%`;
+        document.getElementById('correctDisplay').textContent = correct;
+        document.getElementById('wrongDisplay').textContent = wrong;
+        document.getElementById('timeDisplay').textContent = formatTime(timeTakenSec);
+
+        function formatTime(s) {
+            if (!s || s <= 0) return '--';
+            const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+            if (h > 0) return `${h}h ${m}m`;
+            if (m > 0) return `${m}m ${sec}s`;
+            return `${sec}s`;
+        }
+
+        // Performance
+        const percentage = total > 0 ? (score / total) * 100 : 0;
+        const emoji = document.getElementById('resultEmoji');
+        const tag = document.getElementById('perfTag');
+        if (percentage >= 90) { emoji.textContent='🏆'; tag.textContent='🌟 Excellent Performance!'; tag.className='perf-tag tag-excellent'; startConfetti(); }
+        else if (percentage >= 70) { emoji.textContent='🎉'; tag.textContent='👏 Great Job!'; tag.className='perf-tag tag-good'; }
+        else if (percentage >= 50) { emoji.textContent='👍'; tag.textContent='📚 Good Attempt!'; tag.className='perf-tag tag-average'; }
+        else { emoji.textContent='💪'; tag.textContent='🎯 Keep Practicing!'; tag.className='perf-tag tag-poor'; }
+
+        // ============ ANSWER REVIEW SYSTEM ============
+        let allReviewQuestions = [];
+        let currentReviewFilter = 'all';
+
+        function loadAnswerReview() {
+            const reviewContainer = document.getElementById('answerReview');
+            const mockFile = localStorage.getItem('last_mock_file');
+            const userAnswers = JSON.parse(localStorage.getItem('last_answers') || '{}');
+            
+            if (!mockFile) {
+                reviewContainer.innerHTML = '<div class="empty-state"><i class="fas fa-info-circle"></i><p>Test file not found for review</p></div>';
+                return;
+            }
+            
+            fetch(mockFile)
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const scripts = doc.querySelectorAll('script');
+                    
+                    let questions = [];
+                    scripts.forEach(script => {
+                        const content = script.textContent;
+                        if (content.includes('const QUESTIONS') || content.includes('var QUESTIONS')) {
+                            try {
+                                const match = content.match(/(?:const|var)\s+QUESTIONS\s*=\s*(\[[\s\S]*?\]);/);
+                                if (match) {
+                                    questions = eval(match[1]);
+                                }
+                            } catch(e) {
+                                console.warn('Could not parse questions:', e);
+                            }
+                        }
+                    });
+                    
+                    if (questions.length === 0) {
+                        // Try alternative format
+                        scripts.forEach(script => {
+                            const content = script.textContent;
+                            if (content.includes('id:') && content.includes('text:') && content.includes('options:')) {
+                                try {
+                                    const match = content.match(/(?:const|var)\s+QUESTIONS\s*=\s*(\[[\s\S]*?\]);/);
+                                    if (!match) {
+                                        // Try to find array directly
+                                        const arrMatch = content.match(/=\s*(\[[\s\S]*?\])/);
+                                        if (arrMatch) {
+                                            questions = eval(arrMatch[1]);
+                                        }
+                                    }
+                                } catch(e) {}
+                            }
+                        });
+                    }
+                    
+                    allReviewQuestions = questions.map((q, i) => ({
+                        ...q,
+                        index: i,
+                        userAnswer: userAnswers[q.id]
+                    }));
+                    
+                    renderReviewQuestions();
+                })
+                .catch(e => {
+                    console.error('Review load error:', e);
+                    reviewContainer.innerHTML = '<div class="empty-state"><i class="fas fa-info-circle"></i><p>Could not load test data for review</p></div>';
+                });
+        }
+
+        function renderReviewQuestions() {
+            const container = document.getElementById('answerReview');
+            const letters = ['A', 'B', 'C', 'D'];
+            
+            let questionsToShow = allReviewQuestions;
+            if (currentReviewFilter === 'correct') {
+                questionsToShow = allReviewQuestions.filter(q => q.userAnswer === q.correct);
+            } else if (currentReviewFilter === 'wrong') {
+                questionsToShow = allReviewQuestions.filter(q => q.userAnswer !== undefined && q.userAnswer !== q.correct);
+            } else if (currentReviewFilter === 'unanswered') {
+                questionsToShow = allReviewQuestions.filter(q => q.userAnswer === undefined);
+            }
+            
+            if (questionsToShow.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No questions to show</p></div>';
+                return;
+            }
+            
+            container.innerHTML = questionsToShow.map((q, displayIndex) => {
+                const isCorrect = q.userAnswer === q.correct;
+                const isUnanswered = q.userAnswer === undefined;
+                const actualIndex = q.index + 1;
+                
+                let cardClass = 'review-question';
+                let statusText = '';
+                let statusColor = '';
+                
+                if (isUnanswered) {
+                    cardClass += ' unanswered';
+                    statusText = '⏭️ Unanswered';
+                    statusColor = '#94a3b8';
+                } else if (isCorrect) {
+                    cardClass += ' correct-answer';
+                    statusText = '✅ Correct (+2)';
+                    statusColor = '#10b981';
+                } else {
+                    cardClass += ' wrong-answer';
+                    statusText = '❌ Wrong (-0.5)';
+                    statusColor = '#ef4444';
+                }
+                
+                return `
+                <div class="${cardClass}">
+                    <div class="review-q-header">
+                        <span class="review-q-num">Q${actualIndex}.</span>
+                        <span class="review-q-status" style="color:${statusColor}">${statusText}</span>
+                    </div>
+                    <div class="review-q-text">${q.text}</div>
+                    <div class="review-options">
+                        ${q.options.map((opt, i) => {
+                            let optClass = 'review-option';
+                            if (i === q.correct) optClass += ' correct-opt';
+                            if (i === q.userAnswer && !isCorrect) optClass += ' wrong-user';
+                            if (i === q.userAnswer && isCorrect) optClass += ' user-selected correct-opt';
+                            
+                            let label = '';
+                            if (i === q.correct) label = ' ✅';
+                            if (i === q.userAnswer && !isCorrect) label = ' ❌ (Your answer)';
+                            if (i === q.userAnswer && isCorrect) label = ' ✅ (Your answer)';
+                            
+                            return `
+                            <div class="${optClass}">
+                                <strong>${letters[i]}.</strong> ${opt}${label}
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    ${!isCorrect && !isUnanswered ? `
+                    <div class="review-explanation">
+                        <strong>💡 Correct Answer:</strong> ${letters[q.correct]}. ${q.options[q.correct]}
+                        ${q.explanation ? `<br><strong>Explanation:</strong> ${q.explanation}` : ''}
+                    </div>` : ''}
+                    ${isUnanswered ? `
+                    <div class="review-explanation">
+                        <strong>💡 Correct Answer:</strong> ${letters[q.correct]}. ${q.options[q.correct]}
+                    </div>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        function filterReview(filter, btn) {
+            currentReviewFilter = filter;
+            document.querySelectorAll('.review-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderReviewQuestions();
+        }
+
+        // ============ FETCH ATTEMPTS ============
+        async function fetchUserAttempts() {
+            try {
+                const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const data = await res.json();
+                if (data.success && data.results) {
+                    const testResults = data.results.filter(r => r.testCode === testCode);
+                    renderAttempts(testResults);
+                } else {
+                    showFirstAttempt();
+                }
+            } catch (e) {
+                console.error('Error:', e);
+                showFirstAttempt();
+            }
+        }
+
+        function showFirstAttempt() {
+            document.getElementById('attemptsList').innerHTML = `
+                <div class="attempt-item current">
+                    <div class="attempt-left">
+                        <div class="attempt-num">1</div>
+                        <div class="attempt-info">
+                            <div class="label">First Attempt <span class="current-badge">Current</span></div>
+                            <div class="date">${new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'2-digit'})}</div>
+                        </div>
+                    </div>
+                    <div class="attempt-right">
+                        <div class="pts">${score} pts</div>
+                        <div class="acc">${accuracy}%</div>
+                    </div>
+                </div>`;
+        }
+
+        function renderAttempts(results) {
+            const sorted = [...results].sort((a,b) => new Date(a.timestamp||a.date) - new Date(b.timestamp||b.date));
+            const reversed = [...sorted].reverse();
+            const list = document.getElementById('attemptsList');
+            
+            list.innerHTML = reversed.map((r, i) => {
+                const d = new Date(r.date || r.timestamp);
+                const dateStr = d.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'2-digit'});
+                const timeStr = d.toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
+                const isCurrent = i === 0;
+                const attemptNum = reversed.length - i;
+                
+                let improvedHTML = '';
+                if (i < reversed.length - 1) {
+                    const currentAcc = parseFloat(r.accuracy)||0;
+                    const prevAcc = parseFloat(reversed[i+1].accuracy)||0;
+                    if (currentAcc > prevAcc) {
+                        improvedHTML = '<span class="improved-badge">↑ Improved</span>';
+                    }
+                }
+
+                return `
+                    <div class="attempt-item ${isCurrent ? 'current' : ''}">
+                        <div class="attempt-left">
+                            <div class="attempt-num">${attemptNum}</div>
+                            <div class="attempt-info">
+                                <div class="label">
+                                    Attempt #${attemptNum}
+                                    ${isCurrent ? '<span class="current-badge">Current</span>' : ''}
+                                    ${improvedHTML}
+                                </div>
+                                <div class="date">${dateStr} at ${timeStr}</div>
+                            </div>
+                        </div>
+                        <div class="attempt-right">
+                            <div class="pts">${r.score} pts</div>
+                            <div class="acc">${r.accuracy}%</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============ FETCH LEADERBOARD ============
+        async function fetchLeaderboard() {
+            try {
+                const res = await fetch(`${API_URL}?action=getLeaderboard&testCode=${encodeURIComponent(testCode)}`);
+                const data = await res.json();
+                if (data.success && data.leaderboard && data.leaderboard.length > 0) {
+                    renderLeaderboard(data.leaderboard);
+                } else {
+                    showEmptyLB();
+                }
+            } catch (e) {
+                console.error('LB Error:', e);
+                showEmptyLB();
+            }
+        }
+
+        function showEmptyLB() {
+            document.getElementById('leaderboardList').innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>Be the first to take this test!</p></div>';
+            document.getElementById('percentileText').textContent = 'N/A';
+            document.getElementById('yourRank').textContent = '--';
+            document.getElementById('totalParticipants').textContent = '0';
+            document.getElementById('betterThan').textContent = '--';
+        }
+
+        function renderLeaderboard(lb) {
+            document.getElementById('totalParticipants').textContent = lb.length;
+
+            const userEntry = lb.find(e => e.username === user.username);
+            const totalP = lb.length + (userEntry ? 0 : 1);
+            let userRank;
+            
+            if (userEntry) userRank = userEntry.rank;
+            else userRank = lb.filter(e => parseFloat(e.score) > score).length + 1;
+            
+            const percentile = totalP > 1 ? ((totalP - userRank) / totalP) * 100 : 100;
+            const roundedP = Math.round(percentile * 10) / 10;
+            const betterThan = Math.round((100 - (userRank/totalP)*100));
+            
+            document.getElementById('percentileText').textContent = roundedP + '%';
+            document.getElementById('yourRank').textContent = '#' + userRank;
+            document.getElementById('betterThan').textContent = betterThan + '% of students';
+            setTimeout(() => {
+                document.getElementById('percentileFill').style.width = Math.max(3, roundedP) + '%';
+            }, 300);
+
+            const top20 = lb.slice(0, 20);
+            const list = document.getElementById('leaderboardList');
+            
+            list.innerHTML = top20.map(entry => {
+                let rc = 'rank-other', rd = entry.rank;
+                if (entry.rank === 1) { rc='rank-1'; rd='🥇'; }
+                else if (entry.rank === 2) { rc='rank-2'; rd='🥈'; }
+                else if (entry.rank === 3) { rc='rank-3'; rd='🥉'; }
+                const isYou = entry.username === user.username;
+                
+                return `<div class="lb-item ${isYou?'you':''}">
+                    <div class="lb-rank ${rc}">${rd}</div>
+                    <div class="lb-avatar">${(entry.name||'S').charAt(0).toUpperCase()}</div>
+                    <div class="lb-info">
+                        <div class="lb-name">${entry.name||'Student'}${isYou?'<span class="you-tag">You</span>':''}</div>
+                        <div class="lb-meta">Accuracy: ${entry.accuracy}%</div>
+                    </div>
+                    <div class="lb-stat">
+                        <div class="score">${entry.score}/${total}</div>
+                        <div class="acc">${entry.accuracy}%</div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            if (userEntry && userEntry.rank > 20) {
+                list.innerHTML += `<div style="text-align:center;color:#94a3b8;padding:8px;font-size:12px;">• • • • •</div>
+                <div class="lb-item you">
+                    <div class="lb-rank rank-other">${userEntry.rank}</div>
+                    <div class="lb-avatar">${user.name.charAt(0).toUpperCase()}</div>
+                    <div class="lb-info"><div class="lb-name">${user.name} <span class="you-tag">You</span></div></div>
+                    <div class="lb-stat"><div class="score">${score}/${total}</div><div class="acc">${accuracy}%</div></div>
+                </div>`;
+            }
+        }
+
+        // ============ CONFETTI ============
+        function startConfetti() {
+            const c = document.getElementById('confettiCanvas');
+            const ctx = c.getContext('2d');
+            c.width = innerWidth; c.height = innerHeight;
+            const particles = [];
+            const colors = ['#6366f1','#8b5cf6','#10b981','#f59e0b','#ef4444','#fbbf24','#ec4899'];
+            for (let i=0;i<100;i++) particles.push({
+                x:Math.random()*c.width, y:Math.random()*c.height-c.height,
+                size:Math.random()*6+3, color:colors[Math.floor(Math.random()*colors.length)],
+                speed:Math.random()*3+2, drift:Math.random()*2-1,
+                rotation:Math.random()*360, rotSpeed:Math.random()*10-5
+            });
+            function animate() {
+                ctx.clearRect(0,0,c.width,c.height);
+                particles.forEach(p=>{
+                    p.y+=p.speed; p.x+=p.drift; p.rotation+=p.rotSpeed;
+                    if(p.y>c.height+20){p.y=-20;p.x=Math.random()*c.width;}
+                    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rotation*Math.PI/180);
+                    ctx.globalAlpha=0.8; ctx.fillStyle=p.color;
+                    ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6); ctx.restore();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+            setTimeout(()=>c.style.display='none',5000);
+        }
+
+        // ============ REVIEW MODAL ============
+        function openReview() {
+            const f = localStorage.getItem('last_mock_file');
+            if (f) {
+                document.getElementById('reviewFrame').src = f + '?review=true';
+                document.getElementById('reviewOverlay').classList.add('show');
+            } else {
+                Swal.fire({icon:'info',title:'Review Unavailable',text:'Test file not found.',confirmButtonColor:'#6366f1'});
+            }
+        }
+        function closeReview() {
+            document.getElementById('reviewOverlay').classList.remove('show');
+            document.getElementById('reviewFrame').src = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeReview(); });
+
+        // ============ PDF ============
+        function downloadPDF() {
+            const {jsPDF}=window.jspdf;
+            const doc=new jsPDF();
+            doc.setFillColor(99,102,241); doc.rect(0,0,210,40,'F');
+            doc.setTextColor(255,255,255); doc.setFontSize(20); doc.setFont('helvetica','bold');
+            doc.text('MockTest Pro - Result',20,26);
+            doc.setTextColor(30,41,59); doc.setFontSize(12);
+            doc.text(`Student: ${user.name}`,20,52);
+            doc.text(`Test: ${testCode}`,20,62);
+            doc.text(`Date: ${new Date().toLocaleDateString('en-IN')}`,20,72);
+            doc.text(`Score: ${score}/${total}`,20,84);
+            doc.text(`Accuracy: ${accuracy}%`,20,94);
+            doc.text(`Correct: ${correct} | Wrong: ${wrong}`,20,104);
+            doc.text(`Percentile: ${document.getElementById('percentileText').textContent}`,20,116);
+            doc.text(`Rank: ${document.getElementById('yourRank').textContent}`,20,128);
+            doc.setFontSize(9); doc.setTextColor(148,163,184);
+            doc.text('MockTest Pro',20,285);
+            doc.save(`${user.name}_${testCode}_Result.pdf`);
+        }
+
+        // ============ INIT ============
+        async function init() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+            loadAnswerReview();
+            await Promise.all([fetchUserAttempts(), fetchLeaderboard()]);
+        }
+        setTimeout(init, 600);
+    </script>
+</body>
+</html>
