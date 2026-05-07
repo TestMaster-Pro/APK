@@ -44,9 +44,11 @@
             --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-smooth: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-sidebar: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
             --glass-bg: rgba(255, 255, 255, 0.78);
             --glass-border: rgba(255, 255, 255, 0.55);
             --glass-blur: 18px;
+            --sidebar-width: 300px;
         }
 
         * {
@@ -67,6 +69,9 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+        body.sidebar-open {
+            overflow: hidden;
         }
 
         .bg-animation {
@@ -161,11 +166,340 @@
             background-size: 50px 50px;
         }
 
+        /* SIDEBAR OVERLAY */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.55);
+            z-index: 250;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-sidebar), visibility var(--transition-sidebar);
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* SIDEBAR DRAWER */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: var(--sidebar-width);
+            max-width: 84vw;
+            background: #ffffff;
+            z-index: 251;
+            transform: translateX(-105%);
+            transition: transform var(--transition-sidebar);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.18), 2px 0 12px rgba(0, 0, 0, 0.06);
+            border-radius: 0 20px 20px 0;
+            overflow: hidden;
+        }
+        .sidebar-overlay.active .sidebar {
+            transform: translateX(0);
+        }
+
+        .sidebar-brand {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7, #8b5cf6);
+            padding: 20px 20px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .sidebar-logo {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .sidebar-brand-text {
+            color: #fff;
+            font-weight: 800;
+            font-size: 17px;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+        .sidebar-brand-text small {
+            display: block;
+            font-weight: 400;
+            font-size: 10px;
+            opacity: 0.8;
+            letter-spacing: 0.3px;
+        }
+        .sidebar-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .sidebar-close-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: rotate(90deg);
+        }
+        .sidebar-close-btn:active {
+            transform: scale(0.88) rotate(90deg);
+            transition: 0.08s;
+        }
+
+        .sidebar-user-card {
+            padding: 16px 20px;
+            background: #fafbff;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .sidebar-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #eef0ff, #e0e7ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: #5b4cf0;
+            flex-shrink: 0;
+            box-shadow: 0 3px 12px rgba(91, 76, 240, 0.12);
+            border: 2px solid #fff;
+        }
+        .sidebar-user-info {
+            overflow: hidden;
+        }
+        .sidebar-user-info .name {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1e293b;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .sidebar-user-info .tag {
+            font-size: 11px;
+            color: #5b4cf0;
+            font-weight: 600;
+            background: #eef0ff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 3px;
+            letter-spacing: -0.1px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .sidebar-nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #94a3b8;
+            font-weight: 700;
+            padding: 10px 10px 6px;
+        }
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: #475569;
+            transition: var(--transition-fast);
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font-sans);
+            letter-spacing: -0.15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .sidebar-nav-item:hover {
+            background: #f8fafc;
+            color: #1e293b;
+            transform: translateX(3px);
+        }
+        .sidebar-nav-item:active {
+            transform: scale(0.96);
+            background: #f1f5f9;
+            transition: 0.08s;
+        }
+        .sidebar-nav-item .nav-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            transition: var(--transition-fast);
+        }
+        .sidebar-nav-item:hover .nav-icon {
+            transform: scale(1.06);
+        }
+        .nav-icon-tests {
+            background: #eef0ff;
+            color: #5b4cf0;
+        }
+        .nav-icon-results {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+        .nav-icon-books {
+            background: #fff7ed;
+            color: #f97316;
+        }
+        .nav-icon-chat {
+            background: #f0f9ff;
+            color: #06b6d4;
+        }
+        .nav-icon-instructions {
+            background: #fefce8;
+            color: #ca8a04;
+        }
+        .nav-icon-profile {
+            background: #fdf2f8;
+            color: #db2777;
+        }
+        .nav-icon-logout {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .sidebar-nav-item.logout-item:hover {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: #f1f5f9;
+            margin: 6px 10px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-contact {
+            padding: 14px 18px 18px;
+            background: #fafbff;
+            border-top: 1px solid #f1f5f9;
+            flex-shrink: 0;
+        }
+        .sidebar-contact-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #94a3b8;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .sidebar-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #475569;
+            text-decoration: none;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            letter-spacing: -0.1px;
+            cursor: pointer;
+        }
+        .sidebar-contact-item:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .sidebar-contact-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .sidebar-contact-item .contact-icon-email {
+            color: #ea4335;
+        }
+        .sidebar-contact-item .contact-icon-telegram {
+            color: #26a7de;
+        }
+        .sidebar-contact-item .contact-icon-instagram {
+            color: #e4405f;
+        }
+        .sidebar-contact-item .contact-icon-whatsapp {
+            color: #25d366;
+        }
+        .coming-soon-tag {
+            font-size: 9px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            margin-left: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .sidebar-version {
+            text-align: center;
+            font-size: 10px;
+            color: #cbd5e1;
+            padding: 6px;
+            flex-shrink: 0;
+            letter-spacing: 0.3px;
+        }
+
+        /* NAVBAR */
         .navbar {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--glass-blur));
             -webkit-backdrop-filter: blur(var(--glass-blur));
-            padding: 10px 16px;
+            padding: 10px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -178,11 +512,41 @@
             gap: 8px;
             flex-wrap: nowrap;
         }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .hamburger-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            flex-shrink: 0;
+            font-family: var(--font-sans);
+        }
+        .hamburger-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .hamburger-btn:active {
+            transform: scale(0.9);
+            transition: 0.08s;
+        }
         .nav-brand {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: clamp(16px, 3.5vw, 20px);
+            font-size: clamp(15px, 3.2vw, 19px);
             font-weight: 800;
             background: linear-gradient(135deg, #5b4cf0, #8b5cf6, #06b6d4);
             -webkit-background-clip: text;
@@ -193,7 +557,7 @@
             cursor: pointer;
         }
         .nav-brand i {
-            font-size: clamp(20px, 4vw, 24px);
+            font-size: clamp(18px, 3.5vw, 22px);
             background: none;
             -webkit-text-fill-color: #5b4cf0;
             animation: iconPulse 2.5s ease-in-out infinite;
@@ -210,7 +574,7 @@
         .nav-user {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
             flex-wrap: nowrap;
             flex-shrink: 0;
         }
@@ -227,12 +591,18 @@
             color: #5b4cf0;
             flex-shrink: 0;
             box-shadow: 0 2px 8px rgba(91, 76, 240, 0.12);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .user-avatar:hover {
+            transform: scale(1.06);
+            box-shadow: 0 4px 14px rgba(91, 76, 240, 0.2);
         }
         .nav-btn {
             background: #f1f5f9;
             border: none;
             color: #334155;
-            padding: 7px 13px;
+            padding: 7px 12px;
             border-radius: 30px;
             cursor: pointer;
             font-weight: 600;
@@ -285,15 +655,15 @@
                 font-size: 13px;
                 color: #334155;
                 white-space: nowrap;
-                max-width: 100px;
+                max-width: 90px;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
             .navbar {
-                padding: 12px 22px;
+                padding: 12px 18px;
             }
             .nav-btn {
-                padding: 8px 16px;
+                padding: 8px 14px;
                 font-size: 12px;
                 min-height: 38px;
             }
@@ -301,17 +671,22 @@
                 width: 36px;
                 height: 36px;
             }
+            .hamburger-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 19px;
+            }
         }
         @media (min-width: 768px) {
             #welcomeUser {
-                max-width: 180px;
+                max-width: 160px;
                 font-size: 14px;
             }
             .navbar {
-                padding: 14px 28px;
+                padding: 14px 24px;
             }
             .nav-btn {
-                padding: 8px 18px;
+                padding: 8px 16px;
                 font-size: 13px;
                 min-height: 40px;
             }
@@ -319,6 +694,14 @@
                 width: 38px;
                 height: 38px;
                 font-size: 16px;
+            }
+            .hamburger-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+            .nav-brand {
+                font-size: 18px;
             }
         }
 
@@ -391,7 +774,7 @@
         .welcome-text .info-tag {
             background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             color: #5b4cf0;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: clamp(9px, 2vw, 11px);
             font-weight: 600;
@@ -615,10 +998,10 @@
             }
         }
         .tab-btn {
-            padding: 10px 18px;
+            padding: 10px 16px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: clamp(12px, 2.6vw, 14px);
+            font-size: clamp(11px, 2.4vw, 14px);
             cursor: pointer;
             transition: var(--transition-smooth);
             display: flex;
@@ -626,7 +1009,7 @@
             gap: 6px;
             font-family: var(--font-sans);
             border: 2px solid transparent;
-            min-height: 42px;
+            min-height: 40px;
             letter-spacing: -0.2px;
             white-space: nowrap;
         }
@@ -636,9 +1019,9 @@
         }
         @media (min-width: 480px) {
             .tab-btn {
-                padding: 11px 24px;
+                padding: 11px 20px;
                 font-size: 14px;
-                min-height: 46px;
+                min-height: 44px;
             }
         }
         .tab-btn-active {
@@ -657,69 +1040,70 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
+        /* EXAM PILLS - HORIZONTAL WRAPPING */
         .exam-pills {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-radius: var(--radius-lg);
-            padding: 12px 14px;
+            padding: 10px 12px;
             margin-bottom: 14px;
             box-shadow: var(--shadow-xs);
             display: flex;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             align-items: center;
             gap: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
             border: 1px solid var(--glass-border);
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        .exam-pills::-webkit-scrollbar {
-            display: none;
         }
         @media (min-width: 480px) {
             .exam-pills {
-                padding: 14px 18px;
+                padding: 12px 16px;
                 gap: 10px;
-                flex-wrap: wrap;
+            }
+        }
+        @media (min-width: 768px) {
+            .exam-pills {
+                padding: 14px 20px;
             }
         }
         .exam-pills span.label {
             font-weight: 700;
             color: var(--gray-700);
             white-space: nowrap;
-            font-size: clamp(12px, 2.6vw, 14px);
+            font-size: clamp(11px, 2.4vw, 14px);
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .exam-pills-inner {
             display: flex;
-            flex-wrap: nowrap;
-            gap: 7px;
-            flex-shrink: 0;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         @media (min-width: 480px) {
             .exam-pills-inner {
-                flex-wrap: wrap;
                 gap: 8px;
             }
         }
         .exam-btn {
-            padding: 8px 16px;
+            padding: 7px 13px;
             border-radius: 40px;
             border: 2px solid #e2e8f0;
             background: white;
             font-weight: 600;
-            font-size: clamp(11px, 2.3vw, 13px);
+            font-size: clamp(10px, 2.1vw, 12px);
             cursor: pointer;
             transition: var(--transition-smooth);
             color: #334155;
             white-space: nowrap;
             flex-shrink: 0;
-            min-height: 36px;
+            min-height: 34px;
             font-family: var(--font-sans);
             letter-spacing: -0.1px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
         }
         .exam-btn:active {
             transform: scale(0.93);
@@ -727,9 +1111,16 @@
         }
         @media (min-width: 480px) {
             .exam-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+                min-height: 38px;
+            }
+        }
+        @media (min-width: 768px) {
+            .exam-btn {
                 padding: 10px 20px;
                 font-size: 13px;
-                min-height: 40px;
+                min-height: 42px;
             }
         }
         .exam-btn.selected {
@@ -1108,7 +1499,7 @@
             background: linear-gradient(135deg, #5b4cf0, #6d5df7);
             color: white;
             border: none;
-            padding: 9px 18px;
+            padding: 9px 16px;
             border-radius: 40px;
             font-weight: 700;
             font-size: clamp(11px, 2.3vw, 13px);
@@ -1138,7 +1529,7 @@
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
-            padding: 9px 18px;
+            padding: 9px 16px;
             border-radius: 40px;
             font-weight: 700;
             font-size: clamp(11px, 2.3vw, 13px);
@@ -1367,6 +1758,37 @@
             display: block;
             opacity: 0.5;
         }
+
+        @media (max-width: 380px) {
+            .nav-btn-text {
+                display: none;
+            }
+            .nav-btn {
+                padding: 7px 10px;
+                min-height: 34px;
+                border-radius: 50%;
+                width: 34px;
+                justify-content: center;
+            }
+            .btn-chat,
+            .btn-logout {
+                width: 34px;
+                padding: 7px 0;
+            }
+            .exam-btn {
+                padding: 6px 10px;
+                font-size: 10px;
+                min-height: 30px;
+                border-radius: 30px;
+            }
+            .exam-pills {
+                padding: 8px 10px;
+                gap: 5px;
+            }
+            .exam-pills-inner {
+                gap: 4px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1375,10 +1797,110 @@
     <div class="grid-pattern"></div>
     <div class="grain-overlay"></div>
 
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+            <!-- Brand Header -->
+            <div class="sidebar-brand">
+                <div class="sidebar-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="sidebar-brand-text">
+                    TestMaster Pro
+                    <small>Smart Learning Platform</small>
+                </div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()" aria-label="Close sidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- User Card -->
+            <div class="sidebar-user-card">
+                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebarUserName">Student</div>
+                    <span class="tag" id="sidebarUserTag">Learner</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-label">Main Menu</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('tests')">
+                    <span class="nav-icon nav-icon-tests"><i class="fas fa-book-open"></i></span>
+                    <span>Tests</span>
+                </button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('results')">
+                    <span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span>
+                    <span>My Results</span>
+                </button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')">
+                    <span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span>
+                    <span>Books & PYQ</span>
+                </button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')">
+                    <span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span>
+                    <span>Chat</span>
+                </button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')">
+                    <span class="nav-icon nav-icon-instructions"><i class="fas fa-question-circle"></i></span>
+                    <span>Instructions</span>
+                </button>
+
+                <div class="sidebar-nav-label">Account</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')">
+                    <span class="nav-icon nav-icon-profile"><i class="fas fa-user-circle"></i></span>
+                    <span>Profile</span>
+                </button>
+                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')">
+                    <span class="nav-icon nav-icon-logout"><i class="fas fa-sign-out-alt"></i></span>
+                    <span>Logout</span>
+                </button>
+            </nav>
+
+            <!-- Divider -->
+            <div class="sidebar-divider"></div>
+
+            <!-- Contact Section -->
+            <div class="sidebar-contact">
+                <div class="sidebar-contact-label">Contact Us</div>
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-contact-item" target="_blank">
+                    <i class="fas fa-envelope contact-icon-email"></i>
+                    <span>testmaster.helpdesk@gmail.com</span>
+                </a>
+                <a href="https://t.me/cuet007_bot" class="sidebar-contact-item" target="_blank" rel="noopener">
+                    <i class="fab fa-telegram-plane contact-icon-telegram"></i>
+                    <span>@cuet007_bot</span>
+                </a>
+                <div class="sidebar-contact-item">
+                    <i class="fab fa-instagram contact-icon-instagram"></i>
+                    <span>Instagram</span>
+                    <span class="coming-soon-tag">Coming Soon</span>
+                </div>
+                <div class="sidebar-contact-item">
+                    <i class="fab fa-whatsapp contact-icon-whatsapp"></i>
+                    <span>WhatsApp</span>
+                    <span class="coming-soon-tag">Coming Soon</span>
+                </div>
+            </div>
+
+            <!-- Version -->
+            <div class="sidebar-version">TestMaster Pro v2.0 • © 2025</div>
+        </aside>
+    </div>
+
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
+        <div class="nav-left">
+            <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-brand" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span>
+            </div>
+        </div>
         <div class="nav-user">
-            <div class="user-avatar" id="userInitial">S</div>
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Open menu">S</div>
             <span id="welcomeUser" style="font-weight:600;">Welcome</span>
             <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> <span class="nav-btn-text">Chat</span></a>
             <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span class="nav-btn-text">Logout</span></button>
@@ -1536,6 +2058,9 @@
 
         document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
         document.getElementById('userInitial').textContent = user.name.charAt(0).toUpperCase();
+        document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
+        document.getElementById('sidebarUserName').textContent = user.name;
+        document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
 
         const userExtraTags = document.getElementById('userExtraTags');
         if (user.state) {
@@ -1585,6 +2110,79 @@
                 resultsSection.classList.remove('hidden');
                 renderResultsByExam();
             }
+        }
+
+        // SIDEBAR FUNCTIONS
+        function openSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('active');
+            document.body.classList.add('sidebar-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar(event) {
+            if (event.target === document.getElementById('sidebarOverlay')) {
+                closeSidebarDirect();
+            }
+        }
+
+        function closeSidebarDirect() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 350);
+        }
+
+        function sidebarNavigate(action) {
+            closeSidebarDirect();
+            setTimeout(() => {
+                switch (action) {
+                    case 'tests':
+                        switchTab('tests');
+                        break;
+                    case 'results':
+                        switchTab('results');
+                        break;
+                    case 'books':
+                        goToBooks();
+                        break;
+                    case 'chat':
+                        window.location.href = 'chat.html';
+                        break;
+                    case 'instructions':
+                        openInstructions();
+                        break;
+                    case 'profile':
+                        // Scroll to top or show user info
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        Swal.fire({
+                            title: '👤 Profile',
+                            html: `
+                                <div style="text-align:left;padding:10px;">
+                                    <p><strong>Name:</strong> ${user.name}</p>
+                                    <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                                    <p><strong>State:</strong> ${user.state || 'N/A'}</p>
+                                    <p><strong>Preparing For:</strong> ${user.preparingFor || 'N/A'}</p>
+                                    <p><strong>Education:</strong> ${user.education || 'N/A'}</p>
+                                </div>
+                            `,
+                            icon: 'info',
+                            confirmButtonColor: '#5b4cf0',
+                            confirmButtonText: 'Close',
+                            borderRadius: '16px',
+                        });
+                        break;
+                    case 'logout':
+                        logout();
+                        break;
+                    default:
+                        break;
+                }
+            }, 300);
         }
 
         async function loadNoticeCompact() {
@@ -1836,9 +2434,13 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const overlay = document.getElementById('instructionOverlay');
+                const sidebarOverlay = document.getElementById('sidebarOverlay');
                 if (!overlay.classList.contains('hidden')) {
                     overlay.classList.add('hidden');
                     document.body.style.overflow = '';
+                }
+                if (sidebarOverlay.classList.contains('active')) {
+                    closeSidebarDirect();
                 }
             }
         });
@@ -1866,7 +2468,7 @@
                 bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
                 bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
                 bubble.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math
-                .random() * 3)];
+                    .random() * 3)];
                 container.appendChild(bubble);
             }
         }
@@ -1886,4 +2488,4 @@
         });
     </script>
 </body>
-                </html>
+</html>
