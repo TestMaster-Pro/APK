@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TestMaster Pro • Books & PYQ Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5b4cf0;
+            --primary-dark: #4338ca;
+            --primary-light: #eef0ff;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray-800: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --light: #ffffff;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --card-radius: 20px;
+            --shadow-xs: 0 2px 8px rgba(0,0,0,0.03);
+            --shadow-sm: 0 4px 14px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 28px -6px rgba(0,0,0,0.09);
+            --shadow-lg: 0 18px 40px -10px rgba(0,0,0,0.12);
+            --shadow-xl: 0 24px 52px -14px rgba(0,0,0,0.16);
+            --font-sans: 'Poppins', sans-serif;
+            --glass-bg: rgba(255,255,255,0.78);
+            --glass-border: rgba(255,255,255,0.55);
+            --glass-blur: 18px;
+            --transition-fast: 0.18s cubic-bezier(0.4,0,0.2,1);
+            --transition-smooth: 0.28s cubic-bezier(0.4,0,0.2,1);
+            --transition-bounce: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:var(--font-sans);
+            background:#f0f4ff;
+            min-height:100vh;
+            color:var(--dark);
+            display:flex;
+            flex-direction:column;
+            position:relative;
+            overflow-x:hidden;
+            -webkit-tap-highlight-color:transparent;
+            -webkit-font-smoothing:antialiased;
+        }
+
+        .bg-animation {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden;
+        }
+        .bg-bubble {
+            position:absolute; border-radius:50%; animation:floatBubble var(--dur) ease-in-out infinite;
+            animation-delay:var(--delay); opacity:0.35; will-change:transform;
+        }
+        @keyframes floatBubble {
+            0%,100%{ transform:translateY(0px) translateX(0px) scale(1); }
+            20%{ transform:translateY(-35px) translateX(18px) scale(1.06); }
+            40%{ transform:translateY(-60px) translateX(-14px) scale(0.94); }
+            60%{ transform:translateY(-25px) translateX(22px) scale(1.08); }
+            80%{ transform:translateY(-50px) translateX(-20px) scale(0.92); }
+        }
+        @keyframes floatBubbleSlow {
+            0%,100%{ transform:translateY(0px) translateX(0px) scale(1); }
+            25%{ transform:translateY(-50px) translateX(30px) scale(1.05); }
+            50%{ transform:translateY(-80px) translateX(-20px) scale(0.93); }
+            75%{ transform:translateY(-30px) translateX(25px) scale(1.07); }
+        }
+        @keyframes floatBubbleWide {
+            0%,100%{ transform:translateY(0px) translateX(0px) scale(1); }
+            33%{ transform:translateY(-45px) translateX(40px) scale(1.04); }
+            66%{ transform:translateY(-70px) translateX(-30px) scale(0.95); }
+        }
+
+        .grain-overlay {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.03;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size:200px 200px;
+        }
+        .grid-pattern {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.025;
+            background-image:linear-gradient(rgba(91,76,240,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(91,76,240,0.5) 1px, transparent 1px);
+            background-size:50px 50px;
+        }
+
+        .navbar {
+            background:var(--glass-bg); backdrop-filter:blur(var(--glass-blur)); -webkit-backdrop-filter:blur(var(--glass-blur));
+            padding:10px 16px; display:flex; justify-content:space-between; align-items:center; color:var(--dark);
+            position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.04); border-bottom:1px solid var(--glass-border);
+            gap:8px; flex-wrap:nowrap;
+        }
+        .nav-brand {
+            display:flex; align-items:center; gap:8px; font-size:clamp(16px,3.5vw,20px); font-weight:800;
+            background:linear-gradient(135deg,#5b4cf0,#8b5cf6,#06b6d4);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            white-space:nowrap; letter-spacing:-0.3px;
+        }
+        .nav-brand i { font-size:clamp(20px,4vw,24px); background:none; -webkit-text-fill-color:#5b4cf0; animation:iconPulse 2.5s ease-in-out infinite; }
+        @keyframes iconPulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
+
+        .nav-user { display:flex; align-items:center; gap:8px; flex-wrap:nowrap; flex-shrink:0; }
+        .user-avatar {
+            width:34px; height:34px; background:linear-gradient(135deg,#eef0ff,#e0e7ff); border-radius:12px;
+            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#5b4cf0;
+            flex-shrink:0; box-shadow:0 2px 8px rgba(91,76,240,0.12);
+        }
+        .nav-btn {
+            background:#f1f5f9; border:none; color:#334155; padding:7px 13px; border-radius:30px; cursor:pointer;
+            font-weight:600; font-size:clamp(10px,2.2vw,12px); font-family:var(--font-sans); transition:var(--transition-fast);
+            display:flex; align-items:center; gap:5px; text-decoration:none; white-space:nowrap; min-height:36px; letter-spacing:-0.1px;
+        }
+        .nav-btn:active { transform:scale(0.95); transition:0.08s; }
+        .nav-btn:hover { background:#e2e8f0; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+        .btn-chat {
+            background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15);
+        }
+        .btn-chat:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
+        .btn-logout {
+            background:#fef2f2; color:#dc2626; border:1.5px solid rgba(220,38,38,0.1);
+        }
+        .btn-logout:hover { background:#fee2e2; box-shadow:0 4px 14px rgba(220,38,38,0.12); }
+
+        #welcomeUser { display:none; }
+        @media(min-width:480px){
+            #welcomeUser { display:inline; font-weight:600; font-size:13px; color:#334155; white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis; }
+            .navbar { padding:12px 22px; }
+            .nav-btn { padding:8px 16px; font-size:12px; min-height:38px; }
+            .user-avatar { width:36px; height:36px; }
+        }
+        @media(min-width:768px){
+            #welcomeUser { max-width:180px; font-size:14px; }
+            .navbar { padding:14px 28px; }
+            .nav-btn { padding:8px 18px; font-size:13px; min-height:40px; }
+            .user-avatar { width:38px; height:38px; font-size:16px; }
+        }
+
+        .container { max-width:1250px; margin:0 auto; padding:14px 12px 28px; width:100%; position:relative; z-index:2; }
+        @media(min-width:480px){ .container { padding:18px 18px 30px; } }
+        @media(min-width:768px){ .container { padding:22px 24px 32px; } }
+
+        .exam-pills {
+            background:var(--glass-bg); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:14px; box-shadow:var(--shadow-xs);
+            display:flex; flex-wrap:nowrap; align-items:center; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+            scroll-behavior:smooth; border:1px solid var(--glass-border); scrollbar-width:none; -ms-overflow-style:none;
+        }
+        .exam-pills::-webkit-scrollbar { display:none; }
+        @media(min-width:480px){ .exam-pills { padding:14px 18px; gap:10px; flex-wrap:wrap; } }
+        .exam-pills span.label { font-weight:700; color:var(--gray-700); white-space:nowrap; font-size:clamp(12px,2.6vw,14px); flex-shrink:0; }
+        .exam-pills-inner { display:flex; flex-wrap:nowrap; gap:7px; flex-shrink:0; }
+        @media(min-width:480px){ .exam-pills-inner { flex-wrap:wrap; gap:8px; } }
+        .exam-btn {
+            padding:8px 16px; border-radius:40px; border:2px solid #e2e8f0; background:white; font-weight:600;
+            font-size:clamp(11px,2.3vw,13px); cursor:pointer; transition:var(--transition-smooth); color:#334155;
+            white-space:nowrap; flex-shrink:0; min-height:36px; font-family:var(--font-sans); letter-spacing:-0.1px;
+        }
+        .exam-btn:active { transform:scale(0.93); transition:0.08s; }
+        @media(min-width:480px){ .exam-btn { padding:10px 20px; font-size:13px; min-height:40px; } }
+        .exam-btn.selected {
+            background:linear-gradient(135deg,#5b4cf0,#6d5df7); color:white; border-color:#5b4cf0;
+            box-shadow:0 10px 28px -6px rgba(91,76,240,0.3); animation:selectPop 0.3s ease-out;
+        }
+        @keyframes selectPop { 0%{ transform:scale(0.9); } 60%{ transform:scale(1.04); } 100%{ transform:scale(1); } }
+
+        .filter-bar {
+            background:var(--glass-bg); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            border-radius:var(--radius); padding:10px 12px; margin-bottom:14px; display:flex; gap:8px; flex-wrap:wrap;
+            box-shadow:var(--shadow-xs); border:1px solid var(--glass-border); animation:cardSlideIn 0.4s ease-out;
+        }
+        @media(min-width:480px){ .filter-bar { padding:12px 16px; gap:10px; } }
+        .filter-bar select, .filter-bar input {
+            padding:10px 14px; border:2px solid #e2e8f0; border-radius:14px; font-family:var(--font-sans);
+            font-size:clamp(11px,2.3vw,13px); background:#f8fafc; flex:1 1 120px; min-width:100px;
+            transition:var(--transition-fast); -webkit-appearance:none; appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat:no-repeat; background-position:right 12px center; padding-right:30px; cursor:pointer; min-height:40px;
+        }
+        .filter-bar input { background-image:none; padding-right:14px; }
+        .filter-bar select:focus, .filter-bar input:focus {
+            outline:none; border-color:#5b4cf0; box-shadow:0 0 0 3px rgba(91,76,240,0.08); background:white;
+        }
+        @media(min-width:480px){ .filter-bar select, .filter-bar input { padding:12px 16px; font-size:13px; min-height:44px; border-radius:16px; } }
+
+        .book-grid {
+            display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:14px;
+        }
+        @media(min-width:420px){ .book-grid { grid-template-columns:repeat(2,1fr); gap:14px; } }
+        @media(min-width:900px){ .book-grid { grid-template-columns:repeat(3,1fr); gap:16px; } }
+        @media(min-width:1100px){ .book-grid { grid-template-columns:repeat(auto-fill, minmax(290px,1fr)); gap:18px; } }
+
+        .book-card {
+            background:var(--glass-bg); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-xs); cursor:pointer;
+            transition:var(--transition-smooth); border:2px solid transparent; display:flex; flex-direction:column;
+            position:relative; overflow:hidden; animation:cardSlideIn 0.5s ease-out; animation-fill-mode:both;
+        }
+        @keyframes cardSlideIn { from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+        .book-card:hover { border-color:rgba(91,76,240,0.3); box-shadow:var(--shadow-lg); transform:translateY(-4px); }
+        .book-card:active { transform:scale(0.97); transition:0.08s; }
+        @media(min-width:480px){ .book-card { padding:20px; } }
+
+        .badge-pyq {
+            background:linear-gradient(135deg,#fef3c7,#fde68a); color:#92400e; padding:3px 12px; border-radius:30px;
+            font-size:clamp(9px,2vw,11px); font-weight:700; align-self:flex-start; margin-bottom:10px;
+            border:1px solid rgba(245,158,11,0.2); letter-spacing:0.2px;
+        }
+        .badge-book {
+            background:linear-gradient(135deg,#d1fae5,#a7f3d0); color:#065f46; padding:3px 12px; border-radius:30px;
+            font-size:clamp(9px,2vw,11px); font-weight:700; align-self:flex-start; margin-bottom:10px;
+            border:1px solid rgba(16,185,129,0.2); letter-spacing:0.2px;
+        }
+        .book-card h4 { font-size:clamp(14px,3vw,16px); font-weight:700; margin-bottom:8px; line-height:1.3; letter-spacing:-0.2px; }
+        .meta-row { display:flex; flex-wrap:wrap; gap:5px; margin:6px 0; }
+        .chip {
+            background:#f1f5f9; padding:4px 9px; border-radius:10px; font-size:clamp(9px,2vw,11px); color:#334155;
+            display:flex; align-items:center; gap:3px; font-weight:500; border:1px solid #e2e8f0; transition:var(--transition-fast);
+        }
+        .chip:hover { background:#e2e8f0; border-color:#cbd5e1; }
+        .pdf-btn {
+            background:linear-gradient(135deg,#ef4444,#dc2626); color:white; border:none; padding:10px 16px; border-radius:14px;
+            font-weight:700; font-size:clamp(12px,2.6vw,14px); margin-top:auto; cursor:pointer; transition:var(--transition-smooth);
+            display:flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-sans); min-height:42px;
+            letter-spacing:-0.1px; box-shadow:0 4px 12px rgba(239,68,68,0.2); position:relative; overflow:hidden;
+        }
+        .pdf-btn::after {
+            content:''; position:absolute; top:50%; left:50%; width:0; height:0; background:rgba(255,255,255,0.2);
+            border-radius:50%; transform:translate(-50%,-50%); transition:width 0.5s, height 0.5s;
+        }
+        .pdf-btn:active::after { width:250px; height:250px; transition:0s; }
+        .pdf-btn:active { transform:scale(0.94); transition:0.08s; }
+        .pdf-btn:hover { background:linear-gradient(135deg,#dc2626,#b91c1c); box-shadow:0 10px 24px rgba(239,68,68,0.35); transform:translateY(-2px); }
+        @media(min-width:480px){ .pdf-btn { padding:12px 18px; font-size:14px; min-height:46px; border-radius:16px; } }
+
+        .empty-state { text-align:center; padding:30px 20px; color:#64748b; font-size:clamp(12px,2.6vw,14px); animation:fadeIn 0.4s ease-out; }
+        .empty-state i { font-size:clamp(28px,6vw,40px); margin-bottom:8px; display:block; opacity:0.5; }
+        .back-btn { background:var(--primary-light); color:var(--primary-dark); border:none; padding:8px 16px; border-radius:30px; cursor:pointer; font-weight:600; display:flex; align-items:center; gap:5px; font-family:var(--font-sans); transition:var(--transition-fast); }
+        .back-btn:hover { background:#e0e7ff; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation" id="bgAnimation"></div>
+    <div class="grid-pattern"></div>
+    <div class="grain-overlay"></div>
+
+    <nav class="navbar">
+        <div class="nav-brand"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
+        <div class="nav-user">
+            <div class="user-avatar" id="userInitial">S</div>
+            <span id="welcomeUser" style="font-weight:600;">Welcome</span>
+            <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> <span class="nav-btn-text">Chat</span></a>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span class="nav-btn-text">Logout</span></button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <h2 style="font-size:clamp(18px,4vw,24px); font-weight:800; color:#1e293b;"><i class="fas fa-book-open" style="color:#f59e0b;"></i> Books & PYQ Library</h2>
+            <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <div class="exam-pills" id="examSelector">
+            <span class="label">📚 Exam:</span>
+            <div class="exam-pills-inner" id="examButtons">Loading exams...</div>
+        </div>
+
+        <div class="filter-bar" id="filterBar">
+            <select id="subjectFilter" onchange="applyFilters()"><option value="">📖 All Subjects</option></select>
+            <select id="typeFilter" onchange="applyFilters()"><option value="">📋 All Types</option><option value="PYQ">📝 PYQ</option><option value="Book">📘 Book</option></select>
+            <input type="text" id="searchInput" placeholder="🔍 Search books..." oninput="applyFilters()">
+        </div>
+
+        <div class="book-grid" id="bookGrid">
+            <div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam to see its books</div>
+        </div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
+        document.getElementById('userInitial').textContent = user.name.charAt(0).toUpperCase();
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        let allBooks = [];
+        let selectedExam = '';
+
+        async function loadBooks() {
+            try {
+                const r = await fetch('book.json');
+                allBooks = await r.json();
+                renderExamButtons();
+                if (selectedExam) applyFilters();
+            } catch (e) {
+                document.getElementById('examButtons').innerHTML = '<span style="color:#b91c1c;">Error loading books</span>';
+                console.error('book.json load error:', e);
+            }
+        }
+
+        function renderExamButtons() {
+            const exams = [...new Set(allBooks.map(b => b.exam))];
+            const container = document.getElementById('examButtons');
+            if (exams.length === 0) {
+                container.innerHTML = '<span style="color:#64748b;">No exams found</span>';
+                return;
+            }
+            container.innerHTML = exams.map(exam =>
+                `<button class="exam-btn${selectedExam===exam?' selected':''}" onclick="selectExam('${exam}', this)">${getExamIcon(exam)} ${exam}</button>`
+            ).join('');
+        }
+
+        function getExamIcon(e) {
+            const icons = { 'SSC':'🏛️', 'UPSC':'🇮🇳', 'CUET':'🎓', 'JEE':'⚡', 'NEET':'💊', 'Banking':'🏦', 'Railway':'🚂' };
+            return icons[e] || '📝';
+        }
+
+        function selectExam(exam, btn) {
+            document.querySelectorAll('#examButtons .exam-btn').forEach(b => b.classList.remove('selected'));
+            if (selectedExam === exam) {
+                selectedExam = '';
+                document.getElementById('bookGrid').innerHTML = '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam to see books</div>';
+            } else {
+                selectedExam = exam;
+                btn.classList.add('selected');
+                populateSubjectFilter();
+                applyFilters();
+            }
+        }
+
+        function populateSubjectFilter() {
+            const booksForExam = selectedExam ? allBooks.filter(b => b.exam === selectedExam) : allBooks;
+            const subjects = [...new Set(booksForExam.map(b => b.subject).filter(Boolean))];
+            const subjectSelect = document.getElementById('subjectFilter');
+            subjectSelect.innerHTML = '<option value="">📖 All Subjects</option>';
+            subjects.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s; opt.textContent = s;
+                subjectSelect.appendChild(opt);
+            });
+            document.getElementById('searchInput').value = '';
+            document.getElementById('typeFilter').value = '';
+        }
+
+        function applyFilters() {
+            let filtered = [...allBooks];
+            if (selectedExam) filtered = filtered.filter(b => b.exam === selectedExam);
+            const subject = document.getElementById('subjectFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            if (subject) filtered = filtered.filter(b => b.subject === subject);
+            if (type) filtered = filtered.filter(b => b.type === type);
+            if (search) filtered = filtered.filter(b => b.title.toLowerCase().includes(search) || (b.chapter && b.chapter.toLowerCase().includes(search)) || (b.year && b.year.toString().includes(search)));
+            displayBooks(filtered);
+        }
+
+        function displayBooks(books) {
+            const grid = document.getElementById('bookGrid');
+            if (!books.length) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i> No books match filters</div>';
+                return;
+            }
+            grid.innerHTML = books.map((book, index) => {
+                const isPYQ = book.type === 'PYQ';
+                const badgeClass = isPYQ ? 'badge-pyq' : 'badge-book';
+                const badgeText = isPYQ ? '📝 PYQ' : '📘 Book';
+                return `
+                    <div class="book-card" style="animation-delay:${index * 0.04}s;">
+                        <span class="${badgeClass}">${badgeText} ${book.year ? '· '+book.year : ''}</span>
+                        <h4>${book.title}</h4>
+                        <div class="meta-row">
+                            <span class="chip"><i class="fas fa-book"></i> ${book.subject||'General'}</span>
+                            ${book.chapter ? `<span class="chip"><i class="fas fa-list"></i> ${book.chapter}</span>` : ''}
+                            ${book.pages ? `<span class="chip"><i class="fas fa-file"></i> ${book.pages} pages</span>` : ''}
+                        </div>
+                        <div class="meta-row">
+                            ${book.size ? `<span class="chip"><i class="fas fa-weight-hanging"></i> ${book.size}</span>` : ''}
+                            <span class="chip"><i class="fas fa-tag"></i> ${book.exam}</span>
+                        </div>
+                        ${book.description ? `<p style="font-size:11px;color:#64748b;margin:6px 0;">${book.description.substring(0,80)}...</p>` : ''}
+                        <button class="pdf-btn" onclick="openPDF('${book.file}')">
+                            <i class="fas fa-file-pdf"></i> View PDF
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openPDF(file) {
+            if (!file) {
+                Swal.fire('Not Available', 'PDF file not uploaded yet.', 'info');
+                return;
+            }
+            window.open(file, '_blank');
+        }
+
+        // Background bubbles
+        function createBackgroundBubbles() {
+            const container = document.getElementById('bgAnimation');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(91,76,240,0.18), rgba(139,92,246,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(6,182,212,0.16), rgba(16,185,129,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.14), rgba(251,191,36,0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(139,92,246,0.17), rgba(167,139,250,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(16,185,129,0.15), rgba(52,211,153,0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(239,68,68,0.10), rgba(248,113,113,0.03))',
+            ];
+            const count = window.innerWidth < 480 ? 8 : 12;
+            for (let i = 0; i < count; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bg-bubble');
+                const size = Math.floor(Math.random() * 160) + 70;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 90 + '%';
+                bubble.style.top = Math.random() * 85 + '%';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
+                bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
+                bubble.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math.random() * 3)];
+                container.appendChild(bubble);
+            }
+        }
+
+        createBackgroundBubbles();
+        loadBooks();
+
+        window.addEventListener('resize', () => {
+            clearTimeout(window.resizeTimeout);
+            window.resizeTimeout = setTimeout(() => {
+                document.getElementById('bgAnimation').innerHTML = '';
+                createBackgroundBubbles();
+            }, 400);
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>All Results • TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #5b4cf0;
+            --primary-dark: #4338ca;
+            --primary-light: #eef0ff;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray-800: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --light: #ffffff;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --card-radius: 20px;
+            --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 28px -6px rgba(0, 0, 0, 0.09);
+            --shadow-lg: 0 18px 40px -10px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 24px 52px -14px rgba(0, 0, 0, 0.16);
+            --shadow-primary: 0 10px 28px -6px rgba(91, 76, 240, 0.3);
+            --font-sans: 'Poppins', sans-serif;
+            --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.55);
+            --glass-blur: 18px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: var(--font-sans);
+            background: #f0f4ff;
+            min-height: 100vh;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .bg-animation { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+        .bg-bubble {
+            position:absolute; border-radius:50%; animation:floatBubble var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay); opacity:0.35; will-change:transform;
+        }
+        @keyframes floatBubble {
+            0%,100%{ transform:translateY(0px) translateX(0px) scale(1); }
+            20%{ transform:translateY(-35px) translateX(18px) scale(1.06); }
+            40%{ transform:translateY(-60px) translateX(-14px) scale(0.94); }
+            60%{ transform:translateY(-25px) translateX(22px) scale(1.08); }
+            80%{ transform:translateY(-50px) translateX(-20px) scale(0.92); }
+        }
+        @keyframes floatBubbleSlow {
+            0%,100%{ transform:translateY(0px) translateX(0px) scale(1); }
+            25%{ transform:translateY(-50px) translateX(30px) scale(1.05); }
+            50%{ transform:translateY(-80px) translateX(-20px) scale(0.93); }
+            75%{ transform:translateY(-30px) translateX(25px) scale(1.07); }
+        }
+        @keyframes floatBubbleWide {
+            0%,100%{ transform:translateY(0px) translateX(0px) scale(1); }
+            33%{ transform:translateY(-45px) translateX(40px) scale(1.04); }
+            66%{ transform:translateY(-70px) translateX(-30px) scale(0.95); }
+        }
+        .grain-overlay {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size:200px 200px;
+        }
+        .grid-pattern {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.025;
+            background-image: linear-gradient(rgba(91,76,240,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(91,76,240,0.5) 1px, transparent 1px);
+            background-size:50px 50px;
+        }
+        .navbar {
+            background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
+            padding:10px 16px; display:flex; justify-content:space-between; align-items:center; color:var(--dark);
+            position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.04);
+            border-bottom:1px solid var(--glass-border); gap:8px; flex-wrap:nowrap;
+        }
+        .nav-brand {
+            display:flex; align-items:center; gap:8px; font-size:clamp(16px, 3.5vw, 20px); font-weight:800;
+            background: linear-gradient(135deg, #5b4cf0, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            white-space:nowrap; letter-spacing:-0.3px; cursor:pointer; flex-shrink:0;
+        }
+        .nav-brand i { font-size:clamp(20px, 4vw, 24px); -webkit-text-fill-color: #5b4cf0; animation:iconPulse 2.5s ease-in-out infinite; }
+        @keyframes iconPulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
+        .nav-user { display:flex; align-items:center; gap:6px; flex-wrap:nowrap; flex-shrink:0; }
+        .user-avatar {
+            width:34px; height:34px; background:linear-gradient(135deg, #eef0ff, #e0e7ff); border-radius:12px;
+            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#5b4cf0;
+            flex-shrink:0; box-shadow:0 2px 8px rgba(91,76,240,0.12);
+        }
+        .nav-btn {
+            background:#f1f5f9; border:none; color:#334155; padding:7px 12px; border-radius:30px; cursor:pointer;
+            font-weight:600; font-size:clamp(10px, 2.2vw, 12px); font-family:var(--font-sans); transition:var(--transition-fast);
+            display:flex; align-items:center; gap:4px; text-decoration:none; white-space:nowrap; min-height:36px; letter-spacing:-0.1px;
+        }
+        .nav-btn:active { transform:scale(0.95); transition:0.08s; }
+        .nav-btn:hover { background:#e2e8f0; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+        .btn-back { background:linear-gradient(135deg, #eef0ff, #e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15); }
+        .btn-back:hover { background:linear-gradient(135deg, #e0e7ff, #c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
+        .btn-chat {
+            background: linear-gradient(135deg, #eef0ff, #e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15);
+        }
+        .btn-chat:hover { background:linear-gradient(135deg, #e0e7ff, #c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
+        .btn-logout { background:#fef2f2; color:#dc2626; border:1.5px solid rgba(220,38,38,0.1); }
+        .btn-logout:hover { background:#fee2e2; box-shadow:0 4px 14px rgba(220,38,38,0.12); }
+        #welcomeUser { display:none; }
+        @media (min-width:480px) { #welcomeUser { display:inline; font-weight:600; font-size:13px; color:#334155; white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis; } .navbar { padding:12px 22px; } .nav-btn { padding:8px 14px; font-size:12px; min-height:38px; } .user-avatar { width:36px; height:36px; } }
+        @media (min-width:768px) { .navbar { padding:14px 28px; } .nav-btn { padding:8px 18px; font-size:13px; min-height:40px; } .user-avatar { width:38px; height:38px; font-size:16px; } }
+
+        .container { max-width:1250px; margin:0 auto; padding:14px 12px 28px; width:100%; position:relative; z-index:2; }
+        @media (min-width:480px) { .container { padding:18px 18px 30px; } }
+        @media (min-width:768px) { .container { padding:22px 24px 32px; } }
+
+        .page-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; }
+        .page-header h1 { font-size:clamp(20px, 4.5vw, 24px); font-weight:800; color:#1e293b; display:flex; align-items:center; gap:8px; }
+        .action-buttons { display:flex; gap:8px; flex-wrap:wrap; }
+
+        .stats-grid {
+            display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:16px; animation: cardSlideIn 0.5s ease-out;
+        }
+        @media (min-width:600px) { .stats-grid { grid-template-columns: repeat(4, 1fr); gap:14px; } }
+        @media (min-width:768px) { .stats-grid { gap:16px; margin-bottom:24px; } }
+        .stat-card {
+            background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--radius); padding:14px 12px; box-shadow:var(--shadow-xs); display:flex; align-items:center; gap:10px;
+            transition:var(--transition-smooth); border:1px solid var(--glass-border); cursor:default; min-height:60px;
+        }
+        .stat-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px); border-color:rgba(91,76,240,0.2); }
+        @media (min-width:480px) { .stat-card { padding:16px 14px; gap:12px; } }
+        .stat-icon {
+            width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:16px;
+            color:white; flex-shrink:0; box-shadow:0 4px 10px rgba(0,0,0,0.1); transition:var(--transition-bounce);
+        }
+        .stat-card:hover .stat-icon { transform:scale(1.08); }
+        @media (min-width:480px) { .stat-icon { width:44px; height:44px; font-size:18px; border-radius:14px; } }
+        @media (min-width:768px) { .stat-icon { width:48px; height:48px; font-size:20px; border-radius:16px; } }
+        .stat-info h3 { font-size:clamp(17px, 3.8vw, 22px); font-weight:800; letter-spacing:-0.3px; }
+        .stat-info p { color:var(--gray-500); font-size:clamp(10px, 2.2vw, 13px); font-weight:500; }
+
+        .filter-section {
+            background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg); padding:12px 14px; margin-bottom:14px; box-shadow:var(--shadow-xs);
+            display:flex; flex-wrap:wrap; align-items:center; gap:10px; border:1px solid var(--glass-border);
+        }
+        @media (min-width:480px) { .filter-section { padding:14px 18px; gap:12px; } }
+        .exam-pills { display:flex; flex-wrap:wrap; align-items:center; gap:8px; width:100%; }
+        .exam-pills span.label { font-weight:700; color:var(--gray-700); white-space:nowrap; font-size:clamp(12px, 2.6vw, 14px); }
+        .exam-pills-inner { display:flex; flex-wrap:wrap; gap:8px; }
+        .exam-btn {
+            padding:8px 16px; border-radius:40px; border:2px solid #e2e8f0; background:white; font-weight:600;
+            font-size:clamp(11px, 2.3vw, 13px); cursor:pointer; transition:var(--transition-smooth); color:#334155;
+            white-space:nowrap; min-height:36px; font-family:var(--font-sans);
+        }
+        .exam-btn:active { transform:scale(0.93); transition:0.08s; }
+        .exam-btn.selected { background:linear-gradient(135deg, #5b4cf0, #6d5df7); color:white; border-color:#5b4cf0; box-shadow:var(--shadow-primary); }
+        @keyframes selectPop { 0%{ transform:scale(0.9); } 60%{ transform:scale(1.04); } 100%{ transform:scale(1); } }
+        .filter-bar-inline { display:flex; gap:8px; flex-wrap:wrap; flex:1; min-width:200px; }
+        .filter-bar-inline select, .filter-bar-inline input {
+            padding:10px 14px; border:2px solid #e2e8f0; border-radius:14px; font-family:var(--font-sans);
+            font-size:clamp(11px, 2.3vw, 13px); background:#f8fafc; flex:1 1 130px; min-width:120px;
+            transition:var(--transition-fast); outline:none; appearance:none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat:no-repeat; background-position:right 12px center; padding-right:30px;
+        }
+        .filter-bar-inline input { background-image:none; padding-right:14px; }
+        .filter-bar-inline select:focus, .filter-bar-inline input:focus { border-color:#5b4cf0; box-shadow:0 0 0 3px rgba(91,76,240,0.08); background:white; }
+        .btn {
+            padding:10px 16px; border-radius:40px; font-weight:600; font-size:clamp(11px, 2.3vw, 13px); cursor:pointer;
+            display:flex; align-items:center; gap:6px; border:none; transition:var(--transition-fast); font-family:var(--font-sans); white-space:nowrap; min-height:40px;
+        }
+        .btn-refresh { background:#f1f5f9; color:#475569; border:1.5px solid #e2e8f0; }
+        .btn-refresh:hover { background:#e2e8f0; }
+        .btn-export { background:linear-gradient(135deg, #10b981, #059669); color:white; box-shadow:0 4px 12px rgba(16,185,129,0.2); }
+        .btn-export:hover { background:linear-gradient(135deg, #059669, #047857); transform:translateY(-1px); }
+        .reset-btn { background:#f1f5f9; border:1.5px solid #e2e8f0; color:#475569; padding:10px 16px; border-radius:40px; font-weight:600; font-size:clamp(11px, 2.3vw, 13px); cursor:pointer; display:flex; align-items:center; gap:5px; white-space:nowrap; transition:var(--transition-fast); }
+        .reset-btn:hover { background:#e2e8f0; }
+
+        .results-panel {
+            background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--radius-xl); box-shadow:var(--shadow-sm); overflow:hidden;
+            border:1px solid var(--glass-border); animation: cardSlideIn 0.5s ease-out;
+        }
+        .results-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:#e2e8f0 transparent; }
+        .results-table-wrap::-webkit-scrollbar { height:5px; }
+        .results-table-wrap::-webkit-scrollbar-track { background:transparent; }
+        .results-table-wrap::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:10px; }
+        .results-table { width:100%; border-collapse:collapse; min-width:700px; }
+        .results-table th {
+            text-align:left; padding:12px 14px; font-size:clamp(10px, 2.1vw, 12px); color:#64748b;
+            background:#f8fafc; font-weight:600; white-space:nowrap; letter-spacing:-0.1px; cursor:pointer; user-select:none;
+        }
+        .results-table th:hover { color:#5b4cf0; }
+        .results-table th.sort-active { color:#5b4cf0; }
+        .results-table td { padding:12px 14px; border-bottom:1px solid #f1f5f9; font-size:clamp(11px, 2.3vw, 14px); white-space:nowrap; }
+        @media (min-width:480px) { .results-table th, .results-table td { padding:14px 18px; } }
+        .score-badge { background:#d1fae5; color:#065f46; padding:3px 12px; border-radius:30px; font-weight:700; font-size:clamp(10px, 2.1vw, 13px); border:1px solid rgba(16,185,129,0.2); }
+        .delete-row-btn { background:none; border:none; color:#ef4444; cursor:pointer; font-size:15px; padding:4px 8px; border-radius:8px; transition:var(--transition-fast); }
+        .delete-row-btn:hover { background:#fee2e2; }
+        .empty-state { text-align:center; padding:40px 20px; color:#64748b; font-size:clamp(12px, 2.6vw, 14px); animation:fadeIn 0.4s ease-out; }
+        .empty-state i { font-size:clamp(28px, 6vw, 40px); margin-bottom:8px; display:block; opacity:0.5; }
+        .pagination { display:flex; justify-content:center; align-items:center; gap:8px; padding:14px; flex-wrap:wrap; }
+        .pagination button {
+            background:white; border:1.5px solid #e2e8f0; color:#334155; padding:8px 16px; border-radius:40px;
+            font-weight:600; font-size:13px; cursor:pointer; transition:var(--transition-fast);
+        }
+        .pagination button:hover { background:#f1f5f9; border-color:#cbd5e1; }
+        .pagination button:disabled { opacity:0.5; cursor:default; }
+        .pagination span { font-weight:600; color:#475569; }
+        @keyframes fadeIn { from{ opacity:0; } to{ opacity:1; } }
+        @keyframes cardSlideIn { from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+    <div class="grid-pattern"></div>
+    <div class="grain-overlay"></div>
+
+    <nav class="navbar">
+        <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
+        <div class="nav-user">
+            <div class="user-avatar" id="userInitial">S</div>
+            <span id="welcomeUser">Welcome</span>
+            <a href="dashboard.html" class="nav-btn btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-chart-bar" style="color:#10b981;"></i> All Results</h1>
+            <div class="action-buttons">
+                <button class="btn btn-refresh" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button class="btn btn-export" onclick="exportToCSV()"><i class="fas fa-download"></i> Export CSV</button>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#5b4cf0,#6d5df7);"><i class="fas fa-file-alt"></i></div>
+                <div class="stat-info"><h3 id="totalAttempts">0</h3><p>Total Attempts</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#10b981,#34d399);"><i class="fas fa-percent"></i></div>
+                <div class="stat-info"><h3 id="avgAccuracy">0%</h3><p>Avg Accuracy</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);"><i class="fas fa-trophy"></i></div>
+                <div class="stat-info"><h3 id="bestAccuracy">0%</h3><p>Best Accuracy</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);"><i class="fas fa-clock"></i></div>
+                <div class="stat-info"><h3 id="totalTimeSpent">0m</h3><p>Total Time</p></div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="exam-pills">
+                <span class="label">📚 Exam:</span>
+                <div class="exam-pills-inner" id="examPillsContainer">
+                    <button class="exam-btn selected" onclick="filterByExam('', this)">All Exams</button>
+                </div>
+            </div>
+            <div class="filter-bar-inline">
+                <select id="subjectFilter" onchange="applyResultFilters()">
+                    <option value="">📖 All Subjects</option>
+                </select>
+                <input type="text" id="searchTestCode" placeholder="🔍 Search Test Code" oninput="applyResultFilters()">
+            </div>
+            <button class="reset-btn" onclick="resetFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
+        </div>
+
+        <div class="results-panel">
+            <div class="results-table-wrap">
+                <table class="results-table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('testCode')">Test Code <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('exam')">Exam <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('score')">Score <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('accuracy')">Accuracy <i class="fas fa-sort"></i></th>
+                            <th>Correct/Wrong</th>
+                            <th onclick="sortTable('timeTaken')">Time <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('date')">Date <i class="fas fa-sort"></i></th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <tr><td colspan="8" style="text-align:center;padding:40px;">Loading your results...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="paginationContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbya3ER-Cb71xpak-gm1-wLREfPajBxaPBG8TPKLlLgXcwn_P89vBIN_hptN4LFFqe8X4Q/exec';
+        let allMocks = [];
+        let allUserResults = [];
+        let filteredResults = [];
+        let selectedExam = '';
+        let currentSort = { field: 'date', direction: 'desc' };
+        let currentPage = 1;
+        const RESULTS_PER_PAGE = 15;
+
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
+        document.getElementById('userInitial').textContent = user.name.charAt(0).toUpperCase();
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        async function loadMocks() {
+            try {
+                const r = await fetch('mocks.json');
+                allMocks = await r.json();
+                populateSubjectFilter();
+                renderExamButtons();
+                await loadUserResults();
+            } catch (e) {
+                document.getElementById('examPillsContainer').innerHTML = '<button class="exam-btn selected" onclick="filterByExam(\'\', this)">All Exams</button>';
+                await loadUserResults();
+            }
+        }
+
+        async function loadUserResults() {
+            try {
+                const r = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const d = await r.json();
+                if (d.success) {
+                    allUserResults = d.results;
+                    // Map exam names
+                    const examMap = {};
+                    allMocks.forEach(m => { if (m.exam) examMap[m.testCode] = m.exam; });
+                    allUserResults.forEach(r => {
+                        r.examName = examMap[r.testCode] || 'Unknown';
+                        r.subjectName = allMocks.find(m => m.testCode === r.testCode)?.subject || '';
+                    });
+                    filteredResults = [...allUserResults];
+                    currentPage = 1;
+                    applyResultFilters();
+                    updateStats();
+                } else {
+                    allUserResults = [];
+                    filteredResults = [];
+                    updateStats();
+                    renderTable([]);
+                }
+            } catch (e) {
+                console.warn('Results fetch failed:', e);
+                allUserResults = [];
+                filteredResults = [];
+                updateStats();
+                renderTable([]);
+            }
+        }
+
+        function populateSubjectFilter() {
+            const subjects = [...new Set(allMocks.map(m => m.subject).filter(Boolean))];
+            const select = document.getElementById('subjectFilter');
+            select.innerHTML = '<option value="">📖 All Subjects</option>';
+            subjects.sort().forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                select.appendChild(opt);
+            });
+        }
+
+        function renderExamButtons() {
+            const exams = [...new Set(allMocks.map(m => m.exam))];
+            const container = document.getElementById('examPillsContainer');
+            // Keep the "All Exams" button as the first
+            let html = '<button class="exam-btn selected" onclick="filterByExam(\'\', this)">All Exams</button>';
+            exams.forEach(exam => {
+                html += `<button class="exam-btn" onclick="filterByExam('${exam}', this)">${getExamIcon(exam)} ${exam}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function getExamIcon(e) {
+            const icons = { 'SSC':'🏛️', 'UPSC':'🇮🇳', 'CUET':'🎓', 'JEE':'⚡', 'NEET':'💊', 'Banking':'🏦', 'Railway':'🚂' };
+            return icons[e] || '📝';
+        }
+
+        function filterByExam(exam, btn) {
+            selectedExam = exam;
+            document.querySelectorAll('#examPillsContainer .exam-btn').forEach(b => b.classList.remove('selected'));
+            if (exam === '') {
+                document.querySelector('#examPillsContainer .exam-btn').classList.add('selected'); // All Exams
+            } else {
+                btn.classList.add('selected');
+            }
+            currentPage = 1;
+            applyResultFilters();
+        }
+
+        function applyResultFilters() {
+            let results = [...allUserResults];
+            if (selectedExam) {
+                results = results.filter(r => r.examName === selectedExam);
+            }
+            const subject = document.getElementById('subjectFilter').value;
+            if (subject) {
+                results = results.filter(r => r.subjectName === subject);
+            }
+            const searchValue = document.getElementById('searchTestCode').value.toLowerCase().trim();
+            if (searchValue) {
+                results = results.filter(r => r.testCode.toLowerCase().includes(searchValue));
+            }
+            filteredResults = results;
+            currentPage = 1;
+            sortAndRender();
+            updateStats();
+        }
+
+        function sortTable(field) {
+            if (currentSort.field === field) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+                currentSort.direction = 'asc';
+            }
+            sortAndRender();
+        }
+
+        function sortAndRender() {
+            const results = [...filteredResults];
+            const field = currentSort.field;
+            const dir = currentSort.direction;
+            results.sort((a, b) => {
+                let valA, valB;
+                if (field === 'date') {
+                    valA = new Date(a.date).getTime();
+                    valB = new Date(b.date).getTime();
+                } else if (field === 'accuracy') {
+                    valA = parseFloat(a.accuracy) || 0;
+                    valB = parseFloat(b.accuracy) || 0;
+                } else if (field === 'score') {
+                    valA = parseFloat(a.score) || 0;
+                    valB = parseFloat(b.score) || 0;
+                } else if (field === 'timeTaken') {
+                    valA = parseFloat(a.timeTaken) || 0;
+                    valB = parseFloat(b.timeTaken) || 0;
+                } else if (field === 'exam') {
+                    valA = a.examName || '';
+                    valB = b.examName || '';
+                } else if (field === 'testCode') {
+                    valA = a.testCode || '';
+                    valB = b.testCode || '';
+                } else {
+                    return 0;
+                }
+                if (valA < valB) return dir === 'asc' ? -1 : 1;
+                if (valA > valB) return dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+            // Pagination
+            const totalPages = Math.ceil(results.length / RESULTS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+            const startIdx = (currentPage - 1) * RESULTS_PER_PAGE;
+            const pageResults = results.slice(startIdx, startIdx + RESULTS_PER_PAGE);
+            renderTable(pageResults, totalPages);
+        }
+
+        function renderTable(results, totalPages) {
+            const tbody = document.getElementById('resultsBody');
+            if (!results.length) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;"><i class="fas fa-inbox" style="font-size:28px;opacity:0.4;display:block;margin-bottom:8px;"></i>No results found</td></tr>';
+                document.getElementById('paginationContainer').innerHTML = '';
+                return;
+            }
+            tbody.innerHTML = results.map(r => {
+                const timeStr = r.timeTaken ? formatTime(r.timeTaken) : '--';
+                const dateStr = r.date ? new Date(r.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'2-digit' }) : '--';
+                return `<tr>
+                    <td><strong>${r.testCode}</strong></td>
+                    <td>${r.examName || '--'}</td>
+                    <td><span class="score-badge">${r.score}/${r.totalMarks || '--'}</span></td>
+                    <td>${r.accuracy || 0}%</td>
+                    <td>✅ ${r.correct || 0} / ❌ ${r.wrong || 0}</td>
+                    <td>${timeStr}</td>
+                    <td>${dateStr}</td>
+                    <td><button class="delete-row-btn" onclick="deleteResult('${r.testCode}', '${r.date}', this)" title="Delete"><i class="fas fa-trash-alt"></i></button></td>
+                </tr>`;
+            }).join('');
+
+            // Pagination controls
+            const paginationDiv = document.getElementById('paginationContainer');
+            if (totalPages > 1) {
+                paginationDiv.innerHTML = `
+                    <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>
+                    <span>Page ${currentPage} of ${totalPages}</span>
+                    <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>
+                `;
+            } else {
+                paginationDiv.innerHTML = '';
+            }
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            sortAndRender();
+        }
+
+        function updateStats() {
+            const results = filteredResults;
+            document.getElementById('totalAttempts').textContent = results.length;
+            if (results.length > 0) {
+                const accuracies = results.map(r => parseFloat(r.accuracy) || 0);
+                const avg = Math.round(accuracies.reduce((a,b) => a+b, 0) / accuracies.length);
+                const best = Math.max(...accuracies);
+                const totalSecs = results.reduce((sum, r) => sum + (parseFloat(r.timeTaken) || 0), 0);
+                const totalMin = Math.round(totalSecs / 60);
+                document.getElementById('avgAccuracy').textContent = avg + '%';
+                document.getElementById('bestAccuracy').textContent = best + '%';
+                document.getElementById('totalTimeSpent').textContent = totalMin + 'm';
+            } else {
+                document.getElementById('avgAccuracy').textContent = '0%';
+                document.getElementById('bestAccuracy').textContent = '0%';
+                document.getElementById('totalTimeSpent').textContent = '0m';
+            }
+        }
+
+        function formatTime(s) {
+            if (!s || s <= 0) return '--';
+            const m = Math.floor(s / 60), sec = s % 60;
+            return `${m}m ${sec}s`;
+        }
+
+        async function deleteResult(testCode, date, btnElem) {
+            const confirmResult = await Swal.fire({
+                title: 'Delete Result?',
+                text: `Are you sure you want to delete the result for ${testCode}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!'
+            });
+            if (!confirmResult.isConfirmed) return;
+
+            try {
+                const res = await fetch(`${API_URL}?action=deleteResult&username=${encodeURIComponent(user.username)}&testCode=${encodeURIComponent(testCode)}&date=${encodeURIComponent(date)}`);
+                const data = await res.json();
+                if (data.success) {
+                    // Remove from local array
+                    allUserResults = allUserResults.filter(r => !(r.testCode === testCode && r.date === date));
+                    // Reapply filters
+                    applyResultFilters();
+                    Swal.fire('Deleted!', 'Result has been removed.', 'success');
+                } else {
+                    Swal.fire('Error', 'Failed to delete result. Please try again.', 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'Network error. Could not delete.', 'error');
+            }
+        }
+
+        function exportToCSV() {
+            if (filteredResults.length === 0) {
+                Swal.fire('No data', 'There are no results to export.', 'info');
+                return;
+            }
+            let csv = 'Test Code,Exam,Score,Accuracy,Correct,Wrong,Time Taken (sec),Date\n';
+            filteredResults.forEach(r => {
+                const row = [
+                    r.testCode,
+                    r.examName || '',
+                    r.score || '',
+                    r.accuracy || '',
+                    r.correct || 0,
+                    r.wrong || 0,
+                    r.timeTaken || '',
+                    r.date || ''
+                ].map(val => `"${val}"`).join(',');
+                csv += row + '\n';
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `testmaster_results_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function refreshData() {
+            await loadUserResults();
+            Swal.fire('Refreshed', 'Results updated.', 'success');
+        }
+
+        function resetFilters() {
+            selectedExam = '';
+            document.querySelectorAll('#examPillsContainer .exam-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector('#examPillsContainer .exam-btn').classList.add('selected');
+            document.getElementById('subjectFilter').value = '';
+            document.getElementById('searchTestCode').value = '';
+            currentPage = 1;
+            applyResultFilters();
+        }
+
+        function createBackgroundBubbles() {
+            const container = document.getElementById('bgAnimation');
+            const bubbleColors = [
+                'radial-gradient(circle at 30% 30%, rgba(91,76,240,0.18), rgba(139,92,246,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(6,182,212,0.16), rgba(16,185,129,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.14), rgba(251,191,36,0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(139,92,246,0.17), rgba(167,139,250,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(16,185,129,0.15), rgba(52,211,153,0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(239,68,68,0.10), rgba(248,113,113,0.03))',
+            ];
+            const bubbleCount = window.innerWidth < 480 ? 8 : 12;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bg-bubble');
+                const size = Math.floor(Math.random() * 160) + 70;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 90 + '%';
+                bubble.style.top = Math.random() * 85 + '%';
+                bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+                bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
+                bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
+                bubble.style.animationName = ['floatBubble','floatBubbleSlow','floatBubbleWide'][Math.floor(Math.random()*3)];
+                container.appendChild(bubble);
+            }
+        }
+
+        // Initialize
+        loadMocks();
+        createBackgroundBubbles();
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                document.getElementById('bgAnimation').innerHTML = '';
+                createBackgroundBubbles();
+            }, 400);
+        });
+    </script>
+</body>
+</html>
