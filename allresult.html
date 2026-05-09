@@ -112,6 +112,13 @@
             width:34px; height:34px; background:linear-gradient(135deg, #eef0ff, #e0e7ff); border-radius:12px;
             display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#5b4cf0;
             flex-shrink:0; box-shadow:0 2px 8px rgba(91,76,240,0.12);
+            overflow: hidden; cursor: pointer;
+        }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
         }
         .nav-btn {
             background:#f1f5f9; border:none; color:#334155; padding:7px 12px; border-radius:30px; cursor:pointer;
@@ -243,7 +250,7 @@
     <nav class="navbar">
         <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
         <div class="nav-user">
-            <div class="user-avatar" id="userInitial">S</div>
+            <div class="user-avatar" id="userInitial" onclick="window.location.href='profile.html'">S</div>
             <span id="welcomeUser">Welcome</span>
             <a href="dashboard.html" class="nav-btn btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
             <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
@@ -320,7 +327,7 @@
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbya3ER-Cb71xpak-gm1-wLREfPajBxaPBG8TPKLlLgXcwn_P89vBIN_hptN4LFFqe8X4Q/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
         let allMocks = [];
         let allUserResults = [];
         let filteredResults = [];
@@ -332,8 +339,22 @@
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
+        // ==================== AVATAR HELPER ====================
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
+            }
+        }
+
+        // Set avatar
+        setAvatarWithPic('userInitial', user);
         document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
-        document.getElementById('userInitial').textContent = user.name.charAt(0).toUpperCase();
 
         function logout() {
             localStorage.removeItem('user');
@@ -359,7 +380,6 @@
                 const d = await r.json();
                 if (d.success) {
                     allUserResults = d.results;
-                    // Map exam names
                     const examMap = {};
                     allMocks.forEach(m => { if (m.exam) examMap[m.testCode] = m.exam; });
                     allUserResults.forEach(r => {
@@ -400,7 +420,6 @@
         function renderExamButtons() {
             const exams = [...new Set(allMocks.map(m => m.exam))];
             const container = document.getElementById('examPillsContainer');
-            // Keep the "All Exams" button as the first
             let html = '<button class="exam-btn selected" onclick="filterByExam(\'\', this)">All Exams</button>';
             exams.forEach(exam => {
                 html += `<button class="exam-btn" onclick="filterByExam('${exam}', this)">${getExamIcon(exam)} ${exam}</button>`;
@@ -417,7 +436,7 @@
             selectedExam = exam;
             document.querySelectorAll('#examPillsContainer .exam-btn').forEach(b => b.classList.remove('selected'));
             if (exam === '') {
-                document.querySelector('#examPillsContainer .exam-btn').classList.add('selected'); // All Exams
+                document.querySelector('#examPillsContainer .exam-btn').classList.add('selected');
             } else {
                 btn.classList.add('selected');
             }
@@ -485,7 +504,6 @@
                 if (valA > valB) return dir === 'asc' ? 1 : -1;
                 return 0;
             });
-            // Pagination
             const totalPages = Math.ceil(results.length / RESULTS_PER_PAGE);
             if (currentPage > totalPages) currentPage = totalPages || 1;
             const startIdx = (currentPage - 1) * RESULTS_PER_PAGE;
@@ -515,7 +533,6 @@
                 </tr>`;
             }).join('');
 
-            // Pagination controls
             const paginationDiv = document.getElementById('paginationContainer');
             if (totalPages > 1) {
                 paginationDiv.innerHTML = `
@@ -576,9 +593,7 @@
                 const res = await fetch(`${API_URL}?action=deleteResult&username=${encodeURIComponent(user.username)}&testCode=${encodeURIComponent(testCode)}&date=${encodeURIComponent(date)}`);
                 const data = await res.json();
                 if (data.success) {
-                    // Remove from local array
                     allUserResults = allUserResults.filter(r => !(r.testCode === testCode && r.date === date));
-                    // Reapply filters
                     applyResultFilters();
                     Swal.fire('Deleted!', 'Result has been removed.', 'success');
                 } else {
