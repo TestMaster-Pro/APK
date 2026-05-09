@@ -65,7 +65,7 @@
             border-radius: 30px;
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             padding: 40px 35px;
             position: relative;
             z-index: 1;
@@ -260,6 +260,81 @@
             transition: color 0.3s;
         }
 
+        /* Avatar Selection Styles */
+        .avatar-selection {
+            margin-bottom: 16px;
+        }
+
+        .avatar-selection label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--dark);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .avatar-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background: #f1f5f9;
+            position: relative;
+        }
+
+        .avatar-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+            transform: scale(1.1);
+        }
+
+        .avatar-option .selected-check {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .avatar-option.selected .selected-check {
+            display: flex;
+        }
+
+        .avatar-loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 14px;
@@ -275,6 +350,10 @@
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn-submit:hover {
@@ -299,7 +378,6 @@
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-right: 10px;
         }
 
         @keyframes spin {
@@ -308,6 +386,31 @@
 
         .btn-submit.loading .spinner {
             display: inline-block;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
         }
 
         .validation-message {
@@ -374,6 +477,8 @@
             width: 90%;
             max-width: 420px;
             animation: modalIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         @keyframes modalIn {
@@ -385,6 +490,53 @@
             margin-bottom: 18px;
             color: var(--dark);
             font-size: 20px;
+        }
+
+        .modal-content h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e2e8f0;
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+            width: 12px;
+            height: 12px;
+        }
+
+        .step-line {
+            width: 30px;
+            height: 2px;
+            background: #e2e8f0;
+        }
+
+        .step-line.completed {
+            background: var(--primary);
+        }
+
+        .forgot-step {
+            display: none;
+        }
+
+        .forgot-step.active {
+            display: block;
+            animation: fadeSlide 0.4s ease;
         }
 
         @media (max-width: 480px) {
@@ -404,6 +556,16 @@
             }
             .row-2 {
                 grid-template-columns: 1fr;
+            }
+            .avatar-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .avatar-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
@@ -479,6 +641,13 @@
                                oninput="validateField(this, 'username')">
                     </div>
                     <div class="validation-message" id="regUsernameError"></div>
+                </div>
+                <div class="input-group">
+                    <label>Email *</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="Enter your email address" required>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Mobile Number *</label>
@@ -559,6 +728,18 @@
                     </div>
                     <div class="validation-message" id="regPasswordError"></div>
                 </div>
+
+                <!-- Avatar Selection -->
+                <div class="avatar-selection">
+                    <label>Choose Your Avatar</label>
+                    <div class="avatar-grid" id="avatarGrid">
+                        <div class="avatar-loading">
+                            <i class="fas fa-spinner fa-spin"></i> Loading avatars...
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedAvatar" value="">
+                </div>
+
                 <button type="submit" class="btn-submit" id="registerBtn">
                     <span class="spinner"></span>
                     <span class="btn-text">Create Account</span>
@@ -569,29 +750,90 @@
         <div class="alert" id="alertMessage"></div>
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- Forgot Password Modal with OTP -->
     <div class="modal-overlay" id="forgotModal">
         <div class="modal-content">
-            <h2><i class="fas fa-key"></i> Forgot Password</h2>
-            <div class="input-group">
-                <label>Enter Username or Mobile</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="forgotInput" placeholder="Username or mobile number" required>
-                </div>
+            <h2><i class="fas fa-key"></i> Reset Password</h2>
+            
+            <div class="step-indicator">
+                <div class="step-dot active" id="stepDot1"></div>
+                <div class="step-line" id="stepLine1"></div>
+                <div class="step-dot" id="stepDot2"></div>
+                <div class="step-line" id="stepLine2"></div>
+                <div class="step-dot" id="stepDot3"></div>
             </div>
-            <button class="btn-submit" onclick="handleForgotPassword()" style="margin-bottom: 10px;">
-                <i class="fas fa-paper-plane"></i> Recover Password
-            </button>
-            <button class="btn-submit" onclick="closeForgotModal()" style="background: #64748b;">
-                <i class="fas fa-times"></i> Cancel
-            </button>
+
+            <!-- Step 1: Enter Username/Email -->
+            <div class="forgot-step active" id="forgotStep1">
+                <h3>Enter your username or email</h3>
+                <div class="input-group">
+                    <label>Username or Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="forgotInput" placeholder="Username or email address" required>
+                    </div>
+                </div>
+                <button class="btn-submit" onclick="forgotStep1()">
+                    <i class="fas fa-arrow-right"></i> Send OTP
+                </button>
+                <button class="btn-outline" onclick="closeForgotModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+
+            <!-- Step 2: Enter OTP -->
+            <div class="forgot-step" id="forgotStep2">
+                <h3>Enter OTP sent to your email</h3>
+                <p style="font-size:12px; color:#64748b; margin-bottom:15px;">
+                    A 6-digit code has been sent to your registered email address.
+                </p>
+                <div class="input-group">
+                    <label>OTP Code</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-shield-alt"></i>
+                        <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" pattern="[0-9]{6}" required>
+                    </div>
+                </div>
+                <button class="btn-submit" onclick="forgotStep2()">
+                    <i class="fas fa-check"></i> Verify OTP
+                </button>
+                <button class="btn-outline" onclick="forgotGoBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+
+            <!-- Step 3: Set New Password -->
+            <div class="forgot-step" id="forgotStep3">
+                <h3>Set new password</h3>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="forgotNewPassword" placeholder="Min 6 characters" minlength="6" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('forgotNewPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="validation-message" id="forgotPasswordError"></div>
+                </div>
+                <button class="btn-submit" onclick="forgotStep3()">
+                    <i class="fas fa-save"></i> Reset Password
+                </button>
+                <button class="btn-outline" onclick="forgotGoBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+
             <div class="alert" id="forgotAlert" style="margin-top: 14px;"></div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbya3ER-Cb71xpak-gm1-wLREfPajBxaPBG8TPKLlLgXcwn_P89vBIN_hptN4LFFqe8X4Q/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
+        
+        // Avatar data loaded from GitHub
+        let availableAvatars = [];
+        let selectedAvatarCode = '';
 
         function createParticles() {
             const container = document.getElementById('particles');
@@ -610,6 +852,88 @@
         }
         createParticles();
 
+        // Load avatars from GitHub JSON
+        async function loadAvatars() {
+            try {
+                const response = await fetch(`${API_URL}?action=getAvatars`);
+                const data = await response.json();
+                
+                if (data.success && data.avatars && data.avatars.length > 0) {
+                    availableAvatars = data.avatars;
+                    renderAvatars();
+                } else {
+                    showAvatarError();
+                }
+            } catch (error) {
+                console.error('Failed to load avatars:', error);
+                showAvatarError();
+            }
+        }
+
+        function renderAvatars() {
+            const grid = document.getElementById('avatarGrid');
+            
+            if (availableAvatars.length === 0) {
+                showAvatarError();
+                return;
+            }
+
+            grid.innerHTML = '';
+            
+            availableAvatars.forEach((avatar, index) => {
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'avatar-option';
+                avatarDiv.onclick = () => selectAvatar(avatar.code, avatarDiv);
+
+                const img = document.createElement('img');
+                img.src = avatar.url;
+                img.alt = avatar.code;
+                img.onerror = () => {
+                    img.src = 'https://via.placeholder.com/128/6366f1/ffffff?text=' + avatar.code;
+                };
+
+                const checkMark = document.createElement('div');
+                checkMark.className = 'selected-check';
+                checkMark.innerHTML = '<i class="fas fa-check"></i>';
+
+                avatarDiv.appendChild(img);
+                avatarDiv.appendChild(checkMark);
+                grid.appendChild(avatarDiv);
+
+                // Auto-select first avatar
+                if (index === 0 && !selectedAvatarCode) {
+                    selectAvatar(avatar.code, avatarDiv);
+                }
+            });
+        }
+
+        function showAvatarError() {
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = '<div class="avatar-loading">Failed to load avatars. Using defaults.</div>';
+            
+            // Create default fallback avatars
+            availableAvatars = [
+                { code: 'AVATAR001', url: 'https://ui-avatars.com/api/?name=A1&background=6366f1&color=fff&size=128' },
+                { code: 'AVATAR002', url: 'https://ui-avatars.com/api/?name=A2&background=8b5cf6&color=fff&size=128' },
+                { code: 'AVATAR003', url: 'https://ui-avatars.com/api/?name=A3&background=10b981&color=fff&size=128' },
+                { code: 'AVATAR004', url: 'https://ui-avatars.com/api/?name=A4&background=f59e0b&color=fff&size=128' },
+                { code: 'AVATAR005', url: 'https://ui-avatars.com/api/?name=A5&background=ef4444&color=fff&size=128' }
+            ];
+            renderAvatars();
+        }
+
+        function selectAvatar(code, element) {
+            // Remove selected class from all
+            document.querySelectorAll('.avatar-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked avatar
+            element.classList.add('selected');
+            selectedAvatarCode = code;
+            document.getElementById('selectedAvatar').value = code;
+        }
+
         function switchTab(tab) {
             const loginSection = document.getElementById('loginSection');
             const registerSection = document.getElementById('registerSection');
@@ -627,6 +951,10 @@
                 tabs[1].classList.add('active');
                 registerSection.classList.add('active');
                 loginSection.classList.remove('active');
+                // Load avatars when switching to register tab
+                if (availableAvatars.length === 0) {
+                    loadAvatars();
+                }
             }
         }
 
@@ -642,10 +970,11 @@
             }
         }
 
-        // FIXED: Client-side validation function
         function validateField(input, type) {
             const value = input.value;
             const errorDiv = document.getElementById(input.id + 'Error');
+            
+            if (!errorDiv) return true;
             
             if (!value) {
                 errorDiv.style.display = 'none';
@@ -653,7 +982,6 @@
                 return true;
             }
             
-            // Check first character is alphabet
             const firstChar = value.charAt(0);
             const isFirstCharAlpha = /^[a-zA-Z]/.test(firstChar);
             
@@ -666,7 +994,6 @@
                 return false;
             }
             
-            // Check valid characters
             const validPattern = /^[a-zA-Z][a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
             if (!validPattern.test(value)) {
                 errorDiv.textContent = 'Contains invalid characters';
@@ -675,7 +1002,6 @@
                 return false;
             }
             
-            // Check minimum length
             if (type === 'password' && value.length < 6) {
                 errorDiv.textContent = 'Password must be at least 6 characters';
                 errorDiv.style.display = 'block';
@@ -690,7 +1016,6 @@
                 return false;
             }
             
-            // All validations passed
             errorDiv.style.display = 'none';
             input.classList.remove('error');
             return true;
@@ -715,12 +1040,16 @@
             if (loading) {
                 btn.classList.add('loading');
                 btn.disabled = true;
-                btn.querySelector('.btn-text').textContent = 'Processing...';
+                if (btn.querySelector('.btn-text')) {
+                    btn.querySelector('.btn-text').textContent = 'Processing...';
+                }
             } else {
                 btn.classList.remove('loading');
                 btn.disabled = false;
-                const isLogin = btn.id === 'loginBtn';
-                btn.querySelector('.btn-text').textContent = isLogin ? 'Login to Continue' : 'Create Account';
+                if (btn.querySelector('.btn-text')) {
+                    const isLogin = btn.id === 'loginBtn';
+                    btn.querySelector('.btn-text').textContent = isLogin ? 'Login to Continue' : 'Create Account';
+                }
             }
         }
 
@@ -742,8 +1071,9 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // Store user data including avatarUrl
                     localStorage.setItem('user', JSON.stringify(data.user));
-                    showAlert('success', 'Login successful! Redirecting...');
+                    showAlert('success', data.welcomeMessage || 'Login successful! Redirecting...');
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1000);
@@ -758,12 +1088,12 @@
             }
         }
 
-        // FIXED: Registration with client-side validation
         async function handleRegister(e) {
             e.preventDefault();
             const btn = document.getElementById('registerBtn');
             const name = document.getElementById('regName').value.trim();
             const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
             const mobile = document.getElementById('regMobile').value.trim();
             const password = document.getElementById('regPassword').value;
             const state = document.getElementById('regState').value;
@@ -776,8 +1106,15 @@
             document.getElementById('regUsername').classList.remove('error');
             document.getElementById('regPassword').classList.remove('error');
 
-            if (!name || !username || !mobile || !password) {
+            if (!name || !username || !email || !mobile || !password) {
                 showAlert('error', 'Please fill all required fields');
+                return;
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showAlert('error', 'Please enter a valid email address');
                 return;
             }
 
@@ -785,8 +1122,6 @@
             if (!/^[a-zA-Z]/.test(username)) {
                 showAlert('error', 'Username must start with an alphabet character');
                 document.getElementById('regUsername').classList.add('error');
-                document.getElementById('regUsernameError').textContent = 'Username must start with an alphabet character';
-                document.getElementById('regUsernameError').style.display = 'block';
                 return;
             }
 
@@ -798,7 +1133,6 @@
 
             if (username.length < 3) {
                 showAlert('error', 'Username must be at least 3 characters');
-                document.getElementById('regUsername').classList.add('error');
                 return;
             }
 
@@ -806,8 +1140,6 @@
             if (!/^[a-zA-Z]/.test(password)) {
                 showAlert('error', 'Password must start with an alphabet character');
                 document.getElementById('regPassword').classList.add('error');
-                document.getElementById('regPasswordError').textContent = 'Password must start with an alphabet character';
-                document.getElementById('regPasswordError').style.display = 'block';
                 return;
             }
 
@@ -819,7 +1151,6 @@
 
             if (password.length < 6) {
                 showAlert('error', 'Password must be at least 6 characters');
-                document.getElementById('regPassword').classList.add('error');
                 return;
             }
 
@@ -836,6 +1167,7 @@
                     action: 'register',
                     name: name,
                     username: username,
+                    email: email,
                     mobile: mobile,
                     password: password,
                     state: state,
@@ -851,8 +1183,13 @@
                     switchTab('login');
                     document.getElementById('loginUsername').value = username;
                     document.getElementById('loginPassword').value = '';
-                    // Clear register form
                     document.getElementById('registerForm').reset();
+                    selectedAvatarCode = '';
+                    document.getElementById('selectedAvatar').value = '';
+                    // Remove selected state from avatars
+                    document.querySelectorAll('.avatar-option').forEach(el => {
+                        el.classList.remove('selected');
+                    });
                 } else {
                     showAlert('error', data.error || 'Registration failed. Please try again.');
                 }
@@ -864,43 +1201,135 @@
             }
         }
 
+        // Forgot Password with OTP - Step management
+        let forgotUsername = '';
+
         function openForgotModal() {
             document.getElementById('forgotModal').classList.add('show');
             document.getElementById('forgotAlert').style.display = 'none';
             document.getElementById('forgotInput').value = '';
+            document.getElementById('forgotOTP').value = '';
+            document.getElementById('forgotNewPassword').value = '';
+            forgotUsername = '';
+            showForgotStep(1);
         }
 
         function closeForgotModal() {
             document.getElementById('forgotModal').classList.remove('show');
+            forgotUsername = '';
         }
 
-        async function handleForgotPassword() {
+        function showForgotStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.forgot-step').forEach(el => el.classList.remove('active'));
+            // Show current step
+            document.getElementById('forgotStep' + step).classList.add('active');
+            
+            // Update step indicators
+            document.getElementById('stepDot1').classList.toggle('active', step >= 1);
+            document.getElementById('stepDot2').classList.toggle('active', step >= 2);
+            document.getElementById('stepDot3').classList.toggle('active', step >= 3);
+            document.getElementById('stepLine1').classList.toggle('completed', step > 1);
+            document.getElementById('stepLine2').classList.toggle('completed', step > 2);
+            
+            // Clear alert
+            document.getElementById('forgotAlert').style.display = 'none';
+        }
+
+        function forgotGoBack() {
+            const currentStep = document.querySelector('.forgot-step.active');
+            if (currentStep.id === 'forgotStep2') {
+                showForgotStep(1);
+            } else if (currentStep.id === 'forgotStep3') {
+                showForgotStep(2);
+            }
+        }
+
+        async function forgotStep1() {
             const input = document.getElementById('forgotInput').value.trim();
             
             if (!input) {
-                showForgotAlert('error', 'Please enter username or mobile');
+                showForgotAlert('error', 'Please enter username or email');
                 return;
             }
 
             try {
-                const response = await fetch(`${API_URL}?action=forgotPassword&input=${encodeURIComponent(input)}`);
+                const response = await fetch(`${API_URL}?action=sendPasswordResetOTP&usernameOrEmail=${encodeURIComponent(input)}`);
                 const data = await response.json();
 
                 if (data.success) {
-                    showForgotAlert('success', `Your password is: <strong>${data.password}</strong>`);
+                    forgotUsername = input;
+                    showForgotAlert('success', data.message || 'OTP sent to your email');
+                    showForgotStep(2);
                 } else {
-                    showForgotAlert('error', data.error || 'Account not found');
+                    showForgotAlert('error', data.error || 'Failed to send OTP');
                 }
             } catch (error) {
                 showForgotAlert('error', 'Connection error. Please try again.');
-                console.error('Forgot password error:', error);
+                console.error('OTP send error:', error);
             }
         }
 
-        // Check if user is already logged in
-        if (localStorage.getItem('user')) {
-            window.location.href = 'dashboard.html';
+        async function forgotStep2() {
+            const otp = document.getElementById('forgotOTP').value.trim();
+            
+            if (!otp || otp.length !== 6 || !/^\d+$/.test(otp)) {
+                showForgotAlert('error', 'Please enter a valid 6-digit OTP');
+                return;
+            }
+
+            // We just verify OTP is entered correctly format, actual verification on next step
+            showForgotStep(3);
+            document.getElementById('forgotAlert').style.display = 'none';
         }
+
+        async function forgotStep3() {
+            const newPassword = document.getElementById('forgotNewPassword').value;
+            const otp = document.getElementById('forgotOTP').value.trim();
+            const input = forgotUsername;
+
+            if (!newPassword || newPassword.length < 6) {
+                showForgotAlert('error', 'Password must be at least 6 characters');
+                return;
+            }
+
+            if (!/^[a-zA-Z]/.test(newPassword)) {
+                showForgotAlert('error', 'Password must start with an alphabet character');
+                return;
+            }
+
+            try {
+                // We need the actual username, so let's get it from the forgot input or lookup
+                // Using the input directly as username (might need adjustment based on API)
+                const response = await fetch(`${API_URL}?action=resetPasswordWithOTP&username=${encodeURIComponent(input)}&otp=${encodeURIComponent(otp)}&newPassword=${encodeURIComponent(newPassword)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    showForgotAlert('success', data.message || 'Password reset successful! You can now login.');
+                    setTimeout(() => {
+                        closeForgotModal();
+                        document.getElementById('loginUsername').value = input;
+                        document.getElementById('loginPassword').value = '';
+                    }, 2000);
+                } else {
+                    showForgotAlert('error', data.error || 'Failed to reset password');
+                }
+            } catch (error) {
+                showForgotAlert('error', 'Connection error. Please try again.');
+                console.error('Password reset error:', error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pre-load avatars
+            loadAvatars();
+            
+            // Check if user is already logged in
+            if (localStorage.getItem('user')) {
+                window.location.href = 'dashboard.html';
+            }
+        });
     </script>
 </body>
-</html>
+                    </html>
