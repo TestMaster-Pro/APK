@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>My Profile · TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #a78bfa;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-500: #94a3b8;
+            --gray-400: #cbd5e1;
+            --gray-300: #e2e8f0;
+            --gray-200: #f1f5f9;
+            --gray-100: #f8fafc;
+            --light: #ffffff;
+            --radius-xs: 8px;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --shadow-xs: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow: 0 8px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.12);
+            --shadow-xl: 0 24px 56px rgba(0,0,0,0.16);
+            --font-sans: 'Poppins', sans-serif;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(160deg, #eef2ff 0%, #e0e7ff 30%, #f0f4ff 60%, #ede9fe 100%);
+            min-height: 100vh;
+            padding: 16px;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -15%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 640px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 12px 18px;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: var(--shadow-sm);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .top-bar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .top-bar .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 17px;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+        }
+        .top-bar .brand-text {
+            font-size: 17px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .top-bar-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            background: var(--gray-100);
+            border: 1.5px solid var(--gray-300);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: var(--gray-700);
+            text-decoration: none;
+        }
+        .btn-icon:hover {
+            background: var(--gray-200);
+            border-color: var(--gray-400);
+            transform: scale(1.04);
+        }
+        .btn-icon.help-btn {
+            background: var(--warning-light);
+            border-color: #fde68a;
+            color: #92400e;
+        }
+
+        .profile-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: 28px 24px 20px;
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 16px;
+            animation: fadeUp 0.5s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(20px); }
+            to { opacity:1; transform:translateY(0); }
+        }
+
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .avatar-wrapper {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .avatar-img {
+            width: 96px;
+            height: 96px;
+            border-radius: 26px;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: 0 8px 28px rgba(99,102,241,0.2);
+            cursor: pointer;
+            transition: var(--transition);
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-img:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 36px rgba(99,102,241,0.3);
+        }
+        .avatar-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-initial {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .avatar-edit-badge {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 13px;
+            border: 3px solid white;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(99,102,241,0.3);
+            transition: var(--transition);
+        }
+        .avatar-edit-badge:hover {
+            transform: scale(1.1);
+        }
+        .avatar-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .avatar-username {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 500;
+            background: var(--gray-100);
+            padding: 4px 16px;
+            border-radius: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .info-item {
+            background: var(--gray-100);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .info-item:hover {
+            background: white;
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-sm);
+        }
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+        .info-item .info-icon-sm {
+            font-size: 13px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            width: 32px;
+            height: 32px;
+            background: rgba(99,102,241,0.1);
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-item .info-label-sm {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 2px;
+        }
+        .info-item .info-value-sm {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-900);
+            word-break: break-word;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-action {
+            flex: 1;
+            padding: 13px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
+        .btn-edit {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        .btn-edit:hover {
+            box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+            transform: translateY(-2px);
+        }
+        .btn-logout {
+            background: white;
+            color: var(--danger);
+            border: 1.5px solid var(--danger-light);
+        }
+        .btn-logout:hover {
+            background: var(--danger-light);
+        }
+        .btn-dashboard {
+            background: white;
+            color: var(--primary);
+            border: 1.5px solid rgba(99,102,241,0.2);
+        }
+        .btn-dashboard:hover {
+            background: var(--primary-light);
+        }
+
+        .edit-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 16px;
+            display: none;
+            animation: fadeUp 0.4s ease;
+        }
+        .edit-section.show {
+            display: block;
+        }
+        .edit-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .input-with-icon {
+            position: relative;
+        }
+        .input-with-icon i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 15px;
+            z-index: 1;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        .input-with-icon input,
+        .input-with-icon select {
+            width: 100%;
+            padding: 13px 14px 13px 42px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--gray-900);
+            background: var(--gray-100);
+            transition: var(--transition);
+        }
+        .input-with-icon input:focus,
+        .input-with-icon select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.08);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .password-toggle-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            font-size: 15px;
+            z-index: 2;
+            padding: 4px;
+        }
+        .password-note {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-top: -8px;
+            margin-bottom: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .password-note i {
+            color: var(--warning);
+            font-size: 12px;
+        }
+
+        .password-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 16px;
+        }
+        .password-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-light), transparent);
+            border-radius: 2px;
+            margin: 8px 0 20px;
+        }
+
+        .support-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: 20px 24px;
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 16px;
+        }
+        .support-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .support-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .support-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: var(--transition);
+            color: var(--gray-700);
+            background: var(--gray-100);
+        }
+        .support-link:hover {
+            background: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .support-link i {
+            width: 20px;
+            text-align: center;
+        }
+        .support-link .email-icon { color: #ea4335; }
+        .support-link .telegram-icon { color: #26a7de; }
+        .support-link .chat-icon { color: #6366f1; }
+
+        .btn {
+            padding: 13px 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: white;
+            color: var(--gray-700);
+            border: 1.5px solid var(--gray-300);
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn-outline:hover {
+            background: var(--gray-100);
+        }
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        .btn.loading .spinner {
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .alert-inline {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+            margin-top: 12px;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-inline.show {
+            display: flex;
+            animation: fadeUp 0.3s ease;
+        }
+        .alert-inline.success {
+            background: var(--success-light);
+            color: #065f46;
+        }
+        .alert-inline.error {
+            background: var(--danger-light);
+            color: #991b1b;
+        }
+
+        .avatar-grid-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15,23,42,0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .avatar-grid-overlay.show {
+            display: flex;
+        }
+        .avatar-grid-modal {
+            background: white;
+            border-radius: var(--radius-2xl);
+            padding: 24px;
+            width: 100%;
+            max-width: 440px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn {
+            from { opacity:0; transform:scale(0.9); }
+            to { opacity:1; transform:scale(1); }
+        }
+        .avatar-grid-modal h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .avatar-grid-modal .subtitle {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: var(--transition);
+            background: var(--gray-100);
+            position: relative;
+        }
+        .avatar-option:hover {
+            transform: scale(1.06);
+            border-color: var(--primary-light);
+        }
+        .avatar-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.2);
+        }
+        .avatar-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-option .check {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            border-radius: 50%;
+            color: white;
+            font-size: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        .avatar-option.selected .check {
+            display: flex;
+        }
+        .modal-password-section {
+            background: #f8fafc;
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-top: 12px;
+        }
+        .btn-full {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-sans);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .btn-primary-full {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        .btn-primary-full:hover {
+            box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+            transform: translateY(-2px);
+        }
+        .btn-outline-full {
+            background: white;
+            color: var(--gray-700);
+            border: 1.5px solid var(--gray-300);
+            margin-top: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .avatar-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .avatar-img {
+                width: 80px;
+                height: 80px;
+                border-radius: 22px;
+            }
+            .avatar-initial {
+                font-size: 32px;
+            }
+            .top-bar-buttons {
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="brand-text">TestMaster Pro</span>
+            </div>
+            <div class="top-bar-buttons">
+                <a href="chat.html" class="btn-icon help-btn" title="Chat Support">
+                    <i class="fas fa-comments"></i>
+                </a>
+                <a href="dashboard.html" class="btn-icon" title="Dashboard">
+                    <i class="fas fa-th-large"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-card" id="profileCard">
+            <div class="avatar-section">
+                <div class="avatar-wrapper">
+                    <div class="avatar-img" id="avatarDisplay" onclick="openAvatarGrid()">
+                        <!-- Filled by JS -->
+                    </div>
+                    <div class="avatar-edit-badge" onclick="openAvatarGrid()" title="Change Avatar">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <div class="avatar-name" id="displayName">—</div>
+                <div class="avatar-username" id="displayUsername">@—</div>
+            </div>
+
+            <div class="info-grid" id="infoGrid">
+                <!-- Filled by JS -->
+            </div>
+
+            <div class="action-buttons" style="flex-wrap:wrap;">
+                <button class="btn-action btn-dashboard" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </button>
+                <button class="btn-action btn-edit" onclick="toggleEditSection()">
+                    <i class="fas fa-pen-to-square"></i> Edit
+                </button>
+                <button class="btn-action btn-logout" onclick="handleLogout()">
+                    <i class="fas fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Edit Section -->
+        <div class="edit-section" id="editSection">
+            <h2><i class="fas fa-user-pen"></i> Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="editName" placeholder="Your full name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="editMobile" placeholder="10-digit number" pattern="[0-9]{10}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="editEmail" placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>State</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="editState" placeholder="Your state" list="statesList" autocomplete="off">
+                            <datalist id="statesList">
+                                <option value="Andhra Pradesh"><option value="Bihar"><option value="Delhi">
+                                <option value="Gujarat"><option value="Haryana"><option value="Karnataka">
+                                <option value="Kerala"><option value="Madhya Pradesh"><option value="Maharashtra">
+                                <option value="Punjab"><option value="Rajasthan"><option value="Tamil Nadu">
+                                <option value="Telangana"><option value="Uttar Pradesh"><option value="West Bengal">
+                                <option value="Other">
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Education</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                            <select id="editEducation">
+                                <option value="">Select Education</option>
+                                <option value="10th Pass">10th Pass</option>
+                                <option value="12th Pass">12th Pass</option>
+                                <option value="Graduate">Graduate</option>
+                                <option value="Post Graduate">Post Graduate</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Preparing For</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-bullseye"></i>
+                        <select id="editPreparingFor">
+                            <option value="">Select Exam</option>
+                            <option value="SSC">SSC</option>
+                            <option value="UPSC">UPSC</option>
+                            <option value="Banking">Banking</option>
+                            <option value="Railway">Railway</option>
+                            <option value="CUET">CUET</option>
+                            <option value="JEE">JEE</option>
+                            <option value="NEET">NEET</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+                <p class="password-note">
+                    <i class="fas fa-shield-halved"></i> 
+                    Enter your current password to confirm changes
+                </p>
+                <div class="form-group">
+                    <label>Current Password (Required to save) *</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="editConfirmPassword" placeholder="Enter current password to confirm" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePass('editConfirmPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                    <span class="spinner"></span> Save Changes
+                </button>
+                <button type="button" class="btn btn-outline" onclick="toggleEditSection()">
+                    Cancel
+                </button>
+            </form>
+            <div class="alert-inline" id="editAlert"></div>
+        </div>
+
+        <!-- Password Section -->
+        <div class="password-section">
+            <h3><i class="fas fa-shield-halved"></i> Change Password</h3>
+            <div class="section-divider"></div>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="currentPassword" placeholder="Enter current password" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePass('currentPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>New Password (min 6 chars, start with alphabet)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="newPassword" placeholder="Enter new password" minlength="6" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePass('newPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="passwordBtn">
+                    <span class="spinner"></span> Update Password
+                </button>
+            </form>
+            <div class="alert-inline" id="passwordAlert"></div>
+        </div>
+
+        <!-- Support Card -->
+        <div class="support-card">
+            <h3><i class="fas fa-headset" style="color:#6366f1;"></i> Help & Support</h3>
+            <div class="support-links">
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="support-link">
+                    <i class="fas fa-envelope email-icon"></i>
+                    <span>Email: testmaster.helpdesk@gmail.com</span>
+                </a>
+                <a href="https://t.me/cuet007_bot" target="_blank" class="support-link">
+                    <i class="fab fa-telegram-plane telegram-icon"></i>
+                    <span>Telegram: @cuet007_bot</span>
+                </a>
+                <a href="chat.html" class="support-link">
+                    <i class="fas fa-comments chat-icon"></i>
+                    <span>Community Chat</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avatar Selection Modal -->
+    <div class="avatar-grid-overlay" id="avatarOverlay">
+        <div class="avatar-grid-modal">
+            <h3>🎨 Choose Your Avatar</h3>
+            <p class="subtitle">Select an avatar first, then confirm with password</p>
+            
+            <div class="avatar-grid" id="avatarGrid">
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:var(--gray-400);">
+                    <i class="fas fa-circle-notch fa-spin"></i> Loading avatars...
+                </div>
+            </div>
+
+            <!-- Password section (shown after avatar selection) -->
+            <div class="modal-password-section" id="modalPasswordSection">
+                <p style="font-size:11px;color:#64748b;margin-bottom:10px;font-weight:500;">
+                    <i class="fas fa-shield-alt" style="color:#f59e0b;"></i> 
+                    Enter your password to confirm changing to <strong id="selectedAvatarName">Avatar</strong>
+                </p>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="avatarConfirmPassword" placeholder="Current password" required>
+                    <button type="button" class="password-toggle-btn" onclick="togglePass('avatarConfirmPassword', this)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="alert-inline" id="avatarAlert"></div>
+            </div>
+
+            <button class="btn-full btn-primary-full" onclick="saveAvatarSelection()">
+                <i class="fas fa-check-circle"></i> Confirm & Save Avatar
+            </button>
+            <button class="btn-full btn-outline-full" onclick="closeAvatarGrid()">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
+        
+        let user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = 'index.html';
+        }
+
+        let availableAvatars = [];
+        let selectedAvatarCode = user.avatarCode || 'AVATAR001';
+        let selectedAvatarName = '';
+
+        function init() {
+            loadAvatars();
+            renderProfileInfo();
+            updateAvatarDisplay();
+        }
+
+        async function loadAvatars() {
+            try {
+                const res = await fetch(`${API_URL}?action=getAvatars`);
+                const data = await res.json();
+                if (data.success && data.avatars && data.avatars.length > 0) {
+                    availableAvatars = data.avatars;
+                    // Find name of currently selected avatar
+                    const current = availableAvatars.find(a => a.code === selectedAvatarCode);
+                    if (current) selectedAvatarName = current.name || current.code;
+                }
+            } catch(e) {
+                console.error('Failed to load avatars:', e);
+            }
+        }
+
+        function renderProfileInfo() {
+            document.getElementById('displayName').textContent = user.name || 'User';
+            document.getElementById('displayUsername').textContent = '@' + (user.username || 'unknown');
+            
+            const infoGrid = document.getElementById('infoGrid');
+            const infoItems = [
+                { icon: 'fa-phone', label: 'Mobile', value: user.mobile || '—' },
+                { icon: 'fa-envelope', label: 'Email', value: user.email || 'Not provided' },
+                { icon: 'fa-map-marker-alt', label: 'State', value: user.state || '—' },
+                { icon: 'fa-graduation-cap', label: 'Education', value: user.education || '—' },
+                { icon: 'fa-bullseye', label: 'Preparing For', value: user.preparingFor || '—' },
+                { icon: 'fa-id-card', label: 'User ID', value: (user.userId || '—').substring(0, 12) + '...', full: true },
+            ];
+            
+            infoGrid.innerHTML = infoItems.map(item => `
+                <div class="info-item ${item.full ? 'full-width' : ''}">
+                    <div class="info-icon-sm"><i class="fas ${item.icon}"></i></div>
+                    <div class="info-label-sm">${item.label}</div>
+                    <div class="info-value-sm">${item.value}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateAvatarDisplay() {
+            const avatarDisplay = document.getElementById('avatarDisplay');
+            if (user.avatarUrl) {
+                avatarDisplay.innerHTML = `<img src="${user.avatarUrl}" alt="Avatar" onerror="this.innerHTML='<span class=avatar-initial>${(user.name||'U').charAt(0).toUpperCase()}</span>'">`;
+            } else {
+                avatarDisplay.innerHTML = `<span class="avatar-initial">${(user.name || 'U').charAt(0).toUpperCase()}</span>`;
+            }
+        }
+
+        function openAvatarGrid() {
+            const overlay = document.getElementById('avatarOverlay');
+            overlay.classList.add('show');
+            document.getElementById('avatarConfirmPassword').value = '';
+            document.getElementById('avatarAlert').classList.remove('show');
+            document.getElementById('avatarAlert').style.display = 'none';
+            selectedAvatarName = '';
+            document.getElementById('selectedAvatarName').textContent = 'Avatar';
+            renderAvatarGrid();
+        }
+
+        function closeAvatarGrid() {
+            document.getElementById('avatarOverlay').classList.remove('show');
+            selectedAvatarCode = user.avatarCode || 'AVATAR001';
+        }
+
+        function renderAvatarGrid() {
+            const grid = document.getElementById('avatarGrid');
+            
+            if (availableAvatars.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px; color:var(--gray-400);">No avatars available</div>';
+                return;
+            }
+
+            grid.innerHTML = availableAvatars.map(avatar => `
+                <div class="avatar-option ${selectedAvatarCode === avatar.code ? 'selected' : ''}" 
+                     onclick="selectAvatar('${avatar.code}', '${avatar.name || avatar.code}', this)" title="${avatar.name || avatar.code}">
+                    <img src="${avatar.url}" alt="${avatar.code}" 
+                         onerror="this.src='https://ui-avatars.com/api/?name=${avatar.code}&background=6366f1&color=fff&size=128'">
+                    <div class="check"><i class="fas fa-check"></i></div>
+                </div>
+            `).join('');
+        }
+
+        function selectAvatar(code, name, element) {
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAvatarCode = code;
+            selectedAvatarName = name;
+            document.getElementById('selectedAvatarName').textContent = name;
+            document.getElementById('avatarAlert').classList.remove('show');
+            document.getElementById('avatarAlert').style.display = 'none';
+        }
+
+        async function saveAvatarSelection() {
+            const password = document.getElementById('avatarConfirmPassword').value;
+            
+            if (!password) {
+                showAlert('avatarAlert', 'error', 'Please enter your current password to confirm.');
+                return;
+            }
+
+            if (!selectedAvatarCode) {
+                showAlert('avatarAlert', 'error', 'Please select an avatar first.');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    action: 'updateProfile',
+                    username: user.username,
+                    password: password,
+                    avatarCode: selectedAvatarCode
+                });
+
+                const res = await fetch(API_URL + '?' + params.toString());
+                const data = await res.json();
+
+                if (data.success && data.user) {
+                    user = { ...user, ...data.user };
+                    localStorage.setItem('user', JSON.stringify(user));
+                    updateAvatarDisplay();
+                    closeAvatarGrid();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Avatar Updated!',
+                        text: 'Your profile picture has been changed.',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: { popup: 'swal-round' }
+                    });
+                } else {
+                    showAlert('avatarAlert', 'error', data.error || 'Invalid password or update failed.');
+                }
+            } catch(e) {
+                showAlert('avatarAlert', 'error', 'Connection error. Please try again.');
+            }
+        }
+
+        function toggleEditSection() {
+            const editSection = document.getElementById('editSection');
+            const isVisible = editSection.classList.contains('show');
+            
+            if (isVisible) {
+                editSection.classList.remove('show');
+            } else {
+                document.getElementById('editName').value = user.name || '';
+                document.getElementById('editMobile').value = user.mobile || '';
+                document.getElementById('editEmail').value = user.email || '';
+                document.getElementById('editState').value = user.state || '';
+                document.getElementById('editEducation').value = user.education || '';
+                document.getElementById('editPreparingFor').value = user.preparingFor || '';
+                document.getElementById('editConfirmPassword').value = '';
+                editSection.classList.add('show');
+                editSection.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('editAlert').classList.remove('show');
+                document.getElementById('editAlert').style.display = 'none';
+            }
+        }
+
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('saveProfileBtn');
+            btn.classList.add('loading');
+            
+            const name = document.getElementById('editName').value.trim();
+            const mobile = document.getElementById('editMobile').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const state = document.getElementById('editState').value.trim();
+            const education = document.getElementById('editEducation').value;
+            const preparingFor = document.getElementById('editPreparingFor').value;
+            const confirmPassword = document.getElementById('editConfirmPassword').value;
+
+            if (!name || !mobile) {
+                showAlert('editAlert', 'error', 'Name and mobile are required.');
+                btn.classList.remove('loading');
+                return;
+            }
+            if (mobile.length !== 10 || !/^\d+$/.test(mobile)) {
+                showAlert('editAlert', 'error', 'Invalid mobile number.');
+                btn.classList.remove('loading');
+                return;
+            }
+            if (!confirmPassword) {
+                showAlert('editAlert', 'error', 'Please enter your current password to confirm changes.');
+                btn.classList.remove('loading');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    action: 'updateProfile',
+                    username: user.username,
+                    password: confirmPassword,
+                    name, mobile, email, state, education, preparingFor
+                });
+
+                const res = await fetch(API_URL + '?' + params.toString());
+                const data = await res.json();
+                btn.classList.remove('loading');
+
+                if (data.success && data.user) {
+                    user = { ...user, ...data.user };
+                    localStorage.setItem('user', JSON.stringify(user));
+                    renderProfileInfo();
+                    updateAvatarDisplay();
+                    toggleEditSection();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated!',
+                        text: 'Your profile has been updated successfully.',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: { popup: 'swal-round' }
+                    });
+                } else {
+                    showAlert('editAlert', 'error', data.error || 'Invalid password or update failed.');
+                }
+            } catch(e) {
+                btn.classList.remove('loading');
+                showAlert('editAlert', 'error', 'Connection error.');
+            }
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('passwordBtn');
+            btn.classList.add('loading');
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            if (!currentPassword || !newPassword) {
+                showAlert('passwordAlert', 'error', 'Both fields are required.');
+                btn.classList.remove('loading');
+                return;
+            }
+            if (newPassword.length < 6) {
+                showAlert('passwordAlert', 'error', 'Password must be at least 6 characters.');
+                btn.classList.remove('loading');
+                return;
+            }
+            if (!/^[a-zA-Z]/.test(newPassword)) {
+                showAlert('passwordAlert', 'error', 'Password must start with an alphabet character.');
+                btn.classList.remove('loading');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    action: 'updateProfile',
+                    username: user.username,
+                    password: currentPassword,
+                    newPassword: newPassword
+                });
+
+                const res = await fetch(API_URL + '?' + params.toString());
+                const data = await res.json();
+                btn.classList.remove('loading');
+
+                if (data.success) {
+                    document.getElementById('passwordForm').reset();
+                    showAlert('passwordAlert', 'success', 'Password changed successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Password Updated!',
+                        text: 'A confirmation email has been sent.',
+                        timer: 2500,
+                        showConfirmButton: false,
+                        customClass: { popup: 'swal-round' }
+                    });
+                } else {
+                    showAlert('passwordAlert', 'error', data.error || 'Check your current password.');
+                }
+            } catch(e) {
+                btn.classList.remove('loading');
+                showAlert('passwordAlert', 'error', 'Connection error.');
+            }
+        });
+
+        function togglePass(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function showAlert(elementId, type, message) {
+            const el = document.getElementById(elementId);
+            el.className = `alert-inline ${type} show`;
+            el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            el.style.display = 'flex';
+            setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        function handleLogout() {
+            Swal.fire({
+                title: 'Logout?',
+                text: 'Are you sure you want to logout?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Logout',
+                confirmButtonColor: '#ef4444',
+                cancelButtonText: 'Cancel',
+                customClass: { popup: 'swal-round' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('user');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        document.getElementById('avatarOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeAvatarGrid();
+        });
+
+        init();
+    </script>
+</body>
+</html>
