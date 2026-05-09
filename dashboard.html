@@ -6,8 +6,7 @@
     <title>TestMaster Pro • Smart Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #5b4cf0;
@@ -297,6 +296,13 @@
             flex-shrink: 0;
             box-shadow: 0 3px 12px rgba(91, 76, 240, 0.12);
             border: 2px solid #fff;
+            overflow: hidden;          /* for image */
+        }
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
         }
         .sidebar-user-info {
             overflow: hidden;
@@ -593,6 +599,13 @@
             box-shadow: 0 2px 8px rgba(91, 76, 240, 0.12);
             cursor: pointer;
             transition: var(--transition-fast);
+            overflow: hidden;             /* for image */
+        }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
         }
         .user-avatar:hover {
             transform: scale(1.06);
@@ -1995,6 +2008,7 @@
         <i class="fas fa-question"></i>
     </button>
 
+    <!-- IMPROVED INSTRUCTION MODAL -->
     <div class="instruction-overlay hidden" id="instructionOverlay" onclick="closeInstructions(event)">
         <div class="instruction-modal" onclick="event.stopPropagation()">
             <div class="instruction-modal-header">
@@ -2019,12 +2033,12 @@
                     <p>Switch to the <span class="highlight">My Results</span> tab to see your test history grouped by exam. Use <span class="highlight">Open Full Results</span> for detailed analytics.</p>
                 </div>
                 <div class="instruction-section">
-                    <h4>📚 <span>Books & PYQ</span></h4>
-                    <p>Click the <span class="highlight">Books & PYQ</span> tab to open the full library in a dedicated page with all study materials and previous year question papers.</p>
+                    <h4>🔄 <span>Retaking Tests</span></h4>
+                    <p>Already attempted tests show a <span class="highlight">Retake</span> button and a green score preview with your best attempt details.</p>
                 </div>
                 <div class="instruction-section">
-                    <h4>🗂️ <span>Full Mock Library</span></h4>
-                    <p>Click <span class="highlight">Open Full Mock Library</span> to browse all available mock tests in a comprehensive dedicated page with advanced filtering.</p>
+                    <h4>👤 <span>Profile & Settings</span></h4>
+                    <p>Open the <span class="highlight">Profile</span> page from the sidebar to update your name, mobile, email, state, education, and change your password. You can also set a profile picture.</p>
                 </div>
                 <div class="instruction-section">
                     <h4>💬 <span>Chat Feature</span></h4>
@@ -2038,17 +2052,12 @@
                     <h4>📈 <span>Stats Cards</span></h4>
                     <p>The 4 stat cards at the top show: <span class="highlight">Available</span> tests, <span class="highlight">Completed</span> tests, <span class="highlight">Average Score</span>, and <span class="highlight">Best Score</span> for the selected exam.</p>
                 </div>
-                <div class="instruction-section">
-                    <h4>🔄 <span>Retaking Tests</span></h4>
-                    <p>Already attempted tests show a <span class="highlight">Retake</span> button and a green score preview with your best attempt details.</p>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL =
-            'https://script.google.com/macros/s/AKfycbya3ER-Cb71xpak-gm1-wLREfPajBxaPBG8TPKLlLgXcwn_P89vBIN_hptN4LFFqe8X4Q/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
         let allMocks = [];
         let userResults = [];
         let selectedExam = '';
@@ -2056,38 +2065,50 @@
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
+        // === PROFILE PICTURE HELPER ===
+// === PROFILE PICTURE HELPER ===
+function setAvatarWithPic(elementId, userObj) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    // FIXED: Check for avatarUrl (from API) instead of profilePicUrl
+    if (userObj && userObj.avatarUrl) {
+        el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+    } else if (userObj && userObj.profilePicUrl) {
+        // Fallback for old data
+        el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+    } else {
+        el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
+    }
+}
+
+        // Apply avatars
+        setAvatarWithPic('userInitial', user);
+        setAvatarWithPic('sidebarAvatar', user);
+
         document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
-        document.getElementById('userInitial').textContent = user.name.charAt(0).toUpperCase();
-        document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
         document.getElementById('sidebarUserName').textContent = user.name;
         document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
 
         const userExtraTags = document.getElementById('userExtraTags');
         if (user.state) {
-            userExtraTags.innerHTML +=
-                `<span class="info-tag"><i class="fas fa-map-marker-alt"></i> ${user.state}</span>`;
+            userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-map-marker-alt"></i> ${user.state}</span>`;
         }
         if (user.preparingFor) {
-            userExtraTags.innerHTML +=
-                `<span class="info-tag"><i class="fas fa-bullseye"></i> ${user.preparingFor}</span>`;
+            userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-bullseye"></i> ${user.preparingFor}</span>`;
         }
         if (user.education) {
-            userExtraTags.innerHTML +=
-                `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
+            userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
         }
 
         const hour = new Date().getHours();
-        document.getElementById('greeting').textContent =
-            `${hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening'}!`;
+        document.getElementById('greeting').textContent = `${hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening'}!`;
 
         function logout() {
             localStorage.removeItem('user');
             window.location.href = 'index.html';
         }
 
-        function goToBooks() {
-            window.location.href = 'book.html';
-        }
+        function goToBooks() { window.location.href = 'book.html'; }
 
         function switchTab(tab) {
             const testsBtn = document.getElementById('tabTests');
@@ -2132,55 +2153,20 @@
             overlay.classList.remove('active');
             document.body.classList.remove('sidebar-open');
             document.body.style.overflow = '';
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-            }, 350);
+            setTimeout(() => { overlay.classList.add('hidden'); }, 350);
         }
 
         function sidebarNavigate(action) {
             closeSidebarDirect();
             setTimeout(() => {
                 switch (action) {
-                    case 'tests':
-                        switchTab('tests');
-                        break;
-                    case 'results':
-                        switchTab('results');
-                        break;
-                    case 'books':
-                        goToBooks();
-                        break;
-                    case 'chat':
-                        window.location.href = 'chat.html';
-                        break;
-                    case 'instructions':
-                        openInstructions();
-                        break;
-                    case 'profile':
-                        // Scroll to top or show user info
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        Swal.fire({
-                            title: '👤 Profile',
-                            html: `
-                                <div style="text-align:left;padding:10px;">
-                                    <p><strong>Name:</strong> ${user.name}</p>
-                                    <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
-                                    <p><strong>State:</strong> ${user.state || 'N/A'}</p>
-                                    <p><strong>Preparing For:</strong> ${user.preparingFor || 'N/A'}</p>
-                                    <p><strong>Education:</strong> ${user.education || 'N/A'}</p>
-                                </div>
-                            `,
-                            icon: 'info',
-                            confirmButtonColor: '#5b4cf0',
-                            confirmButtonText: 'Close',
-                            borderRadius: '16px',
-                        });
-                        break;
-                    case 'logout':
-                        logout();
-                        break;
-                    default:
-                        break;
+                    case 'tests': switchTab('tests'); break;
+                    case 'results': switchTab('results'); break;
+                    case 'books': goToBooks(); break;
+                    case 'chat': window.location.href = 'chat.html'; break;
+                    case 'instructions': openInstructions(); break;
+                    case 'profile': window.location.href = 'profile.html'; break;  // NEW: goes to profile page
+                    case 'logout': logout(); break;
                 }
             }, 300);
         }
@@ -2197,12 +2183,10 @@
                         <span><i class="far fa-clock"></i> ${latest.notification?.substring(0, 60)}...</span>
                     `;
                 } else {
-                    document.getElementById('noticeContent').innerHTML =
-                        `<h4>No notices</h4><span>Stay tuned</span>`;
+                    document.getElementById('noticeContent').innerHTML = `<h4>No notices</h4><span>Stay tuned</span>`;
                 }
             } catch (e) {
-                document.getElementById('noticeContent').innerHTML =
-                    `<h4>Notices unavailable</h4><span>Check back later</span>`;
+                document.getElementById('noticeContent').innerHTML = `<h4>Notices unavailable</h4><span>Check back later</span>`;
             }
         }
 
@@ -2213,8 +2197,7 @@
                 renderExamButtons();
                 updateStatsForExam([]);
             } catch (e) {
-                document.getElementById('examButtons').innerHTML =
-                    '<span style="color:#b91c1c;">Error loading exams</span>';
+                document.getElementById('examButtons').innerHTML = '<span style="color:#b91c1c;">Error loading exams</span>';
             }
         }
 
@@ -2227,8 +2210,7 @@
         }
 
         function getExamIcon(e) {
-            const icons = { 'SSC': '🏛️', 'UPSC': '🇮🇳', 'CUET': '🎓', 'JEE': '⚡', 'NEET': '💊', 'Banking': '🏦',
-                'Railway': '🚂' };
+            const icons = { 'SSC': '🏛️', 'UPSC': '🇮🇳', 'CUET': '🎓', 'JEE': '⚡', 'NEET': '💊', 'Banking': '🏦', 'Railway': '🚂' };
             return icons[e] || '📝';
         }
 
@@ -2237,8 +2219,7 @@
             if (selectedExam === exam) {
                 selectedExam = '';
                 document.getElementById('filterBar').classList.add('hidden');
-                document.getElementById('testGrid').innerHTML =
-                    '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
+                document.getElementById('testGrid').innerHTML = '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
                 updateStatsForExam([]);
             } else {
                 selectedExam = exam;
@@ -2284,16 +2265,14 @@
                 });
             }
             if (chapter) filtered = filtered.filter(m => m.chapter === chapter);
-            if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode
-                .toLowerCase().includes(search));
+            if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode.toLowerCase().includes(search));
             displayTests(filtered);
         }
 
         function displayTests(tests) {
             const grid = document.getElementById('testGrid');
             if (!tests.length) {
-                grid.innerHTML =
-                    '<div class="empty-state"><i class="fas fa-search"></i> No tests match filters</div>';
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i> No tests match filters</div>';
                 return;
             }
             const attemptedCodes = userResults.map(r => r.testCode);
@@ -2302,8 +2281,7 @@
                 const userResult = userResults.find(r => r.testCode === test.testCode);
                 let scorePreview = '';
                 if (userResult) {
-                    scorePreview =
-                        `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks || test.totalQuestions * test.marksPerQuestion} (${userResult.accuracy}%)</div>`;
+                    scorePreview = `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks || test.totalQuestions * test.marksPerQuestion} (${userResult.accuracy}%)</div>`;
                 }
                 return `
                     <div class="test-card" style="animation-delay:${index * 0.04}s;">
@@ -2331,8 +2309,7 @@
         function startTest(file, code, exam) {
             localStorage.setItem('last_mock_file', file);
             localStorage.setItem('current_exam', exam);
-            window.location.href =
-                `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(code)}`;
+            window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(code)}`;
         }
 
         function updateStatsForExam(tests = []) {
@@ -2342,14 +2319,12 @@
                 const examMockCodes = allMocks.filter(m => m.exam === examFilter).map(m => m.testCode);
                 relevantResults = userResults.filter(r => examMockCodes.includes(r.testCode));
             }
-            const totalAvailable = tests.length || (examFilter ? allMocks.filter(m => m.exam === examFilter).length :
-                allMocks.length);
+            const totalAvailable = tests.length || (examFilter ? allMocks.filter(m => m.exam === examFilter).length : allMocks.length);
             document.getElementById('totalTests').textContent = totalAvailable;
             if (relevantResults.length) {
                 document.getElementById('completedTests').textContent = relevantResults.length;
                 const accuracies = relevantResults.map(r => parseFloat(r.accuracy) || 0);
-                document.getElementById('avgScore').textContent = Math.round(accuracies.reduce((a, b) => a + b, 0) /
-                    accuracies.length) + '%';
+                document.getElementById('avgScore').textContent = Math.round(accuracies.reduce((a, b) => a + b, 0) / accuracies.length) + '%';
                 document.getElementById('bestScore').textContent = Math.max(...accuracies) + '%';
             } else {
                 document.getElementById('completedTests').textContent = '0';
@@ -2362,8 +2337,7 @@
             const tbody = document.getElementById('resultsBody');
             const label = document.getElementById('resultExamLabel');
             if (!userResults.length) {
-                tbody.innerHTML =
-                    '<tr><td colspan="6" style="text-align:center;padding:30px;">No attempts yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;">No attempts yet</td></tr>';
                 label.textContent = 'All exams';
                 return;
             }
@@ -2377,8 +2351,7 @@
             });
             let html = '';
             for (const [exam, results] of Object.entries(grouped)) {
-                html +=
-                    `<tr style="background:#f8fafc;"><td colspan="6" style="font-weight:700;padding:12px 20px;color:#5b4cf0;">📁 ${exam}</td></tr>`;
+                html += `<tr style="background:#f8fafc;"><td colspan="6" style="font-weight:700;padding:12px 20px;color:#5b4cf0;">📁 ${exam}</td></tr>`;
                 results.slice(0, 20).forEach(r => {
                     const timeStr = r.timeTaken ? formatTime(r.timeTaken) : '--';
                     html += `<tr>
@@ -2397,15 +2370,13 @@
 
         function formatTime(s) {
             if (!s || s <= 0) return '--';
-            const m = Math.floor(s / 60),
-                sec = s % 60;
+            const m = Math.floor(s / 60), sec = s % 60;
             return `${m}m ${sec}s`;
         }
 
         async function loadUserResults() {
             try {
-                const r = await fetch(
-                    `${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const r = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
                 const d = await r.json();
                 if (d.success) {
                     userResults = d.results;
@@ -2467,8 +2438,7 @@
                 bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
                 bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
                 bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
-                bubble.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math
-                    .random() * 3)];
+                bubble.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math.random() * 3)];
                 container.appendChild(bubble);
             }
         }
