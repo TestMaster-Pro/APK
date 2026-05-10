@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Leaderboard • TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #5b4cf0;
+            --primary-dark: #4338ca;
+            --primary-light: #eef0ff;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray-800: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --light: #ffffff;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --card-radius: 20px;
+            --shadow-xs: 0 2px 8px rgba(0,0,0,0.03);
+            --shadow-sm: 0 4px 14px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 28px -6px rgba(0,0,0,0.09);
+            --shadow-lg: 0 18px 40px -10px rgba(0,0,0,0.12);
+            --shadow-xl: 0 24px 52px -14px rgba(0,0,0,0.16);
+            --shadow-primary: 0 10px 28px -6px rgba(91,76,240,0.3);
+            --font-sans: 'Poppins', sans-serif;
+            --transition-fast: 0.18s cubic-bezier(0.4,0,0.2,1);
+            --transition-smooth: 0.28s cubic-bezier(0.4,0,0.2,1);
+            --transition-bounce: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            --glass-bg: rgba(255,255,255,0.78);
+            --glass-border: rgba(255,255,255,0.55);
+            --glass-blur: 18px;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background: #f0f4ff;
+            min-height: 100vh;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .bg-animation { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+        .bg-bubble {
+            position:absolute; border-radius:50%; animation:floatBubble var(--dur) ease-in-out infinite;
+            animation-delay:var(--delay); opacity:0.2; will-change:transform; filter:blur(1px);
+        }
+        @keyframes floatBubble {
+            0%,100%{ transform:translateY(0) translateX(0) scale(1); }
+            20%{ transform:translateY(-40px) translateX(25px) scale(1.08); }
+            40%{ transform:translateY(-70px) translateX(-20px) scale(0.92); }
+            60%{ transform:translateY(-30px) translateX(30px) scale(1.1); }
+            80%{ transform:translateY(-60px) translateX(-25px) scale(0.9); }
+        }
+        @keyframes floatBubbleSlow {
+            0%,100%{ transform:translateY(0) translateX(0) scale(1); }
+            25%{ transform:translateY(-55px) translateX(35px) scale(1.06); }
+            50%{ transform:translateY(-90px) translateX(-25px) scale(0.91); }
+            75%{ transform:translateY(-35px) translateX(30px) scale(1.08); }
+        }
+        @keyframes floatBubbleWide {
+            0%,100%{ transform:translateY(0) translateX(0) scale(1); }
+            33%{ transform:translateY(-50px) translateX(45px) scale(1.05); }
+            66%{ transform:translateY(-80px) translateX(-35px) scale(0.93); }
+        }
+        .sparkle {
+            position:absolute; width:4px; height:4px; background:white; border-radius:50%;
+            box-shadow:0 0 8px rgba(91,76,240,0.7); animation:sparkleFloat var(--dur) linear infinite;
+            animation-delay:var(--delay); opacity:0; will-change:transform,opacity;
+        }
+        @keyframes sparkleFloat {
+            0%{ transform:translateY(105vh) scale(0); opacity:0; }
+            15%{ opacity:0.9; }
+            80%{ opacity:0.4; }
+            100%{ transform:translateY(-15vh) scale(1.3); opacity:0; }
+        }
+        .grain-overlay {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.02;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size:200px 200px;
+        }
+        .grid-pattern {
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.015;
+            background-image:linear-gradient(rgba(91,76,240,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(91,76,240,0.6) 1px, transparent 1px);
+            background-size:50px 50px;
+        }
+
+        .navbar {
+            background:var(--glass-bg); backdrop-filter:blur(var(--glass-blur)); -webkit-backdrop-filter:blur(var(--glass-blur));
+            padding:10px 16px; display:flex; justify-content:space-between; align-items:center; color:var(--dark);
+            position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.04);
+            border-bottom:1px solid var(--glass-border); gap:8px; flex-wrap:nowrap;
+        }
+        .nav-brand {
+            display:flex; align-items:center; gap:8px; font-size:clamp(16px,3.5vw,20px); font-weight:800;
+            background:linear-gradient(135deg,#5b4cf0,#8b5cf6,#06b6d4);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            white-space:nowrap; letter-spacing:-0.3px; cursor:pointer;
+        }
+        .nav-brand i { font-size:clamp(20px,4vw,24px); -webkit-text-fill-color:#5b4cf0; animation:iconPulse 2.5s ease-in-out infinite; }
+        @keyframes iconPulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
+        .nav-user { display:flex; align-items:center; gap:6px; flex-wrap:nowrap; flex-shrink:0; }
+        .user-avatar {
+            width:34px; height:34px; background:linear-gradient(135deg,#eef0ff,#e0e7ff); border-radius:12px;
+            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#5b4cf0;
+            flex-shrink:0; box-shadow:0 2px 8px rgba(91,76,240,0.12); overflow:hidden; cursor:pointer;
+        }
+        .user-avatar img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+        .nav-btn {
+            background:#f1f5f9; border:none; color:#334155; padding:7px 13px; border-radius:30px; cursor:pointer;
+            font-weight:600; font-size:clamp(10px,2.2vw,12px); font-family:var(--font-sans); transition:var(--transition-fast);
+            display:flex; align-items:center; gap:5px; text-decoration:none; white-space:nowrap; min-height:36px; letter-spacing:-0.1px;
+        }
+        .nav-btn:active { transform:scale(0.95); transition:0.08s; }
+        .nav-btn:hover { background:#e2e8f0; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+        .btn-back { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15); }
+        .btn-back:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
+        .btn-chat { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15); }
+        .btn-chat:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
+        .btn-logout { background:#fef2f2; color:#dc2626; border:1.5px solid rgba(220,38,38,0.1); }
+        .btn-logout:hover { background:#fee2e2; box-shadow:0 4px 14px rgba(220,38,38,0.12); }
+        #welcomeUser { display:none; }
+        @media (min-width:480px) { #welcomeUser { display:inline; font-weight:600; font-size:13px; color:#334155; white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis; } .navbar { padding:12px 22px; } .nav-btn { padding:8px 14px; font-size:12px; min-height:38px; } .user-avatar { width:36px; height:36px; } }
+        @media (min-width:768px) { .navbar { padding:14px 28px; } .nav-btn { padding:8px 18px; font-size:13px; min-height:40px; } .user-avatar { width:38px; height:38px; font-size:16px; } }
+
+        .container { max-width:750px; margin:0 auto; padding:14px 12px 28px; width:100%; position:relative; z-index:2; }
+        @media (min-width:480px) { .container { padding:18px 18px 30px; } }
+        @media (min-width:768px) { .container { padding:22px 24px 32px; } }
+
+        .card {
+            background:var(--glass-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+            border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-md);
+            border:1px solid var(--glass-border); animation:slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+        .card-title {
+            font-size:clamp(18px,4vw,22px); font-weight:800; color:var(--dark);
+            margin-bottom:16px; display:flex; align-items:center; gap:8px;
+            flex-wrap:wrap;
+        }
+        .test-badge {
+            display:inline-block; background:#e0e7ff; color:#4f46e5;
+            padding:4px 14px; border-radius:20px; font-weight:700; font-size:12px;
+        }
+        .exam-badge {
+            display:inline-block; background:#fef3c7; color:#92400e;
+            padding:4px 14px; border-radius:20px; font-weight:600; font-size:12px;
+        }
+
+        .lb-list { display:flex; flex-direction:column; gap:8px; max-height:65vh; overflow-y:auto; }
+        .lb-item {
+            display:flex; align-items:center; gap:12px;
+            padding:12px 14px; border-radius:14px;
+            background:#f8fafc; transition:var(--transition-fast);
+        }
+        .lb-item.you { background:#eef2ff; border:2px solid #6366f1; box-shadow:0 4px 15px rgba(99,102,241,0.15); }
+        .lb-rank {
+            width:34px; height:34px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:800; font-size:14px; flex-shrink:0;
+        }
+        .rank-1 { background:#fbbf24; color:#78350f; font-size:18px; }
+        .rank-2 { background:#e2e8f0; color:#475569; font-size:18px; }
+        .rank-3 { background:#fed7aa; color:#7c2d12; font-size:18px; }
+        .rank-other { background:#f1f5f9; color:#64748b; }
+
+        .lb-avatar {
+            width:38px; height:38px; border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size:14px; flex-shrink:0; overflow:hidden;
+        }
+        .lb-avatar img { width:100%; height:100%; object-fit:cover; }
+        .lb-item.you .lb-avatar { background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+        .lb-info { flex:1; min-width:0; }
+        .lb-name { font-weight:600; font-size:14px; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .lb-meta { font-size:11px; color:#64748b; }
+        .lb-stat { text-align:right; flex-shrink:0; }
+        .lb-stat .score { font-weight:700; font-size:15px; color:var(--dark); }
+        .lb-stat .acc { font-size:11px; color:#64748b; }
+        .you-tag {
+            background:#6366f1; color:white;
+            padding:2px 10px; border-radius:10px;
+            font-size:10px; font-weight:700; margin-left:6px;
+        }
+        .empty-state { text-align:center; padding:30px; color:#94a3b8; }
+        .empty-state i { font-size:40px; margin-bottom:10px; display:block; opacity:0.5; }
+
+        .loading-screen { text-align:center; padding:40px; color:#64748b; }
+        .loading-spinner {
+            width:40px; height:40px; border:4px solid #e2e8f0;
+            border-top:4px solid #5b4cf0; border-radius:50%;
+            animation:spin 0.8s linear infinite; margin:0 auto 12px;
+        }
+        @keyframes spin { to{transform:rotate(360deg);} }
+    </style>
+</head>
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+    <div class="grid-pattern"></div>
+    <div class="grain-overlay"></div>
+
+    <nav class="navbar">
+        <div class="nav-brand" onclick="window.location.href='dashboard.html'">
+            <i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span>
+        </div>
+        <div class="nav-user">
+            <div class="user-avatar" id="userInitial" onclick="window.location.href='profile.html'">S</div>
+            <span id="welcomeUser">Welcome</span>
+            <a href="exam.html" class="nav-btn btn-back"><i class="fas fa-arrow-left"></i> Library</a>
+            <a href="dashboard.html" class="nav-btn btn-chat"><i class="fas fa-home"></i> Home</a>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" id="leaderboardCard">
+            <div class="loading-screen" id="loadingScreen">
+                <div class="loading-spinner"></div>
+                <p>Loading leaderboard...</p>
+            </div>
+            <div id="leaderboardContent" style="display:none;">
+                <div class="card-title">
+                    <i class="fas fa-trophy" style="color:#fbbf24;"></i>
+                    Leaderboard
+                    <span class="test-badge" id="testCodeDisplay">📝 TEST</span>
+                    <span class="exam-badge" id="examDisplay" style="display:none;"></span>
+                </div>
+                <div class="lb-list" id="leaderboardList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
+        
+        const params = new URLSearchParams(window.location.search);
+        const testCode = params.get('testCode') || 'TEST';
+        const exam = params.get('exam') || '';
+
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
+            }
+        }
+
+        setAvatarWithPic('userInitial', user);
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        function getAvatarHTML(entry) {
+            if (entry.avatarUrl) {
+                return `<img src="${entry.avatarUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.textContent='${(entry.name||'S').charAt(0).toUpperCase()}'">`;
+            } else if (entry.profilePicUrl) {
+                return `<img src="${entry.profilePicUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            } else {
+                return (entry.name||'S').charAt(0).toUpperCase();
+            }
+        }
+
+        async function fetchLeaderboard() {
+            document.getElementById('testCodeDisplay').textContent = testCode;
+            if (exam) {
+                document.getElementById('examDisplay').textContent = '📚 ' + exam;
+                document.getElementById('examDisplay').style.display = 'inline-block';
+            }
+
+            try {
+                const res = await fetch(`${API_URL}?action=getLeaderboard&testCode=${encodeURIComponent(testCode)}`);
+                const data = await res.json();
+                
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('leaderboardContent').style.display = 'block';
+
+                if (data.success && data.leaderboard && data.leaderboard.length > 0) {
+                    renderLeaderboard(data.leaderboard);
+                } else {
+                    document.getElementById('leaderboardList').innerHTML = 
+                        '<div class="empty-state"><i class="fas fa-trophy"></i><p>No attempts yet. Be the first!</p></div>';
+                }
+            } catch (e) {
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('leaderboardContent').style.display = 'block';
+                document.getElementById('leaderboardList').innerHTML = 
+                    '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading leaderboard</p></div>';
+            }
+        }
+
+        function renderLeaderboard(lb) {
+            const list = document.getElementById('leaderboardList');
+            const top20 = lb.slice(0, 20);
+            
+            list.innerHTML = top20.map(entry => {
+                let rc = 'rank-other', rd = entry.rank;
+                if (entry.rank === 1) { rc='rank-1'; rd='🥇'; }
+                else if (entry.rank === 2) { rc='rank-2'; rd='🥈'; }
+                else if (entry.rank === 3) { rc='rank-3'; rd='🥉'; }
+                const isYou = entry.username === user.username;
+                
+                return `<div class="lb-item ${isYou?'you':''}">
+                    <div class="lb-rank ${rc}">${rd}</div>
+                    <div class="lb-avatar">${getAvatarHTML(entry)}</div>
+                    <div class="lb-info">
+                        <div class="lb-name">${entry.name||'Student'}${isYou?'<span class="you-tag">You</span>':''}</div>
+                        <div class="lb-meta">Accuracy: ${entry.accuracy}%</div>
+                    </div>
+                    <div class="lb-stat">
+                        <div class="score">${entry.score}/${entry.totalMarks||'?'}</div>
+                        <div class="acc">${entry.accuracy}%</div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            const userEntry = lb.find(e => e.username === user.username);
+            if (userEntry && userEntry.rank > 20) {
+                list.innerHTML += `<div style="text-align:center;color:#94a3b8;padding:8px;font-size:12px;">• • • • •</div>
+                <div class="lb-item you">
+                    <div class="lb-rank rank-other">${userEntry.rank}</div>
+                    <div class="lb-avatar">${getAvatarHTML(userEntry)}</div>
+                    <div class="lb-info"><div class="lb-name">${user.name} <span class="you-tag">You</span></div></div>
+                    <div class="lb-stat"><div class="score">${userEntry.score}/${userEntry.totalMarks||'?'}</div><div class="acc">${userEntry.accuracy}%</div></div>
+                </div>`;
+            }
+        }
+
+        function createSparkles(count = 30) {
+            const container = document.getElementById('bgAnimation');
+            const colors = ['rgba(91,76,240,0.9)','rgba(139,92,246,0.8)','rgba(6,182,212,0.8)','rgba(245,158,11,0.7)','rgba(16,185,129,0.8)'];
+            for (let i = 0; i < count; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                const size = Math.floor(Math.random() * 5) + 2;
+                sparkle.style.width = size + 'px';
+                sparkle.style.height = size + 'px';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.bottom = '0px';
+                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.boxShadow = `0 0 ${size*2}px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                sparkle.style.setProperty('--dur', (Math.random() * 8 + 6) + 's');
+                sparkle.style.setProperty('--delay', (Math.random() * 10) + 's');
+                container.appendChild(sparkle);
+            }
+        }
+
+        function createBackgroundBubbles() {
+            const container = document.getElementById('bgAnimation');
+            const bubbleColors = [
+                'radial-gradient(circle at 30% 30%, rgba(91,76,240,0.20), rgba(139,92,246,0.08))',
+                'radial-gradient(circle at 30% 30%, rgba(6,182,212,0.18), rgba(16,185,129,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.16), rgba(251,191,36,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(139,92,246,0.19), rgba(167,139,250,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16,185,129,0.17), rgba(52,211,153,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(239,68,68,0.12), rgba(248,113,113,0.04))',
+            ];
+            const bubbleCount = window.innerWidth < 480 ? 10 : 14;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bg-bubble');
+                const size = Math.floor(Math.random() * 140) + 60;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 90 + '%';
+                bubble.style.top = Math.random() * 85 + '%';
+                bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+                bubble.style.setProperty('--dur', (Math.random() * 12 + 12) + 's');
+                bubble.style.setProperty('--delay', (Math.random() * 8) + 's');
+                bubble.style.animationName = ['floatBubble','floatBubbleSlow','floatBubbleWide'][Math.floor(Math.random() * 3)];
+                container.appendChild(bubble);
+            }
+        }
+
+        createBackgroundBubbles();
+        createSparkles();
+        fetchLeaderboard();
+    </script>
+</body>
+</html>
