@@ -225,11 +225,17 @@
         }
         .chip:hover { background:#e2e8f0; border-color:#cbd5e1; }
         .test-code { font-weight:700; color:#5b4cf0; font-size:clamp(11px,2.3vw,13px); margin:6px 0; letter-spacing:0.3px; }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 8px;
+        }
         .start-btn {
-            background:linear-gradient(135deg,#5b4cf0,#6d5df7); color:white; border:none; padding:10px 16px; border-radius:14px;
-            font-weight:700; font-size:clamp(12px,2.6vw,14px); margin-top:auto; cursor:pointer; transition:var(--transition-smooth);
-            display:flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-sans); min-height:42px;
-            letter-spacing:-0.1px; box-shadow:0 4px 12px rgba(91,76,240,0.2); position:relative; overflow:hidden;
+            background:linear-gradient(135deg,#5b4cf0,#6d5df7); color:white; border:none; padding:10px 14px; border-radius:14px;
+            font-weight:700; font-size:clamp(11px,2.4vw,13px); cursor:pointer; transition:var(--transition-smooth);
+            display:flex; align-items:center; justify-content:center; gap:5px; font-family:var(--font-sans); min-height:40px;
+            letter-spacing:-0.1px; box-shadow:0 4px 12px rgba(91,76,240,0.2); position:relative; overflow:hidden; flex:1;
         }
         .start-btn::after {
             content:''; position:absolute; top:50%; left:50%; width:0; height:0; background:rgba(255,255,255,0.2);
@@ -238,7 +244,19 @@
         .start-btn:active::after { width:250px; height:250px; transition:0s; }
         .start-btn:active { transform:scale(0.94); transition:0.08s; }
         .start-btn:hover { background:linear-gradient(135deg,#4a3dd4,#5b4cf0); box-shadow:var(--shadow-primary); transform:translateY(-2px); }
-        @media (min-width:480px) { .start-btn { padding:12px 18px; font-size:14px; min-height:46px; border-radius:16px; } }
+        .leaderboard-btn {
+            background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#1e293b; border:none; padding:10px 14px; border-radius:14px;
+            font-weight:700; font-size:clamp(11px,2.4vw,13px); cursor:pointer; transition:var(--transition-smooth);
+            display:flex; align-items:center; justify-content:center; gap:5px; font-family:var(--font-sans); min-height:40px;
+            letter-spacing:-0.1px; box-shadow:0 4px 12px rgba(245,158,11,0.25); position:relative; overflow:hidden; flex:1;
+        }
+        .leaderboard-btn::after {
+            content:''; position:absolute; top:50%; left:50%; width:0; height:0; background:rgba(255,255,255,0.25);
+            border-radius:50%; transform:translate(-50%,-50%); transition:width 0.5s,height 0.5s;
+        }
+        .leaderboard-btn:active::after { width:250px; height:250px; transition:0s; }
+        .leaderboard-btn:active { transform:scale(0.94); transition:0.08s; }
+        .leaderboard-btn:hover { background:linear-gradient(135deg,#d97706,#f59e0b); box-shadow:0 8px 20px rgba(245,158,11,0.35); transform:translateY(-2px); }
         .score-preview {
             font-size:11px; color:#10b981; margin-top:4px; font-weight:600; background:#ecfdf5;
             padding:3px 10px; border-radius:8px; display:inline-block; align-self:flex-start; border:1px solid rgba(16,185,129,0.15);
@@ -247,6 +265,9 @@
         .empty-state i { font-size:clamp(28px,6vw,40px); margin-bottom:8px; display:block; opacity:0.5; }
         @keyframes fadeIn { from{ opacity:0; } to{ opacity:1; } }
         @keyframes cardSlideIn { from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+        @media (min-width:480px) {
+            .start-btn, .leaderboard-btn { padding:12px 16px; font-size:13px; min-height:44px; border-radius:16px; }
+        }
     </style>
 </head>
 <body>
@@ -298,7 +319,6 @@
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
-        // ==================== AVATAR HELPER ====================
         function setAvatarWithPic(elementId, userObj) {
             const el = document.getElementById(elementId);
             if (!el) return;
@@ -393,6 +413,11 @@
             displayTests(filtered);
         }
 
+        function viewLeaderboard(testCode, exam) {
+            localStorage.setItem('current_exam', exam);
+            window.location.href = `leaderboard.html?testCode=${encodeURIComponent(testCode)}&exam=${encodeURIComponent(exam)}`;
+        }
+
         function displayTests(tests) {
             const grid = document.getElementById('testGrid');
             if (!tests.length) {
@@ -422,9 +447,14 @@
                         </div>
                         <div class="test-code">📋 ${test.testCode}</div>
                         ${scorePreview}
-                        <button class="start-btn" onclick="startTest('${test.file}','${test.testCode}','${test.exam}')">
-                            <i class="fas fa-play-circle"></i> ${attempted ? 'Retake' : 'Start Test'}
-                        </button>
+                        <div class="action-buttons">
+                            <button class="start-btn" onclick="startTest('${test.file}','${test.testCode}','${test.exam}')">
+                                <i class="fas fa-play-circle"></i> ${attempted ? 'Retake' : 'Start'}
+                            </button>
+                            <button class="leaderboard-btn" onclick="viewLeaderboard('${test.testCode}','${test.exam}')">
+                                <i class="fas fa-trophy"></i> Rank
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
