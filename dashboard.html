@@ -296,7 +296,7 @@
             flex-shrink: 0;
             box-shadow: 0 3px 12px rgba(91, 76, 240, 0.12);
             border: 2px solid #fff;
-            overflow: hidden;          /* for image */
+            overflow: hidden;
         }
         .sidebar-avatar img {
             width: 100%;
@@ -326,6 +326,26 @@
             display: inline-block;
             margin-top: 3px;
             letter-spacing: -0.1px;
+        }
+        .sidebar-user-info .plan-badge-mini {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 3px;
+        }
+        .plan-badge-mini.premium {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+        }
+        .plan-badge-mini.premium_plus {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+        }
+        .plan-badge-mini.ultimate {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
         }
 
         .sidebar-nav {
@@ -393,13 +413,13 @@
             background: #eef0ff;
             color: #5b4cf0;
         }
-        .nav-icon-results {
-            background: #ecfdf5;
-            color: #10b981;
-        }
         .nav-icon-books {
             background: #fff7ed;
             color: #f97316;
+        }
+        .nav-icon-results {
+            background: #ecfdf5;
+            color: #10b981;
         }
         .nav-icon-chat {
             background: #f0f9ff;
@@ -408,6 +428,10 @@
         .nav-icon-instructions {
             background: #fefce8;
             color: #ca8a04;
+        }
+        .nav-icon-premium {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #d97706;
         }
         .nav-icon-profile {
             background: #fdf2f8;
@@ -420,6 +444,14 @@
         .sidebar-nav-item.logout-item:hover {
             background: #fef2f2;
             color: #dc2626;
+        }
+        .sidebar-nav-item.premium-nav-item {
+            border: 1.5px solid rgba(245, 158, 11, 0.35);
+            background: linear-gradient(135deg, #fffdf5, #fffbeb);
+        }
+        .sidebar-nav-item.premium-nav-item:hover {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border-color: #f59e0b;
         }
 
         .sidebar-divider {
@@ -581,8 +613,9 @@
             display: flex;
             align-items: center;
             gap: 7px;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             flex-shrink: 0;
+            justify-content: flex-end;
         }
         .user-avatar {
             width: 34px;
@@ -599,7 +632,7 @@
             box-shadow: 0 2px 8px rgba(91, 76, 240, 0.12);
             cursor: pointer;
             transition: var(--transition-fast);
-            overflow: hidden;             /* for image */
+            overflow: hidden;
         }
         .user-avatar img {
             width: 100%;
@@ -610,6 +643,14 @@
         .user-avatar:hover {
             transform: scale(1.06);
             box-shadow: 0 4px 14px rgba(91, 76, 240, 0.2);
+        }
+        .user-avatar.premium-ring {
+            border: 3px solid #f59e0b;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+        .user-avatar.ultimate-ring {
+            border: 3px solid #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
         }
         .nav-btn {
             background: #f1f5f9;
@@ -661,14 +702,42 @@
         #welcomeUser {
             display: none;
         }
-        @media (min-width: 480px) {
+        @media (max-width: 420px) {
+            .nav-user {
+                gap: 4px;
+            }
+            .nav-btn {
+                padding: 6px 10px;
+                font-size: 9px;
+                min-height: 32px;
+                border-radius: 24px;
+            }
+            .user-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 13px;
+            }
+            .hamburger-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+        }
+        @media (min-width: 421px) and (max-width: 520px) {
+            .nav-btn {
+                padding: 7px 11px;
+                font-size: 10px;
+                min-height: 34px;
+            }
+        }
+        @media (min-width: 521px) {
             #welcomeUser {
                 display: inline;
                 font-weight: 600;
-                font-size: 13px;
+                font-size: 12px;
                 color: #334155;
                 white-space: nowrap;
-                max-width: 90px;
+                max-width: 80px;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
@@ -801,6 +870,23 @@
         .info-tag:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 10px rgba(91, 76, 240, 0.12);
+        }
+        .premium-status-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: clamp(9px, 2vw, 11px);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
+        }
+        .premium-status-badge.ultimate {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
         }
 
         .notice-compact {
@@ -1478,6 +1564,60 @@
             align-self: flex-start;
             border: 1px solid rgba(16, 185, 129, 0.15);
         }
+        .badge-type {
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: clamp(9px, 2vw, 11px);
+            font-weight: 700;
+            align-self: flex-start;
+            margin-bottom: 6px;
+        }
+        .badge-free {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .badge-paid {
+            background: #fef3c7;
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .badge-premium {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .badge-premium-plus {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            color: #065f46;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .badge-ultimate {
+            background: linear-gradient(135deg, #fef3c7, #fde68a, #d1fae5);
+            color: #78350f;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .test-card.premium-card {
+            border-color: rgba(245, 158, 11, 0.25);
+        }
+        .test-card.plus-card {
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+        .start-btn.locked {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            cursor: not-allowed;
+        }
+        .start-btn.locked:hover {
+            background: linear-gradient(135deg, #64748b, #475569);
+            box-shadow: none;
+            transform: none;
+        }
+        .premium-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+        }
 
         .results-panel {
             background: var(--glass-bg);
@@ -1589,36 +1729,6 @@
             transform: translateY(-2px);
         }
         .open-full-btn:active {
-            transform: scale(0.94);
-            transition: 0.08s;
-        }
-        .open-full-btn-results {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 9px 16px;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: clamp(11px, 2.3vw, 13px);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: var(--font-sans);
-            white-space: nowrap;
-            min-height: 40px;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
-            text-decoration: none;
-            flex-shrink: 0;
-            letter-spacing: -0.1px;
-        }
-        .open-full-btn-results:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            box-shadow: 0 8px 22px rgba(16, 185, 129, 0.35);
-            transform: translateY(-2px);
-        }
-        .open-full-btn-results:active {
             transform: scale(0.94);
             transition: 0.08s;
         }
@@ -1825,41 +1935,9 @@
             display: block;
             opacity: 0.5;
         }
-
-        @media (max-width: 380px) {
-            .nav-btn-text {
-                display: none;
-            }
-            .nav-btn {
-                padding: 7px 10px;
-                min-height: 34px;
-                border-radius: 50%;
-                width: 34px;
-                justify-content: center;
-            }
-            .btn-chat,
-            .btn-logout {
-                width: 34px;
-                padding: 7px 0;
-            }
-            .exam-btn {
-                padding: 6px 10px;
-                font-size: 10px;
-                min-height: 30px;
-                border-radius: 30px;
-            }
-            .exam-pills {
-                padding: 8px 10px;
-                gap: 5px;
-            }
-            .exam-pills-inner {
-                gap: 4px;
-            }
-        }
     </style>
 </head>
 <body>
-
     <div class="bg-animation" id="bgAnimation"></div>
     <div class="grid-pattern"></div>
     <div class="grain-overlay"></div>
@@ -1867,91 +1945,43 @@
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
         <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
-            <!-- Brand Header -->
             <div class="sidebar-brand">
-                <div class="sidebar-logo">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="sidebar-brand-text">
-                    TestMaster Pro
-                    <small>Smart Learning Platform</small>
-                </div>
-                <button class="sidebar-close-btn" onclick="closeSidebarDirect()" aria-label="Close sidebar">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-text">TestMaster Pro<small>Smart Learning Platform</small></div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
             </div>
-
-            <!-- User Card -->
             <div class="sidebar-user-card">
                 <div class="sidebar-avatar" id="sidebarAvatar">S</div>
                 <div class="sidebar-user-info">
                     <div class="name" id="sidebarUserName">Student</div>
                     <span class="tag" id="sidebarUserTag">Learner</span>
+                    <span class="plan-badge-mini hidden" id="sidebarPlanBadgeMini"></span>
                 </div>
             </div>
-
-            <!-- Navigation -->
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-label">Main Menu</div>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('tests')">
-                    <span class="nav-icon nav-icon-tests"><i class="fas fa-book-open"></i></span>
-                    <span>Tests</span>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('tests')"><span class="nav-icon nav-icon-tests"><i class="fas fa-book-open"></i></span><span>Tests</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span><span>Books & PYQ</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span><span>My Results</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span><span>Chat</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><span class="nav-icon nav-icon-instructions"><i class="fas fa-question-circle"></i></span><span>Instructions</span></button>
+                <div class="sidebar-nav-label">Premium</div>
+                <button class="sidebar-nav-item premium-nav-item" id="sidebarPremiumBtn" onclick="sidebarNavigate('premium')">
+                    <span class="nav-icon nav-icon-premium"><i class="fas fa-crown"></i></span>
+                    <span id="sidebarPremiumBtnText">Buy Premium</span>
                 </button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('results')">
-                    <span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span>
-                    <span>My Results</span>
-                </button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')">
-                    <span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span>
-                    <span>Books & PYQ</span>
-                </button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')">
-                    <span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span>
-                    <span>Chat</span>
-                </button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')">
-                    <span class="nav-icon nav-icon-instructions"><i class="fas fa-question-circle"></i></span>
-                    <span>Instructions</span>
-                </button>
-
                 <div class="sidebar-nav-label">Account</div>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')">
-                    <span class="nav-icon nav-icon-profile"><i class="fas fa-user-circle"></i></span>
-                    <span>Profile</span>
-                </button>
-                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')">
-                    <span class="nav-icon nav-icon-logout"><i class="fas fa-sign-out-alt"></i></span>
-                    <span>Logout</span>
-                </button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><span class="nav-icon nav-icon-profile"><i class="fas fa-user-circle"></i></span><span>Profile</span></button>
+                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><span class="nav-icon nav-icon-logout"><i class="fas fa-sign-out-alt"></i></span><span>Logout</span></button>
             </nav>
-
-            <!-- Divider -->
             <div class="sidebar-divider"></div>
-
-            <!-- Contact Section -->
             <div class="sidebar-contact">
                 <div class="sidebar-contact-label">Contact Us</div>
-                <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-contact-item" target="_blank">
-                    <i class="fas fa-envelope contact-icon-email"></i>
-                    <span>testmaster.helpdesk@gmail.com</span>
-                </a>
-                <a href="https://t.me/cuet007_bot" class="sidebar-contact-item" target="_blank" rel="noopener">
-                    <i class="fab fa-telegram-plane contact-icon-telegram"></i>
-                    <span>@cuet007_bot</span>
-                </a>
-                <div class="sidebar-contact-item">
-                    <i class="fab fa-instagram contact-icon-instagram"></i>
-                    <span>Instagram</span>
-                    <span class="coming-soon-tag">Coming Soon</span>
-                </div>
-                <div class="sidebar-contact-item">
-                    <i class="fab fa-whatsapp contact-icon-whatsapp"></i>
-                    <span>WhatsApp</span>
-                    <span class="coming-soon-tag">Coming Soon</span>
-                </div>
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-contact-item" target="_blank"><i class="fas fa-envelope contact-icon-email"></i><span>testmaster.helpdesk@gmail.com</span></a>
+                <a href="https://t.me/cuet007_bot" class="sidebar-contact-item" target="_blank" rel="noopener"><i class="fab fa-telegram-plane contact-icon-telegram"></i><span>@cuet007_bot</span></a>
+                <div class="sidebar-contact-item"><i class="fab fa-instagram contact-icon-instagram"></i><span>Instagram</span><span class="coming-soon-tag">Coming Soon</span></div>
+                <div class="sidebar-contact-item"><i class="fab fa-whatsapp contact-icon-whatsapp"></i><span>WhatsApp</span><span class="coming-soon-tag">Coming Soon</span></div>
             </div>
-
-            <!-- Version -->
             <div class="sidebar-version">TestMaster Pro v2.0 • © 2025</div>
         </aside>
     </div>
@@ -1959,18 +1989,14 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-left">
-            <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="nav-brand" onclick="window.location.href='dashboard.html'">
-                <i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span>
-            </div>
+            <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
         </div>
         <div class="nav-user">
             <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Open menu">S</div>
-            <span id="welcomeUser" style="font-weight:600;">Welcome</span>
-            <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> <span class="nav-btn-text">Chat</span></a>
-            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span class="nav-btn-text">Logout</span></button>
+            <span id="welcomeUser">Welcome</span>
+            <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </nav>
 
@@ -2015,8 +2041,8 @@
 
         <div class="tab-row">
             <button id="tabTests" class="tab-btn tab-btn-active" onclick="switchTab('tests')"><i class="fas fa-book-open"></i> Tests</button>
-            <button id="tabResults" class="tab-btn tab-btn-inactive" onclick="switchTab('results')"><i class="fas fa-chart-bar"></i> My Results</button>
             <button id="tabBooks" class="tab-btn tab-btn-inactive" onclick="goToBooks()"><i class="fas fa-book"></i> Books & PYQ</button>
+            <button id="tabResults" class="tab-btn tab-btn-inactive" onclick="goToResults()"><i class="fas fa-chart-bar"></i> My Results</button>
         </div>
 
         <div id="testsSection">
@@ -2037,32 +2063,10 @@
                 <div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam to see tests</div>
             </div>
         </div>
-
-        <div id="resultsSection" class="hidden">
-            <div class="section-header-row">
-                <h3><i class="fas fa-chart-bar" style="color:#10b981;"></i> My Results</h3>
-                <a href="allresult.html" class="open-full-btn-results"><i class="fas fa-external-link-alt"></i> Open Full Results</a>
-            </div>
-            <div class="results-panel">
-                <div class="results-header">
-                    <span><i class="fas fa-clipboard-list"></i> Your test history</span>
-                    <span style="font-size:13px;color:#64748b;" id="resultExamLabel">All exams</span>
-                </div>
-                <div class="results-table-wrap">
-                    <table class="results-table">
-                        <thead><tr><th>Test Code</th><th>Score</th><th>Accuracy</th><th>Correct/Wrong</th><th>Time</th><th>Date</th></tr></thead>
-                        <tbody id="resultsBody"><tr><td colspan="6" style="text-align:center;padding:30px;">No attempts yet</td></tr></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <button class="floating-instruction-btn" onclick="openInstructions()" title="How to use" aria-label="Instructions">
-        <i class="fas fa-question"></i>
-    </button>
+    <button class="floating-instruction-btn" onclick="openInstructions()" title="How to use"><i class="fas fa-question"></i></button>
 
-    <!-- IMPROVED INSTRUCTION MODAL -->
     <div class="instruction-overlay hidden" id="instructionOverlay" onclick="closeInstructions(event)">
         <div class="instruction-modal" onclick="event.stopPropagation()">
             <div class="instruction-modal-header">
@@ -2070,56 +2074,26 @@
                 <button class="instruction-close-btn" onclick="closeInstructionsDirect()"><i class="fas fa-times"></i></button>
             </div>
             <div class="instruction-modal-body">
-                <div class="instruction-section">
-                    <h4>📚 <span>Selecting an Exam</span></h4>
-                    <p>Tap on any <span class="highlight">exam pill</span> (like SSC, UPSC, JEE) above the test list. This filters all available tests for that exam. Tap again to deselect.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>🔍 <span>Filtering Tests</span></h4>
-                    <p>After selecting an exam, use the <span class="highlight">Subject</span>, <span class="highlight">Chapter</span> dropdowns and <span class="highlight">Search</span> bar to narrow down tests. Filters update instantly.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>▶️ <span>Starting a Test</span></h4>
-                    <p>Click the <span class="highlight">Start Test</span> button on any test card. This opens the test interface in a new page where you can answer questions with a timer.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>📊 <span>Viewing Results</span></h4>
-                    <p>Switch to the <span class="highlight">My Results</span> tab to see your test history grouped by exam. Use <span class="highlight">Open Full Results</span> for detailed analytics.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>🔄 <span>Retaking Tests</span></h4>
-                    <p>Already attempted tests show a <span class="highlight">Retake</span> button and a green score preview with your best attempt details.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>👤 <span>Profile & Settings</span></h4>
-                    <p>Open the <span class="highlight">Profile</span> page from the sidebar to update your name, mobile, email, state, education, and change your password. You can also set a profile picture.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>💬 <span>Chat Feature</span></h4>
-                    <p>Use the <span class="highlight">Chat</span> button in the navbar to get instant help or discuss questions with the community.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>🔔 <span>Notices</span></h4>
-                    <p>The notice bar shows the latest announcement. Click <span class="highlight">All notices</span> to view the full list of updates and alerts.</p>
-                </div>
-                <div class="instruction-section">
-                    <h4>📈 <span>Stats Cards</span></h4>
-                    <p>The 4 stat cards at the top show: <span class="highlight">Available</span> tests, <span class="highlight">Completed</span> tests, <span class="highlight">Average Score</span>, and <span class="highlight">Best Score</span> for the selected exam.</p>
-                </div>
+                <div class="instruction-section"><h4>📚 <span>Selecting an Exam</span></h4><p>Tap on any <span class="highlight">exam pill</span> above the test list. This filters all available tests for that exam. Tap again to deselect.</p></div>
+                <div class="instruction-section"><h4>🔍 <span>Filtering Tests</span></h4><p>After selecting an exam, use the <span class="highlight">Subject</span>, <span class="highlight">Chapter</span> dropdowns and <span class="highlight">Search</span> bar to narrow down tests.</p></div>
+                <div class="instruction-section"><h4>▶️ <span>Starting a Test</span></h4><p>Click the <span class="highlight">Start Test</span> button on any test card. This opens the test interface with a timer.</p></div>
+                <div class="instruction-section"><h4>👑 <span>Premium Tests</span></h4><p>Premium tests show a <span class="highlight">crown icon</span>. Subscribe to <span class="highlight">Premium</span> from the sidebar to unlock all locked tests.</p></div>
+                <div class="instruction-section"><h4>📊 <span>My Results</span></h4><p>Click <span class="highlight">My Results</span> tab to go directly to your detailed test history and analytics.</p></div>
+                <div class="instruction-section"><h4>📈 <span>Stats Cards</span></h4><p>The 4 stat cards show: <span class="highlight">Available</span> tests, <span class="highlight">Completed</span> tests, <span class="highlight">Average Score</span>, and <span class="highlight">Best Score</span> for the selected exam.</p></div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwKKmPNFYUvB9QoTp5X6yo2I2EDgpsDngYRVAfIakxzwslcVkU2yrF46tEvjQmfnbmk8w/exec';
         let allMocks = [];
         let userResults = [];
         let selectedExam = '';
+        let userPremiumPlans = [];
 
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
-        // === PROFILE PICTURE HELPER ===
         function setAvatarWithPic(elementId, userObj) {
             const el = document.getElementById(elementId);
             if (!el) return;
@@ -2132,7 +2106,6 @@
             }
         }
 
-        // Apply avatars
         setAvatarWithPic('userInitial', user);
         setAvatarWithPic('sidebarAvatar', user);
 
@@ -2141,85 +2114,104 @@
         document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
 
         const userExtraTags = document.getElementById('userExtraTags');
-        if (user.state) {
-            userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-map-marker-alt"></i> ${user.state}</span>`;
-        }
-        if (user.preparingFor) {
-            userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-bullseye"></i> ${user.preparingFor}</span>`;
-        }
-        if (user.education) {
-            userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
-        }
+        if (user.state) userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-map-marker-alt"></i> ${user.state}</span>`;
+        if (user.preparingFor) userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-bullseye"></i> ${user.preparingFor}</span>`;
+        if (user.education) userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
 
         const hour = new Date().getHours();
         document.getElementById('greeting').textContent = `${hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening'}!`;
 
-        function logout() {
-            localStorage.removeItem('user');
-            window.location.href = 'index.html';
-        }
-
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
         function goToBooks() { window.location.href = 'book.html'; }
+        function goToResults() { window.location.href = 'allresult.html'; }
 
         function switchTab(tab) {
             const testsBtn = document.getElementById('tabTests');
-            const resultsBtn = document.getElementById('tabResults');
             const booksBtn = document.getElementById('tabBooks');
-            const testsSection = document.getElementById('testsSection');
-            const resultsSection = document.getElementById('resultsSection');
-
+            const resultsBtn = document.getElementById('tabResults');
             testsBtn.className = 'tab-btn tab-btn-inactive';
-            resultsBtn.className = 'tab-btn tab-btn-inactive';
             booksBtn.className = 'tab-btn tab-btn-inactive';
-            testsSection.classList.add('hidden');
-            resultsSection.classList.add('hidden');
-
+            resultsBtn.className = 'tab-btn tab-btn-inactive';
             if (tab === 'tests') {
                 testsBtn.className = 'tab-btn tab-btn-active';
-                testsSection.classList.remove('hidden');
+            } else if (tab === 'books') {
+                goToBooks();
             } else if (tab === 'results') {
-                resultsBtn.className = 'tab-btn tab-btn-active';
-                resultsSection.classList.remove('hidden');
-                renderResultsByExam();
+                goToResults();
             }
         }
 
-        // SIDEBAR FUNCTIONS
         function openSidebar() {
             const overlay = document.getElementById('sidebarOverlay');
-            overlay.classList.remove('hidden');
-            overlay.classList.add('active');
-            document.body.classList.add('sidebar-open');
-            document.body.style.overflow = 'hidden';
+            overlay.classList.remove('hidden'); overlay.classList.add('active');
+            document.body.classList.add('sidebar-open'); document.body.style.overflow = 'hidden';
         }
-
-        function closeSidebar(event) {
-            if (event.target === document.getElementById('sidebarOverlay')) {
-                closeSidebarDirect();
-            }
-        }
-
+        function closeSidebar(event) { if (event.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
         function closeSidebarDirect() {
             const overlay = document.getElementById('sidebarOverlay');
-            overlay.classList.remove('active');
-            document.body.classList.remove('sidebar-open');
-            document.body.style.overflow = '';
-            setTimeout(() => { overlay.classList.add('hidden'); }, 350);
+            overlay.classList.remove('active'); document.body.classList.remove('sidebar-open');
+            document.body.style.overflow = ''; setTimeout(() => overlay.classList.add('hidden'), 350);
         }
-
         function sidebarNavigate(action) {
             closeSidebarDirect();
             setTimeout(() => {
                 switch (action) {
                     case 'tests': switchTab('tests'); break;
-                    case 'results': switchTab('results'); break;
                     case 'books': goToBooks(); break;
+                    case 'results': goToResults(); break;
                     case 'chat': window.location.href = 'chat.html'; break;
                     case 'instructions': openInstructions(); break;
                     case 'profile': window.location.href = 'profile.html'; break;
+                    case 'premium': window.location.href = 'payment.html'; break;
                     case 'logout': logout(); break;
                 }
             }, 300);
+        }
+
+        async function loadUserPremiumStatus() {
+            try {
+                if (user.premiumPlans && user.premiumPlans.length > 0) userPremiumPlans = user.premiumPlans;
+                const res = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user.username)}`);
+                const data = await res.json();
+                if (data.success && data.premiumPlans && data.premiumPlans.length > 0) {
+                    userPremiumPlans = data.premiumPlans;
+                    user.premiumPlans = data.premiumPlans;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    updatePremiumUI();
+                } else {
+                    updatePremiumUI(false);
+                }
+            } catch (e) { updatePremiumUI(false); }
+        }
+
+        function updatePremiumUI(hasPremium = true) {
+            const sidebarBadge = document.getElementById('sidebarPlanBadgeMini');
+            const sidebarBtnText = document.getElementById('sidebarPremiumBtnText');
+            const userAvatar = document.getElementById('userInitial');
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+
+            if (hasPremium && userPremiumPlans.length > 0) {
+                const plan = userPremiumPlans[0];
+                const planType = plan.planType || 'premium';
+                const planName = plan.planName || planType;
+                const displayName = planName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                sidebarBadge.classList.remove('hidden');
+                sidebarBadge.className = `plan-badge-mini ${planType}`;
+                sidebarBadge.textContent = displayName;
+                sidebarBtnText.textContent = 'Manage Premium';
+                userAvatar.classList.add(planType === 'ultimate' ? 'ultimate-ring' : 'premium-ring');
+                sidebarAvatar.classList.add(planType === 'ultimate' ? 'ultimate-ring' : 'premium-ring');
+                if (!document.getElementById('premiumStatusTag')) {
+                    userExtraTags.innerHTML += `<span class="premium-status-badge ${planType === 'ultimate' ? 'ultimate' : ''}" id="premiumStatusTag"><i class="fas fa-crown"></i> ${displayName}</span>`;
+                }
+            } else {
+                sidebarBadge.classList.add('hidden');
+                sidebarBtnText.textContent = 'Buy Premium';
+                userAvatar.classList.remove('premium-ring', 'ultimate-ring');
+                sidebarAvatar.classList.remove('premium-ring', 'ultimate-ring');
+                const existing = document.getElementById('premiumStatusTag');
+                if (existing) existing.remove();
+            }
         }
 
         async function loadNoticeCompact() {
@@ -2229,16 +2221,11 @@
                 notices.sort((a, b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time));
                 if (notices.length > 0) {
                     const latest = notices[0];
-                    document.getElementById('noticeContent').innerHTML = `
-                        <h4>${latest.headline}</h4>
-                        <span><i class="far fa-clock"></i> ${latest.notification?.substring(0, 60)}...</span>
-                    `;
+                    document.getElementById('noticeContent').innerHTML = `<h4>${latest.headline}</h4><span><i class="far fa-clock"></i> ${latest.notification?.substring(0, 60)}...</span>`;
                 } else {
                     document.getElementById('noticeContent').innerHTML = `<h4>No notices</h4><span>Stay tuned</span>`;
                 }
-            } catch (e) {
-                document.getElementById('noticeContent').innerHTML = `<h4>Notices unavailable</h4><span>Check back later</span>`;
-            }
+            } catch (e) { document.getElementById('noticeContent').innerHTML = `<h4>Notices unavailable</h4><span>Check back later</span>`; }
         }
 
         async function loadMocks() {
@@ -2247,17 +2234,13 @@
                 allMocks = await r.json();
                 renderExamButtons();
                 updateStatsForExam([]);
-            } catch (e) {
-                document.getElementById('examButtons').innerHTML = '<span style="color:#b91c1c;">Error loading exams</span>';
-            }
+            } catch (e) { document.getElementById('examButtons').innerHTML = '<span style="color:#b91c1c;">Error loading exams</span>'; }
         }
 
         function renderExamButtons() {
             const exams = [...new Set(allMocks.map(m => m.exam))];
             const container = document.getElementById('examButtons');
-            container.innerHTML = exams.map(exam =>
-                `<button class="exam-btn" onclick="selectExam('${exam}', this)">${getExamIcon(exam)} ${exam}</button>`
-            ).join('');
+            container.innerHTML = exams.map(exam => `<button class="exam-btn" onclick="selectExam('${exam}', this)">${getExamIcon(exam)} ${exam}</button>`).join('');
         }
 
         function getExamIcon(e) {
@@ -2287,12 +2270,7 @@
             const subjects = [...new Set(tests.map(t => t.subject))];
             const subjectSelect = document.getElementById('subjectFilter');
             subjectSelect.innerHTML = '<option value="">📖 All Subjects</option>';
-            subjects.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                opt.textContent = s;
-                subjectSelect.appendChild(opt);
-            });
+            subjects.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; subjectSelect.appendChild(opt); });
             document.getElementById('chapterFilter').innerHTML = '<option value="">📑 All Chapters</option>';
             document.getElementById('searchInput').value = '';
         }
@@ -2308,12 +2286,7 @@
                 const chapters = [...new Set(filtered.map(m => m.chapter))];
                 const chapterSelect = document.getElementById('chapterFilter');
                 chapterSelect.innerHTML = '<option value="">📑 All Chapters</option>';
-                chapters.forEach(ch => {
-                    const opt = document.createElement('option');
-                    opt.value = ch;
-                    opt.textContent = ch;
-                    chapterSelect.appendChild(opt);
-                });
+                chapters.forEach(ch => { const opt = document.createElement('option'); opt.value = ch; opt.textContent = ch; chapterSelect.appendChild(opt); });
             }
             if (chapter) filtered = filtered.filter(m => m.chapter === chapter);
             if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode.toLowerCase().includes(search));
@@ -2325,23 +2298,57 @@
             window.location.href = `leaderboard.html?testCode=${encodeURIComponent(testCode)}&exam=${encodeURIComponent(exam)}`;
         }
 
+        function hasUserAccess(test) {
+            if (test.type === 'free' || !test.type) return true;
+            if (userPremiumPlans.length > 0) return true;
+            if (test.requiredPlan) return userPremiumPlans.some(p => p.planType === test.requiredPlan);
+            return false;
+        }
+
+        function getTestTypeBadge(test) {
+            if (!test.type || test.type === 'free') return '<span class="badge-type badge-free"><i class="fas fa-unlock"></i> Free</span>';
+            if (test.requiredPlan === 'premium_plus') return '<span class="badge-type badge-premium-plus"><i class="fas fa-star"></i> Premium Plus</span>';
+            if (test.requiredPlan === 'ultimate') return '<span class="badge-type badge-ultimate"><i class="fas fa-gem"></i> Ultimate</span>';
+            return '<span class="badge-type badge-premium"><i class="fas fa-crown"></i> Premium</span>';
+        }
+
+        function getPremiumIcon(test) {
+            if (test.type === 'paid') {
+                if (test.requiredPlan === 'premium_plus') return '⭐';
+                if (test.requiredPlan === 'ultimate') return '💎';
+                return '👑';
+            }
+            return '';
+        }
+
+        function getTestCardClass(test) {
+            if (test.type === 'paid') {
+                if (test.requiredPlan === 'premium_plus' || test.requiredPlan === 'ultimate') return 'premium-card plus-card';
+                return 'premium-card';
+            }
+            return '';
+        }
+
         function displayTests(tests) {
             const grid = document.getElementById('testGrid');
-            if (!tests.length) {
-                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i> No tests match filters</div>';
-                return;
-            }
+            if (!tests.length) { grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i> No tests match filters</div>'; return; }
             const attemptedCodes = userResults.map(r => r.testCode);
             grid.innerHTML = tests.map((test, index) => {
                 const attempted = attemptedCodes.includes(test.testCode);
                 const userResult = userResults.find(r => r.testCode === test.testCode);
+                const hasAccess = hasUserAccess(test);
+                const premiumIcon = getPremiumIcon(test);
+                const cardClass = getTestCardClass(test);
                 let scorePreview = '';
-                if (userResult) {
-                    scorePreview = `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks || test.totalQuestions * test.marksPerQuestion} (${userResult.accuracy}%)</div>`;
-                }
+                if (userResult) scorePreview = `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks || test.totalQuestions * test.marksPerQuestion} (${userResult.accuracy}%)</div>`;
+                const startBtn = hasAccess
+                    ? `<button class="start-btn" onclick="startTest('${test.file}','${test.testCode}','${test.exam}')"><i class="fas fa-play-circle"></i> ${attempted ? 'Retake' : 'Start'}</button>`
+                    : `<button class="start-btn locked" onclick="handleLockedTest('${test.requiredPlan || 'premium'}')"><i class="fas fa-lock"></i> Unlock ${(test.requiredPlan || 'premium').replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())}</button>`;
                 return `
-                    <div class="test-card" style="animation-delay:${index * 0.04}s;">
+                    <div class="test-card ${cardClass}" style="animation-delay:${index * 0.04}s;">
+                        ${premiumIcon ? `<div class="premium-badge">${premiumIcon}</div>` : ''}
                         <span class="badge-exam">${test.exam}</span>
+                        ${getTestTypeBadge(test)}
                         <h4>${test.testName}</h4>
                         <div class="meta-row">
                             <span class="chip"><i class="fas fa-book"></i> ${test.subject}</span>
@@ -2355,16 +2362,23 @@
                         <div class="test-code">📋 ${test.testCode}</div>
                         ${scorePreview}
                         <div class="action-buttons">
-                            <button class="start-btn" onclick="startTest('${test.file}','${test.testCode}','${test.exam}')">
-                                <i class="fas fa-play-circle"></i> ${attempted ? 'Retake' : 'Start'}
-                            </button>
-                            <button class="leaderboard-btn" onclick="viewLeaderboard('${test.testCode}','${test.exam}')">
-                                <i class="fas fa-trophy"></i> Rank
-                            </button>
+                            ${startBtn}
+                            <button class="leaderboard-btn" onclick="viewLeaderboard('${test.testCode}','${test.exam}')"><i class="fas fa-trophy"></i> Rank</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
+        }
+
+        function handleLockedTest(requiredPlan) {
+            Swal.fire({
+                title: '🔒 Premium Test',
+                text: `This test requires ${requiredPlan.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())} plan. Please upgrade to access.`,
+                icon: 'info',
+                confirmButtonText: 'View Plans',
+                confirmButtonColor: '#f59e0b',
+                showCancelButton: true,
+                cancelButtonText: 'Maybe Later'
+            }).then((result) => { if (result.isConfirmed) window.location.href = 'payment.html'; });
         }
 
         function startTest(file, code, exam) {
@@ -2394,55 +2408,11 @@
             }
         }
 
-        function renderResultsByExam() {
-            const tbody = document.getElementById('resultsBody');
-            const label = document.getElementById('resultExamLabel');
-            if (!userResults.length) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;">No attempts yet</td></tr>';
-                label.textContent = 'All exams';
-                return;
-            }
-            const examMap = {};
-            allMocks.forEach(m => { if (m.exam) examMap[m.testCode] = m.exam; });
-            const grouped = {};
-            userResults.forEach(r => {
-                const exam = examMap[r.testCode] || 'Unknown';
-                if (!grouped[exam]) grouped[exam] = [];
-                grouped[exam].push(r);
-            });
-            let html = '';
-            for (const [exam, results] of Object.entries(grouped)) {
-                html += `<tr style="background:#f8fafc;"><td colspan="6" style="font-weight:700;padding:12px 20px;color:#5b4cf0;">📁 ${exam}</td></tr>`;
-                results.slice(0, 20).forEach(r => {
-                    const timeStr = r.timeTaken ? formatTime(r.timeTaken) : '--';
-                    html += `<tr>
-                        <td><strong>${r.testCode}</strong></td>
-                        <td><span class="score-badge">${r.score}/${r.totalMarks || '--'}</span></td>
-                        <td>${r.accuracy}%</td>
-                        <td>✅${r.correct || 0} ❌${r.wrong || 0}</td>
-                        <td>${timeStr}</td>
-                        <td>${new Date(r.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'})}</td>
-                    </tr>`;
-                });
-            }
-            tbody.innerHTML = html;
-            label.textContent = 'Grouped by exam';
-        }
-
-        function formatTime(s) {
-            if (!s || s <= 0) return '--';
-            const m = Math.floor(s / 60), sec = s % 60;
-            return `${m}m ${sec}s`;
-        }
-
         async function loadUserResults() {
             try {
-                const r = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
-                const d = await r.json();
-                if (d.success) {
-                    userResults = d.results;
-                    updateStatsForExam([]);
-                }
+                const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const data = await res.json();
+                if (data.success) { userResults = data.results; updateStatsForExam([]); }
             } catch (e) { console.warn('Results fetch failed:', e); }
         }
 
@@ -2450,14 +2420,12 @@
             document.getElementById('instructionOverlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-
         function closeInstructions(event) {
             if (event.target === document.getElementById('instructionOverlay')) {
                 document.getElementById('instructionOverlay').classList.add('hidden');
                 document.body.style.overflow = '';
             }
         }
-
         function closeInstructionsDirect() {
             document.getElementById('instructionOverlay').classList.add('hidden');
             document.body.style.overflow = '';
@@ -2467,13 +2435,8 @@
             if (e.key === 'Escape') {
                 const overlay = document.getElementById('instructionOverlay');
                 const sidebarOverlay = document.getElementById('sidebarOverlay');
-                if (!overlay.classList.contains('hidden')) {
-                    overlay.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }
-                if (sidebarOverlay.classList.contains('active')) {
-                    closeSidebarDirect();
-                }
+                if (!overlay.classList.contains('hidden')) { overlay.classList.add('hidden'); document.body.style.overflow = ''; }
+                if (sidebarOverlay.classList.contains('active')) closeSidebarDirect();
             }
         });
 
@@ -2489,13 +2452,10 @@
             ];
             const bubbleCount = window.innerWidth < 480 ? 8 : 12;
             for (let i = 0; i < bubbleCount; i++) {
-                const bubble = document.createElement('div');
-                bubble.classList.add('bg-bubble');
+                const bubble = document.createElement('div'); bubble.classList.add('bg-bubble');
                 const size = Math.floor(Math.random() * 160) + 70;
-                bubble.style.width = size + 'px';
-                bubble.style.height = size + 'px';
-                bubble.style.left = Math.random() * 90 + '%';
-                bubble.style.top = Math.random() * 85 + '%';
+                bubble.style.width = size + 'px'; bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 90 + '%'; bubble.style.top = Math.random() * 85 + '%';
                 bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
                 bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
                 bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
@@ -2504,19 +2464,9 @@
             }
         }
 
-        loadNoticeCompact();
-        loadMocks();
-        loadUserResults();
-        createBackgroundBubbles();
-
+        loadNoticeCompact(); loadMocks(); loadUserResults(); loadUserPremiumStatus(); createBackgroundBubbles();
         let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                document.getElementById('bgAnimation').innerHTML = '';
-                createBackgroundBubbles();
-            }, 400);
-        });
+        window.addEventListener('resize', () => { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(() => { document.getElementById('bgAnimation').innerHTML = ''; createBackgroundBubbles(); }, 400); });
     </script>
 </body>
 </html>
