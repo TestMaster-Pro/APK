@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Mathematics • Matrices</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-glow: #6366f1;
+            --accent: #a78bfa;
+            --accent-glow: #a78bfa;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(99, 102, 241, 0.25);
+            --glow-md: 0 0 20px rgba(99, 102, 241, 0.35);
+            --glow-lg: 0 0 30px rgba(167, 139, 250, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #eef2ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(99, 102, 241, 0.15);
+            --glow-md: 0 0 20px rgba(99, 102, 241, 0.2);
+            --glow-lg: 0 0 30px rgba(167, 139, 250, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #f1f5f9 100%);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(99, 102, 241, 0.2);
+            top: -100px;
+            right: -80px;
+        }
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(167, 139, 250, 0.18);
+            bottom: -80px;
+            left: -60px;
+            animation-delay: -7s;
+        }
+        .blob-3 {
+            width: 220px;
+            height: 220px;
+            background: rgba(236, 72, 153, 0.16);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        @keyframes blobFloat {
+            0%,100% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(40px,-50px) scale(1.1); }
+            50% { transform: translate(-30px,-20px) scale(0.9); }
+            75% { transform: translate(20px,40px) scale(1.05); }
+        }
+
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.2), rgba(167,139,250,0.06));
+            box-shadow: 0 0 20px rgba(99,102,241,0.12);
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity:0.5; }
+            25% { transform: translateY(-250px) translateX(30px) scale(0.8); opacity:0.7; }
+            50% { transform: translateY(-500px) translateX(-20px) scale(1); opacity:0.6; }
+            75% { transform: translateY(-750px) translateX(15px) scale(0.9); opacity:0.35; }
+            100% { transform: translateY(-1000px) translateX(-10px) scale(0.3); opacity:0; }
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .top-bar:hover { box-shadow: var(--glow-sm); }
+        .test-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+        .test-title .icon-dna {
+            font-size: 20px;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+        @keyframes pulseIcon {
+            0%,100% { transform: scale(1); opacity:1; }
+            50% { transform: scale(1.15); opacity:0.75; }
+        }
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 2px solid #f97316;
+            background: var(--card);
+            color: #f97316;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover {
+            box-shadow: 0 0 14px rgba(249,115,22,0.35);
+            transform: translateY(-1px);
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg,#f97316,#ea580c);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 16px rgba(249,115,22,0.4);
+        }
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .theme-toggle:active { transform: scale(0.92); }
+        .timer-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239,68,68,0.15);
+            border-color: rgba(239,68,68,0.4);
+            color: #fca5a5;
+            animation: pulse 0.8s infinite;
+            box-shadow: 0 0 18px rgba(239,68,68,0.3);
+        }
+        @keyframes pulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        .info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .info-chip i { font-size: 11px; }
+        .info-chip.exam { color: #818cf8; }
+        .info-chip.subject { color: #a78bfa; }
+        .info-chip.marks { color: #fbbf24; }
+
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover { box-shadow: var(--glow-sm); }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #a78bfa);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(99,102,241,0.5);
+        }
+
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.35s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: var(--glow-md);
+            transform: translateY(-2px);
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .question-card.swiping { transition: none; }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-badge {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 0 14px rgba(99,102,241,0.35);
+        }
+        .q-marks {
+            font-weight: 600;
+            font-size: 12px;
+            color: #fbbf24;
+            background: rgba(251,191,36,0.1);
+            padding: 6px 14px;
+            border-radius: 15px;
+            border: 1px solid rgba(251,191,36,0.25);
+        }
+
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--option-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #6366f1;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--option-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            backdrop-filter: blur(4px);
+        }
+        .option-card:hover {
+            border-color: #818cf8;
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(99,102,241,0.2);
+        }
+        .option-card.selected {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 6px 22px rgba(99,102,241,0.4);
+        }
+        .option-card.correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(16,185,129,0.4) !important;
+        }
+        .option-card.wrong {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(239,68,68,0.4) !important;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #818cf8;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+        .option-card.selected .option-letter {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .option-card.correct .option-letter,
+        .option-card.wrong .option-letter {
+            background: rgba(255,255,255,0.25);
+            color: white;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 60px;
+        }
+        .btn:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-2px);
+            border-color: #818cf8;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn:disabled { opacity: 0.4; pointer-events: none; }
+        .btn-mark {
+            background: rgba(245,158,11,0.12);
+            border-color: rgba(245,158,11,0.3);
+            color: #fbbf24;
+        }
+        .btn-clear {
+            background: rgba(16,185,129,0.1);
+            border-color: rgba(16,185,129,0.25);
+            color: #4ade80;
+        }
+
+        .palette-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+        .palette-card:hover { box-shadow: var(--glow-sm); }
+        .palette-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+        .palette-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--option-bg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            color: var(--text);
+        }
+        .palette-num:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+            box-shadow: var(--glow-sm);
+        }
+        .palette-num.answered {
+            background: linear-gradient(135deg,#10b981,#059669);
+            color: white;
+            box-shadow: 0 0 10px rgba(16,185,129,0.4);
+        }
+        .palette-num.marked {
+            background: linear-gradient(135deg,#f59e0b,#d97706);
+            color: white;
+            box-shadow: 0 0 10px rgba(245,158,11,0.4);
+        }
+        .palette-num.current {
+            border-color: #6366f1;
+            background: rgba(99,102,241,0.2);
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(99,102,241,0.4);
+        }
+        .palette-num.wrong-num {
+            background: linear-gradient(135deg,#ef4444,#dc2626);
+            color: white;
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .review-panel {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+        .review-panel.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .result-item {
+            background: var(--option-bg);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .result-item:hover { box-shadow: var(--glow-sm); }
+        .result-item .value {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg,#6366f1,#a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .result-item .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .explanation-box {
+            background: rgba(245,158,11,0.1);
+            border: 1px solid rgba(245,158,11,0.25);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .explanation-box .exp-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #fbbf24;
+        }
+
+        .swipe-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
+        .review-mode-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .review-mode-card.correct-answer {
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.3);
+        }
+        .review-mode-card.wrong-answer {
+            background: rgba(239,68,68,0.08);
+            border-color: rgba(239,68,68,0.3);
+        }
+        .review-mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .review-mode-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+        .status-correct { background: rgba(16,185,129,0.2); color: #4ade80; }
+        .status-wrong { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .status-unanswered { background: rgba(148,163,184,0.2); color: #94a3b8; }
+
+        .toast {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: var(--glow-md);
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 13px;
+            display: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .review-mode-badge {
+            display: inline-block;
+            background: linear-gradient(135deg,#6366f1,#a78bfa);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 14px rgba(99,102,241,0.35);
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg,#6366f1,#a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(99,102,241,0.3);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 500px) {
+            .options-grid { grid-template-columns: 1fr; }
+            .palette-grid { grid-template-columns: repeat(5, 1fr); }
+            .test-title { font-size: 15px; }
+            .question-text { font-size: 14px; padding: 14px; }
+            .result-summary { grid-template-columns: 1fr 1fr; }
+            .blob { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">📐</div>
+                CUET Mathematics • Matrices
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">30:00</span></div>
+            </div>
+        </div>
+
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-th"></i> Mathematics</span>
+            <span class="info-chip"><i class="fas fa-border-all"></i> Matrices</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 30 Questions</span>
+        </div>
+
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/30 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/30</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+            <button class="btn" onclick="submitTest()" id="submitBtn" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;font-size:14px;padding:12px;margin-top:12px;width:100%;display:none !important;">
+                <i class="fas fa-check-double"></i> Submit Test
+            </button>
+        </div>
+
+        <div id="reviewModeContainer" style="display:none;"></div>
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+
+        <div class="review-panel" id="reviewPanel">
+            <h3 style="margin-bottom:12px;">📋 Result Review</h3>
+            <div class="result-summary" id="resultSummary"></div>
+            <div id="reviewQuestions"></div>
+            <button class="btn" onclick="closeReview()" style="margin-top:12px;display:inline-flex !important;background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-times"></i> Close Review
+            </button>
+        </div>
+
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #6366f1;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(99,102,241,0.22), rgba(167,139,250,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16,185,129,0.2), rgba(52,211,153,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.2), rgba(252,211,77,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239,68,68,0.16), rgba(248,113,113,0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(167,139,250,0.2), rgba(99,102,241,0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+                bubbles.forEach(b => {
+                    if (parseFloat(b.style.animationDuration) > 0 && b.getAnimations().length === 0) b.remove();
+                });
+            }, 4000);
+        })();
+
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : '📐';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        const QUESTIONS = [{
+            id: 0,
+            en: "What is a matrix with only one column called?",
+            hi: "केवल एक कॉलम वाले आव्यूह को क्या कहा जाता है?",
+            oEn: ["Row Matrix", "Column Matrix", "Square Matrix", "Diagonal Matrix"],
+            oHi: ["पंक्ति आव्यूह", "स्तंभ आव्यूह", "वर्ग आव्यूह", "विकर्ण आव्यूह"],
+            c: 1,
+            exp: "A matrix with only one column is called a Column Matrix.",
+            options: ["Row Matrix", "Column Matrix", "Square Matrix", "Diagonal Matrix"],
+            correct: 1,
+            explanation: "Single column → Column Matrix."
+        }, {
+            id: 1,
+            en: "A square matrix A = [aᵢⱼ] is a diagonal matrix if aᵢⱼ = 0 for:",
+            hi: "एक वर्ग आव्यूह A = [aᵢⱼ] विकर्ण आव्यूह होता है यदि aᵢⱼ = 0 हो, जब:",
+            oEn: ["i = j", "i ≠ j", "i > j", "i < j"],
+            oHi: ["i = j", "i ≠ j", "i > j", "i < j"],
+            c: 1,
+            exp: "In a diagonal matrix, all non-diagonal elements (i ≠ j) are zero.",
+            options: ["i = j", "i ≠ j", "i > j", "i < j"],
+            correct: 1,
+            explanation: "Non-diagonal elements are zero."
+        }, {
+            id: 2,
+            en: "What is the order of a matrix having 3 rows and 2 columns?",
+            hi: "3 पंक्तियों और 2 स्तंभों वाले आव्यूह का क्रम (order) क्या होगा?",
+            oEn: ["2 × 3", "3 × 2", "3 + 2", "6"],
+            oHi: ["2 × 3", "3 × 2", "3 + 2", "6"],
+            c: 1,
+            exp: "Order = rows × columns = 3 × 2.",
+            options: ["2 × 3", "3 × 2", "3 + 2", "6"],
+            correct: 1,
+            explanation: "3 rows, 2 columns → 3 × 2."
+        }, {
+            id: 3,
+            en: "In an Identity matrix, the diagonal elements are always ________.",
+            hi: "एक तत्समक (Identity) आव्यूह में, विकर्ण के अवयव हमेशा ________ होते हैं।",
+            oEn: ["0", "1", "-1", "Variable"],
+            oHi: ["0", "1", "-1", "परिवर्तनशील"],
+            c: 1,
+            exp: "Identity matrix has 1 on the main diagonal and 0 elsewhere.",
+            options: ["0", "1", "-1", "Variable"],
+            correct: 1,
+            explanation: "Diagonal elements = 1."
+        }, {
+            id: 4,
+            en: "If two matrices are equal, their ________ must be the same.",
+            hi: "यदि दो आव्यूह समान हैं, तो उनका ________ समान होना चाहिए।",
+            oEn: ["Sum", "Order and corresponding elements", "Determinant only", "Trace only"],
+            oHi: ["योग", "क्रम और संगत अवयव", "केवल सारणिक", "केवल अनुरेख"],
+            c: 1,
+            exp: "Two matrices are equal if they have same order and each corresponding element is equal.",
+            options: ["Sum", "Order and corresponding elements", "Determinant only", "Trace only"],
+            correct: 1,
+            explanation: "Same order and equal elements."
+        }, {
+            id: 5,
+            en: "For addition (A + B) to be possible, A and B must have:",
+            hi: "जोड़ (A + B) संभव होने के लिए, A और B का क्या समान होना चाहिए?",
+            oEn: ["Same order", "Same determinant", "Same inverse", "Same diagonal"],
+            oHi: ["समान क्रम", "समान सारणिक", "समान व्युत्क्रम", "समान विकर्ण"],
+            c: 0,
+            exp: "Matrix addition requires both matrices to have the same number of rows and columns.",
+            options: ["Same order", "Same determinant", "Same inverse", "Same diagonal"],
+            correct: 0,
+            explanation: "A and B must be of same order."
+        }, {
+            id: 6,
+            en: "Is matrix addition commutative? (A+B = B+A)",
+            hi: "क्या आव्यूह का जोड़ क्रमविनिमेय (commutative) होता है?",
+            oEn: ["Yes", "No", "Only for square matrices", "Only for diagonal matrices"],
+            oHi: ["हाँ", "नहीं", "केवल वर्ग आव्यूह के लिए", "केवल विकर्ण आव्यूह के लिए"],
+            c: 0,
+            exp: "Matrix addition is commutative: A+B = B+A.",
+            options: ["Yes", "No", "Only square", "Only diagonal"],
+            correct: 0,
+            explanation: "Addition is commutative."
+        }, {
+            id: 7,
+            en: "If k is a scalar, then k(A+B) = ________.",
+            hi: "यदि k एक अदिश है, तो k(A+B) = ________।",
+            oEn: ["kA + B", "kA + kB", "A + kB", "kAB"],
+            oHi: ["kA + B", "kA + kB", "A + kB", "kAB"],
+            c: 1,
+            exp: "Scalar multiplication is distributive over addition: k(A+B) = kA + kB.",
+            options: ["kA + B", "kA + kB", "A + kB", "kAB"],
+            correct: 1,
+            explanation: "Distributive property."
+        }, {
+            id: 8,
+            en: "Matrix multiplication AB is possible only if:",
+            hi: "आव्यूह गुणन AB केवल तभी संभव है जब:",
+            oEn: ["Rows of A = Rows of B", "Columns of A = Columns of B", "Columns of A = Rows of B", "Rows of A = Columns of B"],
+            oHi: ["A की पंक्तियाँ = B की पंक्तियाँ", "A के कॉलम = B के कॉलम", "A के कॉलम = B की पंक्तियाँ", "A की पंक्तियाँ = B के कॉलम"],
+            c: 2,
+            exp: "For AB, number of columns in A must equal number of rows in B.",
+            options: ["Rows A = Rows B", "Cols A = Cols B", "Cols A = Rows B", "Rows A = Cols B"],
+            correct: 2,
+            explanation: "Columns of A = Rows of B."
+        }, {
+            id: 9,
+            en: "Generally, AB is ________ to BA.",
+            hi: "सामान्यतः, AB, BA के ________ होता है।",
+            oEn: ["Equal", "Not equal", "Double", "Half"],
+            oHi: ["बराबर", "बराबर नहीं", "दोगुना", "आधा"],
+            c: 1,
+            exp: "Matrix multiplication is not commutative in general.",
+            options: ["Equal", "Not equal", "Double", "Half"],
+            correct: 1,
+            explanation: "AB ≠ BA usually."
+        }, {
+            id: 10,
+            en: "The transpose of a row matrix is a ________.",
+            hi: "एक पंक्ति आव्यूह का परिवर्त (transpose) एक ________ होता है।",
+            oEn: ["Row matrix", "Column matrix", "Square matrix", "Zero matrix"],
+            oHi: ["पंक्ति आव्यूह", "स्तंभ आव्यूह", "वर्ग आव्यूह", "शून्य आव्यूह"],
+            c: 1,
+            exp: "Transpose converts rows to columns.",
+            options: ["Row matrix", "Column matrix", "Square matrix", "Zero matrix"],
+            correct: 1,
+            explanation: "Row → Column."
+        }, {
+            id: 11,
+            en: "For a Symmetric matrix, A' is equal to:",
+            hi: "एक सममित आव्यूह के लिए, A' किसके बराबर होता है?",
+            oEn: ["-A", "A", "2A", "I"],
+            oHi: ["-A", "A", "2A", "I"],
+            c: 1,
+            exp: "By definition, A' = A for symmetric matrix.",
+            options: ["-A", "A", "2A", "I"],
+            correct: 1,
+            explanation: "A' = A."
+        }, {
+            id: 12,
+            en: "In a Skew-symmetric matrix, the diagonal elements are always:",
+            hi: "एक विषम-सममित आव्यूह में, विकर्ण के अवयव हमेशा होते हैं:",
+            oEn: ["1", "-1", "Zero", "Variable"],
+            oHi: ["1", "-1", "शून्य", "परिवर्तनशील"],
+            c: 2,
+            exp: "For skew-symmetric: aᵢᵢ = -aᵢᵢ ⇒ 2aᵢᵢ=0 ⇒ aᵢᵢ=0.",
+            options: ["1", "-1", "Zero", "Variable"],
+            correct: 2,
+            explanation: "Diagonal elements = 0."
+        }, {
+            id: 13,
+            en: "(AB)' = ________ (Reversal law).",
+            hi: "(AB)' = ________ (रिवर्सल नियम)।",
+            oEn: ["A'B'", "B'A'", "AB", "BA"],
+            oHi: ["A'B'", "B'A'", "AB", "BA"],
+            c: 1,
+            exp: "Transpose of product reverses order: (AB)' = B'A'.",
+            options: ["A'B'", "B'A'", "AB", "BA"],
+            correct: 1,
+            explanation: "(AB)' = B'A'."
+        }, {
+            id: 14,
+            en: "Any square matrix can be expressed as the sum of a ________ and a ________ matrix.",
+            hi: "किसी भी वर्ग आव्यूह को एक ________ और एक ________ आव्यूह के योग के रूप में व्यक्त किया जा सकता है।",
+            oEn: ["Diagonal, Zero", "Symmetric, Skew-symmetric", "Upper, Lower", "Row, Column"],
+            oHi: ["विकर्ण, शून्य", "सममित, विषम-सममित", "ऊपरी, निचला", "पंक्ति, स्तंभ"],
+            c: 1,
+            exp: "A = ½(A+A') + ½(A-A').",
+            options: ["Diagonal, Zero", "Symmetric, Skew-symmetric", "Upper, Lower", "Row, Column"],
+            correct: 1,
+            explanation: "Symmetric + Skew-symmetric."
+        }, {
+            id: 15,
+            en: "If AB = BA = I, then B is the ________ of A.",
+            hi: "यदि AB = BA = I है, तो B, A का ________ है।",
+            oEn: ["Transpose", "Adjoint", "Inverse", "Determinant"],
+            oHi: ["परिवर्त", "सहखंडज", "व्युत्क्रम", "सारणिक"],
+            c: 2,
+            exp: "If AB = BA = I, B = A⁻¹, the inverse.",
+            options: ["Transpose", "Adjoint", "Inverse", "Determinant"],
+            correct: 2,
+            explanation: "B = A⁻¹."
+        }, {
+            id: 16,
+            en: "A square matrix A is invertible if its determinant |A| is:",
+            hi: "एक वर्ग आव्यूह A व्युत्क्रमणीय होता है यदि उसका सारणिक (determinant) |A|:",
+            oEn: ["= 0", "≠ 0", "= 1", "= -1"],
+            oHi: ["= 0", "≠ 0", "= 1", "= -1"],
+            c: 1,
+            exp: "A⁻¹ exists only if |A| ≠ 0.",
+            options: ["= 0", "≠ 0", "= 1", "= -1"],
+            correct: 1,
+            explanation: "Non-zero determinant."
+        }, {
+            id: 17,
+            en: "The inverse of a matrix, if it exists, is ________.",
+            hi: "किसी आव्यूह का व्युत्क्रम, यदि मौजूद है, तो वह ________ होता है।",
+            oEn: ["Multiple", "Unique", "Zero", "Symmetric"],
+            oHi: ["अनेक", "अद्वितीय", "शून्य", "सममित"],
+            c: 1,
+            exp: "Inverse is always unique.",
+            options: ["Multiple", "Unique", "Zero", "Symmetric"],
+            correct: 1,
+            explanation: "Inverse is unique."
+        }, {
+            id: 18,
+            en: "(A⁻¹)⁻¹ = ________.",
+            hi: "(A⁻¹)⁻¹ = ________।",
+            oEn: ["A", "A⁻¹", "I", "0"],
+            oHi: ["A", "A⁻¹", "I", "0"],
+            c: 0,
+            exp: "Inverse of inverse gives the original matrix.",
+            options: ["A", "A⁻¹", "I", "0"],
+            correct: 0,
+            explanation: "(A⁻¹)⁻¹ = A."
+        }, {
+            id: 19,
+            en: "(AB)⁻¹ = ________.",
+            hi: "(AB)⁻¹ = ________।",
+            oEn: ["A⁻¹B⁻¹", "B⁻¹A⁻¹", "AB", "BA"],
+            oHi: ["A⁻¹B⁻¹", "B⁻¹A⁻¹", "AB", "BA"],
+            c: 1,
+            exp: "Inverse of product reverses order: (AB)⁻¹ = B⁻¹A⁻¹.",
+            options: ["A⁻¹B⁻¹", "B⁻¹A⁻¹", "AB", "BA"],
+            correct: 1,
+            explanation: "(AB)⁻¹ = B⁻¹A⁻¹."
+        }, {
+            id: 20,
+            en: "If A is a 3×3 matrix and I is an Identity matrix, then A·I = ________.",
+            hi: "यदि A एक 3×3 आव्यूह है और I एक तत्समक आव्यूह है, तो A·I = ________।",
+            oEn: ["I", "A", "0", "3A"],
+            oHi: ["I", "A", "0", "3A"],
+            c: 1,
+            exp: "Multiplying by identity leaves the matrix unchanged.",
+            options: ["I", "A", "0", "3A"],
+            correct: 1,
+            explanation: "A·I = A."
+        }, {
+            id: 21,
+            en: "What is (A')'?",
+            hi: "(A')' क्या है?",
+            oEn: ["A'", "A", "I", "0"],
+            oHi: ["A'", "A", "I", "0"],
+            c: 1,
+            exp: "Double transpose returns the original matrix.",
+            options: ["A'", "A", "I", "0"],
+            correct: 1,
+            explanation: "(A')' = A."
+        }, {
+            id: 22,
+            en: "If A is skew-symmetric, then A + A' = ________.",
+            hi: "यदि A विषम-सममित है, तो A + A' = ________।",
+            oEn: ["2A", "A", "I", "O (Zero matrix)"],
+            oHi: ["2A", "A", "I", "O (शून्य आव्यूह)"],
+            c: 3,
+            exp: "Skew-symmetric: A' = -A, so A + A' = A + (-A) = O.",
+            options: ["2A", "A", "I", "Zero matrix"],
+            correct: 3,
+            explanation: "A + (-A) = O."
+        }, {
+            id: 23,
+            en: "Can the product of two non-zero matrices be a zero matrix?",
+            hi: "क्या दो गैर-शून्य आव्यूहों का गुणनफल एक शून्य आव्यूह हो सकता है?",
+            oEn: ["Yes", "No", "Only for square", "Only for diagonal"],
+            oHi: ["हाँ", "नहीं", "केवल वर्ग", "केवल विकर्ण"],
+            c: 0,
+            exp: "Yes, non-zero matrices can multiply to give zero matrix.",
+            options: ["Yes", "No", "Only square", "Only diagonal"],
+            correct: 0,
+            explanation: "Possible (nilpotent etc.)."
+        }, {
+            id: 24,
+            en: "If A is a square matrix, then A + A' is always ________.",
+            hi: "यदि A एक वर्ग आव्यूह है, तो A + A' हमेशा ________ होता है।",
+            oEn: ["Symmetric", "Skew-symmetric", "Diagonal", "Zero"],
+            oHi: ["सममित", "विषम-सममित", "विकर्ण", "शून्य"],
+            c: 0,
+            exp: "(A+A')' = A'+A = A+A' → symmetric.",
+            options: ["Symmetric", "Skew-symmetric", "Diagonal", "Zero"],
+            correct: 0,
+            explanation: "A+A' is symmetric."
+        }, {
+            id: 25,
+            en: "If A is a square matrix, then A - A' is always ________.",
+            hi: "यदि A एक वर्ग आव्यूह है, तो A - A' हमेशा ________ होता है।",
+            oEn: ["Symmetric", "Skew-symmetric", "Identity", "Zero"],
+            oHi: ["सममित", "विषम-सममित", "तत्समक", "शून्य"],
+            c: 1,
+            exp: "(A-A')' = A'-A = -(A-A') → skew-symmetric.",
+            options: ["Symmetric", "Skew-symmetric", "Identity", "Zero"],
+            correct: 1,
+            explanation: "A-A' is skew-symmetric."
+        }, {
+            id: 26,
+            en: "If [[k,2],[3,4]] = [[5,2],[3,4]], then k = ?",
+            hi: "यदि [[k,2],[3,4]] = [[5,2],[3,4]], तो k = ?",
+            oEn: ["2", "3", "4", "5"],
+            oHi: ["2", "3", "4", "5"],
+            c: 3,
+            exp: "Equating corresponding elements: k = 5.",
+            options: ["2", "3", "4", "5"],
+            correct: 3,
+            explanation: "k = 5."
+        }, {
+            id: 27,
+            en: "Is (A+B)² = A² + 2AB + B² always true for matrices?",
+            hi: "क्या आव्यूह के लिए (A+B)² = A² + 2AB + B² हमेशा सत्य है?",
+            oEn: ["Yes", "No, only when AB=BA", "Only for 2×2", "Only for identity"],
+            oHi: ["हाँ", "नहीं, केवल जब AB=BA", "केवल 2×2 के लिए", "केवल तत्समक के लिए"],
+            c: 1,
+            exp: "(A+B)² = A²+AB+BA+B². It equals A²+2AB+B² only if AB=BA.",
+            options: ["Yes", "No, when AB=BA", "Only 2×2", "Only identity"],
+            correct: 1,
+            explanation: "Requires AB=BA."
+        }, {
+            id: 28,
+            en: "Scalar multiplication k·A means multiplying ________ by k.",
+            hi: "अदिश गुणन k·A का अर्थ है k को ________ से गुणा करना।",
+            oEn: ["Every element of A", "First row only", "First column only", "Diagonal only"],
+            oHi: ["A के प्रत्येक अवयव", "केवल पहली पंक्ति", "केवल पहला कॉलम", "केवल विकर्ण"],
+            c: 0,
+            exp: "Each element of matrix is multiplied by the scalar.",
+            options: ["Every element of A", "First row", "First column", "Diagonal"],
+            correct: 0,
+            explanation: "Multiply all elements by k."
+        }, {
+            id: 29,
+            en: "What is a matrix with all elements as zero called?",
+            hi: "वह आव्यूह जिसके सभी अवयव शून्य हों, क्या कहलाता है?",
+            oEn: ["Identity matrix", "Null/Zero matrix", "Square matrix", "Singular matrix"],
+            oHi: ["तत्समक आव्यूह", "शून्य आव्यूह", "वर्ग आव्यूह", "अव्युत्क्रमणीय आव्यूह"],
+            c: 1,
+            exp: "All elements zero → Null or Zero matrix.",
+            options: ["Identity", "Null/Zero", "Square", "Singular"],
+            correct: 1,
+            explanation: "Null matrix (O)."
+        }];
+
+        const TOTAL = QUESTIONS.length;
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 30 * 60,
+            timerInterval: null,
+            testSubmitted: false,
+            darkMode: true,
+            lang: 'en',
+            score: null
+        };
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('math_mat_theme', state.darkMode ? 'dark' : 'light');
+        }
+        const savedTheme = localStorage.getItem('math_mat_theme');
+        if (savedTheme === 'light') {
+            state.darkMode = false;
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-moon';
+        } else {
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            const btn = document.getElementById('langBtn');
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            btn.classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) renderReviewMode(); else renderQuestion();
+            localStorage.setItem('math_mat_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        function calculateScore() {
+            let correct = 0, wrong = 0, score = 0;
+            Object.keys(state.answers).forEach(idx => {
+                const q = QUESTIONS[parseInt(idx)];
+                if (q) {
+                    if (state.answers[idx] === q.c) { correct++; score += 5; }
+                    else { wrong++; score -= 1; }
+                }
+            });
+            const totalMarks = TOTAL * 5;
+            const attempted = correct + wrong;
+            return {
+                score: Math.max(0, Math.round(score * 100) / 100),
+                total: totalMarks,
+                correct, wrong, attempted,
+                unanswered: TOTAL - attempted
+            };
+        }
+
+        function renderQuestion() {
+            if (IS_REVIEW_MODE) return;
+            const q = QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${TOTAL}`;
+            const qt = document.getElementById('questionText');
+            if (state.lang === 'hi') {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>`;
+            } else {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            }
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.testSubmitted) {
+                    if (i === q.c) card.classList.add('correct');
+                    else if (state.answers[state.currentIndex] === i && state.answers[state.currentIndex] !== q.c) card.classList.add('wrong');
+                    card.style.pointerEvents = 'none';
+                } else {
+                    if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                    card.onclick = () => selectOption(i);
+                }
+                card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+            const expBox = document.getElementById('explanationBox');
+            const expText = document.getElementById('explanationText');
+            if (state.testSubmitted) { expBox.classList.add('show'); expText.textContent = q.exp; }
+            else { expBox.classList.remove('show'); }
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === TOTAL - 1;
+            document.getElementById('swipeHint').style.display = state.testSubmitted ? 'none' : 'block';
+            document.getElementById('actionRow').style.display = state.testSubmitted ? 'none' : 'flex';
+            renderPalette();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if (IS_REVIEW_MODE) return;
+            const idx = state.currentIndex + dir;
+            if (idx >= 0 && idx < TOTAL) {
+                state.currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMark() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            const idx = state.currentIndex;
+            if (state.markedQuestions.has(idx)) { state.markedQuestions.delete(idx); showToast('🏷️ Unmarked'); }
+            else { state.markedQuestions.add(idx); showToast('🚩 Marked for review'); }
+            renderPalette();
+        }
+
+        function clearAnswer() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            if (state.answers[state.currentIndex] !== undefined) {
+                delete state.answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared');
+            }
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.testSubmitted) {
+                    const q = QUESTIONS[i];
+                    if (state.answers[i] === q.c) num.classList.add('answered');
+                    else if (state.answers[i] !== undefined && state.answers[i] !== q.c) num.classList.add('wrong-num');
+                } else {
+                    if (state.answers[i] !== undefined) num.classList.add('answered');
+                    if (state.markedQuestions.has(i)) num.classList.add('marked');
+                }
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    if (IS_REVIEW_MODE) return;
+                    state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            document.getElementById('progressFill').style.width = (answered / TOTAL * 100) + '%';
+            document.getElementById('progressText').textContent = `${answered}/${TOTAL} answered`;
+        }
+
+        function startTimer() {
+            if (IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) { clearInterval(state.timerInterval); return; }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) { clearInterval(state.timerInterval); autoSubmit(); }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60);
+            const s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            if (state.timeLeft < 300 && state.timeLeft > 0) document.getElementById('timerPill').classList.add('warning');
+            else document.getElementById('timerPill').classList.remove('warning');
+            if (!state.testSubmitted) document.title = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} - CUET Math Mock`;
+        }
+
+        function autoSubmit() {
+            showToast('⏰ Time\'s up! Submitting...');
+            setTimeout(() => submitTest(true), 1500);
+        }
+
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const unanswered = TOTAL - Object.keys(state.answers).length;
+            if (!skipConfirm) {
+                let msg = 'Are you sure you want to submit?';
+                if (unanswered > 0) msg = `${unanswered} question(s) unanswered. Submit anyway?`;
+                if (!confirm(msg)) return;
+            }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.score = calculateScore();
+            const resultData = {
+                score: state.score.score,
+                total: state.score.total,
+                accuracy: state.score.attempted > 0 ? Math.round((state.score.correct / state.score.attempted) * 100) : 0,
+                correct: state.score.correct,
+                wrong: state.score.wrong,
+                attempted: state.score.attempted,
+                unanswered: state.score.unanswered,
+                timeTaken: (30 * 60) - state.timeLeft,
+                testCode: 'CUET_MATH_MAT_MOCK',
+                examType: 'CUET UG Mathematics'
+            };
+            localStorage.setItem('math_mat_last_answers', JSON.stringify(state.answers));
+            localStorage.setItem('math_mat_last_mock_file', window.location.href.split('?')[0]);
+            localStorage.setItem('math_mat_last_result_data', JSON.stringify(resultData));
+            if (window.parent !== window) window.parent.postMessage({ type: 'TEST_SUBMITTED', ...resultData, answers: state.answers }, '*');
+            showReview();
+            renderQuestion();
+            renderPalette();
+            showToast('✅ Test Submitted! Check review below.');
+            setTimeout(() => document.getElementById('reviewPanel').scrollIntoView({ behavior: 'smooth' }), 300);
+            document.title = 'Submitted - CUET Math Mock';
+            document.getElementById('swipeHint').style.display = 'none';
+            document.getElementById('actionRow').style.display = 'none';
+            document.getElementById('progressCard').style.display = 'none';
+            document.getElementById('paletteCard').style.display = 'none';
+        }
+
+        function showReview() {
+            const panel = document.getElementById('reviewPanel');
+            panel.classList.add('show');
+            const result = state.score;
+            document.getElementById('resultSummary').innerHTML = `
+            <div class="result-item"><div class="value">${result.score}/${result.total}</div><div class="label">Score</div></div>
+            <div class="result-item"><div class="value" style="color:#10b981;">${result.correct}</div><div class="label">✅ Correct</div></div>
+            <div class="result-item"><div class="value" style="color:#ef4444;">${result.wrong}</div><div class="label">❌ Wrong</div></div>
+            <div class="result-item"><div class="value">${result.unanswered}</div><div class="label">⬜ Unanswered</div></div>`;
+            const reviewQs = document.getElementById('reviewQuestions');
+            reviewQs.innerHTML = '<h4 style="margin:12px 0;">📝 Question-wise Review</h4>';
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                const div = document.createElement('div');
+                div.style.cssText = 'padding:12px;margin:8px 0;border-radius:10px;border:1px solid var(--border);background:var(--option-bg);';
+                let icon, col;
+                if (isUnanswered) { icon = '⬜'; col = 'var(--text-secondary)'; }
+                else if (isCorrect) { icon = '✅'; col = '#10b981'; }
+                else { icon = '❌'; col = '#ef4444'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                const uAns = isUnanswered ? 'Not answered' : opts[userAns];
+                const cAns = opts[q.c];
+                const qD = state.lang === 'hi' ? q.hi : q.en;
+                div.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-weight:700;">Q${i+1}.</span><span style="color:${col};font-size:18px;">${icon}</span></div>
+                <div style="font-size:13px;margin-bottom:4px;white-space:pre-line;">${qD}</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Your answer: <strong>${uAns}</strong><br>Correct: <strong style="color:#10b981;">${cAns}</strong></div>
+                <div style="font-size:11px;margin-top:4px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;color:#fbbf24;">💡 ${q.exp}</div>
+                <button onclick="jumpToQuestion(${i})" style="margin-top:6px;padding:4px 12px;border-radius:6px;border:1px solid #6366f1;background:transparent;color:#818cf8;cursor:pointer;font-size:11px;">Jump to Q${i+1}</button>`;
+                reviewQs.appendChild(div);
+            });
+        }
+
+        function jumpToQuestion(index) {
+            state.currentIndex = index;
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('progressCard').style.display = 'block';
+            document.getElementById('paletteCard').style.display = 'block';
+            document.getElementById('swipeHint').style.display = 'block';
+            document.getElementById('actionRow').style.display = 'flex';
+            renderQuestion();
+            document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeReview() { document.getElementById('reviewPanel').classList.remove('show'); }
+
+        function renderReviewMode() {
+            const container = document.getElementById('reviewModeContainer');
+            const letters = ['A','B','C','D'];
+            const optsKey = state.lang === 'hi' ? 'oHi' : 'oEn';
+            let html = '<div class="review-mode-badge">📝 Review Mode — All 30 Questions</div>';
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let cardClass = 'review-mode-card';
+                let statusHTML = '';
+                if (isUnanswered) { cardClass += ' unanswered-q'; statusHTML = '<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>'; }
+                else if (isCorrect) { cardClass += ' correct-answer'; statusHTML = '<span class="review-mode-status status-correct">✅ Correct (+5)</span>'; }
+                else { cardClass += ' wrong-answer'; statusHTML = '<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>'; }
+                const opts = q[optsKey];
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const optionsHTML = opts.map((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    return `<div class="${optClass}" style="pointer-events:none;"><div class="option-letter">${letters[j]}</div><span>${opt}${label}</span></div>`;
+                }).join('');
+                html += `
+                <div class="${cardClass}">
+                    <div class="review-mode-header"><span class="q-badge">Q ${i+1}/${TOTAL}</span>${statusHTML}</div>
+                    <div class="question-text"><div style="font-weight:600;white-space:pre-line;">${qDisplay}</div></div>
+                    <div class="options-grid">${optionsHTML}</div>
+                    <div class="explanation-box show" style="margin-top:10px;"><div class="exp-title">💡 Explanation</div><div>${q.exp}</div></div>
+                </div>`;
+            });
+            container.innerHTML = html;
+            container.style.display = 'block';
+        }
+
+        let touchStartX=0,touchStartY=0,touchMoved=false,swipeHandled=false;
+        const card = document.getElementById('questionCard');
+        card.addEventListener('touchstart',(e)=>{if(IS_REVIEW_MODE)return;touchStartX=e.touches[0].clientX;touchStartY=e.touches[0].clientY;touchMoved=false;swipeHandled=false;},{passive:true});
+        card.addEventListener('touchmove',(e)=>{if(IS_REVIEW_MODE||swipeHandled)return;const dx=e.touches[0].clientX-touchStartX,dy=e.touches[0].clientY-touchStartY;if(Math.abs(dx)>15&&Math.abs(dx)>Math.abs(dy)){touchMoved=true;card.style.transform=`translateX(${dx*0.5}px)`;card.style.opacity=Math.max(0.5,1-Math.abs(dx)/800);card.classList.add('swiping');e.preventDefault();}},{passive:false});
+        card.addEventListener('touchend',(e)=>{if(IS_REVIEW_MODE)return;card.classList.remove('swiping');card.style.transform='';card.style.opacity='';if(!touchMoved)return;const dx=(e.changedTouches[0]?.clientX||touchStartX)-touchStartX;if(Math.abs(dx)>80){swipeHandled=true;if(dx>0)navigate(-1);else navigate(1);}touchMoved=false;});
+
+        document.addEventListener('keydown',(e)=>{
+            if(IS_REVIEW_MODE)return;
+            if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+            switch(e.key.toLowerCase()){
+                case 'arrowleft':e.preventDefault();navigate(-1);break;
+                case 'arrowright':e.preventDefault();navigate(1);break;
+                case 'a':case '1':e.preventDefault();selectOption(0);break;
+                case 'b':case '2':e.preventDefault();selectOption(1);break;
+                case 'c':case '3':e.preventDefault();selectOption(2);break;
+                case 'd':case '4':e.preventDefault();selectOption(3);break;
+                case 'm':e.preventDefault();toggleMark();break;
+                case 'backspace':e.preventDefault();clearAnswer();break;
+            }
+        });
+
+        function showToast(msg){
+            const t=document.getElementById('toast');
+            t.textContent=msg;t.style.display='flex';
+            clearTimeout(t._t);
+            t._t=setTimeout(()=>{t.style.display='none';},2000);
+        }
+
+        window.addEventListener('beforeunload',(e)=>{
+            if(!state.testSubmitted&&state.timeLeft>0&&Object.keys(state.answers).length>0&&!IS_REVIEW_MODE){e.preventDefault();e.returnValue='';}
+        });
+
+        function init(){
+            localStorage.setItem('math_mat_last_mock_file',window.location.href.split('?')[0]);
+            if(IS_REVIEW_MODE){
+                document.getElementById('questionCard').style.display='none';
+                document.getElementById('progressCard').style.display='none';
+                document.getElementById('paletteCard').style.display='none';
+                document.getElementById('swipeHint').style.display='none';
+                document.getElementById('infoRow').style.display='none';
+                document.getElementById('timerPill').style.display='none';
+                document.getElementById('actionRow').style.display='none';
+                document.getElementById('reviewPanel').style.display='none';
+                document.title='Review - CUET Math Mock';
+                const savedAnswers=JSON.parse(localStorage.getItem('math_mat_last_answers')||'{}');
+                state.answers=savedAnswers;state.testSubmitted=true;
+                state.lang=localStorage.getItem('math_mat_lang')||'en';
+                if(state.lang==='hi'){document.getElementById('langBtn').classList.add('active');document.getElementById('langText').textContent='English';}
+                renderReviewMode();
+            }else{
+                state.lang=localStorage.getItem('math_mat_lang')||'en';
+                if(state.lang==='hi'){document.getElementById('langBtn').classList.add('active');document.getElementById('langText').textContent='English';}
+                startTimer();renderQuestion();renderPalette();
+            }
+        }
+        init();
+    </script> 
+</body>
+</html>
