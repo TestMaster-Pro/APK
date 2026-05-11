@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Premium Plans • TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #5b4cf0; --primary-dark: #4338ca; --primary-light: #eef0ff;
+            --secondary: #8b5cf6; --accent: #06b6d4; --success: #10b981;
+            --warning: #f59e0b; --danger: #ef4444; --dark: #0f172a;
+            --gray-800: #1e293b; --gray-700: #334155; --gray-600: #475569;
+            --gray-500: #64748b; --gray-400: #94a3b8; --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9; --gray-50: #f8fafc; --light: #ffffff;
+            --radius-sm: 12px; --radius: 16px; --radius-lg: 22px; --radius-xl: 28px;
+            --shadow-sm: 0 4px 14px rgba(0,0,0,0.05); --shadow-md: 0 10px 28px -6px rgba(0,0,0,0.09);
+            --shadow-lg: 0 18px 40px -10px rgba(0,0,0,0.12); --shadow-xl: 0 24px 52px -14px rgba(0,0,0,0.16);
+            --font-sans: 'Poppins', sans-serif; --transition-fast: 0.18s;
+            --transition-smooth: 0.28s; --glass-bg: rgba(255,255,255,0.78);
+            --glass-border: rgba(255,255,255,0.55); --glass-blur: 18px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: var(--font-sans); background: linear-gradient(135deg, #f0f4ff, #e8eeff, #f5f0ff); min-height:100vh; color:var(--dark); display:flex; flex-direction:column; overflow-x:hidden; -webkit-tap-highlight-color:transparent; }
+        
+        .navbar { background:var(--glass-bg); backdrop-filter:blur(var(--glass-blur)); padding:10px 16px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.04); border-bottom:1px solid var(--glass-border); gap:8px; }
+        .nav-brand { display:flex; align-items:center; gap:8px; font-size:clamp(16px,3.5vw,20px); font-weight:800; background:linear-gradient(135deg,#5b4cf0,#8b5cf6,#06b6d4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; }
+        .nav-user { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+        .user-avatar { width:34px; height:34px; background:linear-gradient(135deg,#eef0ff,#e0e7ff); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#5b4cf0; overflow:hidden; cursor:pointer; }
+        .user-avatar img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+        .nav-btn { background:#f1f5f9; border:none; color:#334155; padding:7px 13px; border-radius:30px; cursor:pointer; font-weight:600; font-size:clamp(10px,2.2vw,12px); font-family:var(--font-sans); transition:var(--transition-fast); display:flex; align-items:center; gap:5px; text-decoration:none; white-space:nowrap; min-height:36px; }
+        .nav-btn:hover { background:#e2e8f0; }
+        .btn-back { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15); }
+        .btn-history { background:linear-gradient(135deg,#fef3c7,#fde68a); color:#92400e; border:1.5px solid rgba(245,158,11,0.3); font-weight:700; }
+        .btn-logout { background:#fef2f2; color:#dc2626; border:1.5px solid rgba(220,38,38,0.1); }
+        #welcomeUser { display:none; }
+        @media(min-width:480px){ #welcomeUser{display:inline;font-weight:600;font-size:13px;color:#334155;max-width:100px;overflow:hidden;text-overflow:ellipsis;} .navbar{padding:12px 22px;} .nav-btn{padding:8px 14px;font-size:12px;min-height:38px;} .user-avatar{width:36px;height:36px;} }
+
+        .container { max-width:1100px; margin:0 auto; padding:14px 12px 28px; width:100%; position:relative; z-index:2; }
+        
+        .hero-section { text-align:center; padding:20px 16px 28px; }
+        .hero-section .crown-icon { font-size:clamp(40px,8vw,56px); display:block; margin-bottom:10px; animation:crownFloat 3s ease-in-out infinite; background:linear-gradient(135deg,#f59e0b,#d97706,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        @keyframes crownFloat { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-12px) rotate(5deg);} }
+        .hero-section h1 { font-size:clamp(22px,5vw,32px); font-weight:800; margin-bottom:6px; }
+        .hero-section .subtitle { font-size:clamp(12px,2.6vw,15px); color:#64748b; font-weight:500; max-width:500px; margin:0 auto; }
+
+        .active-plan-banner { background:linear-gradient(135deg,#ecfdf5,#d1fae5); border:2px solid rgba(16,185,129,0.3); border-radius:var(--radius-lg); padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .active-plan-banner .plan-icon { width:44px; height:44px; background:linear-gradient(135deg,#10b981,#059669); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; }
+        .active-plan-banner .plan-info { flex:1; min-width:150px; }
+        .active-plan-banner .plan-name { font-weight:700; font-size:15px; color:#065f46; }
+        .active-plan-banner .plan-expiry { font-size:12px; color:#059669; }
+
+        .plans-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:24px; }
+        @media(min-width:580px){ .plans-grid{grid-template-columns:repeat(2,1fr);} }
+        @media(min-width:900px){ .plans-grid{grid-template-columns:repeat(3,1fr);} }
+
+        .plan-card { background:var(--glass-bg); backdrop-filter:blur(14px); border-radius:var(--radius-xl); padding:20px; box-shadow:var(--shadow-sm); transition:var(--transition-smooth); border:2px solid transparent; display:flex; flex-direction:column; position:relative; overflow:hidden; animation:cardSlideIn 0.5s; }
+        @keyframes cardSlideIn { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+        .plan-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-xl); }
+        .plan-card.popular { border-color:#f59e0b; box-shadow:0 8px 32px rgba(245,158,11,0.2); }
+        .plan-card.popular::after { content:'MOST POPULAR'; position:absolute; top:12px; right:-30px; background:linear-gradient(135deg,#f59e0b,#d97706); color:white; font-size:9px; font-weight:700; padding:4px 35px; transform:rotate(35deg); }
+        .plan-card.best-value { border-color:#10b981; }
+        .plan-card.best-value::after { content:'BEST VALUE'; position:absolute; top:12px; right:-30px; background:linear-gradient(135deg,#10b981,#059669); color:white; font-size:9px; font-weight:700; padding:4px 35px; transform:rotate(35deg); }
+        
+        .plan-header { text-align:center; margin-bottom:16px; }
+        .plan-icon-circle { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:24px; color:white; }
+        .plan-icon-circle.premium { background:linear-gradient(135deg,#5b4cf0,#8b5cf6); }
+        .plan-icon-circle.premium-plus { background:linear-gradient(135deg,#f59e0b,#d97706); }
+        .plan-icon-circle.ultimate { background:linear-gradient(135deg,#10b981,#059669); }
+        .plan-name { font-size:clamp(16px,3.2vw,19px); font-weight:700; }
+        .plan-price { font-size:clamp(28px,5vw,36px); font-weight:800; margin:6px 0; }
+        .plan-price span { font-size:14px; color:#64748b; }
+        .plan-duration { font-size:12px; color:#64748b; }
+        .plan-save { display:inline-block; background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; margin-top:6px; }
+
+        .features-list { list-style:none; margin:16px 0; flex:1; }
+        .features-list li { padding:7px 0; font-size:clamp(12px,2.3vw,13px); color:#475569; display:flex; align-items:flex-start; gap:8px; border-bottom:1px solid #f1f5f9; }
+        .features-list li i { color:#10b981; margin-top:3px; font-size:12px; }
+
+        .select-plan-btn { width:100%; padding:12px; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer; transition:var(--transition-smooth); font-family:var(--font-sans); }
+        .select-plan-btn:active { transform:scale(0.95); }
+        .btn-premium { background:linear-gradient(135deg,#5b4cf0,#6d5df7); color:white; }
+        .btn-premium-plus { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#1e293b; }
+        .btn-ultimate { background:linear-gradient(135deg,#10b981,#34d399); color:white; }
+        .btn-disabled { background:#e2e8f0; color:#94a3b8; cursor:not-allowed; }
+
+        /* Payment Modal */
+        .payment-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.6); backdrop-filter:blur(4px); z-index:200; display:flex; align-items:center; justify-content:center; padding:16px; }
+        .payment-modal { background:white; border-radius:var(--radius-xl); padding:20px; max-width:460px; width:100%; box-shadow:var(--shadow-xl); max-height:90vh; overflow-y:auto; position:relative; animation:modalSlideUp 0.3s; }
+        @keyframes modalSlideUp { from{opacity:0;transform:translateY(30px) scale(0.95);} to{opacity:1;transform:translateY(0) scale(1);} }
+        .payment-modal h3 { font-size:18px; font-weight:700; margin-bottom:4px; }
+        .modal-plan-name { color:#5b4cf0; font-weight:600; font-size:14px; margin-bottom:12px; }
+        .amount-display { text-align:center; padding:14px; background:#f8fafc; border-radius:var(--radius); margin-bottom:14px; }
+        .big-amount { font-size:30px; font-weight:800; }
+        
+        .form-group { margin-bottom:12px; }
+        .form-group label { display:block; font-weight:600; font-size:12px; color:#334155; margin-bottom:3px; }
+        .form-group input { width:100%; padding:10px 12px; border:2px solid #e2e8f0; border-radius:10px; font-size:14px; font-family:var(--font-sans); background:#f8fafc; transition:var(--transition-fast); }
+        .form-group input:focus { outline:none; border-color:#5b4cf0; background:white; }
+
+        .upi-buttons { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+        .upi-btn { padding:10px 6px; border:2px solid #e2e8f0; border-radius:10px; cursor:pointer; text-align:center; font-size:11px; font-weight:600; background:white; transition:var(--transition-fast); font-family:var(--font-sans); }
+        .upi-btn:hover { border-color:#5b4cf0; background:#eef0ff; }
+        .upi-btn i { margin-right:4px; }
+
+        .submit-payment-btn { width:100%; padding:13px; background:linear-gradient(135deg,#10b981,#059669); color:white; border:none; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer; font-family:var(--font-sans); }
+        .submit-payment-btn:disabled { background:#94a3b8; cursor:not-allowed; }
+        .close-modal-btn { position:absolute; top:10px; right:12px; width:30px; height:30px; border-radius:50%; background:#f1f5f9; border:none; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+
+        .history-section { background:var(--glass-bg); border-radius:var(--radius-xl); padding:18px; border:1px solid var(--glass-border); display:none; margin-top:16px; }
+        .history-item { display:flex; align-items:center; gap:12px; padding:10px; background:#f8fafc; border-radius:10px; margin-bottom:6px; flex-wrap:wrap; }
+        .status-pending { background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:700; }
+        .status-verified { background:#d1fae5; color:#065f46; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:700; }
+        .status-rejected { background:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:700; }
+
+        .hidden { display:none !important; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
+        <div class="nav-user">
+            <div class="user-avatar" id="userInitial">S</div>
+            <span id="welcomeUser">Welcome</span>
+            <a href="exam.html" class="nav-btn btn-back"><i class="fas fa-book-open"></i> Tests</a>
+            <a href="dashboard.html" class="nav-btn btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <button class="nav-btn btn-history" onclick="toggleHistory()"><i class="fas fa-history"></i> History</button>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-section">
+            <i class="fas fa-crown crown-icon"></i>
+            <h1>Unlock Your <span style="background:linear-gradient(135deg,#f59e0b,#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Full Potential</span></h1>
+            <p class="subtitle">Get access to premium tests, detailed analytics, and exclusive features</p>
+        </div>
+
+        <div class="active-plan-banner" id="activePlanBanner" style="display:none;">
+            <div class="plan-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="plan-info"><div class="plan-name" id="activePlanName">Premium</div><div class="plan-expiry" id="activePlanExpiry">Valid until: --</div></div>
+            <div style="background:#10b981;color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;">Active</div>
+        </div>
+
+        <div class="plans-grid" id="plansGrid">
+            <div style="text-align:center;padding:40px;grid-column:1/-1;color:#64748b;">Loading plans...</div>
+        </div>
+
+        <div class="history-section" id="historySection">
+            <h3><i class="fas fa-history"></i> Payment History</h3>
+            <div id="historyList"><p style="text-align:center;color:#94a3b8;">No history</p></div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="payment-modal-overlay hidden" id="paymentModal">
+        <div class="payment-modal">
+            <button class="close-modal-btn" onclick="closePaymentModal()">✕</button>
+            <h3>💳 Complete Payment</h3>
+            <div class="modal-plan-name" id="modalPlanName">Premium Plan</div>
+            <div class="amount-display"><div class="big-amount">₹<span id="modalAmount">99</span></div><small style="color:#64748b;">One-time payment • <span id="modalDuration">30</span> days</small></div>
+            
+            <div class="form-group"><label>📱 Pay via UPI</label>
+                <div class="upi-buttons">
+                    <button class="upi-btn" onclick="openUPIApp('gpay')"><i class="fab fa-google"></i> GPay</button>
+                    <button class="upi-btn" onclick="openUPIApp('phonepe')"><i class="fas fa-mobile-alt"></i> PhonePe</button>
+                    <button class="upi-btn" onclick="openUPIApp('paytm')"><i class="fas fa-wallet"></i> Paytm</button>
+                </div>
+                <small style="color:#64748b;">UPI ID: <strong style="color:#5b4cf0;">testmaster@nyes</strong></small>
+            </div>
+
+            <div class="form-group"><label>Transaction / Reference ID *</label><input type="text" id="transactionID" placeholder="Enter UPI Ref No. after payment" required></div>
+            <div class="form-group"><label>Amount Paid (₹) *</label><input type="number" id="paymentAmount" placeholder="Enter amount you paid" required></div>
+            <div class="form-group"><label>Payment Date</label><input type="date" id="paymentDate" required></div>
+            <div class="form-group"><label>Your Email (for receipt)</label><input type="email" id="paymentEmail" placeholder="you@example.com"></div>
+
+            <button class="submit-payment-btn" id="submitPaymentBtn" onclick="submitPaymentRequest()"><i class="fas fa-paper-plane"></i> Submit for Verification</button>
+            <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:8px;">⚡ Verified within 1-4 hours</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwKKmPNFYUvB9QoTp5X6yo2I2EDgpsDngYRVAfIakxzwslcVkU2yrF46tEvjQmfnbmk8w/exec';
+        const UPI_ID = 'testmaster@nyes';
+        const PAYEE_NAME = 'TestMaster Pro';
+        let paymentPlans = []; let selectedPlan = null; let userPayments = [];
+
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        function setAvatarWithPic(elId, u) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            if (u?.avatarUrl) el.innerHTML = `<img src="${u.avatarUrl}" alt="A" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+            else el.textContent = (u?.name) ? u.name.charAt(0).toUpperCase() : 'S';
+        }
+        setAvatarWithPic('userInitial', user);
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
+        if (user.email) document.getElementById('paymentEmail').value = user.email;
+        document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+
+        // Open UPI app with deep link
+        function openUPIApp(app) {
+            if (!selectedPlan) { Swal.fire({icon:'warning',title:'Select a plan first'}); return; }
+            const amount = selectedPlan.amount;
+            const note = encodeURIComponent(`${selectedPlan.planType}_${user.username}`);
+            const name = encodeURIComponent(PAYEE_NAME);
+            
+            let upiUrl = '';
+            switch(app) {
+                case 'gpay': upiUrl = `tez://upi/pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR`; break;
+                case 'phonepe': upiUrl = `phonepe://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR`; break;
+                case 'paytm': upiUrl = `paytmmp://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR`; break;
+                default: upiUrl = `upi://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR`;
+            }
+            
+            // Try to open app
+            window.location.href = upiUrl;
+            
+            // Fallback: show UPI ID for manual copy
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'UPI Payment',
+                    html: `<p>Send <strong>₹${amount}</strong> to:</p><p style="font-size:18px;color:#5b4cf0;font-weight:700;">${UPI_ID}</p><p style="font-size:12px;">${PAYEE_NAME}</p><button onclick="navigator.clipboard.writeText('${UPI_ID}');Swal.fire({title:'Copied!',timer:1000,showConfirmButton:false})" style="padding:8px 16px;background:#5b4cf0;color:white;border:none;border-radius:8px;cursor:pointer;margin:8px;">📋 Copy UPI ID</button>`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'I\'ve Paid',
+                    confirmButtonColor: '#10b981'
+                });
+            }, 2000);
+        }
+
+        async function loadPaymentPlans() {
+            try { const r = await fetch('payment.json'); if (r.ok) { paymentPlans = await r.json(); renderPlans(); return; } } catch(e) {}
+            try { const r = await fetch(`${API_URL}?action=getPaymentPlans`); const d = await r.json(); if (d.success) { paymentPlans = d.plans; renderPlans(); } } catch(e) {}
+        }
+
+        async function loadUserPayments() {
+            try { const r = await fetch(`${API_URL}?action=getUserPayments&username=${encodeURIComponent(user.username)}`); const d = await r.json(); if (d.success) { userPayments = d.payments; updateBanner(); renderHistory(); } } catch(e) {}
+        }
+
+        function updateBanner() {
+            const active = userPayments.filter(p => p.status === 'Verified' && p.validUntil && new Date(p.validUntil) > new Date());
+            const b = document.getElementById('activePlanBanner');
+            if (active.length > 0) { b.style.display = 'flex'; const l = active.sort((a,b) => new Date(b.verificationDate)-new Date(a.verificationDate))[0]; document.getElementById('activePlanName').textContent = l.planName||l.planType; document.getElementById('activePlanExpiry').textContent = `Valid until: ${new Date(l.validUntil).toLocaleDateString('en-IN')}`; } else { b.style.display = 'none'; }
+        }
+
+        function renderPlans() {
+            const g = document.getElementById('plansGrid');
+            if (!paymentPlans?.plans?.length) { g.innerHTML = '<div style="text-align:center;padding:40px;">No plans</div>'; return; }
+            g.innerHTML = paymentPlans.plans.map((p,i) => {
+                const isActive = userPayments.some(pp => pp.status==='Verified' && pp.planType===p.type && pp.validUntil && new Date(pp.validUntil) > new Date());
+                const ic = p.type==='premium'?'fa-crown':p.type==='premium_plus'?'fa-star':'fa-gem';
+                const icc = p.type==='premium'?'premium':p.type==='premium_plus'?'premium-plus':'ultimate';
+                const btc = p.type==='premium'?'btn-premium':p.type==='premium_plus'?'btn-premium-plus':'btn-ultimate';
+                const extra = p.type==='premium_plus'?'popular':p.type==='ultimate'?'best-value':'';
+                return `<div class="plan-card ${extra}" style="animation-delay:${i*0.1}s">
+                    <div class="plan-header"><div class="plan-icon-circle ${icc}"><i class="fas ${ic}"></i></div><div class="plan-name">${p.name}</div><div class="plan-price">₹${p.price}<span>/plan</span></div><div class="plan-duration">⏰ ${p.duration} days</div>${isActive?'<div style="color:#10b981;font-size:12px;">✅ Active</div>':''}</div>
+                    <ul class="features-list">${(p.features||[]).map(f=>`<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}</ul>
+                    <button class="select-plan-btn ${isActive?'btn-disabled':btc}" onclick="${isActive?'':`openPaymentModal('${p.type}','${p.name}',${p.price},${p.duration})`}" ${isActive?'disabled':''}><i class="fas ${isActive?'fa-check':ic}"></i> ${isActive?'Subscribed':`Get ${p.name}`}</button>
+                </div>`;
+            }).join('');
+        }
+
+        function openPaymentModal(pt,pn,am,dr) {
+            selectedPlan = {planType:pt, planName:pn, amount:am, duration:dr};
+            document.getElementById('modalPlanName').textContent = pn;
+            document.getElementById('modalAmount').textContent = am;
+            document.getElementById('modalDuration').textContent = dr;
+            document.getElementById('paymentAmount').value = am;
+            document.getElementById('transactionID').value = '';
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); selectedPlan=null; }
+
+        async function submitPaymentRequest() {
+            if (!selectedPlan) return;
+            const txnId = document.getElementById('transactionID').value.trim();
+            const amountPaid = document.getElementById('paymentAmount').value.trim();
+            const email = document.getElementById('paymentEmail').value.trim();
+
+            if (!txnId) { Swal.fire({icon:'warning',title:'Missing',text:'Enter Transaction ID'}); return; }
+            if (!amountPaid) { Swal.fire({icon:'warning',title:'Missing',text:'Enter amount paid'}); return; }
+
+            const btn = document.getElementById('submitPaymentBtn');
+            btn.disabled = true; btn.innerHTML = 'Submitting...';
+
+            try {
+                const params = new URLSearchParams({
+                    action:'submitPayment', username:user.username, planType:selectedPlan.planType,
+                    planName:selectedPlan.planName, amount:amountPaid, transactionID:txnId, paymentMethod:'UPI'
+                });
+                const r = await fetch(API_URL, {method:'POST',body:params});
+                const d = await r.json();
+                if (d.success) {
+                    Swal.fire({icon:'success',title:'Submitted!',html:`<p>Under verification</p><p style="font-size:12px;">ID: ${d.paymentId}</p>`,confirmButtonColor:'#10b981'});
+                    closePaymentModal(); loadUserPayments();
+                } else { Swal.fire({icon:'error',title:'Failed',text:d.error}); }
+            } catch(e) { Swal.fire({icon:'error',title:'Error',text:'Network error'}); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit for Verification'; }
+        }
+
+        function toggleHistory() {
+            const s = document.getElementById('historySection');
+            s.style.display = s.style.display==='block'?'none':'block';
+            if (s.style.display==='block') { renderHistory(); s.scrollIntoView({behavior:'smooth'}); }
+        }
+
+        function renderHistory() {
+            const l = document.getElementById('historyList');
+            if (!userPayments.length) { l.innerHTML = '<p style="text-align:center;color:#94a3b8;">No history</p>'; return; }
+            l.innerHTML = userPayments.sort((a,b)=>new Date(b.requestDate)-new Date(a.requestDate)).map(p=>`
+                <div class="history-item">
+                    <div style="flex:1;"><strong>${p.planName||p.planType}</strong><br><small>${new Date(p.requestDate).toLocaleDateString('en-IN')}</small></div>
+                    <div>₹${p.amount}</div>
+                    <span class="status-${p.status.toLowerCase()}">${p.status}</span>
+                    ${p.status==='Verified'?`<small>Till ${new Date(p.validUntil).toLocaleDateString('en-IN')}</small>`:''}
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('paymentModal').addEventListener('click',function(e){if(e.target===this)closePaymentModal();});
+        loadPaymentPlans(); loadUserPayments();
+    </script>
+</body>
+</html>
