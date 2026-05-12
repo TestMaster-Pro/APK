@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result - TestMaster Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Result · TestMaster Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -11,481 +11,405 @@
     <style>
         :root {
             --primary: #6366f1;
+            --primary-dark: #4f46e5;
             --secondary: #8b5cf6;
+            --accent: #f43f5e;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --dark: #1e293b;
-            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-500: #94a3b8;
+            --gray-400: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --light: #ffffff;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --shadow-sm: 0 4px 6px rgba(0,0,0,0.04);
+            --shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 40px -10px rgba(0,0,0,0.1);
+            --font-sans: 'Poppins', sans-serif;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--font-sans);
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            padding: 16px;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
             overflow-x: hidden;
+        }
+        /* Subtle dot pattern overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* Soft gradient glow */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -30%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .result-wrapper {
-            max-width: 650px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 580px;
+            position: relative;
+            z-index: 1;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
         }
 
         .loading-screen {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: white;
         }
         .loading-spinner {
-            width: 50px; height: 50px;
+            width: 44px; height: 44px;
             border: 4px solid rgba(255,255,255,0.3);
             border-top: 4px solid white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 15px;
+            margin: 0 auto 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .score-card {
-            background: white;
-            border-radius: 24px;
-            padding: 30px 25px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            text-align: center;
-            animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.98); filter: blur(4px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .score-card, .card, .bot-card {
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .bot-card { animation-delay: 0.12s; }
 
-        .user-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+        /* Score Card */
+        .score-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: var(--radius-xl);
+            padding: 28px 22px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+        .user-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
         .user-avatar {
-            width: 45px; height: 45px;
+            width: 44px; height: 44px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 18px;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
         }
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .user-name {
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 15px;
-        }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-name { font-weight: 600; color: var(--gray-800); font-size: 15px; }
 
-        .result-emoji {
-            font-size: 70px;
-            margin-bottom: 10px;
-            animation: bounce 1s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
+        .result-emoji { font-size: 64px; margin-bottom: 8px; animation: float 2.5s ease-in-out infinite; }
+        @keyframes float { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
 
-        .result-title {
-            font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 4px;
-        }
+        .result-title { font-size: 26px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
         .test-badge {
-            display: inline-block;
-            background: #e0e7ff; color: #4f46e5;
-            padding: 5px 16px; border-radius: 20px;
-            font-weight: 700; font-size: 13px; margin-bottom: 10px;
+            display: inline-block; background: #eef0ff; color: #4338ca;
+            padding: 5px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; margin-bottom: 8px;
         }
         .exam-badge {
-            display: inline-block;
-            background: #fef3c7; color: #92400e;
-            padding: 4px 14px; border-radius: 20px;
-            font-weight: 600; font-size: 12px; margin-bottom: 20px;
+            display: inline-block; background: #fef3c7; color: #92400e;
+            padding: 4px 14px; border-radius: 20px; font-weight: 600; font-size: 12px; margin-bottom: 16px;
         }
 
         .score-circle {
-            width: 140px; height: 140px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            margin: 0 auto 20px;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            color: white;
-            box-shadow: 0 12px 30px rgba(99,102,241,0.35);
+            width: 130px; height: 130px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0 auto 18px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: white;
+            box-shadow: 0 14px 35px rgba(99,102,241,0.4);
+            transition: box-shadow 0.3s;
         }
-        .score-circle .big { font-size: 36px; font-weight: 900; line-height: 1; }
-        .score-circle .small { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+        .score-circle.glow {
+            animation: scoreGlow 2s ease-in-out infinite;
+        }
+        @keyframes scoreGlow {
+            0%, 100% { box-shadow: 0 14px 35px rgba(99,102,241,0.4); }
+            50% { box-shadow: 0 14px 45px rgba(99,102,241,0.7), 0 0 0 8px rgba(99,102,241,0.1); }
+        }
+        .score-circle .big { font-size: 34px; font-weight: 900; line-height: 1; }
+        .score-circle .small { font-size: 12px; opacity: 0.85; margin-top: 4px; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
         .stat-item {
-            background: #f8fafc;
-            padding: 15px 10px;
-            border-radius: 14px;
-            text-align: center;
+            background: #f8fafc; padding: 14px 8px; border-radius: var(--radius);
+            text-align: center; transition: transform var(--transition);
         }
-        .stat-item i { font-size: 18px; margin-bottom: 4px; }
+        .stat-item:active { transform: scale(0.96); }
+        .stat-item i { font-size: 18px; margin-bottom: 6px; }
         .stat-item .val { font-size: 20px; font-weight: 800; color: var(--dark); }
-        .stat-item .lbl { font-size: 10px; color: #64748b; font-weight: 500; margin-top: 2px; }
+        .stat-item .lbl { font-size: 10px; color: var(--gray-600); font-weight: 500; margin-top: 4px; }
 
         .percentile-box {
-            background: #f8fafc;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 15px;
-            text-align: left;
+            background: #f8fafc; border-radius: var(--radius); padding: 16px;
+            margin-bottom: 16px; text-align: left;
         }
         .percentile-header {
             display: flex; justify-content: space-between;
-            font-size: 13px; font-weight: 600; color: var(--dark);
-            margin-bottom: 8px;
+            font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 10px;
         }
         .percentile-bar {
-            height: 8px; background: #e2e8f0;
-            border-radius: 10px; overflow: hidden;
-            margin-bottom: 8px;
+            height: 8px; background: var(--gray-200); border-radius: 10px; overflow: hidden;
+            margin-bottom: 10px;
         }
         .percentile-fill {
             height: 100%;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
             border-radius: 10px;
-            transition: width 1.2s ease;
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .percentile-details {
             display: flex; justify-content: space-between;
-            flex-wrap: wrap; gap: 4px;
-            font-size: 11px; color: #64748b;
+            flex-wrap: wrap; gap: 6px;
+            font-size: 11px; color: var(--gray-600);
         }
         .percentile-details strong { color: var(--primary); }
 
         .perf-tag {
-            display: inline-block;
-            padding: 8px 22px; border-radius: 25px;
-            font-weight: 700; font-size: 14px; margin-bottom: 15px;
+            display: inline-block; padding: 8px 24px; border-radius: 25px;
+            font-weight: 700; font-size: 14px; margin-bottom: 16px;
         }
         .tag-excellent { background: #d1fae5; color: #065f46; }
         .tag-good { background: #dbeafe; color: #1e40af; }
         .tag-average { background: #fef3c7; color: #92400e; }
         .tag-poor { background: #fee2e2; color: #991b1b; }
 
-        .btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .btn {
-            padding: 13px; border-radius: 13px;
-            border: none; font-weight: 700; font-size: 13px;
-            cursor: pointer; font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center;
-            gap: 7px;
-        }
+        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-full { grid-column: 1 / -1; }
-        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
-        .btn-review { background: #0ea5e9; color: white; }
-        .btn-outline { background: white; border: 2px solid #e2e8f0; color: var(--dark); }
-        .btn-dark { background: #1e293b; color: white; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .btn {
+            padding: 14px; border-radius: var(--radius);
+            border: none; font-weight: 700; font-size: 13px;
+            cursor: pointer; font-family: var(--font-sans);
+            transition: all var(--transition);
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; position: relative; overflow: hidden;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
         .btn:active { transform: translateY(0); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 6px 18px rgba(99,102,241,0.3); }
+        .btn-review { background: #0ea5e9; color: white; }
+        .btn-review::after {
+            content: ''; position: absolute;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.15);
+            left: -100%; top: 0;
+            transform: skewX(-20deg); transition: 0.4s;
+        }
+        .btn-review:hover::after { left: 100%; }
+        .btn-outline { background: white; border: 2px solid var(--gray-200); color: var(--dark); }
+        .btn-dark { background: var(--gray-900); color: white; }
 
+        /* Cards */
         .card {
-            background: white;
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.1s both;
+            background: rgba(255,255,255,0.9);
+            border-radius: var(--radius-xl);
+            padding: 22px 18px;
+            box-shadow: var(--shadow-lg);
         }
         .card-title {
-            font-size: 18px; font-weight: 800; color: var(--dark);
-            margin-bottom: 15px;
-            display: flex; align-items: center; gap: 8px;
+            font-size: 17px; font-weight: 800; color: var(--dark);
+            margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
         }
 
-        .attempts-list {
+        /* Attempts & Leaderboard */
+        .attempts-list, .lb-list {
             display: flex; flex-direction: column; gap: 8px;
-            max-height: 350px; overflow-y: auto;
+            max-height: 400px; overflow-y: auto;
+            scrollbar-width: thin;
         }
-        .attempt-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 16px;
+        .attempts-list::-webkit-scrollbar, .lb-list::-webkit-scrollbar { width: 4px; }
+        .attempts-list::-webkit-scrollbar-thumb, .lb-list::-webkit-scrollbar-thumb {
+            background: var(--gray-300); border-radius: 10px;
+        }
+        .attempt-item, .lb-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 16px; border-radius: var(--radius);
             background: #f8fafc;
-            border-radius: 12px;
-            font-size: 13px;
-            transition: all 0.2s;
+            transition: transform 0.15s, background 0.2s;
+            cursor: pointer;
         }
-        .attempt-item.current {
-            background: #eef2ff;
-            border: 2px solid #6366f1;
+        .attempt-item:active { transform: scale(0.97); background: #e2e8f0; }
+        .attempt-item.current, .lb-item.you {
+            background: #eef2ff; border: 2px solid var(--primary);
             box-shadow: 0 4px 15px rgba(99,102,241,0.15);
         }
         .attempt-left { display: flex; align-items: center; gap: 12px; }
-        .attempt-num {
-            width: 38px; height: 38px;
-            border-radius: 50%;
+        .attempt-num, .lb-rank {
+            width: 36px; height: 36px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-weight: 800; font-size: 14px;
-            background: #e2e8f0; color: var(--dark);
+            background: var(--gray-200); color: var(--dark);
         }
-        .attempt-item.current .attempt-num {
-            background: #6366f1; color: white;
-        }
-        .attempt-info .date { font-size: 11px; color: #64748b; }
+        .attempt-item.current .attempt-num { background: var(--primary); color: white; }
+        .attempt-info .date { font-size: 11px; color: var(--gray-600); }
         .attempt-info .label { font-weight: 600; color: var(--dark); }
         .attempt-right { text-align: right; }
         .attempt-right .pts { font-weight: 700; font-size: 15px; color: var(--primary); }
-        .attempt-right .acc { font-size: 11px; color: #64748b; }
-        .current-badge {
-            background: #6366f1; color: white;
-            padding: 2px 10px; border-radius: 10px;
-            font-size: 10px; font-weight: 700; margin-left: 6px;
-        }
-        .improved-badge {
-            background: #10b981; color: white;
-            padding: 2px 10px; border-radius: 10px;
-            font-size: 10px; font-weight: 700; margin-left: 4px;
-        }
-
-        .lb-list {
-            display: flex; flex-direction: column; gap: 8px;
-            max-height: 400px; overflow-y: auto;
-        }
-        .lb-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: #f8fafc;
-        }
-        .lb-item.you {
-            background: #eef2ff;
-            border: 2px solid #6366f1;
-            box-shadow: 0 4px 15px rgba(99,102,241,0.15);
-        }
-        .lb-rank {
-            width: 34px; height: 34px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 14px; flex-shrink: 0;
-        }
-        .rank-1 { background: #fbbf24; color: #78350f; font-size: 18px; }
-        .rank-2 { background: #e2e8f0; color: #475569; font-size: 18px; }
-        .rank-3 { background: #fed7aa; color: #7c2d12; font-size: 18px; }
-        .rank-other { background: #f1f5f9; color: #64748b; }
 
         .lb-avatar {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 14px; flex-shrink: 0;
-            overflow: hidden;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; flex-shrink: 0; overflow: hidden;
         }
-        .lb-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .rank-1 { background: #fbbf24; color: #78350f; font-size: 24px; animation: bounce 1s infinite; }
+        .rank-2 { background: #e2e8f0; color: #475569; font-size: 22px; animation: bounce 1.5s infinite 0.2s; }
+        .rank-3 { background: #fed7aa; color: #7c2d12; font-size: 20px; animation: bounce 2s infinite 0.4s; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
         }
-        .lb-item.you .lb-avatar {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        }
-        .lb-info { flex: 1; min-width: 0; }
+        .lb-info { flex: 1; min-width:0; }
         .lb-name {
             font-weight: 600; font-size: 14px; color: var(--dark);
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .lb-meta { font-size: 11px; color: #64748b; }
+        .lb-meta { font-size: 11px; color: var(--gray-600); }
         .lb-stat { text-align: right; flex-shrink: 0; }
         .lb-stat .score { font-weight: 700; font-size: 15px; color: var(--dark); }
-        .lb-stat .acc { font-size: 11px; color: #64748b; }
-        .you-tag {
-            background: #6366f1; color: white;
+
+        .you-tag, .current-badge {
+            background: var(--primary); color: white;
             padding: 2px 10px; border-radius: 10px;
-            font-size: 10px; font-weight: 700; margin-left: 6px;
+            font-size: 10px; font-weight: 700; margin-left: 4px;
+        }
+        .improved-badge {
+            background: var(--success); color: white;
+            padding: 2px 10px; border-radius: 10px;
+            font-size: 10px; font-weight: 700; margin-left: 4px;
         }
 
-        .review-question {
-            background: #f8fafc;
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 12px;
-            border: 1px solid #e2e8f0;
-            transition: 0.2s;
+        /* Telegram support card */
+        .bot-card {
+            background: white; border-radius: var(--radius-xl); padding: 18px;
+            box-shadow: var(--shadow); display: flex; align-items: center;
+            gap: 12px; flex-wrap: wrap; justify-content: space-between;
+            border: 1px solid rgba(14,165,233,0.15);
         }
-        .review-question.correct-answer {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
+        .bot-card .bot-info { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .bot-card .bot-icon {
+            width: 46px; height: 46px; background: #e0f2fe; color: #0ea5e9;
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
         }
-        .review-question.wrong-answer {
-            background: #fef2f2;
-            border-color: #fecaca;
+        .bot-card h4 { font-size: 15px; font-weight: 700; color: var(--dark); }
+        .bot-card p { font-size: 11px; color: var(--gray-600); }
+        .btn-telegram {
+            background: #0088cc; color: white; padding: 12px 20px; border-radius: 14px;
+            font-weight: 700; font-size: 13px; cursor: pointer; border: none; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px; transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(0,136,204,0.35);
+            position: relative; overflow: hidden;
         }
-        .review-question.unanswered {
-            background: #f8fafc;
-            border-color: #e2e8f0;
+        .btn-telegram::after {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            animation: shimmer 2s infinite;
         }
-        .review-q-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 10px;
+        @keyframes shimmer {
+            0% { transform: translate(-100%, -100%) rotate(0deg); }
+            100% { transform: translate(100%, 100%) rotate(360deg); }
         }
-        .review-q-num {
-            font-weight: 800;
-            font-size: 14px;
-            color: var(--dark);
+        .btn-telegram:hover { background: #0077b5; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,136,204,0.5); }
+        .btn-telegram:active { transform: scale(0.97); }
+
+        /* Footer */
+        .result-footer {
+            text-align: center; margin-top: 8px; padding: 20px 10px 10px;
+            color: rgba(255,255,255,0.9); font-size: 10px; font-weight: 500;
+            letter-spacing: 0.8px; text-shadow: 0 1px 4px rgba(0,0,0,0.3);
         }
-        .review-q-status {
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .review-q-text {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 12px;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        .review-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .review-option {
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 500;
-            border: 2px solid #e2e8f0;
-            background: white;
-        }
-        .review-option.user-selected {
-            border-color: #6366f1;
-            background: #eef2ff;
-        }
-        .review-option.correct-opt {
-            border-color: #10b981;
-            background: #d1fae5;
-        }
-        .review-option.wrong-user {
-            border-color: #ef4444;
-            background: #fee2e2;
-        }
-        .review-explanation {
-            margin-top: 10px;
-            padding: 10px 14px;
-            background: #fef3c7;
-            border-radius: 10px;
-            font-size: 12px;
-            color: #92400e;
+        .result-footer .divider {
+            width: 30px; height: 2px; background: rgba(255,255,255,0.4);
+            margin: 8px auto; border-radius: 2px;
         }
 
+        /* Review Modal */
         .review-overlay {
-            display: none;
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 2000;
-            justify-content: center; align-items: center;
-            padding: 15px;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            z-index: 2000; justify-content: center; align-items: center; padding: 15px;
         }
         .review-overlay.show { display: flex; }
         .review-container {
-            width: 100%; max-width: 850px;
-            height: 90vh;
-            background: white; border-radius: 20px;
-            overflow: hidden; position: relative;
+            width: 100%; max-width: 900px; height: 90vh;
+            background: white; border-radius: var(--radius-xl); overflow: hidden;
         }
         .review-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px;
-            background: #1e293b; color: white;
+            padding: 14px 20px; background: var(--gray-900); color: white;
         }
         .review-header button {
-            background: rgba(255,255,255,0.2);
-            border: none; color: white;
-            width: 36px; height: 36px;
-            border-radius: 50%; cursor: pointer;
-            font-size: 18px;
-            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.2); border: none; color: white;
+            width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
         }
-        .review-frame {
-            width: 100%; height: calc(100% - 56px);
-            border: none;
-        }
+        .review-frame { width: 100%; height: calc(100% - 56px); border: none; }
 
-        .empty-state {
-            text-align: center; color: #94a3b8; padding: 30px; font-size: 14px;
-        }
-        .empty-state i { font-size: 40px; margin-bottom: 10px; display: block; }
-
-        .confetti-canvas {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; z-index: -1;
-        }
-
-        .review-tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            background: #f1f5f9;
-            border-radius: 12px;
-            padding: 4px;
-        }
-        .review-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            transition: 0.2s;
-            border: none;
-            background: transparent;
-            color: #64748b;
-        }
-        .review-tab.active {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
+        .confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
 
         @media (max-width: 480px) {
-            .score-card { padding: 25px 15px; }
-            .result-title { font-size: 24px; }
-            .score-circle { width: 120px; height: 120px; }
-            .score-circle .big { font-size: 30px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            body { padding: 10px; }
+            .score-card { padding: 24px 16px; }
+            .result-title { font-size: 22px; }
+            .score-circle { width: 110px; height: 110px; }
+            .score-circle .big { font-size: 28px; }
+            .stats-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
             .btn-row { grid-template-columns: 1fr; }
-            .stat-item .val { font-size: 17px; }
-            .review-options { grid-template-columns: 1fr; }
+            .bot-card { flex-direction: column; align-items: stretch; }
+            .btn-telegram { justify-content: center; }
+        }
+        @media (max-width: 380px) {
+            .score-circle { width: 96px; height: 96px; }
+            .user-avatar { width: 38px; height: 38px; }
         }
     </style>
 </head>
 <body>
     <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
-
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-spinner"></div>
         <p>Loading your result...</p>
@@ -498,13 +422,12 @@
                 <div class="user-avatar" id="userAvatar">S</div>
                 <span class="user-name" id="userNameDisplay">Student</span>
             </div>
-            
             <div class="result-emoji" id="resultEmoji">🎉</div>
             <h1 class="result-title">Test Completed!</h1>
             <div class="test-badge" id="testCodeDisplay">📝 TEST</div>
             <div class="exam-badge" id="examTypeDisplay" style="display:none;"></div>
 
-            <div class="score-circle">
+            <div class="score-circle" id="scoreCircle">
                 <div class="big" id="scoreDisplay">0/0</div>
                 <div class="small">Your Score</div>
             </div>
@@ -513,22 +436,22 @@
 
             <div class="stats-grid">
                 <div class="stat-item">
-                    <i class="fas fa-bullseye" style="color:#10b981;"></i>
+                    <i class="fas fa-bullseye" style="color:var(--success);"></i>
                     <div class="val" id="accuracyDisplay">0%</div>
                     <div class="lbl">Accuracy</div>
                 </div>
                 <div class="stat-item">
-                    <i class="fas fa-check-circle" style="color:#6366f1;"></i>
+                    <i class="fas fa-check-circle" style="color:var(--primary);"></i>
                     <div class="val" id="correctDisplay">0</div>
                     <div class="lbl">Correct</div>
                 </div>
                 <div class="stat-item">
-                    <i class="fas fa-times-circle" style="color:#ef4444;"></i>
+                    <i class="fas fa-times-circle" style="color:var(--danger);"></i>
                     <div class="val" id="wrongDisplay">0</div>
                     <div class="lbl">Wrong</div>
                 </div>
                 <div class="stat-item">
-                    <i class="fas fa-clock" style="color:#f59e0b;"></i>
+                    <i class="fas fa-clock" style="color:var(--warning);"></i>
                     <div class="val" id="timeDisplay">--</div>
                     <div class="lbl">Time</div>
                 </div>
@@ -556,8 +479,8 @@
                 <button class="btn btn-review" onclick="openReview()">
                     <i class="fas fa-search"></i> Review Answers
                 </button>
-                <button class="btn btn-outline" onclick="window.location.href='dashboard.html'">
-                    <i class="fas fa-redo"></i> Try More
+                <button class="btn btn-outline" onclick="shareResult()">
+                    <i class="fas fa-share-alt"></i> Share
                 </button>
                 <button class="btn btn-dark" onclick="downloadPDF()">
                     <i class="fas fa-file-pdf"></i> PDF
@@ -565,36 +488,29 @@
             </div>
         </div>
 
-        <!-- Answer Review Card -->
-        <div class="card" id="reviewCard">
-            <div class="card-title">
-                <i class="fas fa-search" style="color:#6366f1;"></i>
-                Answer Review
-            </div>
-            <div class="review-tabs">
-                <button class="review-tab active" onclick="filterReview('all', this)">All</button>
-                <button class="review-tab" onclick="filterReview('correct', this)">✅ Correct</button>
-                <button class="review-tab" onclick="filterReview('wrong', this)">❌ Wrong</button>
-                <button class="review-tab" onclick="filterReview('unanswered', this)">⏭️ Unanswered</button>
-            </div>
-            <div id="answerReview" style="max-height:600px;overflow-y:auto;">
-                <div class="empty-state">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading answer review...</p>
+        <!-- Telegram Support Card -->
+        <div class="bot-card">
+            <div class="bot-info">
+                <div class="bot-icon"><i class="fab fa-telegram-plane"></i></div>
+                <div>
+                    <h4>Doubt or Correction?</h4>
+                    <p>Found a wrong answer? DM us now.</p>
                 </div>
             </div>
+            <a href="https://t.me/cuet007_bot" target="_blank" class="btn-telegram">
+                <i class="fab fa-telegram-plane"></i> @cuet007_bot
+            </a>
         </div>
 
-        <!-- Previous Attempts Card -->
+        <!-- Previous Attempts -->
         <div class="card">
             <div class="card-title">
-                <i class="fas fa-history" style="color:#6366f1;"></i>
+                <i class="fas fa-history" style="color:var(--primary);"></i>
                 Your Previous Attempts - <span id="progressTestCode">TEST</span>
             </div>
             <div class="attempts-list" id="attemptsList">
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <p>Loading attempts...</p>
+                <div style="text-align:center;padding:20px;color:var(--gray-500);">
+                    <i class="fas fa-inbox"></i><p>Loading attempts...</p>
                 </div>
             </div>
         </div>
@@ -606,15 +522,21 @@
                 Leaderboard - <span id="lbTestCode">TEST</span>
             </div>
             <div class="lb-list" id="leaderboardList">
-                <div class="empty-state">
-                    <i class="fas fa-trophy"></i>
-                    <p>Loading leaderboard...</p>
+                <div style="text-align:center;padding:20px;color:var(--gray-500);">
+                    <i class="fas fa-trophy"></i><p>Loading leaderboard...</p>
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="result-footer">
+            <div class="divider"></div>
+            © 2026 TESTMASTER PRO. ALL RIGHTS RESERVED.<br>
+            Designed for Competitive Excellence
+        </div>
     </div>
 
-    <!-- Review Overlay Modal -->
+    <!-- Review Modal -->
     <div class="review-overlay" id="reviewOverlay">
         <div class="review-container">
             <div class="review-header">
@@ -626,9 +548,8 @@
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwKKmPNFYUvB9QoTp5X6yo2I2EDgpsDngYRVAfIakxzwslcVkU2yrF46tEvjQmfnbmk8w/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
 
-        // URL Parameters
         const params = new URLSearchParams(window.location.search);
         const score = parseFloat(params.get('score')) || 0;
         const total = parseFloat(params.get('total')) || 100;
@@ -643,31 +564,25 @@
 
         const user = JSON.parse(localStorage.getItem('user')) || { username: 'student', name: 'Student' };
 
-        // ==================== AVATAR HELPER (Same as dashboard) ====================
         function setAvatarWithPic(elementId, userObj) {
             const el = document.getElementById(elementId);
             if (!el) return;
             if (userObj && userObj.avatarUrl) {
-                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
-            } else if (userObj && userObj.profilePicUrl) {
-                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
             } else {
                 el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
             }
         }
 
-        // Set user avatar
         setAvatarWithPic('userAvatar', user);
         document.getElementById('userNameDisplay').textContent = user.name;
         document.getElementById('testCodeDisplay').textContent = testCode;
         document.getElementById('progressTestCode').textContent = testCode;
         document.getElementById('lbTestCode').textContent = testCode;
-        
         if (examType) {
             document.getElementById('examTypeDisplay').textContent = '📚 ' + examType;
             document.getElementById('examTypeDisplay').style.display = 'inline-block';
         }
-        
         document.getElementById('scoreDisplay').textContent = `${score}/${total}`;
         document.getElementById('accuracyDisplay').textContent = `${accuracy}%`;
         document.getElementById('correctDisplay').textContent = correct;
@@ -682,166 +597,19 @@
             return `${sec}s`;
         }
 
-        // Performance
         const percentage = total > 0 ? (score / total) * 100 : 0;
         const emoji = document.getElementById('resultEmoji');
         const tag = document.getElementById('perfTag');
-        if (percentage >= 90) { emoji.textContent='🏆'; tag.textContent='🌟 Excellent Performance!'; tag.className='perf-tag tag-excellent'; startConfetti(); }
+        if (percentage >= 90) {
+            emoji.textContent='🏆'; tag.textContent='🌟 Excellent Performance!'; tag.className='perf-tag tag-excellent';
+            document.getElementById('scoreCircle').classList.add('glow');
+            startConfetti();
+        }
         else if (percentage >= 70) { emoji.textContent='🎉'; tag.textContent='👏 Great Job!'; tag.className='perf-tag tag-good'; }
         else if (percentage >= 50) { emoji.textContent='👍'; tag.textContent='📚 Good Attempt!'; tag.className='perf-tag tag-average'; }
         else { emoji.textContent='💪'; tag.textContent='🎯 Keep Practicing!'; tag.className='perf-tag tag-poor'; }
 
-        // ============ ANSWER REVIEW SYSTEM ============
-        let allReviewQuestions = [];
-        let currentReviewFilter = 'all';
-
-        function loadAnswerReview() {
-            const reviewContainer = document.getElementById('answerReview');
-            const mockFile = localStorage.getItem('last_mock_file');
-            const userAnswers = JSON.parse(localStorage.getItem('last_answers') || '{}');
-            
-            if (!mockFile) {
-                reviewContainer.innerHTML = '<div class="empty-state"><i class="fas fa-info-circle"></i><p>Test file not found for review</p></div>';
-                return;
-            }
-            
-            fetch(mockFile)
-                .then(res => res.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const scripts = doc.querySelectorAll('script');
-                    
-                    let questions = [];
-                    scripts.forEach(script => {
-                        const content = script.textContent;
-                        if (content.includes('const QUESTIONS') || content.includes('var QUESTIONS')) {
-                            try {
-                                const match = content.match(/(?:const|var)\s+QUESTIONS\s*=\s*(\[[\s\S]*?\]);/);
-                                if (match) {
-                                    questions = eval(match[1]);
-                                }
-                            } catch(e) {
-                                console.warn('Could not parse questions:', e);
-                            }
-                        }
-                    });
-                    
-                    if (questions.length === 0) {
-                        scripts.forEach(script => {
-                            const content = script.textContent;
-                            if (content.includes('id:') && content.includes('text:') && content.includes('options:')) {
-                                try {
-                                    const arrMatch = content.match(/=\s*(\[[\s\S]*?\])/);
-                                    if (arrMatch) {
-                                        questions = eval(arrMatch[1]);
-                                    }
-                                } catch(e) {}
-                            }
-                        });
-                    }
-                    
-                    allReviewQuestions = questions.map((q, i) => ({
-                        ...q,
-                        index: i,
-                        userAnswer: userAnswers[q.id]
-                    }));
-                    
-                    renderReviewQuestions();
-                })
-                .catch(e => {
-                    console.error('Review load error:', e);
-                    reviewContainer.innerHTML = '<div class="empty-state"><i class="fas fa-info-circle"></i><p>Could not load test data for review</p></div>';
-                });
-        }
-
-        function renderReviewQuestions() {
-            const container = document.getElementById('answerReview');
-            const letters = ['A', 'B', 'C', 'D'];
-            
-            let questionsToShow = allReviewQuestions;
-            if (currentReviewFilter === 'correct') {
-                questionsToShow = allReviewQuestions.filter(q => q.userAnswer === q.correct);
-            } else if (currentReviewFilter === 'wrong') {
-                questionsToShow = allReviewQuestions.filter(q => q.userAnswer !== undefined && q.userAnswer !== q.correct);
-            } else if (currentReviewFilter === 'unanswered') {
-                questionsToShow = allReviewQuestions.filter(q => q.userAnswer === undefined);
-            }
-            
-            if (questionsToShow.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No questions to show</p></div>';
-                return;
-            }
-            
-            container.innerHTML = questionsToShow.map((q, displayIndex) => {
-                const isCorrect = q.userAnswer === q.correct;
-                const isUnanswered = q.userAnswer === undefined;
-                const actualIndex = q.index + 1;
-                
-                let cardClass = 'review-question';
-                let statusText = '';
-                let statusColor = '';
-                
-                if (isUnanswered) {
-                    cardClass += ' unanswered';
-                    statusText = '⏭️ Unanswered';
-                    statusColor = '#94a3b8';
-                } else if (isCorrect) {
-                    cardClass += ' correct-answer';
-                    statusText = '✅ Correct (+2)';
-                    statusColor = '#10b981';
-                } else {
-                    cardClass += ' wrong-answer';
-                    statusText = '❌ Wrong (-0.5)';
-                    statusColor = '#ef4444';
-                }
-                
-                return `
-                <div class="${cardClass}">
-                    <div class="review-q-header">
-                        <span class="review-q-num">Q${actualIndex}.</span>
-                        <span class="review-q-status" style="color:${statusColor}">${statusText}</span>
-                    </div>
-                    <div class="review-q-text">${q.text}</div>
-                    <div class="review-options">
-                        ${q.options.map((opt, i) => {
-                            let optClass = 'review-option';
-                            if (i === q.correct) optClass += ' correct-opt';
-                            if (i === q.userAnswer && !isCorrect) optClass += ' wrong-user';
-                            if (i === q.userAnswer && isCorrect) optClass += ' user-selected correct-opt';
-                            
-                            let label = '';
-                            if (i === q.correct) label = ' ✅';
-                            if (i === q.userAnswer && !isCorrect) label = ' ❌ (Your answer)';
-                            if (i === q.userAnswer && isCorrect) label = ' ✅ (Your answer)';
-                            
-                            return `
-                            <div class="${optClass}">
-                                <strong>${letters[i]}.</strong> ${opt}${label}
-                            </div>`;
-                        }).join('')}
-                    </div>
-                    ${!isCorrect && !isUnanswered ? `
-                    <div class="review-explanation">
-                        <strong>💡 Correct Answer:</strong> ${letters[q.correct]}. ${q.options[q.correct]}
-                        ${q.explanation ? `<br><strong>Explanation:</strong> ${q.explanation}` : ''}
-                    </div>` : ''}
-                    ${isUnanswered ? `
-                    <div class="review-explanation">
-                        <strong>💡 Correct Answer:</strong> ${letters[q.correct]}. ${q.options[q.correct]}
-                    </div>` : ''}
-                </div>`;
-            }).join('');
-        }
-
-        function filterReview(filter, btn) {
-            currentReviewFilter = filter;
-            document.querySelectorAll('.review-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
-            renderReviewQuestions();
-        }
-
-        // ============ FETCH ATTEMPTS ============
+        // Attempts
         async function fetchUserAttempts() {
             try {
                 const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
@@ -849,13 +617,8 @@
                 if (data.success && data.results) {
                     const testResults = data.results.filter(r => r.testCode === testCode);
                     renderAttempts(testResults);
-                } else {
-                    showFirstAttempt();
-                }
-            } catch (e) {
-                console.error('Error:', e);
-                showFirstAttempt();
-            }
+                } else showFirstAttempt();
+            } catch (e) { showFirstAttempt(); }
         }
 
         function showFirstAttempt() {
@@ -876,93 +639,65 @@
         }
 
         function renderAttempts(results) {
-            const sorted = [...results].sort((a,b) => new Date(a.timestamp||a.date) - new Date(b.timestamp||b.date));
-            const reversed = [...sorted].reverse();
+            const reversed = [...results].reverse();
             const list = document.getElementById('attemptsList');
-            
             list.innerHTML = reversed.map((r, i) => {
                 const d = new Date(r.date || r.timestamp);
                 const dateStr = d.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'2-digit'});
                 const timeStr = d.toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
                 const isCurrent = i === 0;
                 const attemptNum = reversed.length - i;
-                
                 let improvedHTML = '';
                 if (i < reversed.length - 1) {
                     const currentAcc = parseFloat(r.accuracy)||0;
                     const prevAcc = parseFloat(reversed[i+1].accuracy)||0;
-                    if (currentAcc > prevAcc) {
-                        improvedHTML = '<span class="improved-badge">↑ Improved</span>';
-                    }
+                    if (currentAcc > prevAcc) improvedHTML = '<span class="improved-badge">↑ Improved</span>';
                 }
-
                 return `
-                    <div class="attempt-item ${isCurrent ? 'current' : ''}">
-                        <div class="attempt-left">
-                            <div class="attempt-num">${attemptNum}</div>
-                            <div class="attempt-info">
-                                <div class="label">
-                                    Attempt #${attemptNum}
-                                    ${isCurrent ? '<span class="current-badge">Current</span>' : ''}
-                                    ${improvedHTML}
-                                </div>
-                                <div class="date">${dateStr} at ${timeStr}</div>
-                            </div>
-                        </div>
-                        <div class="attempt-right">
-                            <div class="pts">${r.score} pts</div>
-                            <div class="acc">${r.accuracy}%</div>
+                <div class="attempt-item ${isCurrent ? 'current' : ''}">
+                    <div class="attempt-left">
+                        <div class="attempt-num">${attemptNum}</div>
+                        <div class="attempt-info">
+                            <div class="label">Attempt #${attemptNum} ${isCurrent ? '<span class="current-badge">Current</span>' : ''} ${improvedHTML}</div>
+                            <div class="date">${dateStr} at ${timeStr}</div>
                         </div>
                     </div>
-                `;
+                    <div class="attempt-right">
+                        <div class="pts">${r.score} pts</div>
+                        <div class="acc">${r.accuracy}%</div>
+                    </div>
+                </div>`;
             }).join('');
         }
 
-        // ============ FETCH LEADERBOARD ============
+        // Leaderboard
         async function fetchLeaderboard() {
             try {
                 const res = await fetch(`${API_URL}?action=getLeaderboard&testCode=${encodeURIComponent(testCode)}`);
                 const data = await res.json();
-                if (data.success && data.leaderboard && data.leaderboard.length > 0) {
-                    renderLeaderboard(data.leaderboard);
-                } else {
-                    showEmptyLB();
-                }
-            } catch (e) {
-                console.error('LB Error:', e);
-                showEmptyLB();
-            }
+                if (data.success && data.leaderboard) renderLeaderboard(data.leaderboard);
+                else showEmptyLB();
+            } catch (e) { showEmptyLB(); }
         }
 
         function showEmptyLB() {
-            document.getElementById('leaderboardList').innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>Be the first to take this test!</p></div>';
+            document.getElementById('leaderboardList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);"><i class="fas fa-trophy"></i><p>Be the first to take this test!</p></div>';
             document.getElementById('percentileText').textContent = 'N/A';
             document.getElementById('yourRank').textContent = '--';
             document.getElementById('totalParticipants').textContent = '0';
             document.getElementById('betterThan').textContent = '--';
         }
 
-        // ✅ FIXED: Avatar helper for leaderboard entries
         function getAvatarHTML(entry) {
-            if (entry.avatarUrl) {
-                return `<img src="${entry.avatarUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.textContent='${(entry.name||'S').charAt(0).toUpperCase()}'">`;
-            } else if (entry.profilePicUrl) {
-                return `<img src="${entry.profilePicUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-            } else {
-                return (entry.name||'S').charAt(0).toUpperCase();
-            }
+            if (entry.avatarUrl) return `<img src="${entry.avatarUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            return (entry.name||'S').charAt(0).toUpperCase();
         }
 
         function renderLeaderboard(lb) {
             document.getElementById('totalParticipants').textContent = lb.length;
-
             const userEntry = lb.find(e => e.username === user.username);
             const totalP = lb.length + (userEntry ? 0 : 1);
-            let userRank;
-            
-            if (userEntry) userRank = userEntry.rank;
-            else userRank = lb.filter(e => parseFloat(e.score) > score).length + 1;
-            
+            let userRank = userEntry ? userEntry.rank : lb.filter(e => parseFloat(e.score) > score).length + 1;
             const percentile = totalP > 1 ? ((totalP - userRank) / totalP) * 100 : 100;
             const roundedP = Math.round(percentile * 10) / 10;
             const betterThan = Math.round((100 - (userRank/totalP)*100));
@@ -970,21 +705,18 @@
             document.getElementById('percentileText').textContent = roundedP + '%';
             document.getElementById('yourRank').textContent = '#' + userRank;
             document.getElementById('betterThan').textContent = betterThan + '% of students';
-            setTimeout(() => {
-                document.getElementById('percentileFill').style.width = Math.max(3, roundedP) + '%';
-            }, 300);
+            setTimeout(() => { document.getElementById('percentileFill').style.width = Math.max(3, roundedP) + '%'; }, 200);
 
             const top20 = lb.slice(0, 20);
             const list = document.getElementById('leaderboardList');
-            
             list.innerHTML = top20.map(entry => {
                 let rc = 'rank-other', rd = entry.rank;
                 if (entry.rank === 1) { rc='rank-1'; rd='🥇'; }
                 else if (entry.rank === 2) { rc='rank-2'; rd='🥈'; }
                 else if (entry.rank === 3) { rc='rank-3'; rd='🥉'; }
                 const isYou = entry.username === user.username;
-                
-                return `<div class="lb-item ${isYou?'you':''}">
+                return `
+                <div class="lb-item ${isYou?'you':''}">
                     <div class="lb-rank ${rc}">${rd}</div>
                     <div class="lb-avatar">${getAvatarHTML(entry)}</div>
                     <div class="lb-info">
@@ -999,17 +731,12 @@
             }).join('');
 
             if (userEntry && userEntry.rank > 20) {
-                list.innerHTML += `<div style="text-align:center;color:#94a3b8;padding:8px;font-size:12px;">• • • • •</div>
-                <div class="lb-item you">
-                    <div class="lb-rank rank-other">${userEntry.rank}</div>
-                    <div class="lb-avatar">${getAvatarHTML(userEntry)}</div>
-                    <div class="lb-info"><div class="lb-name">${user.name} <span class="you-tag">You</span></div></div>
-                    <div class="lb-stat"><div class="score">${score}/${total}</div><div class="acc">${accuracy}%</div></div>
-                </div>`;
+                list.innerHTML += `<div style="text-align:center;color:var(--gray-500);padding:8px;">• • •</div>
+                <div class="lb-item you"><div class="lb-rank rank-other">${userEntry.rank}</div><div class="lb-avatar">${getAvatarHTML(userEntry)}</div><div class="lb-info"><div class="lb-name">${user.name} <span class="you-tag">You</span></div></div><div class="lb-stat"><div class="score">${score}/${total}</div><div class="acc">${accuracy}%</div></div></div>`;
             }
         }
 
-        // ============ CONFETTI ============
+        // Confetti
         function startConfetti() {
             const c = document.getElementById('confettiCanvas');
             const ctx = c.getContext('2d');
@@ -1037,7 +764,7 @@
             setTimeout(()=>c.style.display='none',5000);
         }
 
-        // ============ REVIEW MODAL ============
+        // Review
         function openReview() {
             const f = localStorage.getItem('last_mock_file');
             if (f) {
@@ -1053,7 +780,7 @@
         }
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeReview(); });
 
-        // ============ PDF ============
+        // PDF
         function downloadPDF() {
             const {jsPDF}=window.jspdf;
             const doc=new jsPDF();
@@ -1074,14 +801,24 @@
             doc.save(`${user.name}_${testCode}_Result.pdf`);
         }
 
-        // ============ INIT ============
+        // Share
+        function shareResult() {
+            const rank = document.getElementById('yourRank').textContent;
+            const text = `🏆 I scored ${score}/${total} (${accuracy}%) in ${testCode} on TestMaster Pro! Can you beat my rank ${rank}?`;
+            if (navigator.share) {
+                navigator.share({ title: 'TestMaster Pro Result', text: text });
+            } else {
+                navigator.clipboard.writeText(text).then(() => Swal.fire({ icon:'success', title:'Copied!', timer:1500, showConfirmButton:false }));
+            }
+        }
+
+        // Init
         async function init() {
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('mainContent').style.display = 'flex';
-            loadAnswerReview();
             await Promise.all([fetchUserAttempts(), fetchLeaderboard()]);
         }
-        setTimeout(init, 600);
+        setTimeout(init, 500);
     </script>
 </body>
 </html>
