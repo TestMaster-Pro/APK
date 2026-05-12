@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Physics • Current Electricity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-glow: #8b5cf6;
+            --accent: #ec4899;
+            --accent-glow: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(139, 92, 246, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.25);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.35);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #f3f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.15);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #fdf2f8 100%);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Floating gradient blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(139, 92, 246, 0.2);
+            top: -100px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(236, 72, 153, 0.18);
+            bottom: -80px;
+            left: -60px;
+            animation-delay: -7s;
+        }
+        .blob-3 {
+            width: 220px;
+            height: 220px;
+            background: rgba(168, 85, 247, 0.16);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        @keyframes blobFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(40px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, -20px) scale(0.9);
+            }
+            75% {
+                transform: translate(20px, 40px) scale(1.05);
+            }
+        }
+
+        /* BUBBLES BACKGROUND */
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.06));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.12);
+            animation: floatUp linear infinite;
+        }
+        body.light-mode .bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.04));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.08);
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateY(-250px) translateX(30px) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-500px) translateX(-20px) scale(1);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translateY(-750px) translateX(15px) scale(0.9);
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(-1000px) translateX(-10px) scale(0.3);
+                opacity: 0;
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .top-bar:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+        .test-title .icon-dna {
+            font-size: 20px;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+        @keyframes pulseIcon {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.75;
+            }
+        }
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 2px solid #f97316;
+            background: var(--card);
+            color: #f97316;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover {
+            box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);
+            transform: translateY(-1px);
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 16px rgba(249, 115, 22, 0.4);
+        }
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+        .timer-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            animation: pulse 0.8s infinite;
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
+        }
+        body.light-mode .timer-pill.warning {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        .info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .info-chip i {
+            font-size: 11px;
+        }
+        .info-chip.exam {
+            color: #a78bfa;
+        }
+        .info-chip.subject {
+            color: #ec4899;
+        }
+        .info-chip.marks {
+            color: #fbbf24;
+        }
+        body.light-mode .info-chip.exam {
+            color: #7c3aed;
+        }
+        body.light-mode .info-chip.subject {
+            color: #be185d;
+        }
+        body.light-mode .info-chip.marks {
+            color: #d97706;
+        }
+
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.35s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: var(--glow-md);
+            transform: translateY(-2px);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .question-card.swiping {
+            transition: none;
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-badge {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .q-marks {
+            font-weight: 600;
+            font-size: 12px;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 6px 14px;
+            border-radius: 15px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+        body.light-mode .q-marks {
+            color: #d97706;
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--option-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #8b5cf6;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+        .question-text .hindi-block {
+            color: #fbbf24;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        body.light-mode .question-text .hindi-block {
+            color: #d97706;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--option-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            backdrop-filter: blur(4px);
+        }
+        .option-card:hover {
+            border-color: #a78bfa;
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+        .option-card.selected {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 6px 22px rgba(139, 92, 246, 0.4);
+        }
+        .option-card.correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+        }
+        .option-card.wrong {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4) !important;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-4px);
+            }
+            75% {
+                transform: translateX(4px);
+            }
+        }
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #a78bfa;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+        .option-card.selected .option-letter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .option-card.correct .option-letter,
+        .option-card.wrong .option-letter {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 60px;
+        }
+        .btn:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-2px);
+            border-color: #a78bfa;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .btn-mark {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+        .btn-mark:hover {
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+        }
+        .btn-clear {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #4ade80;
+        }
+        .btn-clear:hover {
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+        }
+        body.light-mode .btn-mark {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        body.light-mode .btn-clear {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+
+        .palette-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+        .palette-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .palette-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+        .palette-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--option-bg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            color: var(--text);
+        }
+        .palette-num:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+            box-shadow: var(--glow-sm);
+        }
+        .palette-num.answered {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+        .palette-num.marked {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+        .palette-num.current {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.2);
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.4);
+        }
+        .palette-num.wrong-num {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .review-panel {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+        .review-panel.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .result-item {
+            background: var(--option-bg);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .result-item:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .result-item .value {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .result-item .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .explanation-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        body.light-mode .explanation-box {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .explanation-box .exp-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #fbbf24;
+        }
+        body.light-mode .explanation-box .exp-title {
+            color: #92400e;
+        }
+
+        .swipe-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+
+        .review-mode-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .review-mode-card:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .review-mode-card.correct-answer {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .review-mode-card.wrong-answer {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .review-mode-card.unanswered-q {
+            background: var(--glass-bg);
+            border-color: var(--glass-border);
+        }
+        .review-mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .review-mode-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+        .status-correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: #4ade80;
+        }
+        .status-wrong {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        .status-unanswered {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+        body.light-mode .status-correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        body.light-mode .status-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        body.light-mode .status-unanswered {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .toast {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: var(--glow-md);
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 13px;
+            display: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .review-mode-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            .test-title {
+                font-size: 15px;
+            }
+            .question-text {
+                font-size: 14px;
+                padding: 14px;
+            }
+            .result-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .blob {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- FLOATING GRADIENT BLOBS -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- BUBBLES BACKGROUND -->
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">⚡</div>
+                CUET Physics • Current Electricity
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">30:00</span></div>
+            </div>
+        </div>
+
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-bolt"></i> Physics</span>
+            <span class="info-chip"><i class="fas fa-plug"></i> Current Electricity</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 30 Questions</span>
+        </div>
+
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/30 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/30</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+            <button class="btn" onclick="submitTest()" id="submitBtn" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;font-size:14px;padding:12px;margin-top:12px;width:100%;display:none !important;">
+                <i class="fas fa-check-double"></i> Submit Test
+            </button>
+        </div>
+
+        <div id="reviewModeContainer" style="display:none;"></div>
+
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+
+        <div class="review-panel" id="reviewPanel">
+            <h3 style="margin-bottom:12px;">📋 Result Review</h3>
+            <div class="result-summary" id="resultSummary"></div>
+            <div id="reviewQuestions"></div>
+            <button class="btn" onclick="closeReview()" style="margin-top:12px;display:inline-flex !important;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-times"></i> Close Review
+            </button>
+        </div>
+
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #8b5cf6;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ========== BUBBLES ANIMATION ==========
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2), rgba(252, 211, 77, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.16), rgba(248, 113, 113, 0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+                bubbles.forEach(b => {
+                    if (parseFloat(b.style.animationDuration) > 0 && b.getAnimations().length === 0) {
+                        b.remove();
+                    }
+                });
+            }, 4000);
+        })();
+
+        // ========== AVATAR FUNCTION ==========
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : '⚡';
+            }
+        }
+
+        // ========== DETECT REVIEW MODE ==========
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        // ========== 30 PHYSICS QUESTIONS: CURRENT ELECTRICITY ==========
+        const QUESTIONS = [{
+            id: 0,
+            en: "When the temperature of a metallic conductor increases, its resistance:",
+            hi: "जब एक धात्विक चालक का तापमान बढ़ता है, तो उसका प्रतिरोध:",
+            oEn: ["Decreases", "Increases", "Remains same", "First increases then decreases"],
+            oHi: ["घटता है", "बढ़ता है", "समान रहता है", "पहले बढ़ता फिर घटता है"],
+            c: 1,
+            exp: "For metallic conductors, resistance increases with temperature as R = R₀(1 + αΔT). Positive temperature coefficient.",
+            text: "Temperature effect on resistance.",
+            options: ["Decreases", "Increases", "Remains same", "First increases then decreases"],
+            correct: 1,
+            explanation: "R = R₀(1 + αΔT), α is positive for metals."
+        }, {
+            id: 1,
+            en: "The relation between current (I) and drift velocity (v_d) is:",
+            hi: "धारा (I) और अपवाह वेग (v_d) के बीच संबंध है:",
+            oEn: ["I = neAv_d", "I = neA/v_d", "I = v_d/neA", "I = n²eAv_d"],
+            oHi: ["I = neAv_d", "I = neA/v_d", "I = v_d/neA", "I = n²eAv_d"],
+            c: 0,
+            exp: "I = neAv_d where n = number density, e = charge, A = cross-sectional area, v_d = drift velocity.",
+            text: "Current and drift velocity relation.",
+            options: ["I = neAv_d", "I = neA/v_d", "I = v_d/neA", "I = n²eAv_d"],
+            correct: 0,
+            explanation: "I = neAv_d is the fundamental relation."
+        }, {
+            id: 2,
+            en: "Mobility of charge carriers is defined as:",
+            hi: "आवेश वाहकों की गतिशीलता (Mobility) को परिभाषित किया जाता है:",
+            oEn: ["v_d × E", "v_d / E", "E / v_d", "1 / (v_d E)"],
+            oHi: ["v_d × E", "v_d / E", "E / v_d", "1 / (v_d E)"],
+            c: 1,
+            exp: "Mobility μ = v_d / E, where v_d is drift velocity and E is electric field.",
+            text: "Mobility definition.",
+            options: ["v_d × E", "v_d / E", "E / v_d", "1 / (v_d E)"],
+            correct: 1,
+            explanation: "μ = v_d/E (drift velocity per unit electric field)."
+        }, {
+            id: 3,
+            en: "Ohm's law is valid for:",
+            hi: "ओम का नियम किसके लिए मान्य है?",
+            oEn: ["Semiconductors", "Electrolytes", "Metallic conductors at constant temperature", "Vacuum tubes"],
+            oHi: ["अर्धचालक", "विद्युत अपघट्य", "नियत तापमान पर धात्विक चालक", "निर्वात नलिकाएं"],
+            c: 2,
+            exp: "Ohm's law V = IR is valid for ohmic conductors like metals at constant temperature.",
+            text: "Ohm's law validity.",
+            options: ["Semiconductors", "Electrolytes", "Metallic conductors at constant temperature", "Vacuum tubes"],
+            correct: 2,
+            explanation: "Valid for metallic conductors at constant temperature."
+        }, {
+            id: 4,
+            en: "Which of the following is a non-ohmic conductor?",
+            hi: "निम्नलिखित में से कौन-सा एक अन-ओमीय (non-ohmic) चालक है?",
+            oEn: ["Copper wire", "Tungsten filament", "P-N Junction Diode", "Silver strip"],
+            oHi: ["तांबे का तार", "टंगस्टन फिलामेंट", "P-N संधि डायोड", "चांदी की पट्टी"],
+            c: 2,
+            exp: "P-N Junction Diode has non-linear V-I characteristic, hence non-ohmic.",
+            text: "Non-ohmic conductor.",
+            options: ["Copper wire", "Tungsten filament", "P-N Junction Diode", "Silver strip"],
+            correct: 2,
+            explanation: "P-N diode has exponential I-V relation."
+        }, {
+            id: 5,
+            en: "The unit of electrical conductivity is:",
+            hi: "विद्युत चालकता (Conductivity) की इकाई क्या है?",
+            oEn: ["Ohm-meter", "Ohm⁻¹meter⁻¹ (Siemen/m)", "Ohm", "Mho"],
+            oHi: ["ओम-मीटर", "ओम⁻¹मीटर⁻¹ (सीमेंस/मी)", "ओम", "मो"],
+            c: 1,
+            exp: "Conductivity σ = 1/ρ, unit is (Ω·m)⁻¹ = S/m (Siemens per meter).",
+            text: "Unit of conductivity.",
+            options: ["Ohm-meter", "Ohm⁻¹meter⁻¹ (Siemen/m)", "Ohm", "Mho"],
+            correct: 1,
+            explanation: "σ = 1/ρ, unit is Ω⁻¹m⁻¹ or S/m."
+        }, {
+            id: 6,
+            en: "If a wire is stretched to double its length, its new resistance becomes:",
+            hi: "यदि एक तार को खींचकर उसकी लंबाई दोगुनी कर दी जाए, तो उसका नया प्रतिरोध होगा:",
+            oEn: ["2 times", "4 times", "1/2 times", "1/4 times"],
+            oHi: ["2 गुना", "4 गुना", "1/2 गुना", "1/4 गुना"],
+            c: 1,
+            exp: "When stretched, volume constant. If L → 2L, A → A/2. R ∝ L/A → R' = 4R.",
+            text: "Resistance of stretched wire.",
+            options: ["2 times", "4 times", "1/2 times", "1/4 times"],
+            correct: 1,
+            explanation: "R ∝ L² when volume constant, so 4 times."
+        }, {
+            id: 7,
+            en: "Electrical power P is given by:",
+            hi: "विद्युत शक्ति P का सूत्र है:",
+            oEn: ["V²/R", "I²R", "VI", "All of these"],
+            oHi: ["V²/R", "I²R", "VI", "ये सभी"],
+            c: 3,
+            exp: "P = VI = I²R = V²/R. All forms are equivalent using Ohm's law.",
+            text: "Power formulas.",
+            options: ["V²/R", "I²R", "VI", "All of these"],
+            correct: 3,
+            explanation: "All are equivalent expressions for electrical power."
+        }, {
+            id: 8,
+            en: "Kilowatt-hour (kWh) is the unit of:",
+            hi: "किलोवाट-घंटा (kWh) किसकी इकाई है?",
+            oEn: ["Power", "Electrical Energy", "Current", "Charge"],
+            oHi: ["शक्ति", "विद्युत ऊर्जा", "धारा", "आवेश"],
+            c: 1,
+            exp: "kWh = Power × Time = Energy. 1 kWh = 3.6 × 10⁶ J.",
+            text: "kWh unit.",
+            options: ["Power", "Electrical Energy", "Current", "Charge"],
+            correct: 1,
+            explanation: "1 kWh = 3.6 × 10⁶ J, unit of energy."
+        }, {
+            id: 9,
+            en: "The resistivity of a wire depends on:",
+            hi: "एक तार की प्रतिरोधकता (Resistivity) निर्भर करती है:",
+            oEn: ["Length", "Area of cross-section", "Nature of material", "Shape"],
+            oHi: ["लंबाई", "अनुप्रस्थ काट का क्षेत्रफल", "पदार्थ की प्रकृति", "आकार"],
+            c: 2,
+            exp: "Resistivity is an intrinsic property depending only on material and temperature.",
+            text: "Resistivity dependence.",
+            options: ["Length", "Area of cross-section", "Nature of material", "Shape"],
+            correct: 2,
+            explanation: "ρ is material property, independent of dimensions."
+        }, {
+            id: 10,
+            en: "Internal resistance of a cell is due to:",
+            hi: "एक सेल का आंतरिक प्रतिरोध किसके कारण होता है?",
+            oEn: ["Electrodes", "Vessel", "Electrolyte", "External wire"],
+            oHi: ["इलेक्ट्रोड", "बर्तन", "विद्युत अपघट्य", "बाहरी तार"],
+            c: 2,
+            exp: "Internal resistance arises from the opposition to current flow within the electrolyte.",
+            text: "Internal resistance cause.",
+            options: ["Electrodes", "Vessel", "Electrolyte", "External wire"],
+            correct: 2,
+            explanation: "Electrolyte offers resistance to ion flow."
+        }, {
+            id: 11,
+            en: "The relation between EMF (E), Potential Difference (V), and Internal Resistance (r) during discharge is:",
+            hi: "डिस्चार्ज के दौरान E, V और r के बीच संबंध है:",
+            oEn: ["V = E + Ir", "V = E - Ir", "E = V - Ir", "V = Ir"],
+            oHi: ["V = E + Ir", "V = E - Ir", "E = V - Ir", "V = Ir"],
+            c: 1,
+            exp: "Terminal voltage V = E - Ir during discharge (current flows out).",
+            text: "EMF and terminal voltage.",
+            options: ["V = E + Ir", "V = E - Ir", "E = V - Ir", "V = Ir"],
+            correct: 1,
+            explanation: "V = E - Ir (discharging)."
+        }, {
+            id: 12,
+            en: "To get maximum current from a parallel combination of n identical cells, the external resistance R should be:",
+            hi: "n समान सेलों के समांतर संयोजन से अधिकतम धारा प्राप्त करने के लिए, बाहरी प्रतिरोध R होना चाहिए:",
+            oEn: ["R >> r/n", "R << r/n", "R = r/n", "R = 0"],
+            oHi: ["R >> r/n", "R << r/n", "R = r/n", "R = 0"],
+            c: 1,
+            exp: "For parallel cells, equivalent internal resistance r/n. Maximum current when R << r/n.",
+            text: "Maximum current condition.",
+            options: ["R >> r/n", "R << r/n", "R = r/n", "R = 0"],
+            correct: 1,
+            explanation: "When external resistance is much less than internal resistance."
+        }, {
+            id: 13,
+            en: "In series combination of cells, the total EMF is:",
+            hi: "सेलों के श्रेणीक्रम संयोजन में, कुल EMF होता है:",
+            oEn: ["Sum of individual EMFs", "Average of EMFs", "Equal to the single cell EMF", "Reciprocal sum"],
+            oHi: ["EMFs का योग", "EMFs का औसत", "एकल सेल EMF के बराबर", "व्युत्क्रम योग"],
+            c: 0,
+            exp: "In series: E_total = E₁ + E₂ + ... + E_n (sum of individual EMFs).",
+            text: "Series EMF.",
+            options: ["Sum of individual EMFs", "Average of EMFs", "Equal to the single cell EMF", "Reciprocal sum"],
+            correct: 0,
+            explanation: "EMFs add up in series combination."
+        }, {
+            id: 14,
+            en: "A cell of EMF E and internal resistance r is connected to external resistance R. The maximum power is delivered to R when:",
+            hi: "R को अधिकतम शक्ति तब दी जाती है जब:",
+            oEn: ["R = r", "R = 2r", "R = r/2", "R → ∞"],
+            oHi: ["R = r", "R = 2r", "R = r/2", "R → ∞"],
+            c: 0,
+            exp: "Maximum Power Transfer Theorem: Maximum power when R = r (load = internal resistance).",
+            text: "Maximum power transfer.",
+            options: ["R = r", "R = 2r", "R = r/2", "R → ∞"],
+            correct: 0,
+            explanation: "P_max when R = r."
+        }, {
+            id: 15,
+            en: "Kirchhoff's First Law (ΣI = 0) at a junction is based on conservation of:",
+            hi: "किसी संधि पर किरखोफ का प्रथम नियम किस संरक्षण पर आधारित है?",
+            oEn: ["Energy", "Momentum", "Charge", "Mass"],
+            oHi: ["ऊर्जा", "संवेग", "आवेश", "द्रव्यमान"],
+            c: 2,
+            exp: "KCL (ΣI = 0) is based on conservation of charge at a junction.",
+            text: "Kirchhoff's Current Law.",
+            options: ["Energy", "Momentum", "Charge", "Mass"],
+            correct: 2,
+            explanation: "Charge conservation at junction."
+        }, {
+            id: 16,
+            en: "Kirchhoff's Second Law (ΣΔV = 0) for a closed loop is based on conservation of:",
+            hi: "बंद लूप के लिए किरखोफ का दूसरा नियम आधारित है:",
+            oEn: ["Charge", "Energy", "Potential", "Resistance"],
+            oHi: ["आवेश", "ऊर्जा", "विभव", "प्रतिरोध"],
+            c: 1,
+            exp: "KVL (ΣΔV = 0) is based on conservation of energy in a closed loop.",
+            text: "Kirchhoff's Voltage Law.",
+            options: ["Charge", "Energy", "Potential", "Resistance"],
+            correct: 1,
+            explanation: "Energy conservation around a closed loop."
+        }, {
+            id: 17,
+            en: "In a balanced Wheatstone Bridge, the current through the galvanometer is:",
+            hi: "एक संतुलित व्हीटस्टोन ब्रिज में, गैल्वेनोमीटर से प्रवाहित धारा होती है:",
+            oEn: ["Maximum", "Zero", "Half of total current", "Dependent on battery voltage"],
+            oHi: ["अधिकतम", "शून्य", "कुल धारा का आधा", "बैटरी वोल्टेज पर निर्भर"],
+            c: 1,
+            exp: "In balanced condition, no current flows through the galvanometer (balanced bridge).",
+            text: "Balanced bridge.",
+            options: ["Maximum", "Zero", "Half of total current", "Dependent on battery voltage"],
+            correct: 1,
+            explanation: "I_g = 0 in balanced Wheatstone bridge."
+        }, {
+            id: 18,
+            en: "If P, Q, R, S are resistances in a balanced Wheatstone bridge, the relation is:",
+            hi: "संतुलित व्हीटस्टोन ब्रिज में संबंध है:",
+            oEn: ["P/Q = S/R", "P/Q = R/S", "P+Q = R+S", "PR = QS"],
+            oHi: ["P/Q = S/R", "P/Q = R/S", "P+Q = R+S", "PR = QS"],
+            c: 1,
+            exp: "Balanced condition: P/Q = R/S or P·S = Q·R.",
+            text: "Wheatstone bridge condition.",
+            options: ["P/Q = S/R", "P/Q = R/S", "P+Q = R+S", "PR = QS"],
+            correct: 1,
+            explanation: "P/Q = R/S for balanced bridge."
+        }, {
+            id: 19,
+            en: "Wheatstone bridge is most sensitive when:",
+            hi: "व्हीटस्टोन ब्रिज सबसे अधिक संवेदनशील होता है जब:",
+            oEn: ["All four resistances are equal", "Two resistances are zero", "One resistance is very high", "It is connected to a high voltage"],
+            oHi: ["चारों प्रतिरोध बराबर हों", "दो प्रतिरोध शून्य हों", "एक प्रतिरोध बहुत अधिक हो", "यह उच्च वोल्टेज से जुड़ा हो"],
+            c: 0,
+            exp: "Maximum sensitivity when all four arms have equal resistance.",
+            text: "Bridge sensitivity.",
+            options: ["All four resistances are equal", "Two resistances are zero", "One resistance is very high", "It is connected to a high voltage"],
+            correct: 0,
+            explanation: "Equal resistances give maximum sensitivity."
+        }, {
+            id: 20,
+            en: "The V-I graph of an ohmic conductor is a:",
+            hi: "एक ओमीय चालक का V-I ग्राफ होता है:",
+            oEn: ["Parabola", "Straight line passing through origin", "Hyperbola", "Constant horizontal line"],
+            oHi: ["परवलय", "मूल बिंदु से गुजरती सीधी रेखा", "अतिपरवलय", "स्थिर क्षैतिज रेखा"],
+            c: 1,
+            exp: "Ohmic conductors follow V ∝ I, giving a straight line through origin.",
+            text: "V-I graph.",
+            options: ["Parabola", "Straight line passing through origin", "Hyperbola", "Constant horizontal line"],
+            correct: 1,
+            explanation: "V = IR gives linear graph passing through origin."
+        }, {
+            id: 21,
+            en: "The color code of a resistor with 20% tolerance is:",
+            hi: "20% टॉलरेंस वाले प्रतिरोधक का रंग कोड बैंड (अंतिम) होता है:",
+            oEn: ["Gold", "Silver", "No color", "Red"],
+            oHi: ["सुनहरा", "चांदी", "कोई रंग नहीं", "लाल"],
+            c: 2,
+            exp: "No color band indicates ±20% tolerance in resistor color coding.",
+            text: "Resistor color code.",
+            options: ["Gold", "Silver", "No color", "Red"],
+            correct: 2,
+            explanation: "Absence of band = 20% tolerance."
+        }, {
+            id: 22,
+            en: "The drift velocity of electrons is of the order of:",
+            hi: "इलेक्ट्रॉनों के अपवाह वेग की कोटि होती है:",
+            oEn: ["10⁸ m/s", "10⁻⁴ m/s", "10² m/s", "10⁻¹⁰ m/s"],
+            oHi: ["10⁸ m/s", "10⁻⁴ m/s", "10² m/s", "10⁻¹⁰ m/s"],
+            c: 1,
+            exp: "Drift velocity is very small, typically ~10⁻⁴ m/s for normal currents.",
+            text: "Drift velocity magnitude.",
+            options: ["10⁸ m/s", "10⁻⁴ m/s", "10² m/s", "10⁻¹⁰ m/s"],
+            correct: 1,
+            explanation: "v_d ≈ 10⁻⁴ m/s (much less than thermal velocity)."
+        }, {
+            id: 23,
+            en: "When cells are connected in series, the ________ increases.",
+            hi: "जब सेलों को श्रेणीक्रम में जोड़ा जाता है, तो ________ बढ़ जाता है।",
+            oEn: ["Current capacity", "Voltage", "Life of the cells", "None"],
+            oHi: ["धारा क्षमता", "वोल्टेज", "सेल का जीवनकाल", "कोई नहीं"],
+            c: 1,
+            exp: "Series connection adds EMFs → total voltage increases.",
+            text: "Series connection effect.",
+            options: ["Current capacity", "Voltage", "Life of the cells", "None"],
+            correct: 1,
+            explanation: "Voltage adds up in series."
+        }, {
+            id: 24,
+            en: "The relaxation time (τ) in a conductor:",
+            hi: "एक चालक में विश्रांति काल (τ):",
+            oEn: ["Increases with temperature", "Decreases with temperature", "Remains constant", "Is independent of temperature"],
+            oHi: ["तापमान के साथ बढ़ता है", "तापमान के साथ घटता है", "स्थिर रहता है", "तापमान से स्वतंत्र है"],
+            c: 1,
+            exp: "As temperature increases, collisions increase → relaxation time decreases.",
+            text: "Relaxation time.",
+            options: ["Increases with temperature", "Decreases with temperature", "Remains constant", "Is independent of temperature"],
+            correct: 1,
+            explanation: "τ decreases as temperature rises due to more collisions."
+        }, {
+            id: 25,
+            en: "Which of the following has a negative temperature coefficient of resistance?",
+            hi: "निम्नलिखित में से किसका प्रतिरोध ताप गुणांक ऋणात्मक होता है?",
+            oEn: ["Copper", "Aluminum", "Carbon/Silicon (Semiconductors)", "Iron"],
+            oHi: ["तांबा", "एल्युमिनियम", "कार्बन/सिलिकॉन (अर्धचालक)", "लोहा"],
+            c: 2,
+            exp: "Semiconductors like Carbon and Silicon have negative temperature coefficient (resistance decreases with temperature).",
+            text: "Negative temperature coefficient.",
+            options: ["Copper", "Aluminum", "Carbon/Silicon (Semiconductors)", "Iron"],
+            correct: 2,
+            explanation: "Semiconductors: more carriers at higher temp → lower resistance."
+        }, {
+            id: 26,
+            en: "A wire of resistance R is cut into n equal parts and these parts are connected in parallel. The equivalent resistance is:",
+            hi: "R प्रतिरोध के तार को n बराबर भागों में काटकर समांतर क्रम में जोड़ा जाता है। तुल्य प्रतिरोध होगा:",
+            oEn: ["nR", "R/n", "R/n²", "n²R"],
+            oHi: ["nR", "R/n", "R/n²", "n²R"],
+            c: 2,
+            exp: "Each part has R/n. For n parallel: 1/R_eq = n/(R/n) = n²/R → R_eq = R/n².",
+            text: "Cut wire parallel combination.",
+            options: ["nR", "R/n", "R/n²", "n²R"],
+            correct: 2,
+            explanation: "Each part = R/n, parallel of n parts = R/n²."
+        }, {
+            id: 27,
+            en: "EMF of a cell is a ________ property.",
+            hi: "सेल का EMF एक ________ गुण है।",
+            oEn: ["Extensive", "Intensive", "Variable", "None"],
+            oHi: ["विस्तारात्मक", "सघन (पदार्थ की मात्रा पर निर्भर नहीं)", "परिवर्तनीय", "कोई नहीं"],
+            c: 1,
+            exp: "EMF is an intensive property – it doesn't depend on the size or amount of material.",
+            text: "EMF property type.",
+            options: ["Extensive", "Intensive", "Variable", "None"],
+            correct: 1,
+            explanation: "Intensive property: independent of quantity."
+        }, {
+            id: 28,
+            en: "Two bulbs of 40 W and 60 W are connected in series. Which bulb will glow brighter?",
+            hi: "40 W और 60 W के दो बल्ब श्रेणीक्रम में जुड़े हैं। कौन-सा बल्ब अधिक चमकेगा?",
+            oEn: ["60 W", "40 W", "Both same", "Neither"],
+            oHi: ["60 W", "40 W", "दोनों समान", "कोई नहीं"],
+            c: 1,
+            exp: "In series, same current flows. P = I²R. Lower wattage bulb has higher resistance → glows brighter.",
+            text: "Bulbs in series.",
+            options: ["60 W", "40 W", "Both same", "Neither"],
+            correct: 1,
+            explanation: "40W has higher R, so more power dissipation."
+        }, {
+            id: 29,
+            en: "Meter Bridge is based on the principle of:",
+            hi: "मीटर सेतु (Meter Bridge) किसके सिद्धांत पर आधारित है?",
+            oEn: ["Ohm's Law", "Kirchhoff's Law", "Wheatstone Bridge", "Faraday's Law"],
+            oHi: ["ओम का नियम", "किरखोफ का नियम", "व्हीटस्टोन ब्रिज", "फैराडे का नियम"],
+            c: 2,
+            exp: "Meter bridge works on the principle of Wheatstone bridge for measuring unknown resistance.",
+            text: "Meter bridge principle.",
+            options: ["Ohm's Law", "Kirchhoff's Law", "Wheatstone Bridge", "Faraday's Law"],
+            correct: 2,
+            explanation: "Based on balanced Wheatstone bridge."
+        }];
+
+        // ========== STATE MANAGEMENT ==========
+        const TOTAL = QUESTIONS.length;
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 30 * 60,
+            timerInterval: null,
+            testSubmitted: false,
+            darkMode: true,
+            lang: 'en',
+            score: null
+        };
+
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('curr_elec_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        const savedTheme = localStorage.getItem('curr_elec_theme');
+        if (savedTheme === 'light') {
+            state.darkMode = false;
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-moon';
+        } else {
+            state.darkMode = true;
+            document.body.classList.remove('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        // ========== LANGUAGE TOGGLE ==========
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            const btn = document.getElementById('langBtn');
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            btn.classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) {
+                renderReviewMode();
+            } else {
+                renderQuestion();
+            }
+            localStorage.setItem('curr_elec_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        // ========== SCORE CALCULATION ==========
+        function calculateScore() {
+            let correct = 0,
+                wrong = 0,
+                score = 0;
+            Object.keys(state.answers).forEach(idx => {
+                const q = QUESTIONS[parseInt(idx)];
+                if (q) {
+                    if (state.answers[idx] === q.c) {
+                        correct++;
+                        score += 5;
+                    } else {
+                        wrong++;
+                        score -= 1;
+                    }
+                }
+            });
+            const totalMarks = TOTAL * 5;
+            const attempted = correct + wrong;
+            const unanswered = TOTAL - attempted;
+            return {
+                score: Math.max(0, Math.round(score * 100) / 100),
+                total: totalMarks,
+                correct,
+                wrong,
+                attempted,
+                unanswered
+            };
+        }
+
+        // ========== RENDER QUESTION (NORMAL MODE) ==========
+        function renderQuestion() {
+            if (IS_REVIEW_MODE) return;
+            const q = QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${TOTAL}`;
+
+            const qt = document.getElementById('questionText');
+            if (state.lang === 'hi') {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>`;
+            } else {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            }
+
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.testSubmitted) {
+                    if (i === q.c) card.classList.add('correct');
+                    else if (state.answers[state.currentIndex] === i && state.answers[state.currentIndex] !== q.c)
+                        card.classList.add('wrong');
+                    card.style.pointerEvents = 'none';
+                } else {
+                    if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                    card.onclick = () => selectOption(i);
+                }
+                card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+
+            const expBox = document.getElementById('explanationBox');
+            const expText = document.getElementById('explanationText');
+            if (state.testSubmitted) {
+                expBox.classList.add('show');
+                expText.textContent = q.exp;
+            } else {
+                expBox.classList.remove('show');
+            }
+
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === TOTAL - 1;
+            document.getElementById('swipeHint').style.display = state.testSubmitted ? 'none' : 'block';
+            document.getElementById('actionRow').style.display = state.testSubmitted ? 'none' : 'flex';
+
+            renderPalette();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if (IS_REVIEW_MODE) return;
+            const idx = state.currentIndex + dir;
+            if (idx >= 0 && idx < TOTAL) {
+                state.currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMark() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            const idx = state.currentIndex;
+            if (state.markedQuestions.has(idx)) {
+                state.markedQuestions.delete(idx);
+                showToast('🏷️ Unmarked');
+            } else {
+                state.markedQuestions.add(idx);
+                showToast('🚩 Marked for review');
+            }
+            renderPalette();
+        }
+
+        function clearAnswer() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            if (state.answers[state.currentIndex] !== undefined) {
+                delete state.answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared');
+            }
+        }
+
+        // ========== PALETTE ==========
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.testSubmitted) {
+                    const q = QUESTIONS[i];
+                    if (state.answers[i] === q.c) num.classList.add('answered');
+                    else if (state.answers[i] !== undefined && state.answers[i] !== q.c) num.classList.add('wrong-num');
+                } else {
+                    if (state.answers[i] !== undefined) num.classList.add('answered');
+                    if (state.markedQuestions.has(i)) num.classList.add('marked');
+                }
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    if (IS_REVIEW_MODE) return;
+                    state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            const percent = (answered / TOTAL) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${answered}/${TOTAL} answered`;
+        }
+
+        // ========== TIMER ==========
+        function startTimer() {
+            if (IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) {
+                    clearInterval(state.timerInterval);
+                    return;
+                }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    autoSubmit();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60);
+            const s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (state.timeLeft < 300 && state.timeLeft > 0) {
+                document.getElementById('timerPill').classList.add('warning');
+            } else {
+                document.getElementById('timerPill').classList.remove('warning');
+            }
+            if (!state.testSubmitted) {
+                document.title =
+                    `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} - CUET Physics Mock`;
+            }
+        }
+
+        function autoSubmit() {
+            showToast('⏰ Time\'s up! Submitting...');
+            setTimeout(() => submitTest(true), 1500);
+        }
+
+        // ========== SUBMIT TEST ==========
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const answered = Object.keys(state.answers).length;
+            const unanswered = TOTAL - answered;
+            if (!skipConfirm) {
+                let confirmMsg = 'Are you sure you want to submit?';
+                if (unanswered > 0) {
+                    confirmMsg = `${unanswered} question(s) unanswered. Submit anyway?`;
+                }
+                if (!confirm(confirmMsg)) return;
+            }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.score = calculateScore();
+
+            const resultData = {
+                score: state.score.score,
+                total: state.score.total,
+                accuracy: state.score.attempted > 0 ? Math.round((state.score.correct / state.score.attempted) * 100) : 0,
+                correct: state.score.correct,
+                wrong: state.score.wrong,
+                attempted: state.score.attempted,
+                unanswered: state.score.unanswered,
+                timeTaken: (30 * 60) - state.timeLeft,
+                testCode: 'CUET_PHYS_CURR_ELEC_MOCK',
+                examType: 'CUET UG Physics'
+            };
+
+            localStorage.setItem('curr_elec_last_answers', JSON.stringify(state.answers));
+            localStorage.setItem('curr_elec_last_mock_file', window.location.href.split('?')[0]);
+            localStorage.setItem('curr_elec_last_result_data', JSON.stringify(resultData));
+
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'TEST_SUBMITTED',
+                    ...resultData,
+                    answers: state.answers
+                }, '*');
+            }
+
+            showReview();
+            renderQuestion();
+            renderPalette();
+            showToast('✅ Test Submitted! Check review below.');
+            setTimeout(() => {
+                document.getElementById('reviewPanel').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+            document.title = 'Submitted - CUET Physics Mock';
+
+            document.getElementById('swipeHint').style.display = 'none';
+            document.getElementById('actionRow').style.display = 'none';
+            document.getElementById('progressCard').style.display = 'none';
+            document.getElementById('paletteCard').style.display = 'none';
+        }
+
+        // ========== REVIEW PANEL ==========
+        function showReview() {
+            const panel = document.getElementById('reviewPanel');
+            panel.classList.add('show');
+            const result = state.score;
+            document.getElementById('resultSummary').innerHTML = `
+            <div class="result-item">
+                <div class="value">${result.score}/${result.total}</div>
+                <div class="label">Score</div>
+            </div>
+            <div class="result-item">
+                <div class="value" style="color:#10b981;">${result.correct}</div>
+                <div class="label">✅ Correct (+5 each)</div>
+            </div>
+            <div class="result-item">
+                <div class="value" style="color:#ef4444;">${result.wrong}</div>
+                <div class="label">❌ Wrong (-1 each)</div>
+            </div>
+            <div class="result-item">
+                <div class="value">${result.unanswered}</div>
+                <div class="label">⬜ Unanswered</div>
+            </div>
+        `;
+            const reviewQs = document.getElementById('reviewQuestions');
+            reviewQs.innerHTML = '<h4 style="margin:12px 0;">📝 Question-wise Review</h4>';
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                const div = document.createElement('div');
+                div.style.cssText = `
+                padding: 12px; margin: 8px 0; border-radius: 10px;
+                border: 1px solid var(--border); background: var(--option-bg);
+            `;
+                let statusIcon, statusColor;
+                if (isUnanswered) { statusIcon = '⬜'; statusColor = 'var(--text-secondary)'; } else if (isCorrect) { statusIcon = '✅'; statusColor = '#10b981'; } else { statusIcon = '❌'; statusColor = '#ef4444'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                const userAnsText = isUnanswered ? 'Not answered' : opts[userAns];
+                const correctAnsText = opts[q.c];
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const letters = ['A', 'B', 'C', 'D'];
+                
+                // Build options HTML with correct/wrong styling
+                let optionsHTML = '<div class="options-grid" style="margin:8px 0;">';
+                opts.forEach((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c && j !== userAns) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    if (j === q.c && j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    optionsHTML += `
+                    <div class="${optClass}" style="pointer-events:none;font-size:12px;padding:10px 12px;">
+                        <div class="option-letter">${letters[j]}</div>
+                        <span>${opt}${label}</span>
+                    </div>`;
+                });
+                optionsHTML += '</div>';
+                
+                div.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                    <span style="font-weight:700;">Q${i+1}.</span>
+                    <span style="color:${statusColor};font-size:18px;">${statusIcon}</span>
+                </div>
+                <div style="font-size:13px;margin-bottom:4px;white-space:pre-line;">${qDisplay}</div>
+                ${optionsHTML}
+                <div style="font-size:11px;margin-top:4px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;color:#fbbf24;">
+                    💡 ${q.exp}
+                </div>
+                <button onclick="jumpToQuestion(${i})" style="margin-top:6px;padding:4px 12px;border-radius:6px;border:1px solid #8b5cf6;background:transparent;color:#a78bfa;cursor:pointer;font-size:11px;transition:all 0.2s;">
+                    Jump to Q${i+1}
+                </button>
+            `;
+                reviewQs.appendChild(div);
+            });
+        }
+
+        function jumpToQuestion(index) {
+            state.currentIndex = index;
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('progressCard').style.display = 'block';
+            document.getElementById('paletteCard').style.display = 'block';
+            document.getElementById('swipeHint').style.display = 'block';
+            document.getElementById('actionRow').style.display = 'flex';
+            renderQuestion();
+            document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeReview() {
+            document.getElementById('reviewPanel').classList.remove('show');
+        }
+
+        // ========== REVIEW MODE (when ?review=true) ==========
+        function renderReviewMode() {
+            const container = document.getElementById('reviewModeContainer');
+            const letters = ['A', 'B', 'C', 'D'];
+            const optsKey = state.lang === 'hi' ? 'oHi' : 'oEn';
+
+            let html = '<div class="review-mode-badge">📝 Review Mode — All 30 Questions</div>';
+
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let cardClass = 'review-mode-card';
+                let statusHTML = '';
+                if (isUnanswered) {
+                    cardClass += ' unanswered-q';
+                    statusHTML = '<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>';
+                } else if (isCorrect) {
+                    cardClass += ' correct-answer';
+                    statusHTML = '<span class="review-mode-status status-correct">✅ Correct (+5)</span>';
+                } else {
+                    cardClass += ' wrong-answer';
+                    statusHTML = '<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>';
+                }
+
+                const opts = q[optsKey];
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                
+                // Build options with correct/wrong styling for review mode
+                const optionsHTML = opts.map((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c && j !== userAns) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    if (j === q.c && j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    return `
+                    <div class="${optClass}" style="pointer-events:none;">
+                        <div class="option-letter">${letters[j]}</div>
+                        <span>${opt}${label}</span>
+                    </div>`;
+                }).join('');
+
+                html += `
+                <div class="${cardClass}">
+                    <div class="review-mode-header">
+                        <span class="q-badge">Q ${i+1}/${TOTAL}</span>
+                        ${statusHTML}
+                    </div>
+                    <div class="question-text">
+                        <div style="font-weight:600;white-space:pre-line;">${qDisplay}</div>
+                    </div>
+                    <div class="options-grid">${optionsHTML}</div>
+                    <div class="explanation-box show" style="margin-top:10px;">
+                        <div class="exp-title">💡 Explanation</div>
+                        <div>${q.exp}</div>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            container.style.display = 'block';
+        }
+
+        // ========== SWIPE NAVIGATION ==========
+        let touchStartX = 0,
+            touchStartY = 0,
+            touchMoved = false,
+            swipeHandled = false;
+        const card = document.getElementById('questionCard');
+
+        card.addEventListener('touchstart', (e) => {
+            if (IS_REVIEW_MODE) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchMoved = false;
+            swipeHandled = false;
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+            if (IS_REVIEW_MODE || swipeHandled) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy)) {
+                touchMoved = true;
+                card.style.transform = `translateX(${dx * 0.5}px)`;
+                card.style.opacity = Math.max(0.5, 1 - Math.abs(dx) / 800);
+                card.classList.add('swiping');
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        card.addEventListener('touchend', (e) => {
+            if (IS_REVIEW_MODE) return;
+            card.classList.remove('swiping');
+            card.style.transform = '';
+            card.style.opacity = '';
+            if (!touchMoved) return;
+            const endX = e.changedTouches[0]?.clientX || touchStartX;
+            const dx = endX - touchStartX;
+            if (Math.abs(dx) > 80) {
+                swipeHandled = true;
+                if (dx > 0) navigate(-1);
+                else navigate(1);
+            }
+            touchMoved = false;
+        });
+
+        // ========== KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', (e) => {
+            if (IS_REVIEW_MODE) return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch (e.key.toLowerCase()) {
+                case 'arrowleft': e.preventDefault(); navigate(-1); break;
+                case 'arrowright': e.preventDefault(); navigate(1); break;
+                case 'a': case '1': e.preventDefault(); selectOption(0); break;
+                case 'b': case '2': e.preventDefault(); selectOption(1); break;
+                case 'c': case '3': e.preventDefault(); selectOption(2); break;
+                case 'd': case '4': e.preventDefault(); selectOption(3); break;
+                case 'm': e.preventDefault(); toggleMark(); break;
+                case 'backspace': e.preventDefault(); clearAnswer(); break;
+            }
+        });
+
+        // ========== TOAST ==========
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'flex';
+            clearTimeout(t._t);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
+
+        // ========== PREVENT ACCIDENTAL EXIT ==========
+        window.addEventListener('beforeunload', (e) => {
+            if (!state.testSubmitted && state.timeLeft > 0 && Object.keys(state.answers).length > 0 && !IS_REVIEW_MODE) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            localStorage.setItem('curr_elec_last_mock_file', window.location.href.split('?')[0]);
+
+            if (IS_REVIEW_MODE) {
+                document.getElementById('questionCard').style.display = 'none';
+                document.getElementById('progressCard').style.display = 'none';
+                document.getElementById('paletteCard').style.display = 'none';
+                document.getElementById('swipeHint').style.display = 'none';
+                document.getElementById('infoRow').style.display = 'none';
+                document.getElementById('timerPill').style.display = 'none';
+                document.getElementById('actionRow').style.display = 'none';
+                document.getElementById('reviewPanel').style.display = 'none';
+                document.title = 'Review - CUET Physics Mock';
+
+                const savedAnswers = JSON.parse(localStorage.getItem('curr_elec_last_answers') || '{}');
+                state.answers = savedAnswers;
+                state.testSubmitted = true;
+                state.lang = localStorage.getItem('curr_elec_lang') || 'en';
+
+                if (state.lang === 'hi') {
+                    document.getElementById('langBtn').classList.add('active');
+                    document.getElementById('langText').textContent = 'English';
+                }
+
+                renderReviewMode();
+                console.log('Physics Review mode activated — all 30 questions displayed');
+            } else {
+                state.lang = localStorage.getItem('curr_elec_lang') || 'en';
+                if (state.lang === 'hi') {
+                    document.getElementById('langBtn').classList.add('active');
+                    document.getElementById('langText').textContent = 'English';
+                }
+                startTimer();
+                renderQuestion();
+                renderPalette();
+                console.log('CUET Physics Current Electricity Mock Initialized');
+                console.log('Questions:', TOTAL, '| Duration: 30 min | Marking: +5/-1 | Auto-submit on timer');
+            }
+        }
+
+        init();
+    </script>
+</body> 
+</html>
