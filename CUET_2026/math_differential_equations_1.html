@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Math • Differential Equations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-glow: #8b5cf6;
+            --accent: #ec4899;
+            --accent-glow: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(139, 92, 246, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.25);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.35);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #f3f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.15);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #fdf2f8 100%);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Floating gradient blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(139, 92, 246, 0.2);
+            top: -100px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(236, 72, 153, 0.18);
+            bottom: -80px;
+            left: -60px;
+            animation-delay: -7s;
+        }
+        .blob-3 {
+            width: 220px;
+            height: 220px;
+            background: rgba(168, 85, 247, 0.16);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        @keyframes blobFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(40px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, -20px) scale(0.9);
+            }
+            75% {
+                transform: translate(20px, 40px) scale(1.05);
+            }
+        }
+
+        /* BUBBLES BACKGROUND */
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.06));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.12);
+            animation: floatUp linear infinite;
+        }
+        body.light-mode .bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.04));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.08);
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateY(-250px) translateX(30px) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-500px) translateX(-20px) scale(1);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translateY(-750px) translateX(15px) scale(0.9);
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(-1000px) translateX(-10px) scale(0.3);
+                opacity: 0;
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .top-bar:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+        .test-title .icon-dna {
+            font-size: 20px;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+        @keyframes pulseIcon {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.75;
+            }
+        }
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 2px solid #f97316;
+            background: var(--card);
+            color: #f97316;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover {
+            box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);
+            transform: translateY(-1px);
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 16px rgba(249, 115, 22, 0.4);
+        }
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+        .timer-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            animation: pulse 0.8s infinite;
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
+        }
+        body.light-mode .timer-pill.warning {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        .info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .info-chip i {
+            font-size: 11px;
+        }
+        .info-chip.exam {
+            color: #a78bfa;
+        }
+        .info-chip.subject {
+            color: #ec4899;
+        }
+        .info-chip.marks {
+            color: #fbbf24;
+        }
+        body.light-mode .info-chip.exam {
+            color: #7c3aed;
+        }
+        body.light-mode .info-chip.subject {
+            color: #be185d;
+        }
+        body.light-mode .info-chip.marks {
+            color: #d97706;
+        }
+
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.35s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: var(--glow-md);
+            transform: translateY(-2px);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .question-card.swiping {
+            transition: none;
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-badge {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .q-marks {
+            font-weight: 600;
+            font-size: 12px;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 6px 14px;
+            border-radius: 15px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+        body.light-mode .q-marks {
+            color: #d97706;
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--option-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #8b5cf6;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+        .question-text .hindi-block {
+            color: #fbbf24;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        body.light-mode .question-text .hindi-block {
+            color: #d97706;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--option-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            backdrop-filter: blur(4px);
+        }
+        .option-card:hover {
+            border-color: #a78bfa;
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+        .option-card.selected {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 6px 22px rgba(139, 92, 246, 0.4);
+        }
+        .option-card.correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+        }
+        .option-card.wrong {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4) !important;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-4px);
+            }
+            75% {
+                transform: translateX(4px);
+            }
+        }
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #a78bfa;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+        .option-card.selected .option-letter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .option-card.correct .option-letter,
+        .option-card.wrong .option-letter {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 60px;
+        }
+        .btn:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-2px);
+            border-color: #a78bfa;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .btn-mark {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+        .btn-mark:hover {
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+        }
+        .btn-clear {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #4ade80;
+        }
+        .btn-clear:hover {
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+        }
+        body.light-mode .btn-mark {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        body.light-mode .btn-clear {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+
+        .palette-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+        .palette-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .palette-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+        .palette-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--option-bg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            color: var(--text);
+        }
+        .palette-num:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+            box-shadow: var(--glow-sm);
+        }
+        .palette-num.answered {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+        .palette-num.marked {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+        .palette-num.current {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.2);
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.4);
+        }
+        .palette-num.wrong-num {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .review-panel {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+        .review-panel.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .result-item {
+            background: var(--option-bg);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .result-item:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .result-item .value {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .result-item .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .explanation-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        body.light-mode .explanation-box {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .explanation-box .exp-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #fbbf24;
+        }
+        body.light-mode .explanation-box .exp-title {
+            color: #92400e;
+        }
+
+        .swipe-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+
+        .review-mode-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .review-mode-card:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .review-mode-card.correct-answer {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .review-mode-card.wrong-answer {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .review-mode-card.unanswered-q {
+            background: var(--glass-bg);
+            border-color: var(--glass-border);
+        }
+        .review-mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .review-mode-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+        .status-correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: #4ade80;
+        }
+        .status-wrong {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        .status-unanswered {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+        body.light-mode .status-correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        body.light-mode .status-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        body.light-mode .status-unanswered {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .toast {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: var(--glow-md);
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 13px;
+            display: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .review-mode-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            .test-title {
+                font-size: 15px;
+            }
+            .question-text {
+                font-size: 14px;
+                padding: 14px;
+            }
+            .result-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .blob {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- FLOATING GRADIENT BLOBS -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- BUBBLES BACKGROUND -->
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">∫</div>
+                CUET Math • Differential Equations
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">30:00</span></div>
+            </div>
+        </div>
+
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-infinity"></i> Mathematics</span>
+            <span class="info-chip"><i class="fas fa-project-diagram"></i> Differential Equations</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 30 Questions</span>
+        </div>
+
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/30 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/30</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+            <button class="btn" onclick="submitTest()" id="submitBtn" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;font-size:14px;padding:12px;margin-top:12px;width:100%;display:none !important;">
+                <i class="fas fa-check-double"></i> Submit Test
+            </button>
+        </div>
+
+        <div id="reviewModeContainer" style="display:none;"></div>
+
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+
+        <div class="review-panel" id="reviewPanel">
+            <h3 style="margin-bottom:12px;">📋 Result Review</h3>
+            <div class="result-summary" id="resultSummary"></div>
+            <div id="reviewQuestions"></div>
+            <button class="btn" onclick="closeReview()" style="margin-top:12px;display:inline-flex !important;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-times"></i> Close Review
+            </button>
+        </div>
+
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #8b5cf6;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ========== BUBBLES ANIMATION ==========
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2), rgba(252, 211, 77, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.16), rgba(248, 113, 113, 0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+                bubbles.forEach(b => {
+                    if (parseFloat(b.style.animationDuration) > 0 && b.getAnimations().length === 0) {
+                        b.remove();
+                    }
+                });
+            }, 4000);
+        })();
+
+        // ========== AVATAR FUNCTION ==========
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : '∫';
+            }
+        }
+
+        // ========== DETECT REVIEW MODE ==========
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        // ========== 30 MATH QUESTIONS: DIFFERENTIAL EQUATIONS ==========
+        const QUESTIONS = [{
+            id: 0,
+            en: "The degree of the differential equation (d²y/dx²)³ + (dy/dx)² + sin(dy/dx) + 1 = 0 is:",
+            hi: "अवकल समीकरण (d²y/dx²)³ + (dy/dx)² + sin(dy/dx) + 1 = 0 की घात (degree) क्या है?",
+            oEn: ["3", "2", "1", "Not defined"],
+            oHi: ["3", "2", "1", "परिभाषित नहीं है"],
+            c: 3,
+            exp: "sin(dy/dx) के कारण यह अवकलजों में बहुपद नहीं है। अतः घात परिभाषित नहीं है।",
+            text: "Degree of differential equation.",
+            options: ["3", "2", "1", "Not defined"],
+            correct: 3,
+            explanation: "sin(y') term makes it non-polynomial in derivatives."
+        }, {
+            id: 1,
+            en: "The order and degree of ρ = [1 + (dy/dx)²]^(3/2) / (d²y/dx²) are respectively:",
+            hi: "ρ = [1 + (dy/dx)²]^(3/2) / (d²y/dx²) की कोटि और घात क्रमशः हैं:",
+            oEn: ["2, 2", "2, 3", "1, 2", "2, 1"],
+            oHi: ["2, 2", "2, 3", "1, 2", "2, 1"],
+            c: 0,
+            exp: "वर्ग करने पर ρ² (y'')² = (1 + (y')²)³ प्राप्त होता है। कोटि = 2, घात = 2.",
+            text: "Order and degree from curvature formula.",
+            options: ["2, 2", "2, 3", "1, 2", "2, 1"],
+            correct: 0,
+            explanation: "Squaring gives polynomial with order 2, degree 2."
+        }, {
+            id: 2,
+            en: "The number of arbitrary constants in the general solution of a differential equation of fourth order is:",
+            hi: "चतुर्थ कोटि के अवकल समीकरण के व्यापक हल में स्वेच्छ अचरों की संख्या होती है:",
+            oEn: ["0", "2", "3", "4"],
+            oHi: ["0", "2", "3", "4"],
+            c: 3,
+            exp: "कोटि n के अवकल समीकरण के व्यापक हल में n स्वेच्छ अचर होते हैं।",
+            text: "Arbitrary constants in general solution.",
+            options: ["0", "2", "3", "4"],
+            correct: 3,
+            explanation: "Order = number of arbitrary constants."
+        }, {
+            id: 3,
+            en: "The solution of dy/dx = e^(x+y) is:",
+            hi: "dy/dx = e^(x+y) का हल है:",
+            oEn: ["e^x + e^y = C", "e^x + e^(-y) = C", "e^(-x) + e^y = C", "e^x - e^y = C"],
+            oHi: ["e^x + e^y = C", "e^x + e^(-y) = C", "e^(-x) + e^y = C", "e^x - e^y = C"],
+            c: 1,
+            exp: "e^(-y) dy = e^x dx ⇒ -e^(-y) = e^x + C' ⇒ e^x + e^(-y) = C.",
+            text: "Variable separable form.",
+            options: ["e^x + e^y = C", "e^x + e^(-y) = C", "e^(-x) + e^y = C", "e^x - e^y = C"],
+            correct: 1,
+            explanation: "Separate variables: e^{-y} dy = e^x dx."
+        }, {
+            id: 4,
+            en: "The general solution of dy/dx = (1+y²)/(1+x²) is:",
+            hi: "dy/dx = (1+y²)/(1+x²) का व्यापक हल है:",
+            oEn: ["y - x = C(1 + xy)", "y + x = C(1 - xy)", "tan⁻¹ y + tan⁻¹ x = C", "tan⁻¹ y = tan⁻¹ x + C"],
+            oHi: ["y - x = C(1 + xy)", "y + x = C(1 - xy)", "tan⁻¹ y + tan⁻¹ x = C", "tan⁻¹ y = tan⁻¹ x + C"],
+            c: 0,
+            exp: "dy/(1+y²) = dx/(1+x²) ⇒ tan⁻¹ y - tan⁻¹ x = C ⇒ (y-x)/(1+xy) = tan C.",
+            text: "Variable separable leading to inverse trig.",
+            options: ["y - x = C(1 + xy)", "y + x = C(1 - xy)", "tan⁻¹ y + tan⁻¹ x = C", "tan⁻¹ y = tan⁻¹ x + C"],
+            correct: 0,
+            explanation: "tan⁻¹ y - tan⁻¹ x = tan⁻¹ C simplifies to given form."
+        }, {
+            id: 5,
+            en: "The solution of dy/dx + √((1-y²)/(1-x²)) = 0 is:",
+            hi: "dy/dx + √((1-y²)/(1-x²)) = 0 का हल है:",
+            oEn: ["sin⁻¹ x + sin⁻¹ y = C", "sin⁻¹ x - sin⁻¹ y = C", "sin⁻¹ x · sin⁻¹ y = C", "None of these"],
+            oHi: ["sin⁻¹ x + sin⁻¹ y = C", "sin⁻¹ x - sin⁻¹ y = C", "sin⁻¹ x · sin⁻¹ y = C", "इनमें से कोई नहीं"],
+            c: 0,
+            exp: "dy/√(1-y²) + dx/√(1-x²) = 0 ⇒ sin⁻¹ y + sin⁻¹ x = C.",
+            text: "Variable separable with inverse sine.",
+            options: ["sin⁻¹ x + sin⁻¹ y = C", "sin⁻¹ x - sin⁻¹ y = C", "sin⁻¹ x · sin⁻¹ y = C", "None of these"],
+            correct: 0,
+            explanation: "Integrate to get sum of inverse sines."
+        }, {
+            id: 6,
+            en: "Which of the following is a homogeneous differential equation?",
+            hi: "निम्नलिखित में से कौन सा समघातीय अवकल समीकरण है?",
+            oEn: ["(4x+6y+5)dy - (3y+2x+4)dx = 0", "xy dx - (x³+y³)dy = 0", "(x³+2y²)dx + 2xy dy = 0", "y² dx + (x² - xy - y²)dy = 0"],
+            oHi: ["(4x+6y+5)dy - (3y+2x+4)dx = 0", "xy dx - (x³+y³)dy = 0", "(x³+2y²)dx + 2xy dy = 0", "y² dx + (x² - xy - y²)dy = 0"],
+            c: 3,
+            exp: "विकल्प (D) में सभी पदों की घात 2 है। अन्य में अचर पद या भिन्न घात हैं।",
+            text: "Identify homogeneous equation.",
+            options: ["(4x+6y+5)dy - (3y+2x+4)dx = 0", "xy dx - (x³+y³)dy = 0", "(x³+2y²)dx + 2xy dy = 0", "y² dx + (x² - xy - y²)dy = 0"],
+            correct: 3,
+            explanation: "All terms in (D) have degree 2."
+        }, {
+            id: 7,
+            en: "To solve the homogeneous equation dy/dx = F(y/x), we substitute:",
+            hi: "समघातीय समीकरण dy/dx = F(y/x) को हल करने के लिए हम क्या प्रतिस्थापित करते हैं?",
+            oEn: ["x = vy", "y = vx", "xy = v", "x+y = v"],
+            oHi: ["x = vy", "y = vx", "xy = v", "x+y = v"],
+            c: 1,
+            exp: "y = vx रखने पर dy/dx = v + x dv/dx होता है।",
+            text: "Standard substitution for homogeneous equations.",
+            options: ["x = vy", "y = vx", "xy = v", "x+y = v"],
+            correct: 1,
+            explanation: "Let y = vx, then dy/dx = v + x dv/dx."
+        }, {
+            id: 8,
+            en: "The solution of x dy/dx = y - x is:",
+            hi: "x dy/dx = y - x का हल है:",
+            oEn: ["y = x log(C/x)", "y = x log(x/C)", "y = x + C", "y = Cx"],
+            oHi: ["y = x log(C/x)", "y = x log(x/C)", "y = x + C", "y = Cx"],
+            c: 0,
+            exp: "dy/dx = y/x - 1. y = vx ⇒ v + x dv/dx = v - 1 ⇒ ∫ dv = -∫ dx/x ⇒ v = -log x + C ⇒ y/x = log(C/x).",
+            text: "Homogeneous equation solution.",
+            options: ["y = x log(C/x)", "y = x log(x/C)", "y = x + C", "y = Cx"],
+            correct: 0,
+            explanation: "y = vx substitution leads to y = x log(C/x)."
+        }, {
+            id: 9,
+            en: "The Integrating Factor (I.F.) of dy/dx + y tan x = sec x is:",
+            hi: "dy/dx + y tan x = sec x का समाकलन गुणक (I.F.) क्या है?",
+            oEn: ["log(sec x)", "sec x", "tan x", "e^(tan x)"],
+            oHi: ["log(sec x)", "sec x", "tan x", "e^(tan x)"],
+            c: 1,
+            exp: "I.F. = e^(∫ tan x dx) = e^(log sec x) = sec x.",
+            text: "I.F. for linear differential equation.",
+            options: ["log(sec x)", "sec x", "tan x", "e^(tan x)"],
+            correct: 1,
+            explanation: "e^{∫ tan x dx} = sec x."
+        }, {
+            id: 10,
+            en: "The I.F. of the differential equation (1 - x²) dy/dx - xy = 1 is:",
+            hi: "अवकल समीकरण (1 - x²) dy/dx - xy = 1 का I.F. है:",
+            oEn: ["-x²", "√(1-x²)", "½ log(1-x²)", "1-x²"],
+            oHi: ["-x²", "√(1-x²)", "½ log(1-x²)", "1-x²"],
+            c: 1,
+            exp: "dy/dx - x/(1-x²) y = 1/(1-x²). I.F. = e^(∫ -x/(1-x²) dx) = e^(½ log(1-x²)) = √(1-x²).",
+            text: "I.F. with rational coefficient.",
+            options: ["-x²", "√(1-x²)", "½ log(1-x²)", "1-x²"],
+            correct: 1,
+            explanation: "Standard form gives I.F. = √(1-x²)."
+        }, {
+            id: 11,
+            en: "The general solution of dy/dx + Py = Q is:",
+            hi: "dy/dx + Py = Q का व्यापक हल है:",
+            oEn: ["y(I.F.) = ∫ Q(I.F.) dx + C", "x(I.F.) = ∫ Q(I.F.) dy + C", "y = ∫ Q dx + C", "y(I.F.) = Q + C"],
+            oHi: ["y(I.F.) = ∫ Q(I.F.) dx + C", "x(I.F.) = ∫ Q(I.F.) dy + C", "y = ∫ Q dx + C", "y(I.F.) = Q + C"],
+            c: 0,
+            exp: "रैखिक अवकल समीकरण का मानक हल सूत्र।",
+            text: "Standard linear DE solution formula.",
+            options: ["y(I.F.) = ∫ Q(I.F.) dx + C", "x(I.F.) = ∫ Q(I.F.) dy + C", "y = ∫ Q dx + C", "y(I.F.) = Q + C"],
+            correct: 0,
+            explanation: "Multiply by I.F. and integrate."
+        }, {
+            id: 12,
+            en: "For dx/dy + Px = Q (where P, Q are functions of y), the I.F. is:",
+            hi: "dx/dy + Px = Q के लिए I.F. है:",
+            oEn: ["e^(∫ P dx)", "e^(∫ P dy)", "e^(∫ Q dy)", "e^(∫ Q dx)"],
+            oHi: ["e^(∫ P dx)", "e^(∫ P dy)", "e^(∫ Q dy)", "e^(∫ Q dx)"],
+            c: 1,
+            exp: "जब समीकरण x में रैखिक हो और y स्वतंत्र चर हो, तो I.F. = e^(∫ P dy).",
+            text: "I.F. for x-linear equations.",
+            options: ["e^(∫ P dx)", "e^(∫ P dy)", "e^(∫ Q dy)", "e^(∫ Q dx)"],
+            correct: 1,
+            explanation: "If x is dependent, integrate w.r.t. y."
+        }, {
+            id: 13,
+            en: "The solution of dy/dx + y/x = x² is:",
+            hi: "dy/dx + y/x = x² का हल है:",
+            oEn: ["4xy = x⁴ + C", "xy = x³ + C", "y = x² + C", "y = x³/4 + C"],
+            oHi: ["4xy = x⁴ + C", "xy = x³ + C", "y = x² + C", "y = x³/4 + C"],
+            c: 0,
+            exp: "I.F. = e^(∫ 1/x dx) = x. y·x = ∫ x·x² dx = x⁴/4 + C ⇒ 4xy = x⁴ + C.",
+            text: "Linear DE with variable coefficient.",
+            options: ["4xy = x⁴ + C", "xy = x³ + C", "y = x² + C", "y = x³/4 + C"],
+            correct: 0,
+            explanation: "I.F. = x, multiply and integrate."
+        }, {
+            id: 14,
+            en: "The order of the differential equation of all circles of radius r is:",
+            hi: "त्रिज्या r वाले सभी वृत्तों के अवकल समीकरण की कोटि क्या होगी?",
+            oEn: ["1", "2", "3", "4"],
+            oHi: ["1", "2", "3", "4"],
+            c: 1,
+            exp: "वृत्त का समीकरण: (x-h)² + (y-k)² = r². इसमें दो स्वेच्छ अचर h, k हैं। अतः कोटि = 2.",
+            text: "Order from family of curves.",
+            options: ["1", "2", "3", "4"],
+            correct: 1,
+            explanation: "Two arbitrary constants (h, k) ⇒ order 2."
+        }, {
+            id: 15,
+            en: "The solution of x dy - y dx = 0 represents:",
+            hi: "x dy - y dx = 0 का हल क्या दर्शाता है?",
+            oEn: ["Rectangular hyperbola", "Straight lines through origin", "Parabola", "Circles"],
+            oHi: ["आयताकार अतिपरवलय", "मूल बिंदु से गुजरती रेखाएं", "परवलय", "वृत्त"],
+            c: 1,
+            exp: "dy/y = dx/x ⇒ log y = log x + log C ⇒ y = Cx, जो मूल बिंदु से जाने वाली सरल रेखाएं हैं।",
+            text: "Solution represents lines through origin.",
+            options: ["Rectangular hyperbola", "Straight lines through origin", "Parabola", "Circles"],
+            correct: 1,
+            explanation: "y = Cx are straight lines passing through (0,0)."
+        }, {
+            id: 16,
+            en: "If I.F. of dy/dx + y f(x) = g(x) is e^x, then f(x) is:",
+            hi: "यदि dy/dx + y f(x) = g(x) का I.F. e^x है, तो f(x) क्या है?",
+            oEn: ["x", "1", "e^x", "0"],
+            oHi: ["x", "1", "e^x", "0"],
+            c: 1,
+            exp: "I.F. = e^(∫ f(x) dx) = e^x ⇒ ∫ f(x) dx = x ⇒ f(x) = 1.",
+            text: "Determine function from given I.F.",
+            options: ["x", "1", "e^x", "0"],
+            correct: 1,
+            explanation: "Integral of f(x) must be x."
+        }, {
+            id: 17,
+            en: "The solution of cos x dy/dx + y sin x = 1 is:",
+            hi: "cos x dy/dx + y sin x = 1 का हल है:",
+            oEn: ["y sec x = tan x + C", "y/cos x = tan x + C", "y cos x = x + C", "y sin x = x + C"],
+            oHi: ["y sec x = tan x + C", "y/cos x = tan x + C", "y cos x = x + C", "y sin x = x + C"],
+            c: 1,
+            exp: "dy/dx + y tan x = sec x. I.F. = sec x. y·sec x = ∫ sec² x dx = tan x + C ⇒ y/cos x = tan x + C.",
+            text: "Linear DE with trigonometric coefficients.",
+            options: ["y sec x = tan x + C", "y/cos x = tan x + C", "y cos x = x + C", "y sin x = x + C"],
+            correct: 1,
+            explanation: "Standard form, I.F. = sec x."
+        }, {
+            id: 18,
+            en: "Particular solution of dy/dx = y cot x when y(π/2) = 1 is:",
+            hi: "dy/dx = y cot x का विशिष्ट हल जब y(π/2) = 1 है:",
+            oEn: ["y = sin x", "y = cos x", "y = tan x", "y = log sin x"],
+            oHi: ["y = sin x", "y = cos x", "y = tan x", "y = log sin x"],
+            c: 0,
+            exp: "dy/y = cot x dx ⇒ log y = log sin x + log C ⇒ y = C sin x. x=π/2, y=1 ⇒ C=1. ∴ y = sin x.",
+            text: "Particular solution with initial condition.",
+            options: ["y = sin x", "y = cos x", "y = tan x", "y = log sin x"],
+            correct: 0,
+            explanation: "General solution y = C sin x, C=1 fits initial condition."
+        }, {
+            id: 19,
+            en: "The slope of a curve at any point (x, y) is x/y. The curve is:",
+            hi: "किसी बिंदु (x, y) पर वक्र की ढाल x/y है। वक्र है:",
+            oEn: ["x² + y² = C", "x² - y² = C", "y² - x² = C", "xy = C"],
+            oHi: ["x² + y² = C", "x² - y² = C", "y² - x² = C", "xy = C"],
+            c: 2,
+            exp: "dy/dx = x/y ⇒ y dy = x dx ⇒ y²/2 = x²/2 + C' ⇒ y² - x² = C.",
+            text: "Find curve from slope condition.",
+            options: ["x² + y² = C", "x² - y² = C", "y² - x² = C", "xy = C"],
+            correct: 2,
+            explanation: "Separate variables and integrate."
+        }, {
+            id: 20,
+            en: "The degree of d²y/dx² = √(1 + (dy/dx)²) is:",
+            hi: "d²y/dx² = √(1 + (dy/dx)²) की घात है:",
+            oEn: ["1", "2", "3", "Not defined"],
+            oHi: ["1", "2", "3", "परिभाषित नहीं"],
+            c: 1,
+            exp: "वर्ग करने पर (y'')² = 1 + (y')². घात = 2.",
+            text: "Degree after removing radical.",
+            options: ["1", "2", "3", "Not defined"],
+            correct: 1,
+            explanation: "Squaring gives polynomial of degree 2."
+        }, {
+            id: 21,
+            en: "The I.F. of x dy/dx - y = 2x² is:",
+            hi: "x dy/dx - y = 2x² का I.F. है:",
+            oEn: ["x", "1/x", "log x", "e^x"],
+            oHi: ["x", "1/x", "log x", "e^x"],
+            c: 1,
+            exp: "dy/dx - (1/x) y = 2x. I.F. = e^(∫ -1/x dx) = e^(-log x) = 1/x.",
+            text: "I.F. for equation with x coefficient.",
+            options: ["x", "1/x", "log x", "e^x"],
+            correct: 1,
+            explanation: "Divide by x to get standard form, I.F. = 1/x."
+        }, {
+            id: 22,
+            en: "The differential equation of y = A e^x + B e^(-x) is:",
+            hi: "y = A e^x + B e^(-x) का अवकल समीकरण है:",
+            oEn: ["y'' + y = 0", "y'' - y = 0", "y' - y = 0", "y' + y = 0"],
+            oHi: ["y'' + y = 0", "y'' - y = 0", "y' - y = 0", "y' + y = 0"],
+            c: 1,
+            exp: "y' = A e^x - B e^(-x), y'' = A e^x + B e^(-x) = y ⇒ y'' - y = 0.",
+            text: "Form differential equation from general solution.",
+            options: ["y'' + y = 0", "y'' - y = 0", "y' - y = 0", "y' + y = 0"],
+            correct: 1,
+            explanation: "Eliminate constants to get y'' - y = 0."
+        }, {
+            id: 23,
+            en: "Number of solutions of dy/dx = (y+1)/(x-1) when y(1) = 2 is:",
+            hi: "dy/dx = (y+1)/(x-1) जब y(1) = 2 है, के हलों की संख्या है:",
+            oEn: ["None", "One", "Two", "Infinite"],
+            oHi: ["कोई नहीं", "एक", "दो", "अनंत"],
+            c: 0,
+            exp: "x=1 पर समीकरण अपरिभाषित है (हर शून्य). अतः इस बिंदु पर कोई हल नहीं।",
+            text: "Existence of solution at singular point.",
+            options: ["None", "One", "Two", "Infinite"],
+            correct: 0,
+            explanation: "Equation is undefined at x=1, no solution passes through."
+        }, {
+            id: 24,
+            en: "y + dx/dy = x is a linear equation of the type:",
+            hi: "y + dx/dy = x किस प्रकार का रैखिक समीकरण है?",
+            oEn: ["dy/dx + Py = Q", "dx/dy + Px = Q", "Homogeneous", "None"],
+            oHi: ["dy/dx + Py = Q", "dx/dy + Px = Q", "समघातीय", "कोई नहीं"],
+            c: 1,
+            exp: "dx/dy - x = -y. यह dx/dy + Px = Q के रूप का है जहाँ P = -1, Q = -y.",
+            text: "Identify type of linear equation.",
+            options: ["dy/dx + Py = Q", "dx/dy + Px = Q", "Homogeneous", "None"],
+            correct: 1,
+            explanation: "Linear in x with independent variable y."
+        }, {
+            id: 25,
+            en: "I.F. of (x + 3y²) dy/dx = y (y > 0) is:",
+            hi: "(x + 3y²) dy/dx = y (y > 0) का I.F. है:",
+            oEn: ["y", "1/y", "y²", "1/y²"],
+            oHi: ["y", "1/y", "y²", "1/y²"],
+            c: 1,
+            exp: "dy/dx = y/(x+3y²) ⇒ dx/dy = (x+3y²)/y = x/y + 3y ⇒ dx/dy - (1/y)x = 3y. I.F. = e^(∫ -1/y dy) = 1/y.",
+            text: "I.F. when x is dependent variable.",
+            options: ["y", "1/y", "y²", "1/y²"],
+            correct: 1,
+            explanation: "Rewrite as linear in x, then I.F. = 1/y."
+        }, {
+            id: 26,
+            en: "General solution of dy/dx = y/x is:",
+            hi: "dy/dx = y/x का व्यापक हल है:",
+            oEn: ["y = Cx", "x = Cy", "xy = C", "x+y = C"],
+            oHi: ["y = Cx", "x = Cy", "xy = C", "x+y = C"],
+            c: 0,
+            exp: "dy/y = dx/x ⇒ log y = log x + log C ⇒ y = Cx.",
+            text: "Basic separable equation.",
+            options: ["y = Cx", "x = Cy", "xy = C", "x+y = C"],
+            correct: 0,
+            explanation: "Integration gives y = Cx."
+        }, {
+            id: 27,
+            en: "Order of the differential equation of all parabolas having axis of symmetry as x-axis is:",
+            hi: "उन सभी परवलयों के अवकल समीकरण की कोटि जिनकी सममिति अक्ष x-अक्ष है, है:",
+            oEn: ["1", "2", "3", "4"],
+            oHi: ["1", "2", "3", "4"],
+            c: 1,
+            exp: "ऐसे परवलय: y² = 4a(x-h). दो स्वेच्छ अचर a, h हैं। अतः कोटि = 2.",
+            text: "Order from family of parabolas.",
+            options: ["1", "2", "3", "4"],
+            correct: 1,
+            explanation: "Two arbitrary constants ⇒ second order DE."
+        }, {
+            id: 28,
+            en: "Solution of dy/dx = (x+y)/x is:",
+            hi: "dy/dx = (x+y)/x का हल है:",
+            oEn: ["y = x log x + Cx", "y = log x + C", "y = x² + Cx", "y = x log x + C"],
+            oHi: ["y = x log x + Cx", "y = log x + C", "y = x² + Cx", "y = x log x + C"],
+            c: 0,
+            exp: "dy/dx = 1 + y/x. y = vx ⇒ v + x dv/dx = 1 + v ⇒ dv = dx/x ⇒ v = log x + C ⇒ y = x log x + Cx.",
+            text: "Homogeneous equation solution.",
+            options: ["y = x log x + Cx", "y = log x + C", "y = x² + Cx", "y = x log x + C"],
+            correct: 0,
+            explanation: "Substitute y = vx, solve to get y = x(log x + C)."
+        }, {
+            id: 29,
+            en: "What is the I.F. of dy/dx + y/(x log x) = 1/x?",
+            hi: "dy/dx + y/(x log x) = 1/x का I.F. क्या है?",
+            oEn: ["x", "log x", "e^x", "1/x"],
+            oHi: ["x", "log x", "e^x", "1/x"],
+            c: 1,
+            exp: "I.F. = e^(∫ 1/(x log x) dx) = e^(log(log x)) = log x.",
+            text: "I.F. with logarithmic coefficient.",
+            options: ["x", "log x", "e^x", "1/x"],
+            correct: 1,
+            explanation: "∫ dx/(x log x) = log(log x)."
+        }];
+
+        // ========== STATE MANAGEMENT ==========
+        const TOTAL = QUESTIONS.length;
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 30 * 60,
+            timerInterval: null,
+            testSubmitted: false,
+            darkMode: true,
+            lang: 'en',
+            score: null
+        };
+
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('math_de_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        const savedTheme = localStorage.getItem('math_de_theme');
+        if (savedTheme === 'light') {
+            state.darkMode = false;
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-moon';
+        } else {
+            state.darkMode = true;
+            document.body.classList.remove('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        // ========== LANGUAGE TOGGLE ==========
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            const btn = document.getElementById('langBtn');
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            btn.classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) {
+                renderReviewMode();
+            } else {
+                renderQuestion();
+            }
+            localStorage.setItem('math_de_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        // ========== SCORE CALCULATION ==========
+        function calculateScore() {
+            let correct = 0,
+                wrong = 0,
+                score = 0;
+            Object.keys(state.answers).forEach(idx => {
+                const q = QUESTIONS[parseInt(idx)];
+                if (q) {
+                    if (state.answers[idx] === q.c) {
+                        correct++;
+                        score += 5;
+                    } else {
+                        wrong++;
+                        score -= 1;
+                    }
+                }
+            });
+            const totalMarks = TOTAL * 5;
+            const attempted = correct + wrong;
+            const unanswered = TOTAL - attempted;
+            return {
+                score: Math.max(0, Math.round(score * 100) / 100),
+                total: totalMarks,
+                correct,
+                wrong,
+                attempted,
+                unanswered
+            };
+        }
+
+        // ========== RENDER QUESTION (NORMAL MODE) ==========
+        function renderQuestion() {
+            if (IS_REVIEW_MODE) return;
+            const q = QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${TOTAL}`;
+
+            const qt = document.getElementById('questionText');
+            if (state.lang === 'hi') {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>`;
+            } else {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            }
+
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.testSubmitted) {
+                    if (i === q.c) card.classList.add('correct');
+                    else if (state.answers[state.currentIndex] === i && state.answers[state.currentIndex] !== q.c)
+                        card.classList.add('wrong');
+                    card.style.pointerEvents = 'none';
+                } else {
+                    if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                    card.onclick = () => selectOption(i);
+                }
+                card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+
+            const expBox = document.getElementById('explanationBox');
+            const expText = document.getElementById('explanationText');
+            if (state.testSubmitted) {
+                expBox.classList.add('show');
+                expText.textContent = q.exp;
+            } else {
+                expBox.classList.remove('show');
+            }
+
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === TOTAL - 1;
+            document.getElementById('swipeHint').style.display = state.testSubmitted ? 'none' : 'block';
+            document.getElementById('actionRow').style.display = state.testSubmitted ? 'none' : 'flex';
+
+            renderPalette();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if (IS_REVIEW_MODE) return;
+            const idx = state.currentIndex + dir;
+            if (idx >= 0 && idx < TOTAL) {
+                state.currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMark() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            const idx = state.currentIndex;
+            if (state.markedQuestions.has(idx)) {
+                state.markedQuestions.delete(idx);
+                showToast('🏷️ Unmarked');
+            } else {
+                state.markedQuestions.add(idx);
+                showToast('🚩 Marked for review');
+            }
+            renderPalette();
+        }
+
+        function clearAnswer() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            if (state.answers[state.currentIndex] !== undefined) {
+                delete state.answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared');
+            }
+        }
+
+        // ========== PALETTE ==========
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.testSubmitted) {
+                    const q = QUESTIONS[i];
+                    if (state.answers[i] === q.c) num.classList.add('answered');
+                    else if (state.answers[i] !== undefined && state.answers[i] !== q.c) num.classList.add('wrong-num');
+                } else {
+                    if (state.answers[i] !== undefined) num.classList.add('answered');
+                    if (state.markedQuestions.has(i)) num.classList.add('marked');
+                }
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    if (IS_REVIEW_MODE) return;
+                    state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            const percent = (answered / TOTAL) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${answered}/${TOTAL} answered`;
+        }
+
+        // ========== TIMER ==========
+        function startTimer() {
+            if (IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) {
+                    clearInterval(state.timerInterval);
+                    return;
+                }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    autoSubmit();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60);
+            const s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (state.timeLeft < 300 && state.timeLeft > 0) {
+                document.getElementById('timerPill').classList.add('warning');
+            } else {
+                document.getElementById('timerPill').classList.remove('warning');
+            }
+            if (!state.testSubmitted) {
+                document.title =
+                    `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} - CUET Math Mock`;
+            }
+        }
+
+        function autoSubmit() {
+            showToast('⏰ Time\'s up! Submitting...');
+            setTimeout(() => submitTest(true), 1500);
+        }
+
+        // ========== SUBMIT TEST ==========
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const answered = Object.keys(state.answers).length;
+            const unanswered = TOTAL - answered;
+            if (!skipConfirm) {
+                let confirmMsg = 'Are you sure you want to submit?';
+                if (unanswered > 0) {
+                    confirmMsg = `${unanswered} question(s) unanswered. Submit anyway?`;
+                }
+                if (!confirm(confirmMsg)) return;
+            }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.score = calculateScore();
+
+            const resultData = {
+                score: state.score.score,
+                total: state.score.total,
+                accuracy: state.score.attempted > 0 ? Math.round((state.score.correct / state.score.attempted) * 100) : 0,
+                correct: state.score.correct,
+                wrong: state.score.wrong,
+                attempted: state.score.attempted,
+                unanswered: state.score.unanswered,
+                timeTaken: (30 * 60) - state.timeLeft,
+                testCode: 'CUET_MATH_DE_MOCK',
+                examType: 'CUET UG Mathematics'
+            };
+
+            localStorage.setItem('math_de_last_answers', JSON.stringify(state.answers));
+            localStorage.setItem('math_de_last_mock_file', window.location.href.split('?')[0]);
+            localStorage.setItem('math_de_last_result_data', JSON.stringify(resultData));
+
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'TEST_SUBMITTED',
+                    ...resultData,
+                    answers: state.answers
+                }, '*');
+            }
+
+            showReview();
+            renderQuestion();
+            renderPalette();
+            showToast('✅ Test Submitted! Check review below.');
+            setTimeout(() => {
+                document.getElementById('reviewPanel').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+            document.title = 'Submitted - CUET Math Mock';
+
+            document.getElementById('swipeHint').style.display = 'none';
+            document.getElementById('actionRow').style.display = 'none';
+            document.getElementById('progressCard').style.display = 'none';
+            document.getElementById('paletteCard').style.display = 'none';
+        }
+
+        // ========== REVIEW PANEL ==========
+        function showReview() {
+            const panel = document.getElementById('reviewPanel');
+            panel.classList.add('show');
+            const result = state.score;
+            document.getElementById('resultSummary').innerHTML = `
+            <div class="result-item">
+                <div class="value">${result.score}/${result.total}</div>
+                <div class="label">Score</div>
+            </div>
+            <div class="result-item">
+                <div class="value" style="color:#10b981;">${result.correct}</div>
+                <div class="label">✅ Correct (+5 each)</div>
+            </div>
+            <div class="result-item">
+                <div class="value" style="color:#ef4444;">${result.wrong}</div>
+                <div class="label">❌ Wrong (-1 each)</div>
+            </div>
+            <div class="result-item">
+                <div class="value">${result.unanswered}</div>
+                <div class="label">⬜ Unanswered</div>
+            </div>
+        `;
+            const reviewQs = document.getElementById('reviewQuestions');
+            reviewQs.innerHTML = '<h4 style="margin:12px 0;">📝 Question-wise Review</h4>';
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                const div = document.createElement('div');
+                div.style.cssText = `
+                padding: 12px; margin: 8px 0; border-radius: 10px;
+                border: 1px solid var(--border); background: var(--option-bg);
+            `;
+                let statusIcon, statusColor;
+                if (isUnanswered) { statusIcon = '⬜'; statusColor = 'var(--text-secondary)'; } else if (isCorrect) { statusIcon = '✅'; statusColor = '#10b981'; } else { statusIcon = '❌'; statusColor = '#ef4444'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                const userAnsText = isUnanswered ? 'Not answered' : opts[userAns];
+                const correctAnsText = opts[q.c];
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                div.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                    <span style="font-weight:700;">Q${i+1}.</span>
+                    <span style="color:${statusColor};font-size:18px;">${statusIcon}</span>
+                </div>
+                <div style="font-size:13px;margin-bottom:4px;white-space:pre-line;">${qDisplay}</div>
+                <div style="font-size:11px;color:var(--text-secondary);">
+                    Your answer: <strong>${userAnsText}</strong><br>
+                    Correct answer: <strong style="color:#10b981;">${correctAnsText}</strong>
+                </div>
+                <div style="font-size:11px;margin-top:4px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;color:#fbbf24;">
+                    💡 ${q.exp}
+                </div>
+                <button onclick="jumpToQuestion(${i})" style="margin-top:6px;padding:4px 12px;border-radius:6px;border:1px solid #8b5cf6;background:transparent;color:#a78bfa;cursor:pointer;font-size:11px;transition:all 0.2s;">
+                    Jump to Q${i+1}
+                </button>
+            `;
+                reviewQs.appendChild(div);
+            });
+        }
+
+        function jumpToQuestion(index) {
+            state.currentIndex = index;
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('progressCard').style.display = 'block';
+            document.getElementById('paletteCard').style.display = 'block';
+            document.getElementById('swipeHint').style.display = 'block';
+            document.getElementById('actionRow').style.display = 'flex';
+            renderQuestion();
+            document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeReview() {
+            document.getElementById('reviewPanel').classList.remove('show');
+        }
+
+        // ========== REVIEW MODE (when ?review=true) ==========
+        function renderReviewMode() {
+            const container = document.getElementById('reviewModeContainer');
+            const letters = ['A', 'B', 'C', 'D'];
+            const optsKey = state.lang === 'hi' ? 'oHi' : 'oEn';
+
+            let html = '<div class="review-mode-badge">📝 Review Mode — All 30 Questions</div>';
+
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let cardClass = 'review-mode-card';
+                let statusHTML = '';
+                if (isUnanswered) {
+                    cardClass += ' unanswered-q';
+                    statusHTML = '<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>';
+                } else if (isCorrect) {
+                    cardClass += ' correct-answer';
+                    statusHTML = '<span class="review-mode-status status-correct">✅ Correct (+5)</span>';
+                } else {
+                    cardClass += ' wrong-answer';
+                    statusHTML = '<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>';
+                }
+
+                const opts = q[optsKey];
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const optionsHTML = opts.map((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    return `
+                    <div class="${optClass}" style="pointer-events:none;">
+                        <div class="option-letter">${letters[j]}</div>
+                        <span>${opt}${label}</span>
+                    </div>`;
+                }).join('');
+
+                html += `
+                <div class="${cardClass}">
+                    <div class="review-mode-header">
+                        <span class="q-badge">Q ${i+1}/${TOTAL}</span>
+                        ${statusHTML}
+                    </div>
+                    <div class="question-text">
+                        <div style="font-weight:600;white-space:pre-line;">${qDisplay}</div>
+                    </div>
+                    <div class="options-grid">${optionsHTML}</div>
+                    <div class="explanation-box show" style="margin-top:10px;">
+                        <div class="exp-title">💡 Explanation</div>
+                        <div>${q.exp}</div>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            container.style.display = 'block';
+        }
+
+        // ========== SWIPE NAVIGATION ==========
+        let touchStartX = 0,
+            touchStartY = 0,
+            touchMoved = false,
+            swipeHandled = false;
+        const card = document.getElementById('questionCard');
+
+        card.addEventListener('touchstart', (e) => {
+            if (IS_REVIEW_MODE) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchMoved = false;
+            swipeHandled = false;
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+            if (IS_REVIEW_MODE || swipeHandled) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy)) {
+                touchMoved = true;
+                card.style.transform = `translateX(${dx * 0.5}px)`;
+                card.style.opacity = Math.max(0.5, 1 - Math.abs(dx) / 800);
+                card.classList.add('swiping');
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        card.addEventListener('touchend', (e) => {
+            if (IS_REVIEW_MODE) return;
+            card.classList.remove('swiping');
+            card.style.transform = '';
+            card.style.opacity = '';
+            if (!touchMoved) return;
+            const endX = e.changedTouches[0]?.clientX || touchStartX;
+            const dx = endX - touchStartX;
+            if (Math.abs(dx) > 80) {
+                swipeHandled = true;
+                if (dx > 0) navigate(-1);
+                else navigate(1);
+            }
+            touchMoved = false;
+        });
+
+        // ========== KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', (e) => {
+            if (IS_REVIEW_MODE) return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch (e.key.toLowerCase()) {
+                case 'arrowleft': e.preventDefault(); navigate(-1); break;
+                case 'arrowright': e.preventDefault(); navigate(1); break;
+                case 'a': case '1': e.preventDefault(); selectOption(0); break;
+                case 'b': case '2': e.preventDefault(); selectOption(1); break;
+                case 'c': case '3': e.preventDefault(); selectOption(2); break;
+                case 'd': case '4': e.preventDefault(); selectOption(3); break;
+                case 'm': e.preventDefault(); toggleMark(); break;
+                case 'backspace': e.preventDefault(); clearAnswer(); break;
+            }
+        });
+
+        // ========== TOAST ==========
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'flex';
+            clearTimeout(t._t);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
+
+        // ========== PREVENT ACCIDENTAL EXIT ==========
+        window.addEventListener('beforeunload', (e) => {
+            if (!state.testSubmitted && state.timeLeft > 0 && Object.keys(state.answers).length > 0 && !IS_REVIEW_MODE) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            localStorage.setItem('math_de_last_mock_file', window.location.href.split('?')[0]);
+
+            if (IS_REVIEW_MODE) {
+                document.getElementById('questionCard').style.display = 'none';
+                document.getElementById('progressCard').style.display = 'none';
+                document.getElementById('paletteCard').style.display = 'none';
+                document.getElementById('swipeHint').style.display = 'none';
+                document.getElementById('infoRow').style.display = 'none';
+                document.getElementById('timerPill').style.display = 'none';
+                document.getElementById('actionRow').style.display = 'none';
+                document.getElementById('reviewPanel').style.display = 'none';
+                document.title = 'Review - CUET Math Mock';
+
+                const savedAnswers = JSON.parse(localStorage.getItem('math_de_last_answers') || '{}');
+                state.answers = savedAnswers;
+                state.testSubmitted = true;
+                state.lang = localStorage.getItem('math_de_lang') || 'en';
+
+                if (state.lang === 'hi') {
+                    document.getElementById('langBtn').classList.add('active');
+                    document.getElementById('langText').textContent = 'English';
+                }
+
+                renderReviewMode();
+                console.log('Math Review mode activated — all 30 questions displayed');
+            } else {
+                state.lang = localStorage.getItem('math_de_lang') || 'en';
+                if (state.lang === 'hi') {
+                    document.getElementById('langBtn').classList.add('active');
+                    document.getElementById('langText').textContent = 'English';
+                }
+                startTimer();
+                renderQuestion();
+                renderPalette();
+                console.log('CUET Math Differential Equations Mock Initialized');
+                console.log('Questions:', TOTAL, '| Duration: 30 min | Marking: +5/-1 | Auto-submit on timer');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
