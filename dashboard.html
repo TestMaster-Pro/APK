@@ -6,7 +6,8 @@
     <title>TestMaster Pro • Smart Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
     <style>
         :root {
             --primary: #5b4cf0;
@@ -55,6 +56,9 @@
             padding: 0;
             box-sizing: border-box;
         }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: var(--font-sans);
@@ -91,11 +95,10 @@
             opacity: 0.35;
             will-change: transform;
         }
-
         @keyframes floatBubble {
             0%,
             100% {
-                transform: translateY(0px) translateX(0px) scale(1);
+                transform: translateY(0) translateX(0) scale(1);
             }
             20% {
                 transform: translateY(-35px) translateX(18px) scale(1.06);
@@ -113,7 +116,7 @@
         @keyframes floatBubbleSlow {
             0%,
             100% {
-                transform: translateY(0px) translateX(0px) scale(1);
+                transform: translateY(0) translateX(0) scale(1);
             }
             25% {
                 transform: translateY(-50px) translateX(30px) scale(1.05);
@@ -128,7 +131,7 @@
         @keyframes floatBubbleWide {
             0%,
             100% {
-                transform: translateY(0px) translateX(0px) scale(1);
+                transform: translateY(0) translateX(0) scale(1);
             }
             33% {
                 transform: translateY(-45px) translateX(40px) scale(1.04);
@@ -138,6 +141,19 @@
             }
         }
 
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.025;
+            background-image: linear-gradient(rgba(91, 76, 240, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(91, 76, 240, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
         .grain-overlay {
             position: fixed;
             top: 0;
@@ -150,22 +166,8 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
             background-size: 200px 200px;
         }
-        .grid-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.025;
-            background-image:
-                linear-gradient(rgba(91, 76, 240, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(91, 76, 240, 0.5) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
 
-        /* SIDEBAR OVERLAY */
+        /* SIDEBAR */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -177,15 +179,19 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity var(--transition-sidebar), visibility var(--transition-sidebar);
-            -webkit-backdrop-filter: blur(2px);
             backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
         }
         .sidebar-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-
-        /* SIDEBAR DRAWER */
+        .sidebar-overlay.hidden {
+            display: none;
+        }
+        .sidebar-overlay.active.hidden {
+            display: block;
+        }
         .sidebar {
             position: fixed;
             top: 0;
@@ -206,7 +212,6 @@
         .sidebar-overlay.active .sidebar {
             transform: translateX(0);
         }
-
         .sidebar-brand {
             background: linear-gradient(135deg, #5b4cf0, #6d5df7, #8b5cf6);
             padding: 20px 20px 18px;
@@ -268,11 +273,6 @@
             background: rgba(255, 255, 255, 0.35);
             transform: rotate(90deg);
         }
-        .sidebar-close-btn:active {
-            transform: scale(0.88) rotate(90deg);
-            transition: 0.08s;
-        }
-
         .sidebar-user-card {
             padding: 16px 20px;
             background: #fafbff;
@@ -311,7 +311,6 @@
             font-weight: 700;
             font-size: 14px;
             color: #1e293b;
-            letter-spacing: -0.2px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -325,7 +324,6 @@
             border-radius: 20px;
             display: inline-block;
             margin-top: 3px;
-            letter-spacing: -0.1px;
         }
         .sidebar-user-info .plan-badge-mini {
             display: inline-block;
@@ -334,12 +332,9 @@
             padding: 2px 8px;
             border-radius: 10px;
             margin-top: 3px;
+            margin-left: 4px;
         }
         .plan-badge-mini.premium {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: #92400e;
-        }
-        .plan-badge-mini.premium_plus {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             color: #92400e;
         }
@@ -347,7 +342,6 @@
             background: linear-gradient(135deg, #d1fae5, #a7f3d0);
             color: #065f46;
         }
-
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -382,8 +376,6 @@
             text-align: left;
             font-family: var(--font-sans);
             letter-spacing: -0.15px;
-            position: relative;
-            overflow: hidden;
         }
         .sidebar-nav-item:hover {
             background: #f8fafc;
@@ -395,7 +387,12 @@
             background: #f1f5f9;
             transition: 0.08s;
         }
-        .sidebar-nav-item .nav-icon {
+        .sidebar-nav-item.active-nav {
+            background: #eef0ff;
+            color: #5b4cf0;
+            font-weight: 700;
+        }
+        .nav-icon {
             width: 38px;
             height: 38px;
             border-radius: 12px;
@@ -425,6 +422,14 @@
             background: #f0f9ff;
             color: #06b6d4;
         }
+        .nav-icon-leaderboard {
+            background: #fefce8;
+            color: #ca8a04;
+        }
+        .nav-icon-achievements {
+            background: #fdf2f8;
+            color: #db2777;
+        }
         .nav-icon-instructions {
             background: #fefce8;
             color: #ca8a04;
@@ -441,6 +446,14 @@
             background: #fef2f2;
             color: #dc2626;
         }
+        .nav-icon-mocks {
+            background: #eef0ff;
+            color: #5b4cf0;
+        }
+        .nav-icon-study {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
         .sidebar-nav-item.logout-item:hover {
             background: #fef2f2;
             color: #dc2626;
@@ -453,14 +466,12 @@
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
             border-color: #f59e0b;
         }
-
         .sidebar-divider {
             height: 1px;
             background: #f1f5f9;
             margin: 6px 10px;
             flex-shrink: 0;
         }
-
         .sidebar-contact {
             padding: 14px 18px 18px;
             background: #fafbff;
@@ -486,42 +497,20 @@
             text-decoration: none;
             transition: var(--transition-fast);
             font-weight: 500;
-            letter-spacing: -0.1px;
             cursor: pointer;
         }
         .sidebar-contact-item:hover {
             background: #f1f5f9;
             color: #1e293b;
         }
-        .sidebar-contact-item i {
-            width: 16px;
-            text-align: center;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-        .sidebar-contact-item .contact-icon-email {
+        .contact-icon-email {
             color: #ea4335;
         }
-        .sidebar-contact-item .contact-icon-telegram {
+        .contact-icon-telegram {
             color: #26a7de;
         }
-        .sidebar-contact-item .contact-icon-instagram {
+        .contact-icon-instagram {
             color: #e4405f;
-        }
-        .sidebar-contact-item .contact-icon-whatsapp {
-            color: #25d366;
-        }
-        .coming-soon-tag {
-            font-size: 9px;
-            background: #fef3c7;
-            color: #92400e;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 600;
-            letter-spacing: 0.2px;
-            margin-left: auto;
-            white-space: nowrap;
-            flex-shrink: 0;
         }
         .sidebar-version {
             text-align: center;
@@ -529,7 +518,6 @@
             color: #cbd5e1;
             padding: 6px;
             flex-shrink: 0;
-            letter-spacing: 0.3px;
         }
 
         /* NAVBAR */
@@ -541,7 +529,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: var(--dark);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -584,21 +571,19 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: clamp(15px, 3.2vw, 19px);
             font-weight: 800;
+            font-size: clamp(15px, 3.2vw, 18px);
             background: linear-gradient(135deg, #5b4cf0, #8b5cf6, #06b6d4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            cursor: pointer;
             white-space: nowrap;
             letter-spacing: -0.3px;
-            cursor: pointer;
         }
         .nav-brand i {
             font-size: clamp(18px, 3.5vw, 22px);
-            background: none;
             -webkit-text-fill-color: #5b4cf0;
-            animation: iconPulse 2.5s ease-in-out infinite;
+            animation: iconPulse 2.5s infinite;
         }
         @keyframes iconPulse {
             0%,
@@ -609,19 +594,19 @@
                 transform: scale(1.12);
             }
         }
-        .nav-user {
+        .nav-right {
             display: flex;
             align-items: center;
-            gap: 7px;
-            flex-wrap: wrap;
+            gap: 6px;
             flex-shrink: 0;
+            flex-wrap: wrap;
             justify-content: flex-end;
         }
         .user-avatar {
             width: 34px;
             height: 34px;
-            background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             border-radius: 12px;
+            background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -680,6 +665,10 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
+        .btn-premium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
         .btn-chat {
             background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             color: #5b4cf0;
@@ -694,41 +683,8 @@
             color: #dc2626;
             border: 1.5px solid rgba(220, 38, 38, 0.1);
         }
-        .btn-logout:hover {
-            background: #fee2e2;
-            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.12);
-        }
-
         #welcomeUser {
             display: none;
-        }
-        @media (max-width: 420px) {
-            .nav-user {
-                gap: 4px;
-            }
-            .nav-btn {
-                padding: 6px 10px;
-                font-size: 9px;
-                min-height: 32px;
-                border-radius: 24px;
-            }
-            .user-avatar {
-                width: 30px;
-                height: 30px;
-                font-size: 13px;
-            }
-            .hamburger-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 16px;
-            }
-        }
-        @media (min-width: 421px) and (max-width: 520px) {
-            .nav-btn {
-                padding: 7px 11px;
-                font-size: 10px;
-                min-height: 34px;
-            }
         }
         @media (min-width: 521px) {
             #welcomeUser {
@@ -759,34 +715,29 @@
                 font-size: 19px;
             }
         }
-        @media (min-width: 768px) {
-            #welcomeUser {
-                max-width: 160px;
-                font-size: 14px;
-            }
-            .navbar {
-                padding: 14px 24px;
-            }
+        @media (max-width: 420px) {
             .nav-btn {
-                padding: 8px 16px;
-                font-size: 13px;
-                min-height: 40px;
+                padding: 6px 10px;
+                font-size: 9px;
+                min-height: 32px;
+                border-radius: 24px;
             }
             .user-avatar {
-                width: 38px;
-                height: 38px;
-                font-size: 16px;
+                width: 30px;
+                height: 30px;
+                font-size: 13px;
             }
             .hamburger-btn {
-                width: 42px;
-                height: 42px;
-                font-size: 20px;
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
             }
             .nav-brand {
-                font-size: 18px;
+                font-size: 13px;
             }
         }
 
+        /* CONTAINER */
         .container {
             max-width: 1250px;
             margin: 0 auto;
@@ -806,6 +757,7 @@
             }
         }
 
+        /* WELCOME */
         .welcome-card {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--glass-blur));
@@ -852,8 +804,9 @@
             gap: 6px;
             margin-top: 6px;
             flex-wrap: wrap;
+            align-items: center;
         }
-        .welcome-text .info-tag {
+        .info-tag {
             background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             color: #5b4cf0;
             padding: 4px 12px;
@@ -866,10 +819,6 @@
             border: 1px solid rgba(91, 76, 240, 0.1);
             white-space: nowrap;
             transition: var(--transition-fast);
-        }
-        .info-tag:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(91, 76, 240, 0.12);
         }
         .premium-status-badge {
             background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -888,113 +837,21 @@
             background: linear-gradient(135deg, #10b981, #059669);
             box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
         }
-
-        .notice-compact {
-            background: linear-gradient(135deg, #fffbeb, #fff8e0);
-            border-radius: var(--radius);
-            padding: 12px 14px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-xs);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-left: 4px solid #f59e0b;
-            gap: 10px;
-            flex-wrap: wrap;
-            animation: cardSlideIn 0.55s ease-out;
-            border: 1px solid rgba(245, 158, 11, 0.15);
-        }
-        @media (min-width: 480px) {
-            .notice-compact {
-                padding: 14px 18px;
-                border-left-width: 5px;
-            }
-        }
-        .notice-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            min-width: 160px;
-        }
-        .notice-icon {
-            background: #fef3c7;
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b45309;
-            font-size: 16px;
-            flex-shrink: 0;
-            animation: bellRing 2s ease-in-out infinite;
-        }
-        @keyframes bellRing {
-            0%,
-            100% {
-                transform: rotate(0);
-            }
-            5% {
-                transform: rotate(12deg);
-            }
-            10% {
-                transform: rotate(-10deg);
-            }
-            15% {
-                transform: rotate(6deg);
-            }
-            20% {
-                transform: rotate(0);
-            }
-        }
-        @media (min-width: 480px) {
-            .notice-icon {
-                width: 42px;
-                height: 42px;
-                font-size: 18px;
-                border-radius: 14px;
-            }
-        }
-        .notice-text h4 {
-            font-size: clamp(13px, 2.8vw, 15px);
+        .goal-badge {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: clamp(9px, 2vw, 11px);
             font-weight: 700;
-            color: #92400e;
-        }
-        .notice-text span {
-            font-size: clamp(10px, 2.2vw, 13px);
-            color: #a16207;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 4px;
-        }
-        .view-all-btn {
-            background: white;
-            border: 1.5px solid #fcd34d;
-            color: #92400e;
-            padding: 7px 14px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: clamp(10px, 2.2vw, 12px);
-            cursor: pointer;
-            transition: var(--transition-fast);
             white-space: nowrap;
-            text-decoration: none;
-            min-height: 34px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-        .view-all-btn:active {
-            transform: scale(0.94);
-            transition: 0.08s;
-        }
-        .view-all-btn:hover {
-            background: #fef3c7;
-            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
+        /* STATS GRID */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1002,10 +859,10 @@
             margin-bottom: 16px;
             animation: cardSlideIn 0.6s ease-out;
         }
-        @media (min-width: 600px) {
+        @media (min-width: 500px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 14px;
+                gap: 12px;
             }
         }
         @media (min-width: 768px) {
@@ -1076,94 +933,188 @@
             font-size: clamp(17px, 3.8vw, 22px);
             font-weight: 800;
             letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .stat-info p {
             color: var(--gray-500);
             font-size: clamp(10px, 2.2vw, 13px);
             font-weight: 500;
         }
-
-        .tab-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-            animation: cardSlideIn 0.65s ease-out;
+        .trend-up {
+            color: #10b981;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
         }
-        @media (min-width: 480px) {
-            .tab-row {
-                gap: 10px;
-                margin-bottom: 18px;
+        .trend-down {
+            color: #ef4444;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .trend-neutral {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        /* NOTICE */
+        .notice-compact {
+            background: linear-gradient(135deg, #fffbeb, #fff8e0);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-xs);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #f59e0b;
+            gap: 10px;
+            flex-wrap: wrap;
+            animation: cardSlideIn 0.55s ease-out;
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+        .notice-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 160px;
+        }
+        .notice-icon {
+            background: #fef3c7;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b45309;
+            font-size: 16px;
+            flex-shrink: 0;
+            animation: bellRing 2s ease-in-out infinite;
+        }
+        @keyframes bellRing {
+            0%,
+            100% {
+                transform: rotate(0);
+            }
+            5% {
+                transform: rotate(12deg);
+            }
+            10% {
+                transform: rotate(-10deg);
+            }
+            15% {
+                transform: rotate(6deg);
+            }
+            20% {
+                transform: rotate(0);
             }
         }
-        .tab-btn {
-            padding: 10px 16px;
+        .notice-text h4 {
+            font-size: clamp(13px, 2.8vw, 15px);
+            font-weight: 700;
+            color: #92400e;
+        }
+        .notice-text span {
+            font-size: clamp(10px, 2.2vw, 13px);
+            color: #a16207;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .view-all-btn {
+            background: white;
+            border: 1.5px solid #fcd34d;
+            color: #92400e;
+            padding: 7px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: clamp(10px, 2.2vw, 12px);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+            text-decoration: none;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            font-family: var(--font-sans);
+        }
+        .view-all-btn:hover {
+            background: #fef3c7;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
+        }
+
+        /* SECTION HEADER */
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .section-header-row h3 {
+            font-size: clamp(15px, 3vw, 18px);
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .open-full-btn {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
+            color: white;
+            border: none;
+            padding: 9px 16px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: clamp(11px, 2.4vw, 14px);
+            font-size: clamp(11px, 2.3vw, 13px);
             cursor: pointer;
             transition: var(--transition-smooth);
             display: flex;
             align-items: center;
             gap: 6px;
             font-family: var(--font-sans);
-            border: 2px solid transparent;
-            min-height: 40px;
-            letter-spacing: -0.2px;
             white-space: nowrap;
+            min-height: 40px;
+            box-shadow: 0 4px 14px rgba(91, 76, 240, 0.25);
+            text-decoration: none;
+            flex-shrink: 0;
+            letter-spacing: -0.1px;
         }
-        .tab-btn:active {
+        .open-full-btn:hover {
+            background: linear-gradient(135deg, #4a3dd4, #5b4cf0);
+            box-shadow: var(--shadow-primary);
+            transform: translateY(-2px);
+        }
+        .open-full-btn:active {
             transform: scale(0.94);
             transition: 0.08s;
         }
-        @media (min-width: 480px) {
-            .tab-btn {
-                padding: 11px 20px;
-                font-size: 14px;
-                min-height: 44px;
-            }
-        }
-        .tab-btn-active {
-            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
-            color: white;
-            border-color: #5b4cf0;
-            box-shadow: var(--shadow-primary);
-        }
-        .tab-btn-inactive {
-            background: #e2e8f0;
-            color: #475569;
-            border-color: transparent;
-        }
-        .tab-btn-inactive:hover {
-            background: #cbd5e1;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
 
-        /* EXAM PILLS - HORIZONTAL WRAPPING */
+        /* EXAM PILLS */
         .exam-pills {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-radius: var(--radius-lg);
             padding: 10px 12px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             box-shadow: var(--shadow-xs);
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 8px;
             border: 1px solid var(--glass-border);
-        }
-        @media (min-width: 480px) {
-            .exam-pills {
-                padding: 12px 16px;
-                gap: 10px;
-            }
-        }
-        @media (min-width: 768px) {
-            .exam-pills {
-                padding: 14px 20px;
-            }
         }
         .exam-pills span.label {
             font-weight: 700;
@@ -1215,13 +1166,6 @@
                 min-height: 38px;
             }
         }
-        @media (min-width: 768px) {
-            .exam-btn {
-                padding: 10px 20px;
-                font-size: 13px;
-                min-height: 42px;
-            }
-        }
         .exam-btn.selected {
             background: linear-gradient(135deg, #5b4cf0, #6d5df7);
             color: white;
@@ -1241,23 +1185,7 @@
             }
         }
 
-        .section-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .section-header-row h3 {
-            font-size: clamp(15px, 3vw, 18px);
-            font-weight: 700;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
+        /* FILTER BAR */
         .filter-bar {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
@@ -1271,6 +1199,7 @@
             box-shadow: var(--shadow-xs);
             border: 1px solid var(--glass-border);
             animation: cardSlideIn 0.4s ease-out;
+            align-items: center;
         }
         @media (min-width: 480px) {
             .filter-bar {
@@ -1286,8 +1215,8 @@
             font-family: var(--font-sans);
             font-size: clamp(11px, 2.3vw, 13px);
             background: #f8fafc;
-            flex: 1 1 120px;
-            min-width: 100px;
+            flex: 1 1 110px;
+            min-width: 90px;
             transition: var(--transition-fast);
             -webkit-appearance: none;
             appearance: none;
@@ -1309,16 +1238,29 @@
             box-shadow: 0 0 0 3px rgba(91, 76, 240, 0.08);
             background: white;
         }
-        @media (min-width: 480px) {
-            .filter-bar select,
-            .filter-bar input {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-                border-radius: 16px;
-            }
+        .filter-bar .clear-filter-btn {
+            padding: 10px 16px;
+            border-radius: 40px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-weight: 600;
+            font-size: clamp(10px, 2.1vw, 12px);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+            min-height: 40px;
+            font-family: var(--font-sans);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #475569;
+        }
+        .filter-bar .clear-filter-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
         }
 
+        /* TEST GRID */
         .test-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -1392,6 +1334,20 @@
                 padding: 20px;
             }
         }
+        .test-card.premium-card {
+            border-color: rgba(245, 158, 11, 0.25);
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(255, 215, 0, 0.05));
+        }
+        .test-card.plus-card {
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+        .premium-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            z-index: 2;
+        }
         .badge-exam {
             background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             color: #4338ca;
@@ -1400,169 +1356,9 @@
             font-size: clamp(9px, 2vw, 11px);
             font-weight: 700;
             align-self: flex-start;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border: 1px solid rgba(91, 76, 240, 0.12);
             letter-spacing: 0.2px;
-        }
-        .test-card h4 {
-            font-size: clamp(14px, 3vw, 16px);
-            font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1.3;
-            letter-spacing: -0.2px;
-            cursor: pointer;
-        }
-        .meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin: 6px 0;
-        }
-        .chip {
-            background: #f1f5f9;
-            padding: 4px 9px;
-            border-radius: 10px;
-            font-size: clamp(9px, 2vw, 11px);
-            color: #334155;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            font-weight: 500;
-            border: 1px solid #e2e8f0;
-            transition: var(--transition-fast);
-        }
-        .chip:hover {
-            background: #e2e8f0;
-            border-color: #cbd5e1;
-        }
-        .test-code {
-            font-weight: 700;
-            color: #5b4cf0;
-            font-size: clamp(11px, 2.3vw, 13px);
-            margin: 6px 0;
-            letter-spacing: 0.3px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: auto;
-            padding-top: 8px;
-        }
-        .start-btn {
-            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
-            color: white;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: clamp(11px, 2.4vw, 13px);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            font-family: var(--font-sans);
-            min-height: 40px;
-            letter-spacing: -0.1px;
-            box-shadow: 0 4px 12px rgba(91, 76, 240, 0.2);
-            position: relative;
-            overflow: hidden;
-            flex: 1;
-        }
-        .start-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
-        }
-        .start-btn:active::after {
-            width: 250px;
-            height: 250px;
-            transition: 0s;
-        }
-        .start-btn:active {
-            transform: scale(0.94);
-            transition: 0.08s;
-        }
-        .start-btn:hover {
-            background: linear-gradient(135deg, #4a3dd4, #5b4cf0);
-            box-shadow: var(--shadow-primary);
-            transform: translateY(-2px);
-        }
-        .leaderboard-btn {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            color: #1e293b;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: clamp(11px, 2.4vw, 13px);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            font-family: var(--font-sans);
-            min-height: 40px;
-            letter-spacing: -0.1px;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
-            position: relative;
-            overflow: hidden;
-            flex: 1;
-        }
-        .leaderboard-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.25);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
-        }
-        .leaderboard-btn:active::after {
-            width: 250px;
-            height: 250px;
-            transition: 0s;
-        }
-        .leaderboard-btn:active {
-            transform: scale(0.94);
-            transition: 0.08s;
-        }
-        .leaderboard-btn:hover {
-            background: linear-gradient(135deg, #d97706, #f59e0b);
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
-            transform: translateY(-2px);
-        }
-        @media (min-width: 480px) {
-            .start-btn, .leaderboard-btn {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-                border-radius: 16px;
-            }
-        }
-        .test-card .score-preview {
-            font-size: clamp(9px, 2vw, 11px);
-            color: #10b981;
-            margin-top: 4px;
-            font-weight: 600;
-            background: #ecfdf5;
-            padding: 3px 10px;
-            border-radius: 8px;
-            display: inline-block;
-            align-self: flex-start;
-            border: 1px solid rgba(16, 185, 129, 0.15);
         }
         .badge-type {
             padding: 3px 12px;
@@ -1597,143 +1393,387 @@
             color: #78350f;
             border: 1px solid rgba(245, 158, 11, 0.4);
         }
-        .test-card.premium-card {
-            border-color: rgba(245, 158, 11, 0.25);
-        }
-        .test-card.plus-card {
-            border-color: rgba(16, 185, 129, 0.25);
-        }
-        .start-btn.locked {
-            background: linear-gradient(135deg, #94a3b8, #64748b);
-            cursor: not-allowed;
-        }
-        .start-btn.locked:hover {
-            background: linear-gradient(135deg, #64748b, #475569);
-            box-shadow: none;
-            transform: none;
-        }
-        .premium-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-        }
-
-        .results-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            animation: cardSlideIn 0.5s ease-out;
-        }
-        .results-header {
-            padding: 14px 16px;
-            border-bottom: 1px solid #f1f5f9;
+        .difficulty-tag {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: clamp(8px, 1.8vw, 10px);
             font-weight: 700;
+            align-self: flex-start;
+            margin-bottom: 6px;
+        }
+        .diff-moderate {
+            background: #fefce8;
+            color: #a16207;
+        }
+        .diff-hard {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .diff-easy {
+            background: #ecfdf5;
+            color: #059669;
+        }
+        .diff-prev-year {
+            background: #f0f9ff;
+            color: #0369a1;
+        }
+        .test-card h4 {
+            font-size: clamp(14px, 3vw, 16px);
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            letter-spacing: -0.2px;
+        }
+        .meta-row {
             display: flex;
-            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 6px;
-            font-size: clamp(13px, 2.8vw, 15px);
-            align-items: center;
+            gap: 5px;
+            margin: 4px 0;
         }
-        @media (min-width: 480px) {
-            .results-header {
-                padding: 18px 22px;
-                font-size: 15px;
-            }
-        }
-        .results-table-wrap {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: #e2e8f0 transparent;
-        }
-        .results-table-wrap::-webkit-scrollbar {
-            height: 5px;
-        }
-        .results-table-wrap::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .results-table-wrap::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
+        .chip {
+            background: #f1f5f9;
+            padding: 4px 9px;
             border-radius: 10px;
+            font-size: clamp(9px, 2vw, 11px);
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition-fast);
         }
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 550px;
+        .chip.language-chip {
+            background: #eef0ff;
+            color: #5b4cf0;
+            border-color: rgba(91, 76, 240, 0.2);
         }
-        .results-table th {
-            text-align: left;
-            padding: 10px 14px;
-            font-size: clamp(10px, 2.1vw, 12px);
-            color: #64748b;
-            background: #f8fafc;
-            font-weight: 600;
-            white-space: nowrap;
-            letter-spacing: -0.1px;
-        }
-        .results-table td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: clamp(11px, 2.3vw, 14px);
-            white-space: nowrap;
-        }
-        @media (min-width: 480px) {
-            .results-table th,
-            .results-table td {
-                padding: 14px 18px;
-            }
-        }
-        .score-badge {
-            background: #d1fae5;
-            color: #065f46;
-            padding: 3px 12px;
-            border-radius: 30px;
+        .test-code {
             font-weight: 700;
-            font-size: clamp(10px, 2.1vw, 13px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #5b4cf0;
+            font-size: clamp(11px, 2.3vw, 13px);
+            margin: 6px 0;
+            letter-spacing: 0.3px;
         }
-        .hidden {
-            display: none !important;
+        .score-preview {
+            font-size: clamp(9px, 2vw, 11px);
+            color: #10b981;
+            margin-top: 4px;
+            font-weight: 600;
+            background: #ecfdf5;
+            padding: 3px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            align-self: flex-start;
+            border: 1px solid rgba(16, 185, 129, 0.15);
         }
-
-        .open-full-btn {
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 8px;
+        }
+        .attempt-btn {
             background: linear-gradient(135deg, #5b4cf0, #6d5df7);
             color: white;
             border: none;
-            padding: 9px 16px;
-            border-radius: 40px;
+            padding: 10px 14px;
+            border-radius: 14px;
             font-weight: 700;
-            font-size: clamp(11px, 2.3vw, 13px);
+            font-size: clamp(11px, 2.4vw, 13px);
             cursor: pointer;
             transition: var(--transition-smooth);
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 5px;
             font-family: var(--font-sans);
-            white-space: nowrap;
             min-height: 40px;
-            box-shadow: 0 4px 14px rgba(91, 76, 240, 0.25);
-            text-decoration: none;
-            flex-shrink: 0;
             letter-spacing: -0.1px;
+            box-shadow: 0 4px 12px rgba(91, 76, 240, 0.2);
+            flex: 2;
+            position: relative;
+            overflow: hidden;
         }
-        .open-full-btn:hover {
+        .attempt-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .attempt-btn:active::after {
+            width: 250px;
+            height: 250px;
+            transition: 0s;
+        }
+        .attempt-btn:active {
+            transform: scale(0.94);
+            transition: 0.08s;
+        }
+        .attempt-btn:hover {
             background: linear-gradient(135deg, #4a3dd4, #5b4cf0);
             box-shadow: var(--shadow-primary);
             transform: translateY(-2px);
         }
-        .open-full-btn:active {
+        .attempt-btn.locked {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            cursor: not-allowed;
+        }
+        .attempt-btn.locked:hover {
+            background: linear-gradient(135deg, #64748b, #475569);
+            box-shadow: none;
+            transform: none;
+        }
+        .leaderboard-btn {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #1e293b;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: clamp(11px, 2.4vw, 13px);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-family: var(--font-sans);
+            min-height: 40px;
+            letter-spacing: -0.1px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .leaderboard-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .leaderboard-btn:active::after {
+            width: 250px;
+            height: 250px;
+            transition: 0s;
+        }
+        .leaderboard-btn:active {
             transform: scale(0.94);
             transition: 0.08s;
         }
+        .leaderboard-btn:hover {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+            transform: translateY(-2px);
+        }
+        @media (min-width: 480px) {
+            .attempt-btn,
+            .leaderboard-btn {
+                padding: 12px 16px;
+                font-size: 13px;
+                min-height: 44px;
+                border-radius: 16px;
+            }
+        }
+        .hidden {
+            display: none !important;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: clamp(12px, 2.6vw, 14px);
+            animation: fadeIn 0.4s ease-out;
+            grid-column: 1 / -1;
+        }
+        .empty-state i {
+            font-size: clamp(28px, 6vw, 40px);
+            margin-bottom: 8px;
+            display: block;
+            opacity: 0.5;
+        }
 
-        .floating-instruction-btn {
+        /* BOTTOM SHEET */
+        .sheet-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 200;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .sheet-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .instruction-sheet {
+            background: white;
+            border-radius: 28px 28px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            padding: 24px 20px;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+        .sheet-overlay.active .instruction-sheet {
+            transform: translateY(0);
+        }
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: #cbd5e1;
+            border-radius: 2px;
+            margin: 0 auto 16px;
+        }
+        .sheet-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sheet-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .inst-card {
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 14px;
+            text-align: center;
+        }
+        .inst-card i {
+            font-size: 20px;
+            color: #5b4cf0;
+            margin-bottom: 8px;
+        }
+        .inst-card p {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .rules-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        .rules-list li {
+            padding: 8px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sheet-footer {
+            display: flex;
+            gap: 12px;
+        }
+        .cancel-sheet {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+        .confirm-start {
+            flex: 2;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+
+        /* FOOTER */
+        .pro-footer {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 20px 16px;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .footer-logo {
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .footer-logo span {
+            color: #fbbf24;
+        }
+        .footer-links {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .footer-links a:hover {
+            color: #fbbf24;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .footer-social {
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+            font-size: 13px;
+        }
+        .footer-social a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .footer-social a:hover {
+            color: #e1306c;
+        }
+
+        /* FLOATING HELP */
+        .floating-help-btn {
             position: fixed;
             bottom: 20px;
             right: 16px;
@@ -1752,6 +1792,7 @@
             justify-content: center;
             transition: var(--transition-smooth);
             animation: floatBtnPulse 2.5s ease-in-out infinite;
+            font-family: var(--font-sans);
         }
         @keyframes floatBtnPulse {
             0%,
@@ -1762,178 +1803,13 @@
                 box-shadow: 0 14px 38px rgba(91, 76, 240, 0.5);
             }
         }
-        .floating-instruction-btn:active {
+        .floating-help-btn:active {
             transform: scale(0.88);
             transition: 0.08s;
         }
-        .floating-instruction-btn:hover {
+        .floating-help-btn:hover {
             transform: scale(1.06);
             box-shadow: 0 16px 40px rgba(91, 76, 240, 0.45);
-        }
-        @media (min-width: 480px) {
-            .floating-instruction-btn {
-                width: 54px;
-                height: 54px;
-                font-size: 22px;
-                bottom: 24px;
-                right: 20px;
-            }
-        }
-        @media (min-width: 768px) {
-            .floating-instruction-btn {
-                width: 58px;
-                height: 58px;
-                font-size: 24px;
-                bottom: 28px;
-                right: 28px;
-            }
-        }
-
-        .instruction-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            z-index: 200;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            animation: fadeIn 0.25s ease-out;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        .instruction-modal {
-            background: white;
-            border-radius: var(--radius-xl);
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-xl);
-            animation: modalSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-        }
-        @keyframes modalSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.92);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        .instruction-modal-header {
-            padding: 18px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 1;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-        }
-        @media (min-width: 480px) {
-            .instruction-modal-header {
-                padding: 22px 26px;
-            }
-        }
-        .instruction-modal-header h3 {
-            font-size: clamp(16px, 3.5vw, 20px);
-            font-weight: 800;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .instruction-close-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #f1f5f9;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            color: #64748b;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .instruction-close-btn:hover {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-        .instruction-close-btn:active {
-            transform: scale(0.9);
-        }
-        .instruction-modal-body {
-            padding: 16px 20px 20px;
-        }
-        @media (min-width: 480px) {
-            .instruction-modal-body {
-                padding: 20px 26px 26px;
-            }
-        }
-        .instruction-section {
-            margin-bottom: 16px;
-            padding: 14px 16px;
-            background: #f8fafc;
-            border-radius: var(--radius);
-            border-left: 3px solid #5b4cf0;
-            transition: var(--transition-fast);
-        }
-        .instruction-section:hover {
-            background: #f1f5f9;
-            border-left-color: #8b5cf6;
-        }
-        .instruction-section h4 {
-            font-size: clamp(13px, 2.8vw, 15px);
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .instruction-section p {
-            font-size: clamp(11px, 2.3vw, 13px);
-            color: #475569;
-            line-height: 1.5;
-        }
-        .instruction-section .highlight {
-            background: #eef0ff;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            color: #5b4cf0;
-            font-size: inherit;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 30px 20px;
-            color: #64748b;
-            font-size: clamp(12px, 2.6vw, 14px);
-            animation: fadeIn 0.4s ease-out;
-        }
-        .empty-state i {
-            font-size: clamp(28px, 6vw, 40px);
-            margin-bottom: 8px;
-            display: block;
-            opacity: 0.5;
         }
     </style>
 </head>
@@ -1942,7 +1818,7 @@
     <div class="grid-pattern"></div>
     <div class="grain-overlay"></div>
 
-    <!-- SIDEBAR OVERLAY -->
+    <!-- SIDEBAR -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
         <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
             <div class="sidebar-brand">
@@ -1960,18 +1836,19 @@
             </div>
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-label">Main Menu</div>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('tests')"><span class="nav-icon nav-icon-tests"><i class="fas fa-book-open"></i></span><span>Tests</span></button>
+                <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('dashboard')"><span class="nav-icon nav-icon-tests"><i class="fas fa-th-large"></i></span><span>Dashboard</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><span class="nav-icon nav-icon-mocks"><i class="fas fa-file-alt"></i></span><span>Mock Tests</span></button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span><span>Books & PYQ</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><span class="nav-icon nav-icon-study"><i class="fas fa-folder-open"></i></span><span>Study Material</span></button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span><span>My Results</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><span class="nav-icon nav-icon-leaderboard"><i class="fas fa-trophy"></i></span><span>Leaderboard</span></button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span><span>Chat</span></button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><span class="nav-icon nav-icon-instructions"><i class="fas fa-question-circle"></i></span><span>Instructions</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('achievements')"><span class="nav-icon nav-icon-achievements"><i class="fas fa-medal"></i></span><span>Achievements</span></button>
                 <div class="sidebar-nav-label">Premium</div>
-                <button class="sidebar-nav-item premium-nav-item" id="sidebarPremiumBtn" onclick="sidebarNavigate('premium')">
-                    <span class="nav-icon nav-icon-premium"><i class="fas fa-crown"></i></span>
-                    <span id="sidebarPremiumBtnText">Buy Premium</span>
-                </button>
+                <button class="sidebar-nav-item premium-nav-item" id="sidebarPremiumBtn" onclick="sidebarNavigate('premium')"><span class="nav-icon nav-icon-premium"><i class="fas fa-crown"></i></span><span id="sidebarPremiumBtnText">Buy Premium</span></button>
                 <div class="sidebar-nav-label">Account</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><span class="nav-icon nav-icon-profile"><i class="fas fa-user-circle"></i></span><span>Profile</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><span class="nav-icon nav-icon-instructions"><i class="fas fa-question-circle"></i></span><span>How to Use</span></button>
                 <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><span class="nav-icon nav-icon-logout"><i class="fas fa-sign-out-alt"></i></span><span>Logout</span></button>
             </nav>
             <div class="sidebar-divider"></div>
@@ -1979,253 +1856,276 @@
                 <div class="sidebar-contact-label">Contact Us</div>
                 <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-contact-item" target="_blank"><i class="fas fa-envelope contact-icon-email"></i><span>testmaster.helpdesk@gmail.com</span></a>
                 <a href="https://t.me/cuet007_bot" class="sidebar-contact-item" target="_blank" rel="noopener"><i class="fab fa-telegram-plane contact-icon-telegram"></i><span>@cuet007_bot</span></a>
-                <div class="sidebar-contact-item"><i class="fab fa-instagram contact-icon-instagram"></i><span>Instagram</span><span class="coming-soon-tag">Coming Soon</span></div>
-                <div class="sidebar-contact-item"><i class="fab fa-whatsapp contact-icon-whatsapp"></i><span>WhatsApp</span><span class="coming-soon-tag">Coming Soon</span></div>
+                <a href="https://instagram.com/testmasterpro" class="sidebar-contact-item" target="_blank" rel="noopener"><i class="fab fa-instagram contact-icon-instagram"></i><span>@testmasterpro</span></a>
             </div>
-            <div class="sidebar-version">TestMaster Pro v2.0 • © 2025</div>
+            <div class="sidebar-version">TestMaster Pro v2.0 • © 2026</div>
         </aside>
     </div>
 
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-left">
-            <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <button class="hamburger-btn" onclick="openSidebar()" aria-label="Menu"><i class="fas fa-bars"></i></button>
             <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
         </div>
-        <div class="nav-user">
-            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Open menu">S</div>
+        <div class="nav-right">
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">S</div>
             <span id="welcomeUser">Welcome</span>
             <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
-            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <a href="payment.html" class="nav-btn btn-premium"><i class="fas fa-crown"></i> Premium</a>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
+    <!-- MAIN CONTENT -->
     <div class="container">
+        <!-- Welcome -->
         <div class="welcome-card">
             <div class="welcome-text">
                 <h1 id="greeting">Good Morning!</h1>
-                <p>🎯 Your focused test dashboard</p>
+                <p id="welcomeSubtitle">🎯 Your focused test dashboard</p>
                 <div class="user-extra" id="userExtraTags"></div>
             </div>
         </div>
 
+        <!-- Notice -->
         <div class="notice-compact" id="noticeCompact">
             <div class="notice-left">
                 <div class="notice-icon"><i class="fas fa-bell"></i></div>
                 <div class="notice-text" id="noticeContent">
-                    <h4>Latest update</h4>
+                    <h4>Latest Update</h4>
                     <span><i class="far fa-clock"></i> Loading...</span>
                 </div>
             </div>
-            <a href="notices.html" class="view-all-btn">All notices <i class="fas fa-arrow-right"></i></a>
+            <a href="notices.html" class="view-all-btn">All Notices <i class="fas fa-arrow-right"></i></a>
         </div>
 
+        <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon" style="background:linear-gradient(135deg,#5b4cf0,#6d5df7);"><i class="fas fa-file-alt"></i></div>
-                <div class="stat-info"><h3 id="totalTests">0</h3><p>Available</p></div>
+                <div class="stat-info"><h3 id="totalTests">0</h3><p>Available Tests</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background:linear-gradient(135deg,#10b981,#34d399);"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-info"><h3 id="completedTests">0</h3><p>Completed</p></div>
+                <div class="stat-info"><h3 id="attemptedTests">0</h3><p>Tests Attempted</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);"><i class="fas fa-star"></i></div>
-                <div class="stat-info"><h3 id="avgScore">0%</h3><p>Avg Score</p></div>
+                <div class="stat-info"><h3 id="avgScore">0% <span id="scoreTrend" class="trend-neutral"></span></h3><p>Average Score</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);"><i class="fas fa-trophy"></i></div>
-                <div class="stat-info"><h3 id="bestScore">0%</h3><p>Best</p></div>
+                <div class="stat-info"><h3 id="bestScore">0%</h3><p>Best Score</p></div>
             </div>
         </div>
 
-        <div class="tab-row">
-            <button id="tabTests" class="tab-btn tab-btn-active" onclick="switchTab('tests')"><i class="fas fa-book-open"></i> Tests</button>
-            <button id="tabBooks" class="tab-btn tab-btn-inactive" onclick="goToBooks()"><i class="fas fa-book"></i> Books & PYQ</button>
-            <button id="tabResults" class="tab-btn tab-btn-inactive" onclick="goToResults()"><i class="fas fa-chart-bar"></i> My Results</button>
+        <!-- Section Header -->
+        <div class="section-header-row">
+            <h3><i class="fas fa-book-open" style="color:#5b4cf0;"></i> Mock Tests</h3>
+            <a href="exam.html" class="open-full-btn"><i class="fas fa-external-link-alt"></i> Open Full Library</a>
         </div>
 
-        <div id="testsSection">
-            <div class="section-header-row">
-                <h3><i class="fas fa-book-open" style="color:#5b4cf0;"></i> Mock Tests</h3>
-                <a href="exam.html" class="open-full-btn"><i class="fas fa-external-link-alt"></i> Open Full Mock Library</a>
+        <!-- Exam Pills -->
+        <div class="exam-pills" id="examSelector">
+            <span class="label">📚 Exam:</span>
+            <div class="exam-pills-inner" id="examButtons">Loading exams...</div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar hidden" id="filterBar">
+            <select id="subjectFilter" onchange="onSubjectChange()"><option value="">📖 All Subjects</option></select>
+            <select id="chapterFilter" onchange="applyFilters()"><option value="">📑 All Chapters</option></select>
+            <select id="typeFilter" onchange="applyFilters()"><option value="">🔓 All Types</option><option value="free">🆓 Free</option><option value="paid">👑 Premium</option></select>
+            <input type="text" id="searchInput" placeholder="🔍 Search tests..." oninput="applyFilters()">
+            <button class="clear-filter-btn" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Clear</button>
+        </div>
+
+        <!-- Test Grid -->
+        <div class="test-grid" id="testGrid">
+            <div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam above to view mock tests</div>
+        </div>
+    </div>
+
+    <!-- BOTTOM SHEET -->
+    <div class="sheet-overlay" id="sheetOverlay">
+        <div class="instruction-sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <h2 id="sheetTestName">Test Instructions</h2>
+                <span style="color:#64748b;font-size:13px;" id="sheetTestCode">#CODE</span>
             </div>
-            <div class="exam-pills" id="examSelector">
-                <span class="label">📚 Exam:</span>
-                <div class="exam-pills-inner" id="examButtons">Loading exams...</div>
+            <div class="instruction-grid">
+                <div class="inst-card"><i class="fas fa-clock"></i><p id="sheetDuration">--</p><span>Minutes</span></div>
+                <div class="inst-card"><i class="fas fa-question-circle"></i><p id="sheetQs">--</p><span>Questions</span></div>
+                <div class="inst-card"><i class="fas fa-check-circle" style="color:#10b981;"></i><p id="sheetPositive">--</p><span>Per Correct</span></div>
+                <div class="inst-card"><i class="fas fa-minus-circle" style="color:#ef4444;"></i><p id="sheetNegative">--</p><span>Negative</span></div>
             </div>
-            <div class="filter-bar hidden" id="filterBar">
-                <select id="subjectFilter" onchange="applyFilters()"><option value="">📖 All Subjects</option></select>
-                <select id="chapterFilter" onchange="applyFilters()"><option value="">📑 All Chapters</option></select>
-                <input type="text" id="searchInput" placeholder="🔍 Search tests..." oninput="applyFilters()">
-            </div>
-            <div class="test-grid" id="testGrid">
-                <div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam to see tests</div>
+            <ul class="rules-list">
+                <li><i class="fas fa-info-circle" style="color:#5b4cf0;"></i> Ensure a stable internet connection.</li>
+                <li><i class="fas fa-info-circle" style="color:#5b4cf0;"></i> Timer starts immediately and cannot be paused.</li>
+                <li><i class="fas fa-info-circle" style="color:#5b4cf0;"></i> Test will auto-submit when time runs out.</li>
+            </ul>
+            <div class="sheet-footer">
+                <button class="cancel-sheet" onclick="closeSheet()">Cancel</button>
+                <button class="confirm-start" id="finalStartBtn">Begin Test</button>
             </div>
         </div>
     </div>
 
-    <button class="floating-instruction-btn" onclick="openInstructions()" title="How to use"><i class="fas fa-question"></i></button>
-
-    <div class="instruction-overlay hidden" id="instructionOverlay" onclick="closeInstructions(event)">
-        <div class="instruction-modal" onclick="event.stopPropagation()">
-            <div class="instruction-modal-header">
-                <h3><i class="fas fa-book" style="color:#5b4cf0;"></i> How to Use</h3>
-                <button class="instruction-close-btn" onclick="closeInstructionsDirect()"><i class="fas fa-times"></i></button>
+    <!-- FOOTER -->
+    <footer class="pro-footer">
+        <div class="footer-content">
+            <div class="footer-logo">TestMaster<span>Pro</span></div>
+            <p>© 2026 TestMaster Pro. All Rights Reserved.</p>
+            <div class="footer-links">
+                <a onclick="showPrivacy()">Privacy</a> •
+                <a onclick="showTerms()">Terms</a> •
+                <a onclick="showSupport()">Support</a>
             </div>
-            <div class="instruction-modal-body">
-                <div class="instruction-section"><h4>📚 <span>Selecting an Exam</span></h4><p>Tap on any <span class="highlight">exam pill</span> above the test list. This filters all available tests for that exam. Tap again to deselect.</p></div>
-                <div class="instruction-section"><h4>🔍 <span>Filtering Tests</span></h4><p>After selecting an exam, use the <span class="highlight">Subject</span>, <span class="highlight">Chapter</span> dropdowns and <span class="highlight">Search</span> bar to narrow down tests.</p></div>
-                <div class="instruction-section"><h4>▶️ <span>Starting a Test</span></h4><p>Click the <span class="highlight">Start Test</span> button on any test card. This opens the test interface with a timer.</p></div>
-                <div class="instruction-section"><h4>👑 <span>Premium Tests</span></h4><p>Premium tests show a <span class="highlight">crown icon</span>. Subscribe to <span class="highlight">Premium</span> from the sidebar to unlock all locked tests.</p></div>
-                <div class="instruction-section"><h4>📊 <span>My Results</span></h4><p>Click <span class="highlight">My Results</span> tab to go directly to your detailed test history and analytics.</p></div>
-                <div class="instruction-section"><h4>📈 <span>Stats Cards</span></h4><p>The 4 stat cards show: <span class="highlight">Available</span> tests, <span class="highlight">Completed</span> tests, <span class="highlight">Average Score</span>, and <span class="highlight">Best Score</span> for the selected exam.</p></div>
+            <div class="footer-social">
+                <a href="https://instagram.com/testmasterpro" target="_blank" title="Instagram"><i class="fab fa-instagram"></i> @testmasterpro</a>
             </div>
         </div>
-    </div>
+    </footer>
+
+    <!-- FLOATING HELP -->
+    <button class="floating-help-btn" onclick="showSupport()" title="Need help?"><i class="fas fa-question"></i></button>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwKKmPNFYUvB9QoTp5X6yo2I2EDgpsDngYRVAfIakxzwslcVkU2yrF46tEvjQmfnbmk8w/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyVPG4x6CSrtwpfI_LPRCjvCjCcN8ZY7d0Z2P3ef_e_BL2hatfDLbIpdStSIG69JhCggg/exec';
         let allMocks = [];
         let userResults = [];
         let selectedExam = '';
         let userPremiumPlans = [];
+        let currentTestData = {};
+        let previousAvgScore = 0;
 
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
-        function setAvatarWithPic(elementId, userObj) {
-            const el = document.getElementById(elementId);
+        function setAvatarWithPic(elId, u) {
+            const el = document.getElementById(elId);
             if (!el) return;
-            if (userObj && userObj.avatarUrl) {
-                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
-            } else if (userObj && userObj.profilePicUrl) {
-                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
-            } else {
-                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
-            }
+            if (u && u.avatarUrl) el.innerHTML =
+                `<img src="${u.avatarUrl}" alt="A" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+            else if (u && u.profilePicUrl) el.innerHTML =
+                `<img src="${u.profilePicUrl}" alt="A" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+            else el.textContent = (u && u.name) ? u.name.charAt(0).toUpperCase() : 'S';
         }
-
         setAvatarWithPic('userInitial', user);
         setAvatarWithPic('sidebarAvatar', user);
-
-        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
-        document.getElementById('sidebarUserName').textContent = user.name;
+        document.getElementById('sidebarUserName').textContent = user.name || 'Student';
         document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
-
-        const userExtraTags = document.getElementById('userExtraTags');
-        if (user.state) userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-map-marker-alt"></i> ${user.state}</span>`;
-        if (user.preparingFor) userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-bullseye"></i> ${user.preparingFor}</span>`;
-        if (user.education) userExtraTags.innerHTML += `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
 
         const hour = new Date().getHours();
-        document.getElementById('greeting').textContent = `${hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening'}!`;
+        const greetingEl = document.getElementById('greeting');
+        if (hour < 12) greetingEl.textContent = 'Good Morning! ☀️';
+        else if (hour < 17) greetingEl.textContent = 'Good Afternoon! 🌤️';
+        else greetingEl.textContent = 'Good Evening! 🌙';
 
-        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
-        function goToBooks() { window.location.href = 'book.html'; }
-        function goToResults() { window.location.href = 'allresult.html'; }
+        const userExtra = document.getElementById('userExtraTags');
+        if (user.state) userExtra.innerHTML +=
+            `<span class="info-tag"><i class="fas fa-map-marker-alt"></i> ${user.state}</span>`;
+        if (user.education) userExtra.innerHTML +=
+            `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
 
-        function switchTab(tab) {
-            const testsBtn = document.getElementById('tabTests');
-            const booksBtn = document.getElementById('tabBooks');
-            const resultsBtn = document.getElementById('tabResults');
-            testsBtn.className = 'tab-btn tab-btn-inactive';
-            booksBtn.className = 'tab-btn tab-btn-inactive';
-            resultsBtn.className = 'tab-btn tab-btn-inactive';
-            if (tab === 'tests') {
-                testsBtn.className = 'tab-btn tab-btn-active';
-            } else if (tab === 'books') {
-                goToBooks();
-            } else if (tab === 'results') {
-                goToResults();
-            }
-        }
+        // Only one target line kept in subtitle, so no goal-badge here.
+        document.getElementById('welcomeSubtitle').textContent = user.preparingFor ?
+            `🎯 Target: ${user.preparingFor} • Stay focused!` : '🎯 Your focused test dashboard';
+
+        function logout() { localStorage.removeItem('user');
+            window.location.href = 'index.html'; }
 
         function openSidebar() {
-            const overlay = document.getElementById('sidebarOverlay');
-            overlay.classList.remove('hidden'); overlay.classList.add('active');
-            document.body.classList.add('sidebar-open'); document.body.style.overflow = 'hidden';
+            const o = document.getElementById('sidebarOverlay');
+            o.classList.remove('hidden');
+            o.classList.add('active');
+            document.body.classList.add('sidebar-open');
+            document.body.style.overflow = 'hidden';
         }
-        function closeSidebar(event) { if (event.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+
+        function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+
         function closeSidebarDirect() {
-            const overlay = document.getElementById('sidebarOverlay');
-            overlay.classList.remove('active'); document.body.classList.remove('sidebar-open');
-            document.body.style.overflow = ''; setTimeout(() => overlay.classList.add('hidden'), 350);
+            const o = document.getElementById('sidebarOverlay');
+            o.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            document.body.style.overflow = '';
+            setTimeout(() => { if (!o.classList.contains('active')) o.classList.add('hidden'); }, 350);
         }
+
         function sidebarNavigate(action) {
             closeSidebarDirect();
             setTimeout(() => {
-                switch (action) {
-                    case 'tests': switchTab('tests'); break;
-                    case 'books': goToBooks(); break;
-                    case 'results': goToResults(); break;
-                    case 'chat': window.location.href = 'chat.html'; break;
-                    case 'instructions': openInstructions(); break;
-                    case 'profile': window.location.href = 'profile.html'; break;
-                    case 'premium': window.location.href = 'payment.html'; break;
-                    case 'logout': logout(); break;
-                }
+                const map = {
+                    'dashboard': 'dashboard.html',
+                    'mocks': 'exam.html',
+                    'books': 'book.html',
+                    'study': 'book.html',
+                    'results': 'allresult.html',
+                    'leaderboard': 'leaderboard.html',
+                    'chat': 'chat.html',
+                    'achievements': 'achievements.html',
+                    'premium': 'payment.html',
+                    'profile': 'profile.html',
+                    'instructions': 'javascript:openHowToUse()',
+                    'logout': 'logout'
+                };
+                if (action === 'logout') logout();
+                else if (action === 'instructions') openHowToUse();
+                else if (map[action]) window.location.href = map[action];
             }, 300);
         }
 
-        async function loadUserPremiumStatus() {
-            try {
-                if (user.premiumPlans && user.premiumPlans.length > 0) userPremiumPlans = user.premiumPlans;
-                const res = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user.username)}`);
-                const data = await res.json();
-                if (data.success && data.premiumPlans && data.premiumPlans.length > 0) {
-                    userPremiumPlans = data.premiumPlans;
-                    user.premiumPlans = data.premiumPlans;
-                    localStorage.setItem('user', JSON.stringify(user));
-                    updatePremiumUI();
-                } else {
-                    updatePremiumUI(false);
-                }
-            } catch (e) { updatePremiumUI(false); }
+        function openHowToUse() {
+            Swal.fire({
+                title: '📖 How to Use TestMaster Pro',
+                html: `
+                    <div style="text-align:left;font-size:13px;line-height:1.8;">
+                        <p><b>1.</b> Select an <b>Exam</b> from the pills above.</p>
+                        <p><b>2.</b> Use <b>Subject, Chapter & Type</b> filters to narrow tests.</p>
+                        <p><b>3.</b> Click <b>"Attempt Now"</b> to start a test.</p>
+                        <p><b>4.</b> Premium tests require a subscription - tap <b>Buy Premium</b>.</p>
+                        <p><b>5.</b> Check <b>Leaderboard</b> to see your rank.</p>
+                        <p><b>6.</b> View <b>My Results</b> for detailed analytics.</p>
+                        <p style="margin-top:8px;color:#5b4cf0;"><b>Tip:</b> Tests are available in Hindi + English.</p>
+                    </div>`,
+                confirmButtonText: 'Got it!',
+                confirmButtonColor: '#5b4cf0',
+                icon: 'info'
+            });
         }
 
-        function updatePremiumUI(hasPremium = true) {
-            const sidebarBadge = document.getElementById('sidebarPlanBadgeMini');
-            const sidebarBtnText = document.getElementById('sidebarPremiumBtnText');
-            const userAvatar = document.getElementById('userInitial');
-            const sidebarAvatar = document.getElementById('sidebarAvatar');
-
-            if (hasPremium && userPremiumPlans.length > 0) {
-                const plan = userPremiumPlans[0];
-                const planType = plan.planType || 'premium';
-                const planName = plan.planName || planType;
-                const displayName = planName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                sidebarBadge.classList.remove('hidden');
-                sidebarBadge.className = `plan-badge-mini ${planType}`;
-                sidebarBadge.textContent = displayName;
-                sidebarBtnText.textContent = 'Manage Premium';
-                userAvatar.classList.add(planType === 'ultimate' ? 'ultimate-ring' : 'premium-ring');
-                sidebarAvatar.classList.add(planType === 'ultimate' ? 'ultimate-ring' : 'premium-ring');
-                if (!document.getElementById('premiumStatusTag')) {
-                    userExtraTags.innerHTML += `<span class="premium-status-badge ${planType === 'ultimate' ? 'ultimate' : ''}" id="premiumStatusTag"><i class="fas fa-crown"></i> ${displayName}</span>`;
-                }
-            } else {
-                sidebarBadge.classList.add('hidden');
-                sidebarBtnText.textContent = 'Buy Premium';
-                userAvatar.classList.remove('premium-ring', 'ultimate-ring');
-                sidebarAvatar.classList.remove('premium-ring', 'ultimate-ring');
-                const existing = document.getElementById('premiumStatusTag');
-                if (existing) existing.remove();
-            }
+        function showPrivacy() {
+            Swal.fire({
+                title: 'Privacy Policy',
+                html: '<div style="text-align:left;font-size:13px;line-height:1.7;"><p><b>TestMaster Pro</b> respects your privacy.</p><p>• We collect only essential data to provide services.</p><p>• Your data is stored securely and never shared.</p><p>• Contact support for data deletion requests.</p><p style="margin-top:10px;">📧 testmaster.helpdesk@gmail.com</p></div>',
+                icon: 'info',
+                confirmButtonText: 'Got it!',
+                confirmButtonColor: '#5b4cf0'
+            });
         }
 
-        async function loadNoticeCompact() {
-            try {
-                const res = await fetch('notices.json');
-                const notices = await res.json();
-                notices.sort((a, b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time));
-                if (notices.length > 0) {
-                    const latest = notices[0];
-                    document.getElementById('noticeContent').innerHTML = `<h4>${latest.headline}</h4><span><i class="far fa-clock"></i> ${latest.notification?.substring(0, 60)}...</span>`;
-                } else {
-                    document.getElementById('noticeContent').innerHTML = `<h4>No notices</h4><span>Stay tuned</span>`;
-                }
-            } catch (e) { document.getElementById('noticeContent').innerHTML = `<h4>Notices unavailable</h4><span>Check back later</span>`; }
+        function showTerms() {
+            Swal.fire({
+                title: 'Terms & Conditions',
+                html: '<div style="text-align:left;font-size:13px;line-height:1.7;"><p>• TestMaster Pro provides mock tests for educational purposes.</p><p>• Premium content requires a valid subscription.</p><p>• Users must not share or redistribute test content.</p><p>• Refund policy: Contact support within 48 hours.</p><p style="margin-top:10px;">By using this platform, you agree to these terms.</p></div>',
+                icon: 'info',
+                confirmButtonText: 'I Agree',
+                confirmButtonColor: '#5b4cf0'
+            });
+        }
+
+        function showSupport() {
+            Swal.fire({
+                title: 'Support & Help',
+                html: '<div style="text-align:center;font-size:14px;line-height:2;"><p><i class="fas fa-envelope" style="color:#ea4335;"></i> <b>Email:</b><br>testmaster.helpdesk@gmail.com</p><p><i class="fab fa-telegram-plane" style="color:#26a7de;"></i> <b>Telegram:</b><br>@cuet007_bot</p><p><i class="fab fa-instagram" style="color:#e1306c;"></i> <b>Instagram:</b><br>@testmasterpro</p><p style="margin-top:8px;font-size:12px;color:#64748b;">We respond within 24 hours.</p></div>',
+                icon: 'question',
+                confirmButtonText: 'Close',
+                confirmButtonColor: '#5b4cf0'
+            });
         }
 
         async function loadMocks() {
@@ -2233,19 +2133,91 @@
                 const r = await fetch('mocks.json');
                 allMocks = await r.json();
                 renderExamButtons();
-                updateStatsForExam([]);
-            } catch (e) { document.getElementById('examButtons').innerHTML = '<span style="color:#b91c1c;">Error loading exams</span>'; }
+                updateStats([]);
+            } catch (e) {
+                document.getElementById('examButtons').innerHTML =
+                    '<span style="color:#b91c1c;">Error loading exams</span>';
+            }
+        }
+
+        async function loadUserResults() {
+            try {
+                const r = await fetch(
+                    `${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const d = await r.json();
+                if (d.success) { userResults = d.results || [];
+                    updateStats([]); }
+            } catch (e) { console.warn('Results fetch failed'); }
+        }
+
+        async function loadPremium() {
+            try {
+                if (user.premiumPlans && user.premiumPlans.length > 0) userPremiumPlans = user.premiumPlans;
+                const r = await fetch(
+                    `${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user.username)}`);
+                const d = await r.json();
+                if (d.success && d.premiumPlans && d.premiumPlans.length > 0) {
+                    userPremiumPlans = d.premiumPlans;
+                    user.premiumPlans = d.premiumPlans;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    updatePremiumUI();
+                } else updatePremiumUI(false);
+            } catch (e) { updatePremiumUI(false); }
+        }
+
+        function updatePremiumUI(hasPremium = true) {
+            const badge = document.getElementById('sidebarPlanBadgeMini');
+            const btnText = document.getElementById('sidebarPremiumBtnText');
+            const ua = document.getElementById('userInitial');
+            const sa = document.getElementById('sidebarAvatar');
+            if (hasPremium && userPremiumPlans.length > 0) {
+                const plan = userPremiumPlans[0];
+                const pt = plan.planType || 'premium';
+                const dn = (plan.planName || pt).replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                badge.classList.remove('hidden');
+                badge.className = `plan-badge-mini ${pt}`;
+                badge.textContent = dn;
+                btnText.textContent = 'Manage Premium';
+                ua.classList.add(pt === 'ultimate' ? 'ultimate-ring' : 'premium-ring');
+                sa.classList.add(pt === 'ultimate' ? 'ultimate-ring' : 'premium-ring');
+                if (!document.getElementById('premiumStatusTag')) {
+                    userExtra.innerHTML +=
+                        `<span class="premium-status-badge ${pt==='ultimate'?'ultimate':''}" id="premiumStatusTag"><i class="fas fa-crown"></i> ${dn}</span>`;
+                }
+            } else {
+                badge.classList.add('hidden');
+                btnText.textContent = 'Buy Premium';
+                ua.classList.remove('premium-ring', 'ultimate-ring');
+                sa.classList.remove('premium-ring', 'ultimate-ring');
+                const ex = document.getElementById('premiumStatusTag');
+                if (ex) ex.remove();
+            }
+        }
+
+        async function loadNotice() {
+            try {
+                const r = await fetch('notices.json');
+                const notices = await r.json();
+                notices.sort((a, b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time));
+                if (notices.length > 0) {
+                    const latest = notices[0];
+                    document.getElementById('noticeContent').innerHTML =
+                        `<h4>${latest.headline}</h4><span><i class="far fa-clock"></i> ${latest.notification?.substring(0,60)}...</span>`;
+                } else document.getElementById('noticeContent').innerHTML =
+                    '<h4>No notices</h4><span>Stay tuned for updates</span>';
+            } catch (e) {
+                document.getElementById('noticeContent').innerHTML =
+                    '<h4>New: Physics Mock Tests Live!</h4><span><i class="far fa-clock"></i> Just now</span>';
+            }
         }
 
         function renderExamButtons() {
             const exams = [...new Set(allMocks.map(m => m.exam))];
-            const container = document.getElementById('examButtons');
-            container.innerHTML = exams.map(exam => `<button class="exam-btn" onclick="selectExam('${exam}', this)">${getExamIcon(exam)} ${exam}</button>`).join('');
-        }
-
-        function getExamIcon(e) {
-            const icons = { 'SSC': '🏛️', 'UPSC': '🇮🇳', 'CUET': '🎓', 'JEE': '⚡', 'NEET': '💊', 'Banking': '🏦', 'Railway': '🚂' };
-            return icons[e] || '📝';
+            document.getElementById('examButtons').innerHTML = exams.map(exam => {
+                const icons = { 'SSC': '🏛️', 'UPSC': '🇮🇳', 'CUET': '🎓', 'JEE': '⚡', 'NEET': '💊',
+                    'Banking': '🏦', 'Railway': '🚂' };
+                return `<button class="exam-btn" onclick="selectExam('${exam.replace(/'/g,"\\'")}',this)">${icons[exam]||'📝'} ${exam}</button>`;
+            }).join('');
         }
 
         function selectExam(exam, btn) {
@@ -2253,62 +2225,93 @@
             if (selectedExam === exam) {
                 selectedExam = '';
                 document.getElementById('filterBar').classList.add('hidden');
-                document.getElementById('testGrid').innerHTML = '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
-                updateStatsForExam([]);
+                document.getElementById('testGrid').innerHTML =
+                    '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
+                updateStats([]);
             } else {
                 selectedExam = exam;
                 btn.classList.add('selected');
+                btn.style.animation = 'none';
+                btn.offsetHeight;
+                btn.style.animation = 'selectPop 0.3s ease-out';
                 document.getElementById('filterBar').classList.remove('hidden');
                 const filtered = allMocks.filter(m => m.exam === exam);
                 populateSubjectFilter(filtered);
                 displayTests(filtered);
-                updateStatsForExam(filtered);
+                updateStats(filtered);
             }
         }
 
         function populateSubjectFilter(tests) {
-            const subjects = [...new Set(tests.map(t => t.subject))];
-            const subjectSelect = document.getElementById('subjectFilter');
-            subjectSelect.innerHTML = '<option value="">📖 All Subjects</option>';
-            subjects.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; subjectSelect.appendChild(opt); });
+            const subjects = [...new Set(tests.map(t => t.subject))].sort();
+            const sel = document.getElementById('subjectFilter');
+            sel.innerHTML = '<option value="">📖 All Subjects</option>';
+            subjects.forEach(s => { const o = document.createElement('option');
+                o.value = s;
+                o.textContent = s;
+                sel.appendChild(o); });
             document.getElementById('chapterFilter').innerHTML = '<option value="">📑 All Chapters</option>';
             document.getElementById('searchInput').value = '';
+            document.getElementById('typeFilter').value = '';
+        }
+
+        function onSubjectChange() {
+            const subject = document.getElementById('subjectFilter').value;
+            let filtered = allMocks;
+            if (selectedExam) filtered = filtered.filter(m => m.exam === selectedExam);
+            if (subject) filtered = filtered.filter(m => m.subject === subject);
+            const chapters = [...new Set(filtered.map(m => m.chapter).filter(Boolean))].sort();
+            const sel = document.getElementById('chapterFilter');
+            sel.innerHTML = '<option value="">📑 All Chapters</option>';
+            chapters.forEach(ch => { const o = document.createElement('option');
+                o.value = ch;
+                o.textContent = ch;
+                sel.appendChild(o); });
+            applyFilters();
         }
 
         function applyFilters() {
             if (!selectedExam) return;
+            let filtered = allMocks.filter(m => m.exam === selectedExam);
             const subject = document.getElementById('subjectFilter').value;
             const chapter = document.getElementById('chapterFilter').value;
+            const type = document.getElementById('typeFilter').value;
             const search = document.getElementById('searchInput').value.toLowerCase();
-            let filtered = allMocks.filter(m => m.exam === selectedExam);
-            if (subject) {
-                filtered = filtered.filter(m => m.subject === subject);
-                const chapters = [...new Set(filtered.map(m => m.chapter))];
-                const chapterSelect = document.getElementById('chapterFilter');
-                chapterSelect.innerHTML = '<option value="">📑 All Chapters</option>';
-                chapters.forEach(ch => { const opt = document.createElement('option'); opt.value = ch; opt.textContent = ch; chapterSelect.appendChild(opt); });
-            }
+            if (subject) filtered = filtered.filter(m => m.subject === subject);
             if (chapter) filtered = filtered.filter(m => m.chapter === chapter);
-            if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode.toLowerCase().includes(search));
+            if (type) filtered = filtered.filter(m => m.type === type);
+            if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode
+                .toLowerCase().includes(search));
             displayTests(filtered);
         }
 
-        function viewLeaderboard(testCode, exam) {
-            localStorage.setItem('current_exam', exam);
-            window.location.href = `leaderboard.html?testCode=${encodeURIComponent(testCode)}&exam=${encodeURIComponent(exam)}`;
+        function clearAllFilters() {
+            selectedExam = '';
+            document.querySelectorAll('#examButtons .exam-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('filterBar').classList.add('hidden');
+            document.getElementById('subjectFilter').value = '';
+            document.getElementById('chapterFilter').innerHTML = '<option value="">📑 All Chapters</option>';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('testGrid').innerHTML =
+                '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
+            updateStats([]);
         }
 
-        function hasUserAccess(test) {
+        function hasAccess(test) {
             if (test.type === 'free' || !test.type) return true;
             if (userPremiumPlans.length > 0) return true;
             if (test.requiredPlan) return userPremiumPlans.some(p => p.planType === test.requiredPlan);
             return false;
         }
 
-        function getTestTypeBadge(test) {
-            if (!test.type || test.type === 'free') return '<span class="badge-type badge-free"><i class="fas fa-unlock"></i> Free</span>';
-            if (test.requiredPlan === 'premium_plus') return '<span class="badge-type badge-premium-plus"><i class="fas fa-star"></i> Premium Plus</span>';
-            if (test.requiredPlan === 'ultimate') return '<span class="badge-type badge-ultimate"><i class="fas fa-gem"></i> Ultimate</span>';
+        function getTypeBadge(test) {
+            if (!test.type || test.type === 'free')
+                return '<span class="badge-type badge-free"><i class="fas fa-unlock"></i> Free</span>';
+            if (test.requiredPlan === 'premium_plus')
+                return '<span class="badge-type badge-premium-plus"><i class="fas fa-star"></i> Premium Plus</span>';
+            if (test.requiredPlan === 'ultimate')
+                return '<span class="badge-type badge-ultimate"><i class="fas fa-gem"></i> Ultimate</span>';
             return '<span class="badge-type badge-premium"><i class="fas fa-crown"></i> Premium</span>';
         }
 
@@ -2321,128 +2324,165 @@
             return '';
         }
 
-        function getTestCardClass(test) {
-            if (test.type === 'paid') {
-                if (test.requiredPlan === 'premium_plus' || test.requiredPlan === 'ultimate') return 'premium-card plus-card';
-                return 'premium-card';
-            }
-            return '';
+        // Parse difficulty from mock.json (optional)
+        function getDifficultyInfo(difficulty) {
+            if (!difficulty || typeof difficulty !== 'string') return null;
+            const d = difficulty.trim();
+            const map = {
+                'easy': { cls: 'diff-easy', emoji: '✅', label: 'Easy' },
+                'moderate': { cls: 'diff-moderate', emoji: '📊', label: 'Moderate' },
+                'hard': { cls: 'diff-hard', emoji: '🔥', label: 'Hard' },
+                'previous year': { cls: 'diff-prev-year', emoji: '📜', label: 'Prev Year' },
+                'high difficulty': { cls: 'diff-hard', emoji: '🔥', label: 'High Difficulty' },
+                'beginner': { cls: 'diff-easy', emoji: '✅', label: 'Beginner' },
+                'advanced': { cls: 'diff-hard', emoji: '🔥', label: 'Advanced' },
+                'medium': { cls: 'diff-moderate', emoji: '📊', label: 'Medium' },
+            };
+            const key = d.toLowerCase();
+            if (map[key]) return map[key];
+            // Default fallback if unknown string
+            return { cls: 'diff-moderate', emoji: '📊', label: d };
         }
 
         function displayTests(tests) {
             const grid = document.getElementById('testGrid');
-            if (!tests.length) { grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i> No tests match filters</div>'; return; }
+            if (!tests.length) {
+                grid.innerHTML =
+                    '<div class="empty-state"><i class="fas fa-search"></i> No tests match your filters.<br><small style="font-size:11px;">Try adjusting subject, chapter, or search.</small></div>';
+                return;
+            }
             const attemptedCodes = userResults.map(r => r.testCode);
-            grid.innerHTML = tests.map((test, index) => {
+            grid.innerHTML = tests.map((test, idx) => {
                 const attempted = attemptedCodes.includes(test.testCode);
                 const userResult = userResults.find(r => r.testCode === test.testCode);
-                const hasAccess = hasUserAccess(test);
+                const accessible = hasAccess(test);
                 const premiumIcon = getPremiumIcon(test);
-                const cardClass = getTestCardClass(test);
-                let scorePreview = '';
-                if (userResult) scorePreview = `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks || test.totalQuestions * test.marksPerQuestion} (${userResult.accuracy}%)</div>`;
-                const startBtn = hasAccess
-                    ? `<button class="start-btn" onclick="startTest('${test.file}','${test.testCode}','${test.exam}')"><i class="fas fa-play-circle"></i> ${attempted ? 'Retake' : 'Start'}</button>`
-                    : `<button class="start-btn locked" onclick="handleLockedTest('${test.requiredPlan || 'premium'}')"><i class="fas fa-lock"></i> Unlock ${(test.requiredPlan || 'premium').replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())}</button>`;
+                const cardClass = test.type === 'paid' ?
+                    (test.requiredPlan === 'premium_plus' || test.requiredPlan === 'ultimate' ?
+                        'premium-card plus-card' : 'premium-card') : '';
+
+                // Difficulty from JSON (optional)
+                const diffInfo = getDifficultyInfo(test.difficulty);
+                const diffTagHTML = diffInfo ?
+                    `<span class="difficulty-tag ${diffInfo.cls}">${diffInfo.emoji} ${diffInfo.label}</span>` : '';
+
+                // Language from JSON (optional)
+                const lang = test.language;
+                const langChipHTML = (lang && typeof lang === 'string' && lang.trim()) ?
+                    `<span class="chip language-chip"><i class="fas fa-globe"></i> ${lang.trim()}</span>` : '';
+
+                const scorePreview = userResult ?
+                    `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks||test.totalQuestions*test.marksPerQuestion} (${userResult.accuracy}%)</div>` :
+                    '';
+
+                const attemptBtn = accessible ?
+                    `<button class="attempt-btn" onclick="openInstructions('${test.file.replace(/'/g,"\\'")}','${test.testCode.replace(/'/g,"\\'")}','${test.exam.replace(/'/g,"\\'")}','${test.testName.replace(/'/g,"\\'")}',${test.duration||30},${test.totalQuestions},${test.marksPerQuestion},${test.negativeMarking})"><i class="fas fa-play-circle"></i> ${attempted?'Retake':'Attempt Now'}</button>` :
+                    `<button class="attempt-btn locked" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock ${(test.requiredPlan||'premium').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</button>`;
+
+                // No test code display
                 return `
-                    <div class="test-card ${cardClass}" style="animation-delay:${index * 0.04}s;">
-                        ${premiumIcon ? `<div class="premium-badge">${premiumIcon}</div>` : ''}
-                        <span class="badge-exam">${test.exam}</span>
-                        ${getTestTypeBadge(test)}
-                        <h4>${test.testName}</h4>
-                        <div class="meta-row">
-                            <span class="chip"><i class="fas fa-book"></i> ${test.subject}</span>
-                            <span class="chip"><i class="fas fa-list"></i> ${test.chapter}</span>
-                            <span class="chip"><i class="fas fa-clock"></i> ${test.duration||30}m</span>
-                        </div>
-                        <div class="meta-row">
-                            <span class="chip"><i class="fas fa-star"></i> +${test.marksPerQuestion} / -${test.negativeMarking}</span>
-                            <span class="chip"><i class="fas fa-question-circle"></i> ${test.totalQuestions} Qs</span>
-                        </div>
-                        <div class="test-code">📋 ${test.testCode}</div>
-                        ${scorePreview}
-                        <div class="action-buttons">
-                            ${startBtn}
-                            <button class="leaderboard-btn" onclick="viewLeaderboard('${test.testCode}','${test.exam}')"><i class="fas fa-trophy"></i> Rank</button>
-                        </div>
-                    </div>`;
+                <div class="test-card ${cardClass}" style="animation-delay:${idx*0.04}s">
+                    ${premiumIcon?`<div class="premium-badge">${premiumIcon}</div>`:''}
+                    <span class="badge-exam">${test.exam}</span>
+                    ${getTypeBadge(test)}
+                    ${diffTagHTML}
+                    <h4>${test.testName}</h4>
+                    <div class="meta-row">
+                        <span class="chip"><i class="fas fa-book"></i> ${test.subject}</span>
+                        <span class="chip"><i class="fas fa-list"></i> ${test.chapter||'General'}</span>
+                        ${langChipHTML}
+                    </div>
+                    <div class="meta-row">
+                        <span class="chip"><i class="fas fa-clock"></i> ${test.duration||30}m</span>
+                        <span class="chip"><i class="fas fa-star"></i> +${test.marksPerQuestion} / -${test.negativeMarking}</span>
+                        <span class="chip"><i class="fas fa-question-circle"></i> ${test.totalQuestions} Qs</span>
+                    </div>
+                    ${scorePreview}
+                    <div class="action-buttons">
+                        ${attemptBtn}
+                        <button class="leaderboard-btn" onclick="viewLeaderboard('${test.testCode.replace(/'/g,"\\'")}','${test.exam.replace(/'/g,"\\'")}')"><i class="fas fa-trophy"></i> Rank</button>
+                    </div>
+                </div>`;
             }).join('');
         }
 
-        function handleLockedTest(requiredPlan) {
+        function handleLockedTest(plan) {
             Swal.fire({
                 title: '🔒 Premium Test',
-                text: `This test requires ${requiredPlan.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase())} plan. Please upgrade to access.`,
+                text: `This test requires ${plan.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())} plan. Upgrade to access all premium content.`,
                 icon: 'info',
                 confirmButtonText: 'View Plans',
                 confirmButtonColor: '#f59e0b',
                 showCancelButton: true,
                 cancelButtonText: 'Maybe Later'
-            }).then((result) => { if (result.isConfirmed) window.location.href = 'payment.html'; });
+            }).then(r => { if (r.isConfirmed) window.location.href = 'payment.html'; });
         }
 
-        function startTest(file, code, exam) {
-            localStorage.setItem('last_mock_file', file);
+        function viewLeaderboard(code, exam) {
             localStorage.setItem('current_exam', exam);
-            window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(code)}`;
+            window.location.href =
+                `leaderboard.html?testCode=${encodeURIComponent(code)}&exam=${encodeURIComponent(exam)}`;
         }
 
-        function updateStatsForExam(tests = []) {
-            const examFilter = selectedExam;
-            let relevantResults = userResults;
-            if (examFilter) {
-                const examMockCodes = allMocks.filter(m => m.exam === examFilter).map(m => m.testCode);
-                relevantResults = userResults.filter(r => examMockCodes.includes(r.testCode));
-            }
-            const totalAvailable = tests.length || (examFilter ? allMocks.filter(m => m.exam === examFilter).length : allMocks.length);
-            document.getElementById('totalTests').textContent = totalAvailable;
-            if (relevantResults.length) {
-                document.getElementById('completedTests').textContent = relevantResults.length;
-                const accuracies = relevantResults.map(r => parseFloat(r.accuracy) || 0);
-                document.getElementById('avgScore').textContent = Math.round(accuracies.reduce((a, b) => a + b, 0) / accuracies.length) + '%';
-                document.getElementById('bestScore').textContent = Math.max(...accuracies) + '%';
-            } else {
-                document.getElementById('completedTests').textContent = '0';
-                document.getElementById('avgScore').textContent = '0%';
-                document.getElementById('bestScore').textContent = '0%';
-            }
+        function openInstructions(file, code, exam, name, duration, totalQs, marks, negative) {
+            currentTestData = { file, code, exam };
+            document.getElementById('sheetTestName').textContent = name;
+            document.getElementById('sheetTestCode').textContent = '#' + code;
+            document.getElementById('sheetDuration').textContent = duration;
+            document.getElementById('sheetQs').textContent = totalQs;
+            document.getElementById('sheetPositive').textContent = '+' + marks;
+            document.getElementById('sheetNegative').textContent = '-' + negative;
+            document.getElementById('sheetOverlay').classList.add('active');
         }
 
-        async function loadUserResults() {
-            try {
-                const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
-                const data = await res.json();
-                if (data.success) { userResults = data.results; updateStatsForExam([]); }
-            } catch (e) { console.warn('Results fetch failed:', e); }
-        }
+        function closeSheet() { document.getElementById('sheetOverlay').classList.remove('active'); }
 
-        function openInstructions() {
-            document.getElementById('instructionOverlay').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeInstructions(event) {
-            if (event.target === document.getElementById('instructionOverlay')) {
-                document.getElementById('instructionOverlay').classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        }
-        function closeInstructionsDirect() {
-            document.getElementById('instructionOverlay').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const overlay = document.getElementById('instructionOverlay');
-                const sidebarOverlay = document.getElementById('sidebarOverlay');
-                if (!overlay.classList.contains('hidden')) { overlay.classList.add('hidden'); document.body.style.overflow = ''; }
-                if (sidebarOverlay.classList.contains('active')) closeSidebarDirect();
-            }
+        document.getElementById('finalStartBtn').addEventListener('click', () => {
+            localStorage.setItem('last_mock_file', currentTestData.file);
+            localStorage.setItem('current_exam', currentTestData.exam);
+            window.location.href =
+                `test.html?file=${encodeURIComponent(currentTestData.file)}&testCode=${encodeURIComponent(currentTestData.code)}`;
         });
 
-        function createBackgroundBubbles() {
-            const container = document.getElementById('bgAnimation');
-            const bubbleColors = [
+        document.getElementById('sheetOverlay').addEventListener('click', function(e) { if (e.target === this)
+                closeSheet(); });
+
+        function updateStats(tests) {
+            const examFilter = selectedExam;
+            let relevant = userResults;
+            if (examFilter) {
+                const codes = allMocks.filter(m => m.exam === examFilter).map(m => m.testCode);
+                relevant = userResults.filter(r => codes.includes(r.testCode));
+            }
+            const totalAvail = tests.length || (examFilter ? allMocks.filter(m => m.exam === examFilter).length : allMocks
+                .length);
+            document.getElementById('totalTests').textContent = totalAvail;
+            if (relevant.length) {
+                document.getElementById('attemptedTests').textContent = relevant.length;
+                const accs = relevant.map(r => parseFloat(r.accuracy) || 0);
+                const avg = Math.round(accs.reduce((a, b) => a + b, 0) / accs.length);
+                document.getElementById('avgScore').innerHTML = `${avg}% <span id="scoreTrend" class="trend-neutral"></span>`;
+                document.getElementById('bestScore').textContent = Math.max(...accs) + '%';
+                const trendEl = document.getElementById('scoreTrend');
+                if (trendEl && previousAvgScore > 0) {
+                    if (avg > previousAvgScore) trendEl.className = 'trend-up';
+                    else if (avg < previousAvgScore) trendEl.className = 'trend-down';
+                    else trendEl.className = 'trend-neutral';
+                    trendEl.innerHTML = avg > previousAvgScore ? '<i class="fas fa-arrow-up"></i>' : avg <
+                        previousAvgScore ? '<i class="fas fa-arrow-down"></i>' : '';
+                }
+                previousAvgScore = avg;
+            } else {
+                document.getElementById('attemptedTests').textContent = '0';
+                document.getElementById('avgScore').innerHTML = '0% <span class="trend-neutral"></span>';
+                document.getElementById('bestScore').textContent = '0%';
+                previousAvgScore = 0;
+            }
+        }
+
+        function createBg() {
+            const c = document.getElementById('bgAnimation');
+            const colors = [
                 'radial-gradient(circle at 30% 30%, rgba(91,76,240,0.18), rgba(139,92,246,0.06))',
                 'radial-gradient(circle at 30% 30%, rgba(6,182,212,0.16), rgba(16,185,129,0.05))',
                 'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.14), rgba(251,191,36,0.04))',
@@ -2450,23 +2490,46 @@
                 'radial-gradient(circle at 30% 30%, rgba(16,185,129,0.15), rgba(52,211,153,0.04))',
                 'radial-gradient(circle at 30% 30%, rgba(239,68,68,0.10), rgba(248,113,113,0.03))',
             ];
-            const bubbleCount = window.innerWidth < 480 ? 8 : 12;
-            for (let i = 0; i < bubbleCount; i++) {
-                const bubble = document.createElement('div'); bubble.classList.add('bg-bubble');
-                const size = Math.floor(Math.random() * 160) + 70;
-                bubble.style.width = size + 'px'; bubble.style.height = size + 'px';
-                bubble.style.left = Math.random() * 90 + '%'; bubble.style.top = Math.random() * 85 + '%';
-                bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
-                bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
-                bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
-                bubble.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math.random() * 3)];
-                container.appendChild(bubble);
+            const count = window.innerWidth < 480 ? 8 : 12;
+            for (let i = 0; i < count; i++) {
+                const b = document.createElement('div');
+                b.className = 'bg-bubble';
+                const s = Math.floor(Math.random() * 160) + 70;
+                b.style.width = s + 'px';
+                b.style.height = s + 'px';
+                b.style.left = Math.random() * 90 + '%';
+                b.style.top = Math.random() * 85 + '%';
+                b.style.background = colors[Math.floor(Math.random() * colors.length)];
+                b.style.setProperty('--dur', (Math.random() * 15 + 10) + 's');
+                b.style.setProperty('--delay', (Math.random() * 8) + 's');
+                b.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math.random() *
+                    3)];
+                c.appendChild(b);
             }
         }
 
-        loadNoticeCompact(); loadMocks(); loadUserResults(); loadUserPremiumStatus(); createBackgroundBubbles();
-        let resizeTimeout;
-        window.addEventListener('resize', () => { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(() => { document.getElementById('bgAnimation').innerHTML = ''; createBackgroundBubbles(); }, 400); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const so = document.getElementById('sidebarOverlay');
+                if (so.classList.contains('active')) closeSidebarDirect();
+                if (document.getElementById('sheetOverlay').classList.contains('active')) closeSheet();
+            }
+        });
+
+        let resizeT;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeT);
+            resizeT = setTimeout(() => { document.getElementById('bgAnimation').innerHTML = '';
+                createBg(); }, 400);
+        });
+
+        (function init() {
+            loadMocks();
+            loadUserResults();
+            loadPremium();
+            loadNotice();
+            createBg();
+        })();
     </script>
 </body>
 </html>
