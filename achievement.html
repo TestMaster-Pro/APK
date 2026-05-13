@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TestMaster Pro · Achievements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #5b4cf0;
+            --primary-dark: #4338ca;
+            --primary-light: #eef0ff;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray-800: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --light: #ffffff;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --card-radius: 20px;
+            --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 28px -6px rgba(0, 0, 0, 0.09);
+            --shadow-lg: 0 18px 40px -10px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 24px 52px -14px rgba(0, 0, 0, 0.16);
+            --shadow-primary: 0 10px 28px -6px rgba(91, 76, 240, 0.3);
+            --shadow-success: 0 8px 22px -4px rgba(16, 185, 129, 0.25);
+            --font-sans: 'Poppins', sans-serif;
+            --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-sidebar: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.55);
+            --glass-blur: 18px;
+            --sidebar-width: 300px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: #f0f4ff;
+            min-height: 100vh;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body.sidebar-open {
+            overflow: hidden;
+        }
+
+        /* Background animations */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatBubble var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0.35;
+            will-change: transform;
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+            20% { transform: translateY(-35px) translateX(18px) scale(1.06); }
+            40% { transform: translateY(-60px) translateX(-14px) scale(0.94); }
+            60% { transform: translateY(-25px) translateX(22px) scale(1.08); }
+            80% { transform: translateY(-50px) translateX(-20px) scale(0.92); }
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+        .grid-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; opacity: 0.025;
+            background-image:
+                linear-gradient(rgba(91,76,240,0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(91,76,240,0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* SIDEBAR (identical to dashboard) */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.55); z-index: 250;
+            opacity: 0; visibility: hidden;
+            transition: opacity var(--transition-sidebar), visibility var(--transition-sidebar);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        .sidebar {
+            position: fixed; top: 0; left: 0; height: 100%;
+            width: var(--sidebar-width); max-width: 84vw;
+            background: #ffffff; z-index: 251;
+            transform: translateX(-105%);
+            transition: transform var(--transition-sidebar);
+            display: flex; flex-direction: column;
+            box-shadow: 8px 0 40px rgba(0,0,0,0.18), 2px 0 12px rgba(0,0,0,0.06);
+            border-radius: 0 20px 20px 0; overflow: hidden;
+        }
+        .sidebar-overlay.active .sidebar { transform: translateX(0); }
+        .sidebar-brand {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7, #8b5cf6);
+            padding: 20px 20px 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+        }
+        .sidebar-logo {
+            width: 44px; height: 44px; background: rgba(255,255,255,0.22); border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff;
+            flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+        }
+        .sidebar-brand-text { color: #fff; font-weight: 800; font-size: 17px; letter-spacing: -0.3px; line-height: 1.2; }
+        .sidebar-brand-text small { display: block; font-weight: 400; font-size: 10px; opacity: 0.8; }
+        .sidebar-close-btn {
+            position: absolute; top: 16px; right: 14px; width: 34px; height: 34px;
+            border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: #fff;
+            cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+            transition: var(--transition-fast); backdrop-filter: blur(4px);
+        }
+        .sidebar-close-btn:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
+        .sidebar-user-card {
+            padding: 16px 20px; background: #fafbff; border-bottom: 1px solid #f1f5f9;
+            display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+        }
+        .sidebar-avatar {
+            width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #eef0ff, #e0e7ff);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px;
+            color: #5b4cf0; flex-shrink: 0; box-shadow: 0 3px 12px rgba(91,76,240,0.12); border: 2px solid #fff;
+            overflow: hidden;
+        }
+        .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+        .sidebar-user-info { overflow: hidden; }
+        .sidebar-user-info .name { font-weight: 700; font-size: 14px; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-user-info .tag { font-size: 11px; color: #5b4cf0; font-weight: 600; background: #eef0ff; padding: 2px 10px; border-radius: 20px; display: inline-block; margin-top: 3px; }
+        .sidebar-nav {
+            flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 3px;
+        }
+        .sidebar-nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #94a3b8; font-weight: 700; padding: 10px 10px 6px; }
+        .sidebar-nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px;
+            cursor: pointer; font-weight: 600; font-size: 13px; color: #475569;
+            transition: var(--transition-fast); text-decoration: none; border: none; background: transparent;
+            width: 100%; text-align: left; font-family: var(--font-sans); letter-spacing: -0.15px;
+        }
+        .sidebar-nav-item:hover { background: #f8fafc; color: #1e293b; transform: translateX(3px); }
+        .sidebar-nav-item:active { transform: scale(0.96); background: #f1f5f9; transition: 0.08s; }
+        .nav-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+        .nav-icon-tests { background: #eef0ff; color: #5b4cf0; }
+        .nav-icon-books { background: #fff7ed; color: #f97316; }
+        .nav-icon-results { background: #ecfdf5; color: #10b981; }
+        .nav-icon-chat { background: #f0f9ff; color: #06b6d4; }
+        .nav-icon-instructions { background: #fefce8; color: #ca8a04; }
+        .nav-icon-premium { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706; }
+        .nav-icon-achievements { background: #fdf2f8; color: #db2777; }
+        .nav-icon-profile { background: #fdf2f8; color: #db2777; }
+        .nav-icon-logout { background: #fef2f2; color: #dc2626; }
+        .sidebar-nav-item.logout-item:hover { background: #fef2f2; color: #dc2626; }
+        .sidebar-contact { padding: 14px 18px 18px; background: #fafbff; border-top: 1px solid #f1f5f9; flex-shrink: 0; }
+        .sidebar-contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #94a3b8; font-weight: 700; margin-bottom: 10px; }
+        .sidebar-contact-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; font-size: 11px; color: #475569; text-decoration: none; transition: var(--transition-fast); font-weight: 500; cursor: pointer; }
+        .sidebar-contact-item:hover { background: #f1f5f9; color: #1e293b; }
+        .sidebar-version { text-align: center; font-size: 10px; color: #cbd5e1; padding: 6px; flex-shrink: 0; }
+
+        /* NAVBAR (identical) */
+        .navbar {
+            background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+            color: var(--dark); position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04); border-bottom: 1px solid var(--glass-border);
+            gap: 8px; flex-wrap: nowrap;
+        }
+        .nav-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .hamburger-btn {
+            width: 38px; height: 38px; border-radius: 12px; background: #f1f5f9; border: none;
+            cursor: pointer; font-size: 18px; color: #475569; display: flex; align-items: center; justify-content: center;
+            transition: var(--transition-fast); flex-shrink: 0; font-family: var(--font-sans);
+        }
+        .hamburger-btn:hover { background: #e2e8f0; color: #1e293b; }
+        .hamburger-btn:active { transform: scale(0.9); transition: 0.08s; }
+        .nav-brand {
+            display: flex; align-items: center; gap: 8px;
+            font-size: clamp(15px, 3.2vw, 19px); font-weight: 800;
+            background: linear-gradient(135deg, #5b4cf0, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            white-space: nowrap; letter-spacing: -0.3px; cursor: pointer;
+        }
+        .nav-brand i { font-size: clamp(18px, 3.5vw, 22px); color: #5b4cf0; -webkit-text-fill-color: #5b4cf0; }
+        .nav-user { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; flex-shrink: 0; justify-content: flex-end; }
+        .user-avatar {
+            width: 34px; height: 34px; background: linear-gradient(135deg, #eef0ff, #e0e7ff); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px;
+            color: #5b4cf0; flex-shrink: 0; box-shadow: 0 2px 8px rgba(91,76,240,0.12); cursor: pointer;
+            transition: var(--transition-fast); overflow: hidden;
+        }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+        .user-avatar:hover { transform: scale(1.06); box-shadow: 0 4px 14px rgba(91,76,240,0.2); }
+        .nav-btn {
+            background: #f1f5f9; border: none; color: #334155; padding: 7px 12px; border-radius: 30px;
+            cursor: pointer; font-weight: 600; font-size: clamp(10px, 2.2vw, 12px);
+            font-family: var(--font-sans); transition: var(--transition-fast); display: flex; align-items: center;
+            gap: 5px; text-decoration: none; white-space: nowrap; min-height: 36px; letter-spacing: -0.1px;
+        }
+        .nav-btn:active { transform: scale(0.95); transition: 0.08s; }
+        .nav-btn:hover { background: #e2e8f0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .btn-chat { background: linear-gradient(135deg, #eef0ff, #e0e7ff); color: #5b4cf0; border: 1.5px solid rgba(91,76,240,0.15); }
+        .btn-logout { background: #fef2f2; color: #dc2626; border: 1.5px solid rgba(220,38,38,0.1); }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 14px 12px 28px; width: 100%; position: relative; z-index: 2;
+        }
+        @media (min-width: 480px) { .container { padding: 18px 18px 30px; } }
+        @media (min-width: 768px) { .container { padding: 22px 24px 32px; } }
+
+        .page-header {
+            background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur));
+            border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 16px;
+            box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; border: 1px solid var(--glass-border);
+            animation: cardSlideIn 0.5s ease-out;
+        }
+        @keyframes cardSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .page-header h1 { font-size: clamp(20px, 5vw, 26px); font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .page-header h1 i { color: #f59e0b; }
+        .achievement-count-badge {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1e293b;
+            padding: 8px 16px; border-radius: 40px; font-weight: 700; font-size: 14px;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .achievements-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px; margin-top: 8px; animation: cardSlideIn 0.6s ease-out;
+        }
+        .achievement-card {
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border-radius: var(--radius-xl); padding: 24px 20px;
+            box-shadow: var(--shadow-xs); transition: var(--transition-smooth);
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            border: 1.5px solid var(--glass-border); position: relative; overflow: hidden;
+        }
+        .achievement-card:hover {
+            transform: translateY(-6px); box-shadow: var(--shadow-lg);
+            border-color: rgba(245,158,11,0.4);
+        }
+        .achievement-icon {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; color: #d97706; margin-bottom: 16px;
+            box-shadow: 0 6px 20px rgba(245,158,11,0.3);
+            transition: var(--transition-bounce);
+        }
+        .achievement-card:hover .achievement-icon { transform: scale(1.1) rotate(5deg); }
+        .achievement-name {
+            font-weight: 700; font-size: 16px; margin-bottom: 6px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .achievement-date {
+            font-size: 12px; color: #64748b; display: flex; align-items: center; gap: 4px;
+        }
+        .empty-state {
+            text-align: center; padding: 60px 20px; color: #64748b;
+            font-size: clamp(14px, 2.6vw, 16px);
+            animation: fadeIn 0.5s ease-out;
+        }
+        .empty-state i { font-size: 48px; margin-bottom: 12px; display: block; opacity: 0.6; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .floating-instruction-btn {
+            position: fixed; bottom: 20px; right: 16px; z-index: 90;
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, #5b4cf0, #8b5cf6); color: white; border: none;
+            cursor: pointer; font-size: 20px; box-shadow: var(--shadow-lg);
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition-smooth);
+            animation: floatBtnPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes floatBtnPulse {
+            0%,100% { box-shadow: 0 8px 28px rgba(91,76,240,0.3); }
+            50% { box-shadow: 0 14px 38px rgba(91,76,240,0.5); }
+        }
+        .floating-instruction-btn:active { transform: scale(0.88); transition: 0.08s; }
+        .floating-instruction-btn:hover { transform: scale(1.06); box-shadow: 0 16px 40px rgba(91,76,240,0.45); }
+        @media (min-width: 480px) {
+            .floating-instruction-btn { width: 54px; height: 54px; font-size: 22px; bottom: 24px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+    <div class="grid-pattern"></div>
+    <div class="grain-overlay"></div>
+
+    <!-- SIDEBAR OVERLAY (same as dashboard) -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-text">TestMaster Pro<small>Smart Learning Platform</small></div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="sidebar-user-card">
+                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebarUserName">Student</div>
+                    <span class="tag" id="sidebarUserTag">Learner</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-label">Main Menu</div>
+                <button class="sidebar-nav-item" onclick="navigate('dashboard.html')"><span class="nav-icon nav-icon-tests"><i class="fas fa-book-open"></i></span><span>Dashboard</span></button>
+                <button class="sidebar-nav-item" onclick="navigate('book.html')"><span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span><span>Books & PYQ</span></button>
+                <button class="sidebar-nav-item" onclick="navigate('allresult.html')"><span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span><span>My Results</span></button>
+                <button class="sidebar-nav-item" onclick="navigate('chat.html')"><span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span><span>Chat</span></button>
+                <button class="sidebar-nav-item active-nav" onclick="navigate('achievements.html')"><span class="nav-icon nav-icon-achievements"><i class="fas fa-trophy"></i></span><span>Achievements</span></button>
+                <div class="sidebar-nav-label">Premium</div>
+                <button class="sidebar-nav-item" onclick="navigate('payment.html')"><span class="nav-icon nav-icon-premium"><i class="fas fa-crown"></i></span><span>Buy Premium</span></button>
+                <div class="sidebar-nav-label">Account</div>
+                <button class="sidebar-nav-item" onclick="navigate('profile.html')"><span class="nav-icon nav-icon-profile"><i class="fas fa-user-circle"></i></span><span>Profile</span></button>
+                <button class="sidebar-nav-item logout-item" onclick="logout()"><span class="nav-icon nav-icon-logout"><i class="fas fa-sign-out-alt"></i></span><span>Logout</span></button>
+            </nav>
+            <div class="sidebar-contact">
+                <div class="sidebar-contact-label">Contact Us</div>
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-contact-item" target="_blank"><i class="fas fa-envelope" style="color:#ea4335;"></i><span>testmaster.helpdesk@gmail.com</span></a>
+                <a href="https://t.me/cuet007_bot" class="sidebar-contact-item" target="_blank"><i class="fab fa-telegram-plane" style="color:#26a7de;"></i><span>@cuet007_bot</span></a>
+            </div>
+            <div class="sidebar-version">TestMaster Pro v2.0 • © 2025</div>
+        </aside>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
+        </div>
+        <div class="nav-user">
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Open menu">S</div>
+            <span id="welcomeUser">Welcome</span>
+            <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
+            <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-trophy"></i> My Achievements</h1>
+            <div class="achievement-count-badge" id="achievementCountDisplay">
+                <i class="fas fa-medal"></i> <span id="countNumber">0</span> Earned
+            </div>
+        </div>
+        <div id="achievementsContainer">
+            <div class="empty-state"><i class="fas fa-spinner fa-pulse"></i> Loading your achievements...</div>
+        </div>
+    </div>
+
+    <button class="floating-instruction-btn" onclick="openInstructions()" title="How to use"><i class="fas fa-question"></i></button>
+
+    <script>
+        // !!! IMPORTANT: Replace with your actual deployed Apps Script URL !!!
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyVPG4x6CSrtwpfI_LPRCjvCjCcN8ZY7d0Z2P3ef_e_BL2hatfDLbIpdStSIG69JhCggg/exec';  // e.g., 'https://script.google.com/macros/s/.../exec'
+
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) { window.location.href = 'index.html'; }
+
+        // Set avatar
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
+            }
+        }
+
+        setAvatarWithPic('userInitial', user);
+        setAvatarWithPic('sidebarAvatar', user);
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name}`;
+        document.getElementById('sidebarUserName').textContent = user.name;
+        document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
+
+        // Sidebar functions
+        function openSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('hidden'); overlay.classList.add('active');
+            document.body.classList.add('sidebar-open'); document.body.style.overflow = 'hidden';
+        }
+        function closeSidebar(event) { if (event.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+        function closeSidebarDirect() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('active'); document.body.classList.remove('sidebar-open');
+            document.body.style.overflow = ''; setTimeout(() => overlay.classList.add('hidden'), 350);
+        }
+        function navigate(url) { window.location.href = url; }
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+
+        // Fetch and display achievements
+        async function loadAchievements() {
+            const container = document.getElementById('achievementsContainer');
+            try {
+                const res = await fetch(`${API_URL}?action=getAchievements&username=${encodeURIComponent(user.username)}`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error || 'Failed to fetch achievements');
+                
+                const achievements = data.achievements || [];
+                document.getElementById('countNumber').textContent = achievements.length;
+
+                if (achievements.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-trophy" style="color:#f59e0b;"></i>
+                            <p>No achievements yet!</p>
+                            <p style="font-size:13px;">Complete tests, achieve perfect scores, or maintain a streak to earn badges.</p>
+                        </div>`;
+                    return;
+                }
+
+                // Icons mapping based on achievement name keywords
+                const iconMap = {
+                    'Perfect': 'fa-star',
+                    'Speed': 'fa-bolt',
+                    'Accuracy': 'fa-bullseye',
+                    'Streak': 'fa-fire',
+                    '10 Tests': 'fa-layer-group',
+                    'Master': 'fa-crown'
+                };
+                function getIcon(name) {
+                    for (let key in iconMap) {
+                        if (name.includes(key)) return iconMap[key];
+                    }
+                    return 'fa-medal';
+                }
+
+                let html = '<div class="achievements-grid">';
+                achievements.forEach(ach => {
+                    const date = new Date(ach.dateEarned);
+                    const formatted = date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+                    html += `
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <i class="fas ${getIcon(ach.name)}"></i>
+                            </div>
+                            <div class="achievement-name">${ach.name}</div>
+                            <div class="achievement-date"><i class="far fa-calendar-alt"></i> ${formatted}</div>
+                        </div>`;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i>
+                        <p>Failed to load achievements.</p>
+                        <p style="font-size:13px;">${error.message}</p>
+                    </div>`;
+            }
+        }
+
+        // Background animation
+        function createBackgroundBubbles() {
+            const container = document.getElementById('bgAnimation');
+            const bubbleColors = [
+                'radial-gradient(circle at 30% 30%, rgba(91,76,240,0.18), rgba(139,92,246,0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(6,182,212,0.16), rgba(16,185,129,0.05))',
+                'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.14), rgba(251,191,36,0.04))',
+            ];
+            const count = window.innerWidth < 480 ? 8 : 12;
+            for (let i = 0; i < count; i++) {
+                const bubble = document.createElement('div'); bubble.classList.add('bg-bubble');
+                const size = Math.floor(Math.random() * 160) + 70;
+                bubble.style.width = size + 'px'; bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 90 + '%'; bubble.style.top = Math.random() * 85 + '%';
+                bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+                bubble.style.setProperty('--dur', (Math.random() * 10 + 10) + 's');
+                bubble.style.setProperty('--delay', (Math.random() * 6) + 's');
+                bubble.style.animationName = 'floatBubble';
+                container.appendChild(bubble);
+            }
+        }
+
+        // Instructions modal (optional)
+        function openInstructions() {
+            Swal.fire({
+                title: 'Achievements Guide',
+                html: `
+                    <div style="text-align:left; font-size:14px;">
+                        <p><i class="fas fa-star" style="color:#f59e0b;"></i> <b>Perfect Score</b> – Score full marks on any test.</p>
+                        <p><i class="fas fa-layer-group" style="color:#8b5cf6;"></i> <b>10 Tests</b> – Complete 10 tests.</p>
+                        <p><i class="fas fa-bolt" style="color:#06b6d4;"></i> <b>Speed Demon</b> – Finish a test in under 10 minutes with 100% accuracy.</p>
+                        <p><i class="fas fa-bullseye" style="color:#10b981;"></i> <b>Accuracy Master</b> – Achieve 100% accuracy on any test.</p>
+                        <p><i class="fas fa-fire" style="color:#ef4444;"></i> <b>7-Day Streak</b> – Submit a test result for 7 consecutive days.</p>
+                    </div>`,
+                icon: 'info',
+                confirmButtonText: 'Got it!',
+                confirmButtonColor: '#5b4cf0'
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sidebarOverlay = document.getElementById('sidebarOverlay');
+                if (sidebarOverlay.classList.contains('active')) closeSidebarDirect();
+            }
+        });
+
+        // Init
+        createBackgroundBubbles();
+        loadAchievements();
+
+        // Recreate bubbles on resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                document.getElementById('bgAnimation').innerHTML = '';
+                createBackgroundBubbles();
+            }, 400);
+        });
+    </script>
+</body>
+</html>
