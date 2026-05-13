@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Physics • Optics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-glow: #8b5cf6;
+            --accent: #ec4899;
+            --accent-glow: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(139, 92, 246, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.25);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.35);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #f3f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.15);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #fdf2f8 100%);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 { width: 350px; height: 350px; background: rgba(139, 92, 246, 0.2); top: -100px; right: -80px; animation-delay: 0s; }
+        .blob-2 { width: 280px; height: 280px; background: rgba(236, 72, 153, 0.18); bottom: -80px; left: -60px; animation-delay: -7s; }
+        .blob-3 { width: 220px; height: 220px; background: rgba(168, 85, 247, 0.16); top: 50%; left: 50%; animation-delay: -14s; }
+        @keyframes blobFloat {
+            0%,100% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(40px,-50px) scale(1.1); }
+            50% { transform: translate(-30px,-20px) scale(0.9); }
+            75% { transform: translate(20px,40px) scale(1.05); }
+        }
+
+        .bubbles-container {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            pointer-events: none; z-index:0; overflow:hidden;
+        }
+        .bubble {
+            position: absolute; bottom:-100px; border-radius:50%;
+            background: radial-gradient(circle at 30% 30%, rgba(139,92,246,0.2), rgba(236,72,153,0.06));
+            box-shadow: 0 0 20px rgba(139,92,246,0.12);
+            animation: floatUp linear infinite;
+        }
+        body.light-mode .bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(139,92,246,0.15), rgba(236,72,153,0.04));
+            box-shadow: 0 0 20px rgba(139,92,246,0.08);
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity:0.5; }
+            25% { transform: translateY(-250px) translateX(30px) scale(0.8); opacity:0.7; }
+            50% { transform: translateY(-500px) translateX(-20px) scale(1); opacity:0.6; }
+            75% { transform: translateY(-750px) translateX(15px) scale(0.9); opacity:0.35; }
+            100% { transform: translateY(-1000px) translateX(-10px) scale(0.3); opacity:0; }
+        }
+
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between; gap:10px;
+            margin-bottom:14px; flex-wrap:wrap;
+            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px; border-radius: var(--radius); border:1px solid var(--glass-border);
+            box-shadow: var(--shadow); transition: all 0.3s ease;
+        }
+        .top-bar:hover { box-shadow: var(--glow-sm); }
+        .test-title {
+            font-size:18px; font-weight:700; color:var(--text);
+            display:flex; align-items:center; gap:8px; letter-spacing:-0.3px;
+        }
+        .test-title .icon-dna { font-size:20px; animation: pulseIcon 2s ease-in-out infinite; }
+        @keyframes pulseIcon {
+            0%,100% { transform:scale(1); opacity:1; }
+            50% { transform:scale(1.15); opacity:0.75; }
+        }
+        .top-actions { display:flex; align-items:center; gap:8px; }
+        .lang-btn {
+            padding:8px 16px; border-radius:25px; border:2px solid #f97316;
+            background:var(--card); color:#f97316; cursor:pointer; font-weight:700; font-size:12px;
+            display:flex; align-items:center; gap:6px; transition: all 0.3s ease; backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover { box-shadow:0 0 14px rgba(249,115,22,0.35); transform:translateY(-1px); }
+        .lang-btn.active {
+            background: linear-gradient(135deg,#f97316,#ea580c); color:white; border-color:transparent;
+            box-shadow:0 0 16px rgba(249,115,22,0.4);
+        }
+        .theme-toggle {
+            width:40px; height:40px; border-radius:12px; border:1.5px solid var(--glass-border);
+            background:var(--glass-bg); color:var(--text); cursor:pointer; font-size:16px;
+            display:flex; align-items:center; justify-content:center; transition:all 0.3s ease;
+            box-shadow:var(--shadow); backdrop-filter:blur(8px);
+        }
+        .theme-toggle:hover { border-color:var(--accent); box-shadow:var(--glow-sm); transform:translateY(-1px); }
+        .theme-toggle:active { transform:scale(0.92); }
+        .timer-pill {
+            background:var(--glass-bg); backdrop-filter:blur(16px); border:1.5px solid var(--glass-border);
+            color:var(--text); padding:8px 16px; border-radius:12px; font-family:'Courier New',monospace;
+            font-size:17px; font-weight:700; display:flex; align-items:center; gap:7px;
+            box-shadow:var(--shadow); transition:all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.4); color:#fca5a5;
+            animation:pulse 0.8s infinite; box-shadow:0 0 18px rgba(239,68,68,0.3);
+        }
+        body.light-mode .timer-pill.warning { background:#fef2f2; border-color:#fecaca; color:#dc2626; }
+        @keyframes pulse {
+            0%,100% { transform:scale(1); }
+            50% { transform:scale(1.04); }
+        }
+
+        .info-row { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+        .info-chip {
+            display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:20px;
+            font-size:11px; font-weight:600; background:var(--glass-bg); backdrop-filter:blur(8px);
+            border:1px solid var(--glass-border); color:var(--text-secondary); transition:all 0.3s ease;
+        }
+        .info-chip i { font-size:11px; }
+        .info-chip.exam { color:#a78bfa; }
+        .info-chip.subject { color:#ec4899; }
+        .info-chip.marks { color:#fbbf24; }
+        body.light-mode .info-chip.exam { color:#7c3aed; }
+        body.light-mode .info-chip.subject { color:#be185d; }
+        body.light-mode .info-chip.marks { color:#d97706; }
+
+        .progress-card {
+            background:var(--glass-bg); backdrop-filter:blur(16px); border-radius:var(--radius);
+            padding:14px 18px; margin-bottom:14px; box-shadow:var(--shadow);
+            border:1px solid var(--glass-border); transition:all 0.3s ease;
+        }
+        .progress-card:hover { box-shadow:var(--glow-sm); }
+        .progress-header { display:flex; justify-content:space-between; margin-bottom:8px; font-size:12px; font-weight:600; color:var(--text-secondary); }
+        .progress-bar { height:6px; background:var(--border); border-radius:10px; overflow:hidden; }
+        .progress-fill {
+            height:100%; background:linear-gradient(90deg,#8b5cf6,#ec4899); border-radius:10px;
+            transition:width 0.5s ease; box-shadow:0 0 10px rgba(139,92,246,0.5);
+        }
+
+        .question-card {
+            background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+            border-radius:var(--radius); padding:24px; margin-bottom:14px; box-shadow:var(--shadow);
+            border:1px solid var(--glass-border); animation:slideIn 0.35s ease;
+            transition:transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover { box-shadow:var(--glow-md); transform:translateY(-2px); }
+        @keyframes slideIn {
+            from { opacity:0; transform:translateX(20px); }
+            to { opacity:1; transform:translateX(0); }
+        }
+        .question-card.swiping { transition:none; }
+
+        .q-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px; }
+        .q-badge {
+            background:linear-gradient(135deg,#8b5cf6,#7c3aed); color:white; padding:6px 16px;
+            border-radius:20px; font-weight:700; font-size:12px; box-shadow:0 0 14px rgba(139,92,246,0.35);
+        }
+        .q-marks {
+            font-weight:600; font-size:12px; color:#fbbf24; background:rgba(251,191,36,0.1);
+            padding:6px 14px; border-radius:15px; border:1px solid rgba(251,191,36,0.25);
+        }
+        body.light-mode .q-marks { color:#d97706; background:#fffbeb; border-color:#fde68a; }
+
+        .question-text {
+            font-size:15px; font-weight:500; line-height:1.7; color:var(--text);
+            background:var(--option-bg); padding:18px; border-radius:12px; border-left:4px solid #8b5cf6;
+            margin-bottom:18px; transition:all 0.3s ease;
+        }
+        .question-text .hindi-block { color:#fbbf24; font-size:14px; line-height:1.8; }
+        body.light-mode .question-text .hindi-block { color:#d97706; }
+
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .option-card {
+            display:flex; align-items:center; gap:12px; padding:14px 16px;
+            background:var(--option-bg); border:2px solid var(--border); border-radius:12px;
+            cursor:pointer; transition:all 0.25s ease; font-size:13px; font-weight:500;
+            color:var(--text); backdrop-filter:blur(4px);
+        }
+        .option-card:hover { border-color:#a78bfa; background:var(--hover-bg); transform:translateY(-2px); box-shadow:0 4px 16px rgba(139,92,246,0.2); }
+        .option-card.selected {
+            background:linear-gradient(135deg,#8b5cf6,#7c3aed); color:white; border-color:transparent;
+            transform:scale(1.02); box-shadow:0 6px 22px rgba(139,92,246,0.4);
+        }
+        .option-card.correct { background:#10b981 !important; color:white !important; border-color:transparent !important; box-shadow:0 4px 16px rgba(16,185,129,0.4) !important; }
+        .option-card.wrong { background:#ef4444 !important; color:white !important; border-color:transparent !important; box-shadow:0 4px 16px rgba(239,68,68,0.4) !important; animation:shake 0.4s ease; }
+        @keyframes shake {
+            0%,100% { transform:translateX(0); }
+            25% { transform:translateX(-4px); }
+            75% { transform:translateX(4px); }
+        }
+        .option-letter {
+            width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+            background:rgba(255,255,255,0.08); border-radius:8px; font-weight:800; font-size:13px;
+            color:#a78bfa; flex-shrink:0; transition:all 0.25s ease;
+        }
+        .option-card.selected .option-letter { background:rgba(255,255,255,0.2); color:white; }
+        .option-card.correct .option-letter,
+        .option-card.wrong .option-letter { background:rgba(255,255,255,0.25); color:white; }
+
+        .action-row { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+        .btn {
+            padding:10px 16px; border-radius:10px; border:1.5px solid var(--border);
+            font-weight:600; font-size:12px; cursor:pointer; transition:all 0.3s ease;
+            font-family:'Poppins',sans-serif; display:flex; align-items:center; gap:5px;
+            background:var(--glass-bg); backdrop-filter:blur(8px); color:var(--text);
+            flex:1; justify-content:center; min-width:60px;
+        }
+        .btn:hover { box-shadow:var(--glow-sm); transform:translateY(-2px); border-color:#a78bfa; }
+        .btn:active { transform:scale(0.95); }
+        .btn:disabled { opacity:0.4; pointer-events:none; }
+        .btn-mark { background:rgba(245,158,11,0.12); border-color:rgba(245,158,11,0.3); color:#fbbf24; }
+        .btn-mark:hover { box-shadow:0 0 14px rgba(245,158,11,0.3); }
+        .btn-clear { background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.25); color:#4ade80; }
+        .btn-clear:hover { box-shadow:0 0 14px rgba(16,185,129,0.3); }
+        body.light-mode .btn-mark { background:#fef3c7; border-color:#fde68a; color:#92400e; }
+        body.light-mode .btn-clear { background:#f0fdf4; border-color:#bbf7d0; color:#166534; }
+
+        .palette-card {
+            background:var(--glass-bg); backdrop-filter:blur(16px); border-radius:var(--radius);
+            padding:18px; box-shadow:var(--shadow); border:1px solid var(--glass-border);
+            margin-top:12px; transition:all 0.3s ease;
+        }
+        .palette-card:hover { box-shadow:var(--glow-sm); }
+        .palette-title { font-weight:700; margin-bottom:12px; color:var(--text); font-size:14px; display:flex; align-items:center; gap:7px; }
+        .palette-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:7px; margin-bottom:12px; }
+        .palette-num {
+            aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+            background:var(--option-bg); border-radius:8px; font-weight:700; font-size:11px;
+            cursor:pointer; transition:all 0.25s ease; border:2px solid transparent; color:var(--text);
+        }
+        .palette-num:hover { background:var(--hover-bg); transform:scale(1.1); box-shadow:var(--glow-sm); }
+        .palette-num.answered { background:linear-gradient(135deg,#10b981,#059669); color:white; box-shadow:0 0 10px rgba(16,185,129,0.4); }
+        .palette-num.marked { background:linear-gradient(135deg,#f59e0b,#d97706); color:white; box-shadow:0 0 10px rgba(245,158,11,0.4); }
+        .palette-num.current { border-color:#8b5cf6; background:rgba(139,92,246,0.2); transform:scale(1.08); box-shadow:0 0 14px rgba(139,92,246,0.4); }
+        .palette-num.wrong-num { background:linear-gradient(135deg,#ef4444,#dc2626); color:white; box-shadow:0 0 10px rgba(239,68,68,0.4); }
+
+        .legend { display:flex; gap:12px; flex-wrap:wrap; font-size:10px; color:var(--text-secondary); }
+        .legend-dot { width:10px; height:10px; border-radius:3px; display:inline-block; }
+
+        .review-panel {
+            display:none; background:var(--glass-bg); backdrop-filter:blur(20px); border-radius:var(--radius);
+            padding:20px; margin-top:12px; box-shadow:var(--shadow); border:1px solid var(--glass-border);
+        }
+        .review-panel.show { display:block; animation:fadeIn 0.5s ease; }
+
+        .result-summary { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
+        .result-item {
+            background:var(--option-bg); padding:14px; border-radius:12px; text-align:center;
+            border:1px solid var(--border); transition:all 0.3s ease;
+        }
+        .result-item:hover { box-shadow:var(--glow-sm); }
+        .result-item .value {
+            font-size:26px; font-weight:800; background:linear-gradient(135deg,#8b5cf6,#ec4899);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        }
+        .result-item .label { font-size:11px; color:var(--text-secondary); margin-top:4px; }
+
+        .explanation-box {
+            background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.25);
+            border-radius:10px; padding:14px; margin-top:12px; display:none; transition:all 0.3s ease;
+        }
+        body.light-mode .explanation-box { background:#fef3c7; border-color:#fde68a; color:#92400e; }
+        .explanation-box.show { display:block; animation:fadeIn 0.3s ease; }
+        .explanation-box .exp-title { font-weight:700; font-size:13px; margin-bottom:6px; color:#fbbf24; }
+        body.light-mode .explanation-box .exp-title { color:#92400e; }
+
+        .swipe-hint { text-align:center; font-size:11px; color:var(--text-secondary); margin-top:8px; opacity:0.7; letter-spacing:0.5px; }
+
+        .review-mode-card {
+            background:var(--glass-bg); backdrop-filter:blur(12px); border-radius:var(--radius);
+            padding:20px; margin-bottom:10px; box-shadow:var(--shadow); border:1px solid var(--glass-border);
+            transition:all 0.3s ease;
+        }
+        .review-mode-card:hover { box-shadow:var(--glow-sm); transform:translateY(-1px); }
+        .review-mode-card.correct-answer { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3); }
+        .review-mode-card.wrong-answer { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); }
+        .review-mode-card.unanswered-q { background:var(--glass-bg); border-color:var(--glass-border); }
+        .review-mode-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px; }
+        .review-mode-status { font-size:12px; font-weight:700; padding:4px 12px; border-radius:15px; }
+        .status-correct { background:rgba(16,185,129,0.2); color:#4ade80; }
+        .status-wrong { background:rgba(239,68,68,0.2); color:#fca5a5; }
+        .status-unanswered { background:rgba(148,163,184,0.2); color:#94a3b8; }
+        body.light-mode .status-correct { background:#d1fae5; color:#065f46; }
+        body.light-mode .status-wrong { background:#fee2e2; color:#991b1b; }
+        body.light-mode .status-unanswered { background:#e2e8f0; color:#475569; }
+
+        .toast {
+            position:fixed; top:16px; right:16px; background:var(--glass-bg); backdrop-filter:blur(20px);
+            padding:12px 18px; border-radius:10px; box-shadow:var(--glow-md); z-index:1000;
+            font-weight:600; font-size:13px; display:none; border:1px solid var(--glass-border);
+            color:var(--text); animation:toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from { opacity:0; transform:translateX(50px); }
+            to { opacity:1; transform:translateX(0); }
+        }
+
+        .review-mode-badge {
+            display:inline-block; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:white;
+            padding:6px 16px; border-radius:20px; font-weight:700; font-size:13px; margin-bottom:16px;
+            box-shadow:0 0 14px rgba(139,92,246,0.35);
+        }
+
+        .avatar-circle {
+            width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#8b5cf6,#ec4899);
+            display:flex; align-items:center; justify-content:center; color:white; font-weight:700;
+            font-size:16px; overflow:hidden; box-shadow:0 0 12px rgba(139,92,246,0.3); flex-shrink:0;
+        }
+
+        @media (max-width:500px) {
+            .options-grid { grid-template-columns:1fr; }
+            .palette-grid { grid-template-columns:repeat(5,1fr); }
+            .test-title { font-size:15px; }
+            .question-text { font-size:14px; padding:14px; }
+            .result-summary { grid-template-columns:1fr 1fr; }
+            .blob { display:none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">🔭</div>
+                CUET Physics • Optics
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">35:00</span></div>
+            </div>
+        </div>
+
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-bolt"></i> Physics</span>
+            <span class="info-chip"><i class="fas fa-eye"></i> Optics</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 40 Questions</span>
+        </div>
+
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/40 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/40</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+            <button class="btn" onclick="submitTest()" id="submitBtn" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;font-size:14px;padding:12px;margin-top:12px;width:100%;display:none !important;">
+                <i class="fas fa-check-double"></i> Submit Test
+            </button>
+        </div>
+
+        <div id="reviewModeContainer" style="display:none;"></div>
+
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #8b5cf6;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2), rgba(252, 211, 77, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.16), rgba(248, 113, 113, 0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+                bubbles.forEach(b => {
+                    if (parseFloat(b.style.animationDuration) > 0 && b.getAnimations().length === 0) {
+                        b.remove();
+                    }
+                });
+            }, 4000);
+        })();
+
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : '🔭';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        // ========== 40 OPTICS QUESTIONS ==========
+        const QUESTIONS = [{
+            id: 0,
+            en: "A point object is placed at the center of a glass sphere of radius 6 cm and refractive index 1.5. The distance of the virtual image from the surface is:",
+            hi: "एक बिंदु वस्तु को 6 cm त्रिज्या और 1.5 अपवर्तनांक वाले कांच के गोले के केंद्र में रखा गया है। सतह से आभासी प्रतिबिंब की दूरी है:",
+            oEn: ["4 cm", "6 cm", "9 cm", "12 cm"],
+            oHi: ["4 cm", "6 cm", "9 cm", "12 cm"],
+            c: 1,
+            exp: "When an object is at the center of a sphere, rays strike the surface normally. They pass undeviated. Thus, the image is formed at the center itself.",
+            text: "Image at sphere center.",
+            options: ["4 cm", "6 cm", "9 cm", "12 cm"],
+            correct: 1,
+            explanation: "Rays normal to surface → no deviation → image at center (6 cm from surface)."
+        }, {
+            id: 1,
+            en: "The refractive index of a prism is cot(A/2), where A is the angle of the prism. The angle of minimum deviation is:",
+            hi: "एक प्रिज्म का अपवर्तनांक cot(A/2) है। न्यूनतम विचलन कोण (minimum deviation) है:",
+            oEn: ["180 - A", "180 - 2A", "90 - A", "A/2"],
+            oHi: ["180 - A", "180 - 2A", "90 - A", "A/2"],
+            c: 1,
+            exp: "Using μ = sin((A+δ_m)/2)/sin(A/2). Substituting cot(A/2) = cos(A/2)/sin(A/2) gives cos(A/2)=sin((A+δ_m)/2) ⇒ 90 - A/2 = (A+δ_m)/2 ⇒ δ_m = 180 - 2A.",
+            text: "Minimum deviation from cot formula.",
+            options: ["180 - A", "180 - 2A", "90 - A", "A/2"],
+            correct: 1,
+            explanation: "δ_m = 180° - 2A."
+        }, {
+            id: 2,
+            en: "A convex lens is dipped in a liquid whose refractive index is equal to the refractive index of the lens. Its focal length will:",
+            hi: "एक उत्तल लेंस को एक तरल में डुबोया जाता है जिसका अपवर्तनांक लेंस के अपवर्तनांक के बराबर होता है। इसकी फोकस दूरी होगी:",
+            oEn: ["Become zero", "Become infinite", "Remain unchanged", "Become small"],
+            oHi: ["शून्य हो जाएगी", "अनंत हो जाएगी", "अपरिवर्तित रहेगी", "छोटी हो जाएगी"],
+            c: 1,
+            exp: "Lens Maker’s formula: 1/f = (n_lens/n_medium - 1)(1/R1 - 1/R2). If n_lens = n_medium, then 1/f = 0 ⇒ f = ∞.",
+            text: "Lens in same index liquid.",
+            options: ["Become zero", "Become infinite", "Remain unchanged", "Become small"],
+            correct: 1,
+            explanation: "f → ∞; it behaves like a plane glass."
+        }, {
+            id: 3,
+            en: "In a compound microscope, the intermediate image is:",
+            hi: "एक संयुक्त सूक्ष्मदर्शी में, मध्यवर्ती प्रतिबिंब (intermediate image) होता है:",
+            oEn: ["Virtual, erect, and magnified", "Real, erect, and magnified", "Real, inverted, and magnified", "Virtual, inverted, and magnified"],
+            oHi: ["आभासी, सीधा और आवर्धित", "वास्तविक, सीधा और आवर्धित", "वास्तविक, उल्टा और आवर्धित", "आभासी, उल्टा और आवर्धित"],
+            c: 2,
+            exp: "The objective lens forms a real, inverted, and magnified image.",
+            text: "Compound microscope intermediate image.",
+            options: ["Virtual, erect, magnified", "Real, erect, magnified", "Real, inverted, magnified", "Virtual, inverted, magnified"],
+            correct: 2,
+            explanation: "Objective forms real, inverted, magnified image."
+        }, {
+            id: 4,
+            en: "A ray of light is incident at an angle I on one face of a small angle prism A and emerges normally from the other face. If the refractive index is μ, then the angle of incidence I is nearly:",
+            hi: "प्रकाश की एक किरण छोटे कोण वाले प्रिज्म A के एक फलक पर कोण I पर आपतित होती है और दूसरे फलक से लंबवत निर्गत होती है। यदि अपवर्तनांक μ है, तो I लगभग है:",
+            oEn: ["A/μ", "μA", "A/(2μ)", "A"],
+            oHi: ["A/μ", "μA", "A/(2μ)", "A"],
+            c: 1,
+            exp: "e=0 ⇒ r2 = 0. Since r1 + r2 = A, r1 = A. For small angles, μ = i/r1 ⇒ i = μA.",
+            text: "Small angle prism normal emergence.",
+            options: ["A/μ", "μA", "A/(2μ)", "A"],
+            correct: 1,
+            explanation: "i ≈ μA."
+        }, {
+            id: 5,
+            en: "The magnifying power of an astronomical telescope is 8 and the distance between the two lenses is 54 cm. The focal length of eye piece is:",
+            hi: "एक खगोलीय दूरबीन की आवर्धन क्षमता 8 है और लेंसों के बीच की दूरी 54 cm है। आई-पीस की फोकस दूरी है:",
+            oEn: ["6 cm", "48 cm", "10 cm", "20 cm"],
+            oHi: ["6 cm", "48 cm", "10 cm", "20 cm"],
+            c: 0,
+            exp: "f_o/f_e = 8 and f_o + f_e = 54. 8f_e + f_e = 54 ⇒ 9f_e = 54 ⇒ f_e = 6 cm.",
+            text: "Telescope eyepiece focal length.",
+            options: ["6 cm", "48 cm", "10 cm", "20 cm"],
+            correct: 0,
+            explanation: "f_e = 6 cm."
+        }, {
+            id: 6,
+            en: "For which color of light is the focal length of a convex lens maximum?",
+            hi: "किस रंग के प्रकाश के लिए उत्तल लेंस की फोकस दूरी अधिकतम होती है?",
+            oEn: ["Violet", "Red", "Yellow", "Green"],
+            oHi: ["बैंगनी", "लाल", "पीला", "हरा"],
+            c: 1,
+            exp: "μ is minimum for red. Since f ∝ 1/(μ - 1), f is maximum for red.",
+            text: "Chromatic focal length.",
+            options: ["Violet", "Red", "Yellow", "Green"],
+            correct: 1,
+            explanation: "Red has smallest μ → largest f."
+        }, {
+            id: 7,
+            en: "Critical angle of light passing from glass to air is minimum for:",
+            hi: "कांच से हवा में जाने वाले प्रकाश का क्रांतिक कोण (critical angle) किसके लिए न्यूनतम होता है?",
+            oEn: ["Red", "Green", "Yellow", "Violet"],
+            oHi: ["लाल", "हरा", "पीला", "बैंगनी"],
+            c: 3,
+            exp: "sin C = 1/μ. μ is maximum for violet, so C is minimum.",
+            text: "Critical angle vs color.",
+            options: ["Red", "Green", "Yellow", "Violet"],
+            correct: 3,
+            explanation: "Violet has max μ → min C."
+        }, {
+            id: 8,
+            en: "An object is placed at 10 cm from a convex lens of focal length 12 cm. The image is:",
+            hi: "एक वस्तु 10 cm पर उत्तल लेंस से 12 cm फोकस दूरी वाले लेंस के सामने रखी है। प्रतिबिंब है:",
+            oEn: ["Real and magnified", "Virtual and magnified", "Real and diminished", "Virtual and diminished"],
+            oHi: ["वास्तविक और आवर्धित", "आभासी और आवर्धित", "वास्तविक और छोटा", "आभासी और छोटा"],
+            c: 1,
+            exp: "Object is within the focus (u < f). Convex lens produces virtual, magnified image.",
+            text: "Object inside focal length.",
+            options: ["Real and magnified", "Virtual and magnified", "Real and diminished", "Virtual and diminished"],
+            correct: 1,
+            explanation: "u < f → virtual, magnified."
+        }, {
+            id: 9,
+            en: "Optical fibers work on the principle of:",
+            hi: "ऑप्टिकल फाइबर किस सिद्धांत पर कार्य करते हैं?",
+            oEn: ["Refraction", "Total Internal Reflection", "Dispersion", "Scattering"],
+            oHi: ["अपवर्तन", "पूर्ण आंतरिक परावर्तन", "वर्ण विक्षेपण", "प्रकीर्णन"],
+            c: 1,
+            exp: "Optical fibers rely on total internal reflection to guide light.",
+            text: "Optical fiber principle.",
+            options: ["Refraction", "Total Internal Reflection", "Dispersion", "Scattering"],
+            correct: 1,
+            explanation: "TIR keeps light inside the fiber."
+        }, {
+            id: 10,
+            en: "In YDSE, if the width of the slits is in the ratio 4:9, the ratio of maximum to minimum intensity in the interference pattern is:",
+            hi: "YDSE में, यदि स्लिट्स की चौड़ाई का अनुपात 4:9 है, तो अधिकतम से न्यूनतम तीव्रता का अनुपात है:",
+            oEn: ["169:25", "25:1", "13:5", "81:16"],
+            oHi: ["169:25", "25:1", "13:5", "81:16"],
+            c: 1,
+            exp: "I₁/I₂ = 4/9 ⇒ a₁/a₂ = 2/3. I_max/I_min = (a₁+a₂)²/(a₁-a₂)² = (5)²/(1)² = 25:1.",
+            text: "Intensity ratio from slit widths.",
+            options: ["169:25", "25:1", "13:5", "81:16"],
+            correct: 1,
+            explanation: "I_max/I_min = 25:1."
+        }, {
+            id: 11,
+            en: "The shape of a wavefront from a very distant source (like a star) is:",
+            hi: "बहुत दूर के स्रोत (जैसे तारा) से आने वाले तरंगाग्र का आकार होता है:",
+            oEn: ["Spherical", "Cylindrical", "Plane", "Conical"],
+            oHi: ["गोलाकार", "बेलनाकार", "समतल", "शंक्वाकार"],
+            c: 2,
+            exp: "At large distances, wavefronts are essentially plane.",
+            text: "Wavefront from distant source.",
+            options: ["Spherical", "Cylindrical", "Plane", "Conical"],
+            correct: 2,
+            explanation: "Distant source → plane wavefront."
+        }, {
+            id: 12,
+            en: "In YDSE, the 5th bright fringe of light of wavelength 500 nm coincides with the 4th bright fringe of another light. The wavelength of the second light is:",
+            hi: "YDSE में, 500 nm तरंगदैर्ध्य वाले प्रकाश की 5वीं दीप्त फ्रिंज दूसरे प्रकाश की 4थी दीप्त फ्रिंज से संपाती होती है। दूसरे प्रकाश की तरंगदैर्ध्य है:",
+            oEn: ["400 nm", "625 nm", "500 nm", "750 nm"],
+            oHi: ["400 nm", "625 nm", "500 nm", "750 nm"],
+            c: 1,
+            exp: "n₁λ₁ = n₂λ₂ ⇒ 5×500 = 4×λ₂ ⇒ λ₂ = 2500/4 = 625 nm.",
+            text: "Coinciding fringes.",
+            options: ["400 nm", "625 nm", "500 nm", "750 nm"],
+            correct: 1,
+            explanation: "λ₂ = 625 nm."
+        }, {
+            id: 13,
+            en: "In a single slit diffraction pattern, if the slit width is doubled, the width of the central maximum becomes:",
+            hi: "एकल स्लिट विवर्तन पैटर्न में, यदि स्लिट की चौड़ाई दोगुनी कर दी जाए, तो केंद्रीय उच्चिष्ठ की चौड़ाई:",
+            oEn: ["Becomes double", "Becomes half", "Remains same", "Becomes four times"],
+            oHi: ["दोगुनी हो जाएगी", "आधी हो जाएगी", "समान रहेगी", "चार गुना हो जाएगी"],
+            c: 1,
+            exp: "Width W = 2λD/d. W ∝ 1/d, so doubling d halves W.",
+            text: "Central maximum width.",
+            options: ["Becomes double", "Becomes half", "Remains same", "Becomes four times"],
+            correct: 1,
+            explanation: "W ∝ 1/d → halves."
+        }, {
+            id: 14,
+            en: "Huygens' wave theory could not explain:",
+            hi: "हाइजेन का तरंग सिद्धांत किसे नहीं समझा सका?",
+            oEn: ["Reflection", "Refraction", "Photoelectric Effect", "Interference"],
+            oHi: ["परावर्तन", "अपवर्तन", "प्रकाश वैद्युत प्रभाव", "व्यतिकरण"],
+            c: 2,
+            exp: "Photoelectric effect requires photon theory (particle nature).",
+            text: "Limitation of Huygens' theory.",
+            options: ["Reflection", "Refraction", "Photoelectric Effect", "Interference"],
+            correct: 2,
+            explanation: "Photoelectric effect unexplained by wave theory."
+        }, {
+            id: 15,
+            en: "Two coherent sources of light can be obtained by:",
+            hi: "प्रकाश के दो कलासंबद्ध स्रोत प्राप्त किए जा सकते हैं:",
+            oEn: ["Two different lamps", "Division of wavefront", "Using two different colors", "Increasing intensity"],
+            oHi: ["दो भिन्न लैंप", "तरंगाग्र का विभाजन", "दो भिन्न रंगों का उपयोग", "तीव्रता बढ़ाकर"],
+            c: 1,
+            exp: "Coherent sources require division of wavefront or amplitude.",
+            text: "Coherent sources method.",
+            options: ["Two different lamps", "Division of wavefront", "Two different colors", "Increasing intensity"],
+            correct: 1,
+            explanation: "Division of wavefront (e.g., YDSE)."
+        }, {
+            id: 16,
+            en: "In YDSE, if the screen is moved away from the slits, the angular separation of fringes:",
+            hi: "YDSE में, यदि स्क्रीन को स्लिट्स से दूर ले जाया जाता है, तो फ्रिंजों का कोणीय पृथक्करण:",
+            oEn: ["Increases", "Decreases", "Remains unchanged", "Becomes zero"],
+            oHi: ["बढ़ता है", "घटता है", "अपरिवर्तित रहता है", "शून्य हो जाता है"],
+            c: 2,
+            exp: "Angular width θ = λ/d, independent of D (distance to screen).",
+            text: "Angular fringe width vs distance.",
+            options: ["Increases", "Decreases", "Remains unchanged", "Becomes zero"],
+            correct: 2,
+            explanation: "θ = λ/d, not dependent on D."
+        }, {
+            id: 17,
+            en: "The phase difference between two points on the same wavefront is:",
+            hi: "एक ही तरंगाग्र पर दो बिंदुओं के बीच कलांतर (phase difference) होता है:",
+            oEn: ["π", "π/2", "0", "2π"],
+            oHi: ["π", "π/2", "0", "2π"],
+            c: 2,
+            exp: "All points on a wavefront are in same phase.",
+            text: "Phase on a wavefront.",
+            options: ["π", "π/2", "0", "2π"],
+            correct: 2,
+            explanation: "Same wavefront → same phase (0)."
+        }, {
+            id: 18,
+            en: "Diffraction of light is more difficult to observe than diffraction of sound because:",
+            hi: "प्रकाश का विवर्तन ध्वनि के विवर्तन से अधिक कठिनाई से देखा जाता है क्योंकि:",
+            oEn: ["Light travels faster", "Wavelength of light is very small", "Light is a transverse wave", "Sound is a longitudinal wave"],
+            oHi: ["प्रकाश तेज चलता है", "प्रकाश की तरंग दैर्ध्य बहुत कम है", "प्रकाश अनुप्रस्थ तरंग है", "ध्वनि अनुदैर्ध्य तरंग है"],
+            c: 1,
+            exp: "Diffraction effects are noticeable when wavelength ≈ obstacle size. Light wavelength is very small.",
+            text: "Observation of diffraction.",
+            options: ["Light faster", "Small wavelength", "Light transverse", "Sound longitudinal"],
+            correct: 1,
+            explanation: "λ_light small → diffraction hard to observe."
+        }, {
+            id: 19,
+            en: "Colors in a soap bubble are due to:",
+            hi: "साबुन के बुलबुले में रंग किसके कारण होते हैं?",
+            oEn: ["Interference", "Diffraction", "Dispersion", "Reflection"],
+            oHi: ["व्यतिकरण", "विवर्तन", "वर्ण विक्षेपण", "परावर्तन"],
+            c: 0,
+            exp: "Thin film interference produces colors.",
+            text: "Soap bubble colors.",
+            options: ["Interference", "Diffraction", "Dispersion", "Reflection"],
+            correct: 0,
+            explanation: "Thin film interference."
+        }, {
+            id: 20,
+            en: "A thin lens of refractive index 1.5 has focal length of 15 cm in air. When dipped in water (μ=4/3), its focal length becomes:",
+            hi: "1.5 अपवर्तनांक वाले एक पतले लेंस की हवा में फोकस दूरी 15 cm है। जब इसे पानी (μ=4/3) में डुबोया जाता है, तो इसकी फोकस दूरी हो जाती है:",
+            oEn: ["30 cm", "45 cm", "60 cm", "15 cm"],
+            oHi: ["30 cm", "45 cm", "60 cm", "15 cm"],
+            c: 2,
+            exp: "f_w = f_a × (n_g - 1)/(n_g/n_w - 1) = 15 × 0.5/(1.125 - 1) = 15 × 4 = 60 cm.",
+            text: "Focal length in water.",
+            options: ["30 cm", "45 cm", "60 cm", "15 cm"],
+            correct: 2,
+            explanation: "f_w = 60 cm."
+        }, {
+            id: 21,
+            en: "The power of a biconvex lens is 10 D and the radius of curvature of each surface is 10 cm. The refractive index of the material is:",
+            hi: "एक उभयोत्तल लेंस की क्षमता 10 D है और प्रत्येक सतह की वक्रता त्रिज्या 10 cm है। पदार्थ का अपवर्तनांक है:",
+            oEn: ["1.5", "1.33", "1.6", "1.4"],
+            oHi: ["1.5", "1.33", "1.6", "1.4"],
+            c: 0,
+            exp: "P = (n-1)(2/R). 10 = (n-1)(2/0.1) ⇒ 10 = (n-1)×20 ⇒ n-1 = 0.5 ⇒ n = 1.5.",
+            text: "Refractive index from power.",
+            options: ["1.5", "1.33", "1.6", "1.4"],
+            correct: 0,
+            explanation: "n = 1.5."
+        }, {
+            id: 22,
+            en: "Mirages are observed in deserts due to:",
+            hi: "रेगिस्तान में मृगतृष्णा (mirages) किसके कारण देखी जाती हैं?",
+            oEn: ["Scattering", "Total Internal Reflection", "Dispersion", "Double refraction"],
+            oHi: ["प्रकीर्णन", "पूर्ण आंतरिक परावर्तन", "वर्ण विक्षेपण", "द्विअपवर्तन"],
+            c: 1,
+            exp: "Mirages are caused by total internal reflection due to varying air density.",
+            text: "Mirage principle.",
+            options: ["Scattering", "Total Internal Reflection", "Dispersion", "Double refraction"],
+            correct: 1,
+            explanation: "TIR from hot air layers."
+        }, {
+            id: 23,
+            en: "A ray is incident at 60° on one face of a prism and suffers minimum deviation. If the angle of prism is 60°, the refractive index is:",
+            hi: "एक किरण प्रिज्म के एक फलक पर 60° पर आपतित होती है और न्यूनतम विचलन प्राप्त करती है। यदि प्रिज्म कोण 60° है, तो अपवर्तनांक है:",
+            oEn: ["√3", "√2", "1.5", "1.33"],
+            oHi: ["√3", "√2", "1.5", "1.33"],
+            c: 0,
+            exp: "At δ_m, i = (A+δ_m)/2 ⇒ 60 = (60+δ_m)/2 ⇒ δ_m = 60. μ = sin(60)/sin(30) = (√3/2)/(1/2) = √3.",
+            text: "Prism refractive index.",
+            options: ["√3", "√2", "1.5", "1.33"],
+            correct: 0,
+            explanation: "μ = √3."
+        }, {
+            id: 24,
+            en: "For a given lens, the magnification was found to be twice as large as the object. If focal length is 20 cm, the object distance could be:",
+            hi: "एक दिए गए लेंस के लिए, आवर्धन वस्तु के आकार का दोगुना पाया गया। यदि फोकस दूरी 20 cm है, तो वस्तु दूरी हो सकती है:",
+            oEn: ["10 cm", "30 cm", "Both A and B", "40 cm"],
+            oHi: ["10 cm", "30 cm", "A और B दोनों", "40 cm"],
+            c: 2,
+            exp: "m = ±2. Using m = f/(f+u) gives two possible u values.",
+            text: "Magnification and object distance.",
+            options: ["10 cm", "30 cm", "Both A and B", "40 cm"],
+            correct: 2,
+            explanation: "u = 10 cm (virtual) or 30 cm (real)."
+        }, {
+            id: 25,
+            en: "Which of the following is used in the eyepiece of an astronomical telescope?",
+            hi: "निम्नलिखित में से कौन खगोलीय दूरबीन के नेत्रिका (eyepiece) में उपयोग किया जाता है?",
+            oEn: ["Concave lens", "Convex lens", "Plane mirror", "Concave mirror"],
+            oHi: ["अवतल लेंस", "उत्तल लेंस", "समतल दर्पण", "अवतल दर्पण"],
+            c: 1,
+            exp: "Eyepiece is a convex lens.",
+            text: "Telescope eyepiece.",
+            options: ["Concave lens", "Convex lens", "Plane mirror", "Concave mirror"],
+            correct: 1,
+            explanation: "Convex lens as eyepiece."
+        }, {
+            id: 26,
+            en: "The ratio of the widths of two slits in YDSE is 4:1. The ratio of the amplitudes of the light waves is:",
+            hi: "YDSE में दो स्लिटों की चौड़ाइयों का अनुपात 4:1 है। प्रकाश तरंगों के आयामों का अनुपात है:",
+            oEn: ["4:1", "2:1", "16:1", "1:1"],
+            oHi: ["4:1", "2:1", "16:1", "1:1"],
+            c: 1,
+            exp: "Width ∝ Intensity ∝ A², so A ∝ √width. Ratio = √(4:1) = 2:1.",
+            text: "Amplitude from slit width.",
+            options: ["4:1", "2:1", "16:1", "1:1"],
+            correct: 1,
+            explanation: "A ∝ √w → 2:1."
+        }, {
+            id: 27,
+            en: "When light is reflected from a denser medium, the phase change is:",
+            hi: "सघन माध्यम से परावर्तित होने पर प्रकाश में कला परिवर्तन होता है:",
+            oEn: ["0", "π/2", "π", "2π"],
+            oHi: ["0", "π/2", "π", "2π"],
+            c: 2,
+            exp: "Reflection from denser medium introduces a phase change of π (180°).",
+            text: "Phase change on reflection.",
+            options: ["0", "π/2", "π", "2π"],
+            correct: 2,
+            explanation: "Phase change = π."
+        }, {
+            id: 28,
+            en: "The power of a combination of two lenses of focal lengths 20 cm and -40 cm is:",
+            hi: "20 cm और -40 cm फोकस दूरी वाले दो लेंसों के संयोजन की क्षमता है:",
+            oEn: ["+2.5 D", "-2.5 D", "+5 D", "+1.25 D"],
+            oHi: ["+2.5 D", "-2.5 D", "+5 D", "+1.25 D"],
+            c: 0,
+            exp: "P = 100/20 - 100/40 = 5 - 2.5 = +2.5 D.",
+            text: "Combined lens power.",
+            options: ["+2.5 D", "-2.5 D", "+5 D", "+1.25 D"],
+            correct: 0,
+            explanation: "P = 5 - 2.5 = 2.5 D."
+        }, {
+            id: 29,
+            en: "In YDSE, if one slit is covered with a red filter and the other with a blue filter:",
+            hi: "YDSE में, यदि एक स्लिट को लाल फिल्टर से और दूसरी को नीले फिल्टर से ढक दिया जाए:",
+            oEn: ["Interference pattern remains same", "No interference pattern is observed", "Pattern becomes very bright", "Only central fringe is seen"],
+            oHi: ["व्यतिकरण पैटर्न समान रहता है", "कोई व्यतिकरण पैटर्न नहीं दिखता", "पैटर्न बहुत चमकीला हो जाता है", "केवल केंद्रीय फ्रिंज दिखती है"],
+            c: 1,
+            exp: "Coherence is lost because wavelengths are different.",
+            text: "Different colors in YDSE.",
+            options: ["Pattern same", "No pattern", "Brighter pattern", "Only central fringe"],
+            correct: 1,
+            explanation: "Different λ → no sustained interference."
+        }, {
+            id: 30,
+            en: "Magnification produced by an astronomical telescope for relaxed eye is:",
+            hi: "शांत नेत्र के लिए खगोलीय दूरबीन द्वारा उत्पन्न आवर्धन है:",
+            oEn: ["f_o/f_e", "f_e/f_o", "f_o + f_e", "1 + D/f_e"],
+            oHi: ["f_o/f_e", "f_e/f_o", "f_o + f_e", "1 + D/f_e"],
+            c: 0,
+            exp: "M = f_o / f_e for relaxed eye.",
+            text: "Telescope magnification.",
+            options: ["f_o/f_e", "f_e/f_o", "f_o + f_e", "1 + D/f_e"],
+            correct: 0,
+            explanation: "M = f_o / f_e."
+        }, {
+            id: 31,
+            en: "In a single slit diffraction, the first minimum is formed at θ = 30° for λ = 600 nm. The slit width is:",
+            hi: "एकल स्लिट विवर्तन में, λ = 600 nm के लिए प्रथम निम्निष्ठ θ = 30° पर बनता है। स्लिट चौड़ाई है:",
+            oEn: ["1.2 μm", "0.6 μm", "2.4 μm", "0.3 μm"],
+            oHi: ["1.2 μm", "0.6 μm", "2.4 μm", "0.3 μm"],
+            c: 0,
+            exp: "d sinθ = λ ⇒ d(1/2) = 600 nm ⇒ d = 1200 nm = 1.2 μm.",
+            text: "Slit width from first minimum.",
+            options: ["1.2 μm", "0.6 μm", "2.4 μm", "0.3 μm"],
+            correct: 0,
+            explanation: "d = 1.2 μm."
+        }, {
+            id: 32,
+            en: "A ray of light passes from vacuum into a medium of refractive index n. If the angle of incidence is twice the angle of refraction, then the angle of incidence is:",
+            hi: "एक प्रकाश किरण निर्वात से अपवर्तनांक n के माध्यम में जाती है। यदि आपतन कोण अपवर्तन कोण का दोगुना है, तो आपतन कोण है:",
+            oEn: ["cos⁻¹(n/2)", "2cos⁻¹(n/2)", "sin⁻¹(n/2)", "2sin⁻¹(n/2)"],
+            oHi: ["cos⁻¹(n/2)", "2cos⁻¹(n/2)", "sin⁻¹(n/2)", "2sin⁻¹(n/2)"],
+            c: 1,
+            exp: "i = 2r. Snell: 1×sin i = n sin r ⇒ sin(2r) = n sin r ⇒ 2 sin r cos r = n sin r ⇒ cos r = n/2 ⇒ r = cos⁻¹(n/2). i = 2cos⁻¹(n/2).",
+            text: "Angle of incidence from Snell's law.",
+            options: ["cos⁻¹(n/2)", "2cos⁻¹(n/2)", "sin⁻¹(n/2)", "2sin⁻¹(n/2)"],
+            correct: 1,
+            explanation: "i = 2cos⁻¹(n/2)."
+        }, {
+            id: 33,
+            en: "Rainbow is formed due to a combination of:",
+            hi: "इंद्रधनुष किसके संयोजन से बनता है?",
+            oEn: ["Refraction and Scattering", "Refraction, Dispersion, and TIR", "Reflection and Interference", "Diffraction only"],
+            oHi: ["अपवर्तन और प्रकीर्णन", "अपवर्तन, वर्ण विक्षेपण और पूर्ण आंतरिक परावर्तन", "परावर्तन और व्यतिकरण", "केवल विवर्तन"],
+            c: 1,
+            exp: "Rainbow involves refraction, total internal reflection, and dispersion.",
+            text: "Rainbow formation.",
+            options: ["Refraction & Scattering", "Refraction, Dispersion & TIR", "Reflection & Interference", "Diffraction only"],
+            correct: 1,
+            explanation: "Combination of refraction, dispersion, TIR."
+        }, {
+            id: 34,
+            en: "The limit of resolution of a telescope depends on:",
+            hi: "दूरबीन की विभेदन सीमा निर्भर करती है:",
+            oEn: ["Focal length", "Diameter of objective", "Length of telescope", "Magnification"],
+            oHi: ["फोकस दूरी", "अभिदृश्य के व्यास", "दूरबीन की लंबाई", "आवर्धन"],
+            c: 1,
+            exp: "Limit of resolution = 1.22λ/D, depends on diameter D.",
+            text: "Telescope resolution.",
+            options: ["Focal length", "Diameter of objective", "Length", "Magnification"],
+            correct: 1,
+            explanation: "Resolution ∝ 1/D."
+        }, {
+            id: 35,
+            en: "In YDSE, the distance between the slits is 1 mm and the screen is 1 m away. For λ = 500 nm, the fringe width is:",
+            hi: "YDSE में, स्लिटों के बीच दूरी 1 mm है और स्क्रीन 1 m दूर है। λ = 500 nm के लिए फ्रिंज चौड़ाई है:",
+            oEn: ["0.5 mm", "5 mm", "0.05 mm", "1 mm"],
+            oHi: ["0.5 mm", "5 mm", "0.05 mm", "1 mm"],
+            c: 0,
+            exp: "β = λD/d = (500×10⁻⁹ × 1) / (1×10⁻³) = 5×10⁻⁴ m = 0.5 mm.",
+            text: "Fringe width calculation.",
+            options: ["0.5 mm", "5 mm", "0.05 mm", "1 mm"],
+            correct: 0,
+            explanation: "β = 0.5 mm."
+        }, {
+            id: 36,
+            en: "A person cannot see objects clearly beyond 2 m. The power of lens required to correct this vision is:",
+            hi: "एक व्यक्ति 2 m से अधिक दूर की वस्तुओं को स्पष्ट नहीं देख सकता। इस दृष्टि को सही करने के लिए आवश्यक लेंस की क्षमता है:",
+            oEn: ["+0.5 D", "-0.5 D", "-2 D", "+2 D"],
+            oHi: ["+0.5 D", "-0.5 D", "-2 D", "+2 D"],
+            c: 1,
+            exp: "Myopia: P = 1/f = 1/(-2) = -0.5 D.",
+            text: "Myopia correction.",
+            options: ["+0.5 D", "-0.5 D", "-2 D", "+2 D"],
+            correct: 1,
+            explanation: "P = -0.5 D."
+        }, {
+            id: 37,
+            en: "The intensity of a wave is I. If the amplitude is doubled, the new intensity will be:",
+            hi: "एक तरंग की तीव्रता I है। यदि आयाम दोगुना कर दिया जाए, तो नई तीव्रता होगी:",
+            oEn: ["2I", "4I", "I/2", "I/4"],
+            oHi: ["2I", "4I", "I/2", "I/4"],
+            c: 1,
+            exp: "I ∝ A². Doubling A quadruples I → 4I.",
+            text: "Intensity vs amplitude.",
+            options: ["2I", "4I", "I/2", "I/4"],
+            correct: 1,
+            explanation: "I ∝ A² → 4I."
+        }, {
+            id: 38,
+            en: "Secondary rainbows are fainter than primary ones because:",
+            hi: "द्वितीयक इंद्रधनुष प्राथमिक से धुंधले होते हैं क्योंकि:",
+            oEn: ["Light suffers two internal reflections", "It is higher in the sky", "It has different colors", "It is larger"],
+            oHi: ["प्रकाश का दो बार आंतरिक परावर्तन होता है", "यह आकाश में ऊंचा होता है", "इसके रंग भिन्न होते हैं", "यह बड़ा होता है"],
+            c: 0,
+            exp: "Secondary rainbow involves two internal reflections, losing more light.",
+            text: "Secondary rainbow faintness.",
+            options: ["Two internal reflections", "Higher in sky", "Different colors", "Larger size"],
+            correct: 0,
+            explanation: "Two internal reflections → more light loss."
+        }, {
+            id: 39,
+            en: "At the time of a sunset, the sun appears elliptical because of:",
+            hi: "सूर्यास्त के समय सूर्य अंडाकार प्रतीत होता है, इसका कारण है:",
+            oEn: ["Refraction", "Dispersion", "Reflection", "Diffraction"],
+            oHi: ["अपवर्तन", "वर्ण विक्षेपण", "परावर्तन", "विवर्तन"],
+            c: 0,
+            exp: "Differential atmospheric refraction flattens the sun's disk.",
+            text: "Sunset elliptical sun.",
+            options: ["Refraction", "Dispersion", "Reflection", "Diffraction"],
+            correct: 0,
+            explanation: "Atmospheric refraction causes elliptical shape."
+        }];
+
+        // ========== STATE MANAGEMENT ==========
+        const TOTAL = QUESTIONS.length;
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 35 * 60,
+            timerInterval: null,
+            testSubmitted: false,
+            darkMode: true,
+            lang: 'en',
+            score: null
+        };
+
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('phys_opt_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        const savedTheme = localStorage.getItem('phys_opt_theme');
+        if (savedTheme === 'light') {
+            state.darkMode = false;
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-moon';
+        } else {
+            state.darkMode = true;
+            document.body.classList.remove('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        // ========== LANGUAGE TOGGLE ==========
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            const btn = document.getElementById('langBtn');
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            btn.classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) {
+                renderReviewMode();
+            } else {
+                renderQuestion();
+            }
+            localStorage.setItem('phys_opt_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        // ========== SCORE CALCULATION ==========
+        function calculateScore() {
+            let correct = 0, wrong = 0, score = 0;
+            Object.keys(state.answers).forEach(idx => {
+                const q = QUESTIONS[parseInt(idx)];
+                if (q) {
+                    if (state.answers[idx] === q.c) {
+                        correct++;
+                        score += 5;
+                    } else {
+                        wrong++;
+                        score -= 1;
+                    }
+                }
+            });
+            const totalMarks = TOTAL * 5;
+            const attempted = correct + wrong;
+            const unanswered = TOTAL - attempted;
+            return {
+                score: Math.max(0, Math.round(score * 100) / 100),
+                total: totalMarks,
+                correct,
+                wrong,
+                attempted,
+                unanswered
+            };
+        }
+
+        // ========== RENDER QUESTION ==========
+        function renderQuestion() {
+            if (IS_REVIEW_MODE) return;
+            const q = QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${TOTAL}`;
+
+            const qt = document.getElementById('questionText');
+            if (state.lang === 'hi') {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>`;
+            } else {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            }
+
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.testSubmitted) {
+                    if (i === q.c) card.classList.add('correct');
+                    else if (state.answers[state.currentIndex] === i && state.answers[state.currentIndex] !== q.c)
+                        card.classList.add('wrong');
+                    card.style.pointerEvents = 'none';
+                } else {
+                    if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                    card.onclick = () => selectOption(i);
+                }
+                card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+
+            const expBox = document.getElementById('explanationBox');
+            const expText = document.getElementById('explanationText');
+            if (state.testSubmitted) {
+                expBox.classList.add('show');
+                expText.textContent = q.exp;
+            } else {
+                expBox.classList.remove('show');
+            }
+
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === TOTAL - 1;
+            document.getElementById('swipeHint').style.display = state.testSubmitted ? 'none' : 'block';
+            document.getElementById('actionRow').style.display = state.testSubmitted ? 'none' : 'flex';
+
+            renderPalette();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if (IS_REVIEW_MODE) return;
+            const idx = state.currentIndex + dir;
+            if (idx >= 0 && idx < TOTAL) {
+                state.currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMark() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            const idx = state.currentIndex;
+            if (state.markedQuestions.has(idx)) {
+                state.markedQuestions.delete(idx);
+                showToast('🏷️ Unmarked');
+            } else {
+                state.markedQuestions.add(idx);
+                showToast('🚩 Marked for review');
+            }
+            renderPalette();
+        }
+
+        function clearAnswer() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            if (state.answers[state.currentIndex] !== undefined) {
+                delete state.answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared');
+            }
+        }
+
+        // ========== PALETTE ==========
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.testSubmitted) {
+                    const q = QUESTIONS[i];
+                    if (state.answers[i] === q.c) num.classList.add('answered');
+                    else if (state.answers[i] !== undefined && state.answers[i] !== q.c) num.classList.add('wrong-num');
+                } else {
+                    if (state.answers[i] !== undefined) num.classList.add('answered');
+                    if (state.markedQuestions.has(i)) num.classList.add('marked');
+                }
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    if (IS_REVIEW_MODE) return;
+                    state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            const percent = (answered / TOTAL) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${answered}/${TOTAL} answered`;
+        }
+
+        // ========== TIMER ==========
+        function startTimer() {
+            if (IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) {
+                    clearInterval(state.timerInterval);
+                    return;
+                }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    autoSubmit();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60);
+            const s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (state.timeLeft < 300 && state.timeLeft > 0) {
+                document.getElementById('timerPill').classList.add('warning');
+            } else {
+                document.getElementById('timerPill').classList.remove('warning');
+            }
+            if (!state.testSubmitted) {
+                document.title = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} - CUET Physics Optics Mock`;
+            }
+        }
+
+        function autoSubmit() {
+            showToast('⏰ Time\'s up! Submitting...');
+            setTimeout(() => submitTest(true), 1500);
+        }
+
+        // ========== SUBMIT TEST (redirect to results.html) ==========
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const answered = Object.keys(state.answers).length;
+            const unanswered = TOTAL - answered;
+            if (!skipConfirm) {
+                let confirmMsg = 'Are you sure you want to submit?';
+                if (unanswered > 0) confirmMsg = `${unanswered} question(s) unanswered. Submit anyway?`;
+                if (!confirm(confirmMsg)) return;
+            }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.score = calculateScore();
+            const result = state.score;
+            const timeTaken = (35 * 60) - state.timeLeft;
+            const testCode = 'CUET-PHYS-OPT-40';
+            const examType = 'CUET UG Physics';
+            
+            localStorage.setItem('phys_opt_last_answers', JSON.stringify(state.answers));
+            localStorage.setItem('last_mock_file', window.location.href.split('?')[0]);
+            localStorage.setItem('phys_opt_last_result', JSON.stringify({ ...result, timeTaken, testCode }));
+            
+            const accuracy = result.attempted > 0 ? Math.round((result.correct / result.attempted) * 100) : 0;
+            window.location.href = `results.html?score=${result.score}&total=${result.total}&accuracy=${accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(examType)}`;
+        }
+
+        // ========== REVIEW MODE (when ?review=true) ==========
+        function renderReviewMode() {
+            const container = document.getElementById('reviewModeContainer');
+            const letters = ['A', 'B', 'C', 'D'];
+            const optsKey = state.lang === 'hi' ? 'oHi' : 'oEn';
+
+            let html = '<div class="review-mode-badge">📝 Review Mode — All 40 Questions</div>';
+
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let cardClass = 'review-mode-card';
+                let statusHTML = '';
+                if (isUnanswered) {
+                    cardClass += ' unanswered-q';
+                    statusHTML = '<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>';
+                } else if (isCorrect) {
+                    cardClass += ' correct-answer';
+                    statusHTML = '<span class="review-mode-status status-correct">✅ Correct (+5)</span>';
+                } else {
+                    cardClass += ' wrong-answer';
+                    statusHTML = '<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>';
+                }
+
+                const opts = q[optsKey];
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const optionsHTML = opts.map((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    return `
+                    <div class="${optClass}" style="pointer-events:none;">
+                        <div class="option-letter">${letters[j]}</div>
+                        <span>${opt}${label}</span>
+                    </div>`;
+                }).join('');
+
+                html += `
+                <div class="${cardClass}">
+                    <div class="review-mode-header">
+                        <span class="q-badge">Q ${i+1}/${TOTAL}</span>
+                        ${statusHTML}
+                    </div>
+                    <div class="question-text">
+                        <div style="font-weight:600;white-space:pre-line;">${qDisplay}</div>
+                    </div>
+                    <div class="options-grid">${optionsHTML}</div>
+                    <div class="explanation-box show" style="margin-top:10px;">
+                        <div class="exp-title">💡 Explanation</div>
+                        <div>${q.exp}</div>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            container.style.display = 'block';
+        }
+
+        // ========== SWIPE NAVIGATION ==========
+        let touchStartX = 0, touchStartY = 0, touchMoved = false, swipeHandled = false;
+        const card = document.getElementById('questionCard');
+
+        card.addEventListener('touchstart', (e) => {
+            if (IS_REVIEW_MODE) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchMoved = false;
+            swipeHandled = false;
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+            if (IS_REVIEW_MODE || swipeHandled) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy)) {
+                touchMoved = true;
+                card.style.transform = `translateX(${dx * 0.5}px)`;
+                card.style.opacity = Math.max(0.5, 1 - Math.abs(dx) / 800);
+                card.classList.add('swiping');
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        card.addEventListener('touchend', (e) => {
+            if (IS_REVIEW_MODE) return;
+            card.classList.remove('swiping');
+            card.style.transform = '';
+            card.style.opacity = '';
+            if (!touchMoved) return;
+            const endX = e.changedTouches[0]?.clientX || touchStartX;
+            const dx = endX - touchStartX;
+            if (Math.abs(dx) > 80) {
+                swipeHandled = true;
+                if (dx > 0) navigate(-1);
+                else navigate(1);
+            }
+            touchMoved = false;
+        });
+
+        // ========== KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', (e) => {
+            if (IS_REVIEW_MODE) return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch (e.key.toLowerCase()) {
+                case 'arrowleft': e.preventDefault(); navigate(-1); break;
+                case 'arrowright': e.preventDefault(); navigate(1); break;
+                case 'a': case '1': e.preventDefault(); selectOption(0); break;
+                case 'b': case '2': e.preventDefault(); selectOption(1); break;
+                case 'c': case '3': e.preventDefault(); selectOption(2); break;
+                case 'd': case '4': e.preventDefault(); selectOption(3); break;
+                case 'm': e.preventDefault(); toggleMark(); break;
+                case 'backspace': e.preventDefault(); clearAnswer(); break;
+            }
+        });
+
+        // ========== TOAST ==========
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'flex';
+            clearTimeout(t._t);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
+
+        // ========== PREVENT ACCIDENTAL EXIT ==========
+        window.addEventListener('beforeunload', (e) => {
+            if (!state.testSubmitted && state.timeLeft > 0 && Object.keys(state.answers).length > 0 && !IS_REVIEW_MODE) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            localStorage.setItem('phys_opt_last_mock_file', window.location.href.split('?')[0]);
+            localStorage.setItem('last_mock_file', window.location.href.split('?')[0]);
+
+            if (IS_REVIEW_MODE) {
+                document.getElementById('questionCard').style.display = 'none';
+                document.getElementById('progressCard').style.display = 'none';
+                document.getElementById('paletteCard').style.display = 'none';
+                document.getElementById('swipeHint').style.display = 'none';
+                document.getElementById('infoRow').style.display = 'none';
+                document.getElementById('timerPill').style.display = 'none';
+                document.getElementById('actionRow').style.display = 'none';
+                document.title = 'Review - CUET Physics Optics Mock';
+
+                const savedAnswers = JSON.parse(localStorage.getItem('phys_opt_last_answers') || '{}');
+                state.answers = savedAnswers;
+                state.testSubmitted = true;
+                state.lang = localStorage.getItem('phys_opt_lang') || 'en';
+
+                if (state.lang === 'hi') {
+                    document.getElementById('langBtn').classList.add('active');
+                    document.getElementById('langText').textContent = 'English';
+                }
+                renderReviewMode();
+                console.log('Physics Optics Review mode activated — all 40 questions displayed');
+            } else {
+                state.lang = localStorage.getItem('phys_opt_lang') || 'en';
+                if (state.lang === 'hi') {
+                    document.getElementById('langBtn').classList.add('active');
+                    document.getElementById('langText').textContent = 'English';
+                }
+                startTimer();
+                renderQuestion();
+                renderPalette();
+                console.log('CUET Physics Optics Mock Initialized');
+                console.log('Questions:', TOTAL, '| Duration: 35 min | Marking: +5/-1 | Auto-submit on timer');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
