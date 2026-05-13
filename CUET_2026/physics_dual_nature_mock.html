@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Physics • Dual Nature</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-glow: #8b5cf6;
+            --accent: #ec4899;
+            --accent-glow: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(139, 92, 246, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.25);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.35);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #f3f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.15);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #fdf2f8 100%);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 { width: 350px; height: 350px; background: rgba(139, 92, 246, 0.2); top: -100px; right: -80px; animation-delay: 0s; }
+        .blob-2 { width: 280px; height: 280px; background: rgba(236, 72, 153, 0.18); bottom: -80px; left: -60px; animation-delay: -7s; }
+        .blob-3 { width: 220px; height: 220px; background: rgba(168, 85, 247, 0.16); top: 50%; left: 50%; animation-delay: -14s; }
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, -20px) scale(0.9); }
+            75% { transform: translate(20px, 40px) scale(1.05); }
+        }
+        .bubbles-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .bubble {
+            position: absolute; bottom: -100px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.06));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.12);
+            animation: floatUp linear infinite;
+        }
+        body.light-mode .bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.04));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.08);
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0.5; }
+            25% { transform: translateY(-250px) translateX(30px) scale(0.8); opacity: 0.7; }
+            50% { transform: translateY(-500px) translateX(-20px) scale(1); opacity: 0.6; }
+            75% { transform: translateY(-750px) translateX(15px) scale(0.9); opacity: 0.35; }
+            100% { transform: translateY(-1000px) translateX(-10px) scale(0.3); opacity: 0; }
+        }
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            margin-bottom: 14px; flex-wrap: wrap; background: var(--glass-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px; border-radius: var(--radius); border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow); transition: all 0.3s ease;
+        }
+        .top-bar:hover { box-shadow: var(--glow-sm); }
+        .test-title {
+            font-size: 18px; font-weight: 700; color: var(--text);
+            display: flex; align-items: center; gap: 8px; letter-spacing: -0.3px;
+        }
+        .top-actions { display: flex; align-items: center; gap: 8px; }
+        .lang-btn {
+            padding: 8px 16px; border-radius: 25px; border: 2px solid #f97316;
+            background: var(--card); color: #f97316; cursor: pointer; font-weight: 700;
+            font-size: 12px; display: flex; align-items: center; gap: 6px;
+            transition: all 0.3s ease; backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover { box-shadow: 0 0 14px rgba(249, 115, 22, 0.35); transform: translateY(-1px); }
+        .lang-btn.active { background: linear-gradient(135deg, #f97316, #ea580c); color: white; border-color: transparent; box-shadow: 0 0 16px rgba(249, 115, 22, 0.4); }
+        .theme-toggle {
+            width: 40px; height: 40px; border-radius: 12px; border: 1.5px solid var(--glass-border);
+            background: var(--glass-bg); color: var(--text); cursor: pointer; font-size: 16px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+            box-shadow: var(--shadow); backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover { border-color: var(--accent); box-shadow: var(--glow-sm); transform: translateY(-1px); }
+        .theme-toggle:active { transform: scale(0.92); }
+        .timer-pill {
+            background: var(--glass-bg); backdrop-filter: blur(16px); border: 1.5px solid var(--glass-border);
+            color: var(--text); padding: 8px 16px; border-radius: 12px;
+            font-family: 'Courier New', monospace; font-size: 17px; font-weight: 700;
+            display: flex; align-items: center; gap: 7px; box-shadow: var(--shadow); transition: all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5; animation: pulse 0.8s infinite; box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
+        }
+        body.light-mode .timer-pill.warning { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+        .info-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+        .info-chip {
+            display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px;
+            border-radius: 20px; font-size: 11px; font-weight: 600; background: var(--glass-bg);
+            backdrop-filter: blur(8px); border: 1px solid var(--glass-border); color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .info-chip i { font-size: 11px; }
+        .info-chip.exam { color: #a78bfa; }
+        .info-chip.subject { color: #ec4899; }
+        .info-chip.marks { color: #fbbf24; }
+        body.light-mode .info-chip.exam { color: #7c3aed; }
+        body.light-mode .info-chip.subject { color: #be185d; }
+        body.light-mode .info-chip.marks { color: #d97706; }
+        .progress-card {
+            background: var(--glass-bg); backdrop-filter: blur(16px); border-radius: var(--radius);
+            padding: 14px 18px; margin-bottom: 14px; box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border); transition: all 0.3s ease;
+        }
+        .progress-card:hover { box-shadow: var(--glow-sm); }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+        .progress-bar { height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #8b5cf6, #ec4899); border-radius: 10px; transition: width 0.5s ease; box-shadow: 0 0 10px rgba(139, 92, 246, 0.5); }
+        .question-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius); padding: 24px; margin-bottom: 14px; box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border); animation: slideIn 0.35s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover { box-shadow: var(--glow-md); transform: translateY(-2px); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .question-card.swiping { transition: none; }
+        .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .q-badge { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; box-shadow: 0 0 14px rgba(139, 92, 246, 0.35); }
+        .q-marks { font-weight: 600; font-size: 12px; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 6px 14px; border-radius: 15px; border: 1px solid rgba(251, 191, 36, 0.25); }
+        body.light-mode .q-marks { color: #d97706; background: #fffbeb; border-color: #fde68a; }
+        .question-text { font-size: 15px; font-weight: 500; line-height: 1.7; color: var(--text); background: var(--option-bg); padding: 18px; border-radius: 12px; border-left: 4px solid #8b5cf6; margin-bottom: 18px; transition: all 0.3s ease; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .option-card {
+            display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+            background: var(--option-bg); border: 2px solid var(--border); border-radius: 12px;
+            cursor: pointer; transition: all 0.25s ease; font-size: 13px; font-weight: 500;
+            color: var(--text); backdrop-filter: blur(4px);
+        }
+        .option-card:hover { border-color: #a78bfa; background: var(--hover-bg); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2); }
+        .option-card.selected { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-color: transparent; transform: scale(1.02); box-shadow: 0 6px 22px rgba(139, 92, 246, 0.4); }
+        .option-card.correct { background: #10b981 !important; color: white !important; border-color: transparent !important; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important; }
+        .option-card.wrong { background: #ef4444 !important; color: white !important; border-color: transparent !important; box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4) !important; animation: shake 0.4s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+        .option-letter { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.08); border-radius: 8px; font-weight: 800; font-size: 13px; color: #a78bfa; flex-shrink: 0; transition: all 0.25s ease; }
+        .option-card.selected .option-letter { background: rgba(255, 255, 255, 0.2); color: white; }
+        .option-card.correct .option-letter, .option-card.wrong .option-letter { background: rgba(255, 255, 255, 0.25); color: white; }
+        .action-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .btn {
+            padding: 10px 16px; border-radius: 10px; border: 1.5px solid var(--border);
+            font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 5px;
+            background: var(--glass-bg); backdrop-filter: blur(8px); color: var(--text);
+            flex: 1; justify-content: center; min-width: 60px;
+        }
+        .btn:hover { box-shadow: var(--glow-sm); transform: translateY(-2px); border-color: #a78bfa; }
+        .btn:active { transform: scale(0.95); }
+        .btn:disabled { opacity: 0.4; pointer-events: none; }
+        .btn-mark { background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24; }
+        .btn-mark:hover { box-shadow: 0 0 14px rgba(245, 158, 11, 0.3); }
+        .btn-clear { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.25); color: #4ade80; }
+        .btn-clear:hover { box-shadow: 0 0 14px rgba(16, 185, 129, 0.3); }
+        body.light-mode .btn-mark { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+        body.light-mode .btn-clear { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+        .palette-card {
+            background: var(--glass-bg); backdrop-filter: blur(16px); border-radius: var(--radius);
+            padding: 18px; box-shadow: var(--shadow); border: 1px solid var(--glass-border);
+            margin-top: 12px; transition: all 0.3s ease;
+        }
+        .palette-card:hover { box-shadow: var(--glow-sm); }
+        .palette-title { font-weight: 700; margin-bottom: 12px; color: var(--text); font-size: 14px; display: flex; align-items: center; gap: 7px; }
+        .palette-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 7px; margin-bottom: 12px; }
+        .palette-num {
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            background: var(--option-bg); border-radius: 8px; font-weight: 700; font-size: 11px;
+            cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; color: var(--text);
+        }
+        .palette-num:hover { background: var(--hover-bg); transform: scale(1.1); box-shadow: var(--glow-sm); }
+        .palette-num.answered { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .palette-num.marked { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+        .palette-num.current { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.2); transform: scale(1.08); box-shadow: 0 0 14px rgba(139, 92, 246, 0.4); }
+        .palette-num.wrong-num { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10px; color: var(--text-secondary); }
+        .legend-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+        .review-panel {
+            display: none; background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-radius: var(--radius); padding: 20px; margin-top: 12px;
+            box-shadow: var(--shadow); border: 1px solid var(--glass-border);
+        }
+        .review-panel.show { display: block; animation: fadeIn 0.5s ease; }
+        .result-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+        .result-item { background: var(--option-bg); padding: 14px; border-radius: 12px; text-align: center; border: 1px solid var(--border); transition: all 0.3s ease; }
+        .result-item:hover { box-shadow: var(--glow-sm); }
+        .result-item .value { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .result-item .label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+        .explanation-box {
+            background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 10px; padding: 14px; margin-top: 12px; display: none; transition: all 0.3s ease;
+        }
+        body.light-mode .explanation-box { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+        .explanation-box.show { display: block; animation: fadeIn 0.3s ease; }
+        .explanation-box .exp-title { font-weight: 700; font-size: 13px; margin-bottom: 6px; color: #fbbf24; }
+        body.light-mode .explanation-box .exp-title { color: #92400e; }
+        .swipe-hint { text-align: center; font-size: 11px; color: var(--text-secondary); margin-top: 8px; opacity: 0.7; letter-spacing: 0.5px; }
+        .review-mode-card {
+            background: var(--glass-bg); backdrop-filter: blur(12px); border-radius: var(--radius);
+            padding: 20px; margin-bottom: 10px; box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border); transition: all 0.3s ease;
+        }
+        .review-mode-card:hover { box-shadow: var(--glow-sm); transform: translateY(-1px); }
+        .review-mode-card.correct-answer { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3); }
+        .review-mode-card.wrong-answer { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); }
+        .review-mode-card.unanswered-q { background: var(--glass-bg); border-color: var(--glass-border); }
+        .review-mode-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
+        .review-mode-status { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 15px; }
+        .status-correct { background: rgba(16, 185, 129, 0.2); color: #4ade80; }
+        .status-wrong { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .status-unanswered { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+        body.light-mode .status-correct { background: #d1fae5; color: #065f46; }
+        body.light-mode .status-wrong { background: #fee2e2; color: #991b1b; }
+        body.light-mode .status-unanswered { background: #e2e8f0; color: #475569; }
+        .toast {
+            position: fixed; top: 16px; right: 16px; background: var(--glass-bg);
+            backdrop-filter: blur(20px); padding: 12px 18px; border-radius: 10px;
+            box-shadow: var(--glow-md); z-index: 1000; font-weight: 600; font-size: 13px;
+            display: none; border: 1px solid var(--glass-border); color: var(--text);
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        .review-mode-badge {
+            display: inline-block; background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white; padding: 6px 16px; border-radius: 20px; font-weight: 700;
+            font-size: 13px; margin-bottom: 16px; box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .avatar-circle {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 16px; overflow: hidden;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3); flex-shrink: 0;
+        }
+        @media (max-width: 500px) {
+            .options-grid { grid-template-columns: 1fr; }
+            .palette-grid { grid-template-columns: repeat(5, 1fr); }
+            .test-title { font-size: 15px; }
+            .question-text { font-size: 14px; padding: 14px; }
+            .result-summary { grid-template-columns: 1fr 1fr; }
+            .blob { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">⚛️</div>
+                CUET Physics • Dual Nature
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">30:00</span></div>
+            </div>
+        </div>
+
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-atom"></i> Physics</span>
+            <span class="info-chip"><i class="fas fa-wave-particle"></i> Dual Nature</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 40 Questions</span>
+        </div>
+
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/40 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/40</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+            <button class="btn" onclick="submitTest()" id="submitBtn" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;font-size:14px;padding:12px;margin-top:12px;width:100%;display:none !important;">
+                <i class="fas fa-check-double"></i> Submit Test
+            </button>
+        </div>
+
+        <div id="reviewModeContainer" style="display:none;"></div>
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+
+        <div class="review-panel" id="reviewPanel">
+            <h3 style="margin-bottom:12px;">📋 Result Review</h3>
+            <div class="result-summary" id="resultSummary"></div>
+            <div id="reviewQuestions"></div>
+            <button class="btn" onclick="closeReview()" style="margin-top:12px;display:inline-flex !important;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-times"></i> Close Review
+            </button>
+        </div>
+
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #8b5cf6;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2), rgba(252, 211, 77, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.16), rgba(248, 113, 113, 0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+                bubbles.forEach(b => {
+                    if (parseFloat(b.style.animationDuration) > 0 && b.getAnimations().length === 0) {
+                        b.remove();
+                    }
+                });
+            }, 4000);
+        })();
+
+        function setAvatarWithPic(elementId, userObj) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (userObj && userObj.avatarUrl) {
+                el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else if (userObj && userObj.profilePicUrl) {
+                el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius: inherit;">`;
+            } else {
+                el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : '⚛️';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        const QUESTIONS = [{
+            id: 0, en: "In a photoelectric experiment, if the intensity of incident light is doubled, the maximum kinetic energy of the photoelectrons will:", hi: "एक प्रकाश वैद्युत प्रयोग में, यदि आपतित प्रकाश की तीव्रता दोगुनी कर दी जाए, तो प्रकाशिक इलेक्ट्रॉनों की अधिकतम गतिज ऊर्जा:", oEn: ["Be doubled", "Be halved", "Remain unchanged", "Become four times"], oHi: ["दोगुनी हो जाएगी", "आधी हो जाएगी", "अपरिवर्तित रहेगी", "चार गुना हो जाएगी"], c: 2, exp: "Max KE depends only on frequency and work function, not intensity.", text: "Intensity effect on KE.", options: ["Be doubled", "Be halved", "Remain unchanged", "Become four times"], correct: 2, explanation: "KE depends on frequency, not intensity." },
+            { id: 1, en: "The stopping potential for a metal surface is 4V when illuminated with light of frequency ν. If the frequency is doubled, the new stopping potential will be:", hi: "धातु सतह के लिए निरोधी विभव 4V है जब आवृत्ति ν का प्रकाश डाला जाता है। यदि आवृत्ति दोगुनी कर दी जाए, तो नया निरोधी विभव होगा:", oEn: ["4V", "8V", "More than 8V", "Less than 8V but more than 4V"], oHi: ["4V", "8V", "8V से अधिक", "8V से कम पर 4V से अधिक"], c: 2, exp: "eV₀' = 2hν - Φ = 2(eV₀+Φ)-Φ = 2eV₀+Φ > 2V₀.", text: "Stopping potential with doubled frequency.", options: ["4V", "8V", "More than 8V", "Less than 8V but more than 4V"], correct: 2, explanation: "V₀' > 2V₀ because work function remains." },
+            { id: 2, en: "Which graph correctly represents variation of stopping potential (V₀) with frequency (ν)?", hi: "कौन सा ग्राफ निरोधी विभव (V₀) और आवृत्ति (ν) के परिवर्तन को सही दर्शाता है?", oEn: ["Straight line through origin", "Straight line with negative intercept on V₀ axis", "Parabola", "Exponential curve"], oHi: ["मूल बिंदु से सीधी रेखा", "V₀ अक्ष पर ऋणात्मक अंतःखंड वाली सीधी रेखा", "परवलय", "चरघातांकी वक्र"], c: 1, exp: "V₀ = (h/e)ν - (Φ/e). Linear with negative intercept.", text: "V₀ vs ν graph.", options: ["Straight line through origin", "Straight line with negative intercept", "Parabola", "Exponential"], correct: 1, explanation: "y = mx - c form." },
+            { id: 3, en: "The work function of a metal is 2.5 eV. The threshold frequency is approximately:", hi: "एक धातु का कार्य फलन 2.5 eV है। देहली आवृत्ति लगभग है:", oEn: ["6×10¹⁴ Hz", "6×10¹² Hz", "2.5×10¹⁵ Hz", "4×10¹⁴ Hz"], oHi: ["6×10¹⁴ Hz", "6×10¹² Hz", "2.5×10¹⁵ Hz", "4×10¹⁴ Hz"], c: 0, exp: "ν₀ = Φ/h = (2.5×1.6×10⁻¹⁹)/(6.63×10⁻³⁴) ≈ 6×10¹⁴ Hz.", text: "Threshold frequency calculation.", options: ["6×10¹⁴ Hz", "6×10¹² Hz", "2.5×10¹⁵ Hz", "4×10¹⁴ Hz"], correct: 0, explanation: "ν₀ = Φ/h ≈ 6×10¹⁴ Hz." },
+            { id: 4, en: "Photoelectric effect supports which nature of light?", hi: "प्रकाश वैद्युत प्रभाव प्रकाश की किस प्रकृति का समर्थन करता है?", oEn: ["Wave nature", "Particle nature", "Both", "Neither"], oHi: ["तरंग प्रकृति", "कण प्रकृति", "दोनों", "कोई नहीं"], c: 1, exp: "Photoelectric effect proves particle nature of light.", text: "Nature proved by photoelectric effect.", options: ["Wave nature", "Particle nature", "Both", "Neither"], correct: 1, explanation: "Particle nature (photons)." },
+            { id: 5, en: "If wavelength is reduced from 4000 Å to 3000 Å, change in stopping potential is:", hi: "यदि तरंगदैर्ध्य 4000 Å से 3000 Å की जाती है, तो निरोधी विभव में परिवर्तन है:", oEn: ["1.03 V", "2.04 V", "0.5 V", "1.5 V"], oHi: ["1.03 V", "2.04 V", "0.5 V", "1.5 V"], c: 0, exp: "ΔV₀ = 12400(1/3000 - 1/4000) ≈ 1.03 V.", text: "Stopping potential change with λ.", options: ["1.03 V", "2.04 V", "0.5 V", "1.5 V"], correct: 0, explanation: "ΔV₀ ≈ 1.03 V." },
+            { id: 6, en: "The slope of K_max vs ν graph is:", hi: "K_max बनाम ν ग्राफ का ढलान है:", oEn: ["h/e", "h", "Work function", "e/h"], oHi: ["h/e", "h", "कार्य फलन", "e/h"], c: 1, exp: "K_max = hν - Φ. Slope = h.", text: "Slope of K_max vs ν.", options: ["h/e", "h", "Work function", "e/h"], correct: 1, explanation: "Slope = Planck's constant h." },
+            { id: 7, en: "Threshold wavelength for a metal is 5000 Å. Photoelectrons will be emitted by:", hi: "धातु की देहली तरंगदैर्ध्य 5000 Å है। प्रकाशिक इलेक्ट्रॉन किसके द्वारा उत्सर्जित होंगे:", oEn: ["6000 Å light", "Infrared", "Ultraviolet", "Radio waves"], oHi: ["6000 Å प्रकाश", "अवरक्त", "पराबैंगनी", "रेडियो तरंगें"], c: 2, exp: "UV has wavelength < 4000 Å < 5000 Å threshold.", text: "Emission condition.", options: ["6000 Å", "Infrared", "Ultraviolet", "Radio"], correct: 2, explanation: "λ_incident < λ_threshold." },
+            { id: 8, en: "Hertz and Lenard observed that current flows only when frequency is:", hi: "हर्ट्ज़ और लेनार्ड ने देखा कि धारा तभी प्रवाहित होती है जब आवृत्ति:", oEn: ["Any value", "Above a certain minimum", "Below a maximum", "Constant"], oHi: ["कोई भी मान", "एक निश्चित न्यूनतम से ऊपर", "अधिकतम से नीचे", "स्थिर"], c: 1, exp: "Current flows only when frequency > threshold frequency.", text: "Frequency condition for photoemission.", options: ["Any value", "Above a certain minimum", "Below a maximum", "Constant"], correct: 1, explanation: "ν > ν₀ required." },
+            { id: 9, en: "Photon energy 8 eV incident on metal with work function 2 eV. Max velocity of photoelectrons is (m=9×10⁻³¹ kg):", hi: "8 eV ऊर्जा का फोटॉन 2 eV कार्य फलन की धातु पर गिरता है। फोटोइलेक्ट्रॉनों का अधिकतम वेग है:", oEn: ["1.4×10⁶ m/s", "2.4×10⁵ m/s", "4.2×10⁶ m/s", "3×10⁸ m/s"], oHi: ["1.4×10⁶ m/s", "2.4×10⁵ m/s", "4.2×10⁶ m/s", "3×10⁸ m/s"], c: 0, exp: "K = 6eV = 9.6×10⁻¹⁹ J. v = √(2K/m) ≈ 1.46×10⁶ m/s.", text: "Max velocity calculation.", options: ["1.4×10⁶ m/s", "2.4×10⁵ m/s", "4.2×10⁶ m/s", "3×10⁸ m/s"], correct: 0, explanation: "v ≈ 1.46×10⁶ m/s." },
+            { id: 10, en: "de-Broglie wavelength of a particle with mass m and kinetic energy K is:", hi: "द्रव्यमान m और गतिज ऊर्जा K वाले कण की डी-ब्रोग्ली तरंगदैर्ध्य है:", oEn: ["h/√(2mK)", "√(2mK)/h", "h/2mK", "h/mK"], oHi: ["h/√(2mK)", "√(2mK)/h", "h/2mK", "h/mK"], c: 0, exp: "λ = h/p = h/√(2mK).", text: "de-Broglie wavelength formula.", options: ["h/√(2mK)", "√(2mK)/h", "h/2mK", "h/mK"], correct: 0, explanation: "λ = h/√(2mK)." },
+            { id: 11, en: "Electron accelerated through 100 V has de-Broglie wavelength approximately:", hi: "100 V से त्वरित इलेक्ट्रॉन की डी-ब्रोग्ली तरंगदैर्ध्य लगभग है:", oEn: ["12.27 Å", "1.227 Å", "0.1227 Å", "122.7 Å"], oHi: ["12.27 Å", "1.227 Å", "0.1227 Å", "122.7 Å"], c: 1, exp: "λ = 12.27/√V = 12.27/10 = 1.227 Å.", text: "de-Broglie wavelength from potential.", options: ["12.27 Å", "1.227 Å", "0.1227 Å", "122.7 Å"], correct: 1, explanation: "λ = 12.27/√100 = 1.227 Å." },
+            { id: 12, en: "Proton and alpha particle accelerated through same V. Ratio of de-Broglie wavelengths λ_p : λ_α is:", hi: "समान V से त्वरित प्रोटॉन और अल्फा कण की डी-ब्रोग्ली तरंगदैर्ध्य का अनुपात λ_p : λ_α है:", oEn: ["1:1", "2:1", "2√2:1", "√8:1"], oHi: ["1:1", "2:1", "2√2:1", "√8:1"], c: 2, exp: "λ ∝ 1/√(mq). λ_p/λ_α = √(4×2/1×1) = √8 = 2√2.", text: "de-Broglie wavelength ratio.", options: ["1:1", "2:1", "2√2:1", "√8:1"], correct: 2, explanation: "= 2√2 : 1." },
+            { id: 13, en: "Matter waves are:", hi: "द्रव्य तरंगें हैं:", oEn: ["EM waves", "Transverse waves", "Probability waves", "Longitudinal waves"], oHi: ["EM तरंगें", "अनुप्रस्थ तरंगें", "संभाव्यता तरंगें", "अनुदैर्ध्य तरंगें"], c: 2, exp: "Matter waves are probability waves associated with moving particles.", text: "Nature of matter waves.", options: ["EM waves", "Transverse waves", "Probability waves", "Longitudinal waves"], correct: 2, explanation: "Probability waves." },
+            { id: 14, en: "If momentum of a particle is increased by 100%, de-Broglie wavelength will:", hi: "यदि कण के संवेग में 100% वृद्धि हो, तो डी-ब्रोग्ली तरंगदैर्ध्य:", oEn: ["Double", "Become half", "Remain same", "Increase by 100%"], oHi: ["दोगुनी", "आधी", "समान", "100% बढ़ जाएगी"], c: 1, exp: "λ = h/p. If p→2p, λ→λ/2.", text: "Wavelength vs momentum.", options: ["Double", "Become half", "Remain same", "Increase by 100%"], correct: 1, explanation: "λ ∝ 1/p." },
+            { id: 15, en: "de-Broglie wavelength of a 0.1 kg ball moving at 66 m/s is approximately:", hi: "66 m/s से गतिमान 0.1 kg गेंद की डी-ब्रोग्ली तरंगदैर्ध्य लगभग है:", oEn: ["10⁻³⁴ m", "10⁻³² m", "10⁻³⁵ m", "6.6×10⁻³⁴ m"], oHi: ["10⁻³⁴ m", "10⁻³² m", "10⁻³⁵ m", "6.6×10⁻³⁴ m"], c: 0, exp: "λ = h/mv = 6.6×10⁻³⁴/(0.1×66) ≈ 10⁻³⁴ m.", text: "Macroscopic de-Broglie wavelength.", options: ["10⁻³⁴ m", "10⁻³² m", "10⁻³⁵ m", "6.6×10⁻³⁴ m"], correct: 0, explanation: "λ ≈ 10⁻³⁴ m (negligible)." },
+            { id: 16, en: "Which moving with same velocity has longest de-Broglie wavelength?", hi: "समान वेग से गतिमान किसमें सबसे लंबी डी-ब्रोग्ली तरंगदैर्ध्य होगी?", oEn: ["Electron", "Proton", "Neutron", "Alpha particle"], oHi: ["इलेक्ट्रॉन", "प्रोटॉन", "न्यूट्रॉन", "अल्फा कण"], c: 0, exp: "λ ∝ 1/m. Electron has smallest mass.", text: "Longest de-Broglie wavelength.", options: ["Electron", "Proton", "Neutron", "Alpha"], correct: 0, explanation: "Lightest particle → longest λ." },
+            { id: 17, en: "If E_p is photon energy and E_e is electron KE with same λ, then:", hi: "यदि समान λ के लिए फोटॉन ऊर्जा E_p और इलेक्ट्रॉन KE E_e है, तो:", oEn: ["E_p ∝ E_e", "E_p ∝ √E_e", "E_e ∝ E_p²", "None"], oHi: ["E_p ∝ E_e", "E_p ∝ √E_e", "E_e ∝ E_p²", "कोई नहीं"], c: 1, exp: "E_p=hc/λ, E_e=h²/(2mλ²). So E_e ∝ E_p² or E_p ∝ √E_e.", text: "Photon vs electron energy relation.", options: ["E_p ∝ E_e", "E_p ∝ √E_e", "E_e ∝ E_p²", "None"], correct: 1, explanation: "E_p ∝ √E_e." },
+            { id: 18, en: "Davisson-Germer experiment proved:", hi: "डेविसन-जर्मर प्रयोग ने सिद्ध किया:", oEn: ["Wave nature of electrons", "Particle nature of light", "Nucleus existence", "Photoelectric effect"], oHi: ["इलेक्ट्रॉनों की तरंग प्रकृति", "प्रकाश की कण प्रकृति", "नाभिक का अस्तित्व", "प्रकाश वैद्युत प्रभाव"], c: 0, exp: "It demonstrated electron diffraction, proving wave nature.", text: "Davisson-Germer experiment.", options: ["Wave nature of electrons", "Particle nature of light", "Nucleus existence", "Photoelectric effect"], correct: 0, explanation: "Wave nature of electrons." },
+            { id: 19, en: "Photon momentum for frequency ν is:", hi: "आवृत्ति ν के फोटॉन का संवेग है:", oEn: ["hν/c", "hν/c²", "hνc", "h/ν"], oHi: ["hν/c", "hν/c²", "hνc", "h/ν"], c: 0, exp: "p = E/c = hν/c.", text: "Photon momentum.", options: ["hν/c", "hν/c²", "hνc", "h/ν"], correct: 0, explanation: "p = hν/c." },
+            { id: 20, en: "Light of frequency 1.5ν₀ incident. If frequency halved and intensity doubled, current becomes:", hi: "1.5ν₀ आवृत्ति का प्रकाश। यदि आवृत्ति आधी और तीव्रता दोगुनी, तो धारा:", oEn: ["Doubled", "Halved", "Zero", "Unchanged"], oHi: ["दोगुनी", "आधी", "शून्य", "अपरिवर्तित"], c: 2, exp: "New ν = 0.75ν₀ < ν₀, no emission.", text: "Current with reduced frequency.", options: ["Doubled", "Halved", "Zero", "Unchanged"], correct: 2, explanation: "ν < ν₀ → zero emission." },
+            { id: 21, en: "Slope of V₀ vs 1/λ graph is:", hi: "V₀ बनाम 1/λ ग्राफ का ढलान है:", oEn: ["hc/e", "h/e", "hc", "h"], oHi: ["hc/e", "h/e", "hc", "h"], c: 0, exp: "V₀ = (hc/e)(1/λ) - Φ/e. Slope = hc/e.", text: "Slope of V₀ vs 1/λ.", options: ["hc/e", "h/e", "hc", "h"], correct: 0, explanation: "Slope = hc/e." },
+            { id: 22, en: "Saturation current depends on:", hi: "संतृप्त धारा निर्भर करती है:", oEn: ["Frequency", "Work function", "Intensity", "Stopping potential"], oHi: ["आवृत्ति", "कार्य फलन", "तीव्रता", "निरोधी विभव"], c: 2, exp: "Saturation current ∝ intensity (number of photons).", text: "Saturation current dependence.", options: ["Frequency", "Work function", "Intensity", "Stopping potential"], correct: 2, explanation: "Depends on intensity." },
+            { id: 23, en: "Proton and electron have same de-Broglie wavelength. Which moves faster?", hi: "प्रोटॉन और इलेक्ट्रॉन की डी-ब्रोग्ली तरंगदैर्ध्य समान है। कौन तेज़ चलता है?", oEn: ["Proton", "Electron", "Same speed", "Depends on potential"], oHi: ["प्रोटॉन", "इलेक्ट्रॉन", "समान गति", "विभव पर निर्भर"], c: 1, exp: "v = h/mλ. For same λ, v ∝ 1/m. Electron lighter → faster.", text: "Speed comparison same λ.", options: ["Proton", "Electron", "Same speed", "Depends"], correct: 1, explanation: "Electron is faster." },
+            { id: 24, en: "Dual nature of radiation is shown by:", hi: "विकिरण की दोहरी प्रकृति किसके द्वारा दर्शाई जाती है?", oEn: ["Photoelectric effect & Diffraction", "Refraction & Reflection", "Interference only", "Photoelectric effect only"], oHi: ["प्रकाश वैद्युत प्रभाव और विवर्तन", "अपवर्तन और परावर्तन", "केवल व्यतिकरण", "केवल प्रकाश वैद्युत प्रभाव"], c: 0, exp: "PE effect (particle) + Diffraction (wave).", text: "Dual nature evidence.", options: ["PE & Diffraction", "Refraction & Reflection", "Interference only", "PE only"], correct: 0, explanation: "Particle + Wave nature." },
+            { id: 25, en: "Maximum wavelength for photoemission from metal with work function Φ is:", hi: "कार्य फलन Φ वाली धातु से फोटो उत्सर्जन के लिए अधिकतम तरंगदैर्ध्य है:", oEn: ["hc/Φ", "hΦ/c", "Φ/hc", "cΦ/h"], oHi: ["hc/Φ", "hΦ/c", "Φ/hc", "cΦ/h"], c: 0, exp: "λ₀ = c/ν₀ = hc/Φ.", text: "Threshold wavelength formula.", options: ["hc/Φ", "hΦ/c", "Φ/hc", "cΦ/h"], correct: 0, explanation: "λ₀ = hc/Φ." },
+            { id: 26, en: "When illuminated by λ, V₀ = V. By 2λ, V₀ = V/4. Threshold wavelength is:", hi: "λ से V₀=V। 2λ से V₀=V/4। देहली तरंगदैर्ध्य है:", oEn: ["3λ", "4λ", "5λ", "2λ"], oHi: ["3λ", "4λ", "5λ", "2λ"], c: 0, exp: "Solving two equations gives λ₀ = 3λ.", text: "Threshold wavelength from two readings.", options: ["3λ", "4λ", "5λ", "2λ"], correct: 0, explanation: "λ₀ = 3λ." },
+            { id: 27, en: "Number of photoelectrons emitted per second is proportional to:", hi: "प्रति सेकंड उत्सर्जित फोटोइलेक्ट्रॉनों की संख्या समानुपाती है:", oEn: ["Frequency", "Velocity", "Intensity", "Stopping potential"], oHi: ["आवृत्ति", "वेग", "तीव्रता", "निरोधी विभव"], c: 2, exp: "Intensity ∝ number of photons ∝ number of photoelectrons.", text: "Photoelectron count dependence.", options: ["Frequency", "Velocity", "Intensity", "Stopping potential"], correct: 2, explanation: "Depends on intensity." },
+            { id: 28, en: "Which has highest momentum for same wavelength?", hi: "समान तरंगदैर्ध्य के लिए किसका संवेग सबसे अधिक है?", oEn: ["Electron", "Photon", "Alpha particle", "All same"], oHi: ["इलेक्ट्रॉन", "फोटॉन", "अल्फा कण", "सभी समान"], c: 3, exp: "p = h/λ. Same λ → same p.", text: "Momentum at same wavelength.", options: ["Electron", "Photon", "Alpha", "All same"], correct: 3, explanation: "p depends only on λ." },
+            { id: 29, en: "Einstein won Nobel Prize for:", hi: "आइंस्टीन को नोबेल पुरस्कार किसके लिए मिला?", oEn: ["Relativity", "Photoelectric effect", "Brownian motion", "E=mc²"], oHi: ["सापेक्षता", "प्रकाश वैद्युत प्रभाव", "ब्राउनियन गति", "E=mc²"], c: 1, exp: "For his explanation of the photoelectric effect.", text: "Einstein's Nobel Prize.", options: ["Relativity", "Photoelectric effect", "Brownian motion", "E=mc²"], correct: 1, explanation: "Photoelectric effect (1921)." },
+            { id: 30, en: "Electron, alpha, proton have same KE. Shortest de-Broglie wavelength is for:", hi: "इलेक्ट्रॉन, अल्फा, प्रोटॉन की KE समान है। सबसे छोटी डी-ब्रोग्ली तरंगदैर्ध्य किसकी है?", oEn: ["Electron", "Alpha", "Proton", "All same"], oHi: ["इलेक्ट्रॉन", "अल्फा", "प्रोटॉन", "सभी समान"], c: 1, exp: "λ ∝ 1/√m. Heaviest (alpha) has shortest λ.", text: "Shortest de-Broglie wavelength.", options: ["Electron", "Alpha", "Proton", "All same"], correct: 1, explanation: "α has max mass → min λ." },
+            { id: 31, en: "If frequency of incident radiation increases, K_max will:", hi: "यदि आपतित विकिरण की आवृत्ति बढ़ती है, तो K_max:", oEn: ["Increase linearly", "Decrease", "Increase exponentially", "Remain same"], oHi: ["रैखिक रूप से बढ़ेगी", "घटेगी", "चरघातांकी रूप से बढ़ेगी", "समान रहेगी"], c: 0, exp: "K_max = hν - Φ. Linear increase with ν.", text: "K_max vs frequency.", options: ["Increase linearly", "Decrease", "Increase exponentially", "Remain same"], correct: 0, explanation: "Linear relation." },
+            { id: 32, en: "de-Broglie wavelength of electron in first Bohr orbit is:", hi: "प्रथम बोर कक्षा में इलेक्ट्रॉन की डी-ब्रोग्ली तरंगदैर्ध्य है:", oEn: ["Equal to circumference", "Half circumference", "Twice circumference", "Zero"], oHi: ["परिधि के बराबर", "आधी परिधि", "दोगुनी परिधि", "शून्य"], c: 0, exp: "2πr = nλ. For n=1, λ = 2πr.", text: "de-Broglie in Bohr orbit.", options: ["Equal to circumference", "Half circumference", "Twice circumference", "Zero"], correct: 0, explanation: "λ = 2πr (n=1)." },
+            { id: 33, en: "Energy of photon of wavelength 400 nm is approximately:", hi: "400 nm तरंगदैर्ध्य वाले फोटॉन की ऊर्जा लगभग है:", oEn: ["2.0 eV", "3.1 eV", "4.5 eV", "1.1 eV"], oHi: ["2.0 eV", "3.1 eV", "4.5 eV", "1.1 eV"], c: 1, exp: "E = 1240/λ(nm) = 1240/400 = 3.1 eV.", text: "Photon energy from wavelength.", options: ["2.0 eV", "3.1 eV", "4.5 eV", "1.1 eV"], correct: 1, explanation: "E = 1240/400 = 3.1 eV." },
+            { id: 34, en: "Photoelectrons are emitted when:", hi: "प्रकाशिक इलेक्ट्रॉन उत्सर्जित होते हैं जब:", oEn: ["ν = ν₀", "ν > ν₀", "ν < ν₀", "Both A and B"], oHi: ["ν = ν₀", "ν > ν₀", "ν < ν₀", "A और B दोनों"], c: 3, exp: "Emission occurs when ν ≥ ν₀.", text: "Emission frequency condition.", options: ["ν = ν₀", "ν > ν₀", "ν < ν₀", "Both A and B"], correct: 3, explanation: "ν ≥ ν₀." },
+            { id: 35, en: "If momentum P of matter wave is doubled, wavelength λ is:", hi: "यदि द्रव्य तरंग का संवेग P दोगुना किया जाए, तो तरंगदैर्ध्य λ:", oEn: ["Doubled", "Quadrupled", "Halved", "Unchanged"], oHi: ["दोगुनी", "चौगुनी", "आधी", "अपरिवर्तित"], c: 2, exp: "λ = h/p. p→2p ⇒ λ→λ/2.", text: "Wavelength vs momentum change.", options: ["Doubled", "Quadrupled", "Halved", "Unchanged"], correct: 2, explanation: "Halved." },
+            { id: 36, en: "Kinetic energy of electron with wavelength 1 Å is:", hi: "1 Å तरंगदैर्ध्य वाले इलेक्ट्रॉन की गतिज ऊर्जा है:", oEn: ["150 eV", "15 eV", "1.5 eV", "1500 eV"], oHi: ["150 eV", "15 eV", "1.5 eV", "1500 eV"], c: 0, exp: "V ≈ 150/λ² = 150/1 = 150 V → 150 eV.", text: "KE from de-Broglie λ.", options: ["150 eV", "15 eV", "1.5 eV", "1500 eV"], correct: 0, explanation: "≈ 150 eV." },
+            { id: 37, en: "Photoelectric emission is:", hi: "प्रकाश वैद्युत उत्सर्जन है:", oEn: ["Delayed by seconds", "Instantaneous", "Only in dark", "Constant for all metals"], oHi: ["सेकंड विलंबित", "तत्काल", "केवल अंधेरे में", "सभी धातुओं के लिए स्थिर"], c: 1, exp: "Emission is instantaneous (<10⁻⁹ s).", text: "Time delay in photoemission.", options: ["Delayed", "Instantaneous", "Only in dark", "Constant"], correct: 1, explanation: "Instantaneous emission." },
+            { id: 38, en: "Metal with very high work function is:", hi: "बहुत उच्च कार्य फलन वाली धातु है:", oEn: ["Good photosensitive material", "Poor photosensitive material", "Superconductor", "Radioactive"], oHi: ["अच्छा प्रकाश संवेदी", "खराब प्रकाश संवेदी", "अतिचालक", "रेडियोधर्मी"], c: 1, exp: "High Φ means difficult to emit electrons.", text: "High work function implication.", options: ["Good photosensitive", "Poor photosensitive", "Superconductor", "Radioactive"], correct: 1, explanation: "Poor photosensitivity." },
+            { id: 39, en: "de-Broglie wavelength of thermal neutron at temperature T is proportional to:", hi: "ताप T पर तापीय न्यूट्रॉन की डी-ब्रोग्ली तरंगदैर्ध्य समानुपाती है:", oEn: ["T", "1/√T", "1/T", "√T"], oHi: ["T", "1/√T", "1/T", "√T"], c: 1, exp: "K ∝ T. λ = h/√(2mK) ∝ 1/√T.", text: "Thermal neutron wavelength.", options: ["T", "1/√T", "1/T", "√T"], correct: 1, explanation: "λ ∝ 1/√T." }
+        ];
+
+        const TOTAL = QUESTIONS.length;
+        const state = {
+            currentIndex: 0, answers: {}, markedQuestions: new Set(),
+            timeLeft: 30 * 60, timerInterval: null, testSubmitted: false,
+            darkMode: true, lang: 'en', score: null
+        };
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('phys_dn_theme', state.darkMode ? 'dark' : 'light');
+        }
+        const savedTheme = localStorage.getItem('phys_dn_theme');
+        if (savedTheme === 'light') { state.darkMode = false; document.body.classList.add('light-mode'); document.getElementById('themeIcon').className = 'fas fa-moon'; }
+        else { state.darkMode = true; document.body.classList.remove('light-mode'); document.getElementById('themeIcon').className = 'fas fa-sun'; }
+
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            document.getElementById('langBtn').classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) renderReviewMode(); else renderQuestion();
+            localStorage.setItem('phys_dn_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        function calculateScore() {
+            let correct=0, wrong=0, score=0;
+            Object.keys(state.answers).forEach(idx=>{
+                const q=QUESTIONS[parseInt(idx)];
+                if(q){ if(state.answers[idx]===q.c){ correct++; score+=5; } else { wrong++; score-=1; } }
+            });
+            const attempted=correct+wrong;
+            return { score: Math.max(0,Math.round(score*100)/100), total: TOTAL*5, correct, wrong, attempted, unanswered: TOTAL-attempted };
+        }
+
+        function renderQuestion() {
+            if(IS_REVIEW_MODE) return;
+            const q=QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent=`Q ${state.currentIndex+1}/${TOTAL}`;
+            document.getElementById('questionText').innerHTML = state.lang==='hi' ? `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>` : `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            const grid=document.getElementById('optionsGrid'); grid.innerHTML='';
+            const opts=state.lang==='hi'?q.oHi:q.oEn;
+            const letters=['A','B','C','D'];
+            opts.forEach((opt,i)=>{
+                const card=document.createElement('div'); card.className='option-card';
+                if(state.testSubmitted){ if(i===q.c) card.classList.add('correct'); else if(state.answers[state.currentIndex]===i && state.answers[state.currentIndex]!==q.c) card.classList.add('wrong'); card.style.pointerEvents='none'; }
+                else { if(state.answers[state.currentIndex]===i) card.classList.add('selected'); card.onclick=()=>selectOption(i); }
+                card.innerHTML=`<div class="option-letter">${letters[i]}</div><span>${opt}</span>`; grid.appendChild(card);
+            });
+            const expBox=document.getElementById('explanationBox'); const expText=document.getElementById('explanationText');
+            if(state.testSubmitted){ expBox.classList.add('show'); expText.textContent=q.exp; } else { expBox.classList.remove('show'); }
+            document.getElementById('prevBtn').disabled=state.currentIndex===0;
+            document.getElementById('nextBtn').disabled=state.currentIndex===TOTAL-1;
+            document.getElementById('swipeHint').style.display=state.testSubmitted?'none':'block';
+            document.getElementById('actionRow').style.display=state.testSubmitted?'none':'flex';
+            renderPalette(); updateProgress();
+        }
+
+        function selectOption(index) {
+            if(state.testSubmitted||IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex]=index; state.markedQuestions.delete(state.currentIndex);
+            localStorage.setItem('phys_dn_answers',JSON.stringify(state.answers));
+            localStorage.setItem('phys_dn_marked',JSON.stringify([...state.markedQuestions]));
+            renderQuestion(); showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if(IS_REVIEW_MODE) return;
+            const idx=state.currentIndex+dir;
+            if(idx>=0&&idx<TOTAL){ state.currentIndex=idx; localStorage.setItem('phys_dn_idx',state.currentIndex); renderQuestion(); document.getElementById('questionCard').scrollIntoView({behavior:'smooth',block:'start'}); }
+        }
+
+        function toggleMark() {
+            if(state.testSubmitted||IS_REVIEW_MODE) return;
+            const idx=state.currentIndex;
+            if(state.markedQuestions.has(idx)){ state.markedQuestions.delete(idx); showToast('🏷️ Unmarked'); } else { state.markedQuestions.add(idx); showToast('🚩 Marked for review'); }
+            localStorage.setItem('phys_dn_marked',JSON.stringify([...state.markedQuestions])); renderPalette();
+        }
+
+        function clearAnswer() {
+            if(state.testSubmitted||IS_REVIEW_MODE) return;
+            if(state.answers[state.currentIndex]!==undefined){ delete state.answers[state.currentIndex]; localStorage.setItem('phys_dn_answers',JSON.stringify(state.answers)); renderQuestion(); showToast('🧹 Answer cleared'); }
+        }
+
+        function renderPalette() {
+            const grid=document.getElementById('paletteGrid'); grid.innerHTML='';
+            for(let i=0;i<TOTAL;i++){
+                const num=document.createElement('div'); num.className='palette-num'; num.textContent=i+1;
+                if(state.testSubmitted){ const q=QUESTIONS[i]; if(state.answers[i]===q.c) num.classList.add('answered'); else if(state.answers[i]!==undefined&&state.answers[i]!==q.c) num.classList.add('wrong-num'); }
+                else { if(state.answers[i]!==undefined) num.classList.add('answered'); if(state.markedQuestions.has(i)) num.classList.add('marked'); }
+                if(i===state.currentIndex) num.classList.add('current');
+                num.onclick=()=>{ if(IS_REVIEW_MODE) return; state.currentIndex=i; localStorage.setItem('phys_dn_idx',state.currentIndex); renderQuestion(); document.getElementById('questionCard').scrollIntoView({behavior:'smooth',block:'start'}); };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered=Object.keys(state.answers).length;
+            document.getElementById('progressFill').style.width=(answered/TOTAL*100)+'%';
+            document.getElementById('progressText').textContent=`${answered}/${TOTAL} answered`;
+        }
+
+        function startTimer() {
+            if(IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval=setInterval(()=>{ if(state.testSubmitted){clearInterval(state.timerInterval);return;} state.timeLeft--; localStorage.setItem('phys_dn_time',state.timeLeft); updateTimerDisplay(); if(state.timeLeft<=0){clearInterval(state.timerInterval);autoSubmit();} },1000);
+        }
+
+        function updateTimerDisplay() {
+            const m=Math.floor(state.timeLeft/60), s=state.timeLeft%60;
+            document.getElementById('timerText').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            if(state.timeLeft<300&&state.timeLeft>0) document.getElementById('timerPill').classList.add('warning'); else document.getElementById('timerPill').classList.remove('warning');
+            if(!state.testSubmitted) document.title=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} - CUET Physics Mock`;
+        }
+
+        function autoSubmit(){ showToast('⏰ Time\'s up! Submitting...'); setTimeout(()=>submitTest(true),1500); }
+
+        function submitTest(skipConfirm=false){
+            if(state.testSubmitted) return;
+            const answered=Object.keys(state.answers).length;
+            if(!skipConfirm){ let msg='Are you sure?'; if(TOTAL-answered>0) msg=`${TOTAL-answered} unanswered. Submit anyway?`; if(!confirm(msg)) return; }
+            state.testSubmitted=true; clearInterval(state.timerInterval); state.score=calculateScore();
+            const resultData={ score: state.score.score, total: state.score.total, accuracy: state.score.attempted>0?Math.round((state.score.correct/state.score.attempted)*100):0, correct: state.score.correct, wrong: state.score.wrong, attempted: state.score.attempted, unanswered: state.score.unanswered, timeTaken: (30*60)-state.timeLeft, testCode:'CUET-PHYS-DN-40', examType:'CUET UG Physics' };
+            localStorage.setItem('phys_dn_last_answers',JSON.stringify(state.answers)); localStorage.setItem('phys_dn_last_file',window.location.href.split('?')[0]); localStorage.setItem('phys_dn_last_result',JSON.stringify(resultData));
+            if(window.parent!==window) window.parent.postMessage({type:'TEST_SUBMITTED',...resultData,answers:state.answers},'*');
+            showReview(); renderQuestion(); renderPalette(); showToast('✅ Test Submitted!'); setTimeout(()=>document.getElementById('reviewPanel').scrollIntoView({behavior:'smooth'}),300);
+            document.title='Submitted - CUET Physics Mock'; document.getElementById('swipeHint').style.display='none'; document.getElementById('actionRow').style.display='none'; document.getElementById('progressCard').style.display='none'; document.getElementById('paletteCard').style.display='none';
+        }
+
+        function showReview(){
+            document.getElementById('reviewPanel').classList.add('show');
+            const r=state.score;
+            document.getElementById('resultSummary').innerHTML=`<div class="result-item"><div class="value">${r.score}/${r.total}</div><div class="label">Score</div></div><div class="result-item"><div class="value" style="color:#10b981;">${r.correct}</div><div class="label">✅ Correct</div></div><div class="result-item"><div class="value" style="color:#ef4444;">${r.wrong}</div><div class="label">❌ Wrong</div></div><div class="result-item"><div class="value">${r.unanswered}</div><div class="label">⬜ Unanswered</div></div>`;
+            const rev=document.getElementById('reviewQuestions'); rev.innerHTML='<h4 style="margin:12px 0;">📝 Question-wise Review</h4>';
+            QUESTIONS.forEach((q,i)=>{ const u=state.answers[i]; const isC=u===q.c; const isU=u===undefined; const d=document.createElement('div'); d.style.cssText='padding:12px;margin:8px 0;border-radius:10px;border:1px solid var(--border);background:var(--option-bg);'; let si,sc; if(isU){si='⬜';sc='var(--text-secondary)';}else if(isC){si='✅';sc='#10b981';}else{si='❌';sc='#ef4444';} const opts=state.lang==='hi'?q.oHi:q.oEn; const ut=isU?'Not answered':opts[u]; const ct=opts[q.c]; const qd=state.lang==='hi'?q.hi:q.en; d.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-weight:700;">Q${i+1}.</span><span style="color:${sc};font-size:18px;">${si}</span></div><div style="font-size:13px;margin-bottom:4px;white-space:pre-line;">${qd}</div><div style="font-size:11px;color:var(--text-secondary);">Your answer: <strong>${ut}</strong><br>Correct: <strong style="color:#10b981;">${ct}</strong></div><div style="font-size:11px;margin-top:4px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;color:#fbbf24;">💡 ${q.exp}</div><button onclick="jumpToQ(${i})" style="margin-top:6px;padding:4px 12px;border-radius:6px;border:1px solid #8b5cf6;background:transparent;color:#a78bfa;cursor:pointer;font-size:11px;">Jump to Q${i+1}</button>`; rev.appendChild(d); });
+        }
+
+        function jumpToQ(i){ state.currentIndex=i; document.getElementById('questionCard').style.display='block'; document.getElementById('progressCard').style.display='block'; document.getElementById('paletteCard').style.display='block'; document.getElementById('swipeHint').style.display='block'; document.getElementById('actionRow').style.display='flex'; renderQuestion(); document.getElementById('questionCard').scrollIntoView({behavior:'smooth'}); }
+        function closeReview(){ document.getElementById('reviewPanel').classList.remove('show'); }
+
+        function renderReviewMode(){
+            const c=document.getElementById('reviewModeContainer'); const l=['A','B','C','D']; const k=state.lang==='hi'?'oHi':'oEn';
+            let h='<div class="review-mode-badge">📝 Review Mode — All 40 Questions</div>';
+            QUESTIONS.forEach((q,i)=>{ const u=state.answers[i]; const isC=u===q.c; const isU=u===undefined; let cc='review-mode-card'; let s=''; if(isU){cc+=' unanswered-q';s='<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>';}else if(isC){cc+=' correct-answer';s='<span class="review-mode-status status-correct">✅ Correct (+5)</span>';}else{cc+=' wrong-answer';s='<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>';} const opts=q[k]; const qd=state.lang==='hi'?q.hi:q.en; const oh=opts.map((opt,j)=>{ let oc='option-card'; if(j===q.c) oc+=' correct'; if(j===u&&!isC) oc+=' wrong'; if(j===u&&isC) oc+=' selected correct'; let lb=''; if(j===q.c) lb=' ✅'; if(j===u&&!isC) lb=' ❌ (Your answer)'; if(j===u&&isC) lb=' ✅ (Your answer)'; return `<div class="${oc}" style="pointer-events:none;"><div class="option-letter">${l[j]}</div><span>${opt}${lb}</span></div>`; }).join(''); h+=`<div class="${cc}"><div class="review-mode-header"><span class="q-badge">Q ${i+1}/${TOTAL}</span>${s}</div><div class="question-text"><div style="font-weight:600;white-space:pre-line;">${qd}</div></div><div class="options-grid">${oh}</div><div class="explanation-box show" style="margin-top:10px;"><div class="exp-title">💡 Explanation</div><div>${q.exp}</div></div></div>`; });
+            c.innerHTML=h; c.style.display='block';
+        }
+
+        let tSX=0,tSY=0,tM=false,sH=false;
+        const card=document.getElementById('questionCard');
+        card.addEventListener('touchstart',(e)=>{if(IS_REVIEW_MODE)return;tSX=e.touches[0].clientX;tSY=e.touches[0].clientY;tM=false;sH=false;},{passive:true});
+        card.addEventListener('touchmove',(e)=>{if(IS_REVIEW_MODE||sH)return;const dx=e.touches[0].clientX-tSX,dy=e.touches[0].clientY-tSY;if(Math.abs(dx)>15&&Math.abs(dx)>Math.abs(dy)){tM=true;card.style.transform=`translateX(${dx*0.5}px)`;card.style.opacity=Math.max(0.5,1-Math.abs(dx)/800);card.classList.add('swiping');e.preventDefault();}},{passive:false});
+        card.addEventListener('touchend',(e)=>{if(IS_REVIEW_MODE)return;card.classList.remove('swiping');card.style.transform='';card.style.opacity='';if(!tM)return;const ex=e.changedTouches[0]?.clientX||tSX;const dx=ex-tSX;if(Math.abs(dx)>80){sH=true;if(dx>0)navigate(-1);else navigate(1);}tM=false;});
+
+        document.addEventListener('keydown',(e)=>{if(IS_REVIEW_MODE)return;if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;switch(e.key.toLowerCase()){case'arrowleft':e.preventDefault();navigate(-1);break;case'arrowright':e.preventDefault();navigate(1);break;case'a':case'1':e.preventDefault();selectOption(0);break;case'b':case'2':e.preventDefault();selectOption(1);break;case'c':case'3':e.preventDefault();selectOption(2);break;case'd':case'4':e.preventDefault();selectOption(3);break;case'm':e.preventDefault();toggleMark();break;case'backspace':e.preventDefault();clearAnswer();}});
+
+        function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='flex';clearTimeout(t._t);t._t=setTimeout(()=>{t.style.display='none';},2000);}
+        window.addEventListener('beforeunload',(e)=>{if(!state.testSubmitted&&state.timeLeft>0&&Object.keys(state.answers).length>0&&!IS_REVIEW_MODE){e.preventDefault();e.returnValue='';}});
+
+        function init(){
+            localStorage.setItem('phys_dn_last_file',window.location.href.split('?')[0]);
+            if(IS_REVIEW_MODE){
+                ['questionCard','progressCard','paletteCard','swipeHint','infoRow','timerPill','actionRow','reviewPanel'].forEach(id=>document.getElementById(id).style.display='none');
+                document.title='Review - CUET Physics Mock';
+                state.answers=JSON.parse(localStorage.getItem('phys_dn_last_answers')||'{}'); state.testSubmitted=true; state.lang=localStorage.getItem('phys_dn_lang')||'en';
+                if(state.lang==='hi'){document.getElementById('langBtn').classList.add('active');document.getElementById('langText').textContent='English';}
+                renderReviewMode();
+            }else{
+                state.lang=localStorage.getItem('phys_dn_lang')||'en'; if(state.lang==='hi'){document.getElementById('langBtn').classList.add('active');document.getElementById('langText').textContent='English';}
+                state.answers=JSON.parse(localStorage.getItem('phys_dn_answers')||'{}'); state.markedQuestions=new Set(JSON.parse(localStorage.getItem('phys_dn_marked')||'[]'));
+                const si=parseInt(localStorage.getItem('phys_dn_idx')); state.currentIndex=(si>=0&&si<TOTAL)?si:0;
+                const st=parseInt(localStorage.getItem('phys_dn_time')); if(st&&st>0&&st<=30*60) state.timeLeft=st;
+                startTimer(); renderQuestion(); renderPalette();
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
