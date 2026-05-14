@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Chemistry Mock Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-glow: #8b5cf6;
+            --accent: #ec4899;
+            --accent-glow: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(139, 92, 246, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.25);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.35);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #f3f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.15);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #fdf2f8 100%);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(139, 92, 246, 0.2);
+            top: -100px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(236, 72, 153, 0.18);
+            bottom: -80px;
+            left: -60px;
+            animation-delay: -7s;
+        }
+        .blob-3 {
+            width: 220px;
+            height: 220px;
+            background: rgba(168, 85, 247, 0.16);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        @keyframes blobFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(40px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, -20px) scale(0.9);
+            }
+            75% {
+                transform: translate(20px, 40px) scale(1.05);
+            }
+        }
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.06));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.12);
+            animation: floatUp linear infinite;
+        }
+        body.light-mode .bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.04));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.08);
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateY(-250px) translateX(30px) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-500px) translateX(-20px) scale(1);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translateY(-750px) translateX(15px) scale(0.9);
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(-1000px) translateX(-10px) scale(0.3);
+                opacity: 0;
+            }
+        }
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .top-bar:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+        .test-title .icon-dna {
+            font-size: 20px;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+        @keyframes pulseIcon {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.75;
+            }
+        }
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 2px solid #f97316;
+            background: var(--card);
+            color: #f97316;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover {
+            box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);
+            transform: translateY(-1px);
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 16px rgba(249, 115, 22, 0.4);
+        }
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+        .timer-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            animation: pulse 0.8s infinite;
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
+        }
+        body.light-mode .timer-pill.warning {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+        }
+        .info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .info-chip i {
+            font-size: 11px;
+        }
+        .info-chip.exam {
+            color: #a78bfa;
+        }
+        .info-chip.subject {
+            color: #ec4899;
+        }
+        .info-chip.marks {
+            color: #fbbf24;
+        }
+        body.light-mode .info-chip.exam {
+            color: #7c3aed;
+        }
+        body.light-mode .info-chip.subject {
+            color: #be185d;
+        }
+        body.light-mode .info-chip.marks {
+            color: #d97706;
+        }
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.35s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: var(--glow-md);
+            transform: translateY(-2px);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .question-card.swiping {
+            transition: none;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-badge {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .q-marks {
+            font-weight: 600;
+            font-size: 12px;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 6px 14px;
+            border-radius: 15px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+        body.light-mode .q-marks {
+            color: #d97706;
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--option-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #8b5cf6;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+        .question-text .hindi-block {
+            color: #fbbf24;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        body.light-mode .question-text .hindi-block {
+            color: #d97706;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--option-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            backdrop-filter: blur(4px);
+        }
+        .option-card:hover {
+            border-color: #a78bfa;
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+        .option-card.selected {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 6px 22px rgba(139, 92, 246, 0.4);
+        }
+        .option-card.correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+        }
+        .option-card.wrong {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4) !important;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-4px);
+            }
+            75% {
+                transform: translateX(4px);
+            }
+        }
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #a78bfa;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+        .option-card.selected .option-letter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .option-card.correct .option-letter,
+        .option-card.wrong .option-letter {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 60px;
+        }
+        .btn:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-2px);
+            border-color: #a78bfa;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .btn-mark {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+        .btn-mark:hover {
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+        }
+        .btn-clear {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #4ade80;
+        }
+        .btn-clear:hover {
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+        }
+        body.light-mode .btn-mark {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        body.light-mode .btn-clear {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        .palette-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+        .palette-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .palette-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+        .palette-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--option-bg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            color: var(--text);
+        }
+        .palette-num:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+            box-shadow: var(--glow-sm);
+        }
+        .palette-num.answered {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+        .palette-num.marked {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+        .palette-num.current {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.2);
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.4);
+        }
+        .palette-num.wrong-num {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+        .legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .review-panel {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+        .review-panel.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .result-item {
+            background: var(--option-bg);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .result-item:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .result-item .value {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .result-item .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .explanation-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        body.light-mode .explanation-box {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .explanation-box .exp-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #fbbf24;
+        }
+        body.light-mode .explanation-box .exp-title {
+            color: #92400e;
+        }
+        .swipe-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+        .review-mode-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .review-mode-card:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .review-mode-card.correct-answer {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .review-mode-card.wrong-answer {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .review-mode-card.unanswered-q {
+            background: var(--glass-bg);
+            border-color: var(--glass-border);
+        }
+        .review-mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .review-mode-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+        .status-correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: #4ade80;
+        }
+        .status-wrong {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        .status-unanswered {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+        body.light-mode .status-correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        body.light-mode .status-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        body.light-mode .status-unanswered {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .toast {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: var(--glow-md);
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 13px;
+            display: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .review-mode-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+            flex-shrink: 0;
+        }
+        @media (max-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            .test-title {
+                font-size: 15px;
+            }
+            .question-text {
+                font-size: 14px;
+                padding: 14px;
+            }
+            .result-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .blob {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="bubbles-container" id="bubblesContainer"></div>
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">🧪</div>
+                CUET Chemistry • Mock Test
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">45:00</span></div>
+            </div>
+        </div>
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-flask"></i> Chemistry</span>
+            <span class="info-chip"><i class="fas fa-atom"></i> Physical • Organic • Inorganic</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 50 Questions</span>
+        </div>
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/50 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/50</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+        </div>
+        <div id="reviewModeContainer" style="display:none;"></div>
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+        <div class="review-panel" id="reviewPanel">
+            <h3 style="margin-bottom:12px;">📋 Result Review</h3>
+            <div class="result-summary" id="resultSummary"></div>
+            <div id="reviewQuestions"></div>
+            <button class="btn" onclick="closeReview()" style="margin-top:12px;display:inline-flex !important;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-times"></i> Close Review
+            </button>
+        </div>
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #8b5cf6;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2), rgba(252, 211, 77, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.16), rgba(248, 113, 113, 0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+            }, 4000);
+        })();
+
+        const QUESTIONS = [
+            { id:0, en:"An element with density 2.8 g/cm³ forms a f.c.c. unit cell with edge length 4×10⁻⁸ cm. The molar mass of the element is:", hi:"एक तत्व जिसका घनत्व 2.8 g/cm³ है, 4×10⁻⁸ cm कोर लंबाई के साथ f.c.c. इकाई सेल बनाता है। तत्व का मोलर द्रव्यमान है:", oEn:["27 g/mol","45 g/mol","54 g/mol","30 g/mol"], oHi:["27 g/mol","45 g/mol","54 g/mol","30 g/mol"], c:0, exp:"M = (d × a³ × Nₐ) / Z; for fcc Z=4. Calculation gives ≈27 g/mol." },
+            { id:1, en:"The osmotic pressure of a solution containing 4.0 g of solute (molar mass 246) per litre at 27°C is:", hi:"27°C पर प्रति लीटर 4.0 g विलेय (मोलर द्रव्यमान 246) वाले विलयन का परासरण दाब है:", oEn:["0.4 atm","0.1 atm","0.8 atm","0.2 atm"], oHi:["0.4 atm","0.1 atm","0.8 atm","0.2 atm"], c:0, exp:"π = CRT; C = (4/246) mol/L, T=300K, R=0.0821 → π ≈ 0.4 atm." },
+            { id:2, en:"How much electricity in Faraday is required to produce 20 g of Ca from molten CaCl₂?", hi:"गलित CaCl₂ से 20 g Ca उत्पन्न करने के लिए फैराडे में कितनी बिजली की आवश्यकता होती है?", oEn:["1 F","2 F","0.5 F","4 F"], oHi:["1 F","2 F","0.5 F","4 F"], c:0, exp:"Ca²⁺ + 2e⁻ → Ca; 40 g needs 2F, so 20 g needs 1F." },
+            { id:3, en:"For a first-order reaction, if the time taken for 50% completion is 20 minutes, the time for 99.9% completion is:", hi:"प्रथम कोटि की अभिक्रिया के लिए, यदि 50% पूर्ण होने में 20 मिनट लगते हैं, तो 99.9% पूर्ण होने का समय है:", oEn:["200 min","100 min","150 min","180 min"], oHi:["200 min","100 min","150 min","180 min"], c:0, exp:"t_99.9% ≈ 10 × t₁/₂ = 200 min." },
+            { id:4, en:"The unit of rate constant for a zero-order reaction is:", hi:"शून्य कोटि की अभिक्रिया के लिए वेग स्थिरांक की इकाई है:", oEn:["s⁻¹","mol L⁻¹ s⁻¹","L mol⁻¹ s⁻¹","mol⁻¹ s⁻¹"], oHi:["s⁻¹","mol L⁻¹ s⁻¹","L mol⁻¹ s⁻¹","mol⁻¹ s⁻¹"], c:1, exp:"For zero order: rate = k, unit = concentration time⁻¹ → mol L⁻¹ s⁻¹." },
+            { id:5, en:"Which of the following ions has the highest magnetic moment?", hi:"निम्नलिखित में से किस आयन का चुंबकीय आघूर्ण सबसे अधिक है?", oEn:["Fe³⁺","Mn²⁺","Cr³⁺","Cu²⁺"], oHi:["Fe³⁺","Mn²⁺","Cr³⁺","Cu²⁺"], c:1, exp:"Mn²⁺ has 5 unpaired electrons, highest magnetic moment." },
+            { id:6, en:"The shape of XeF₄ according to VSEPR theory is:", hi:"VSEPR सिद्धांत के अनुसार XeF₄ की आकृति है:", oEn:["Tetrahedral","Square Planar","Pyramidal","See-saw"], oHi:["चतुष्फलकीय","वर्ग समतलीय","पिरामिडीय","सी-सॉ"], c:1, exp:"XeF₄ has 4 bond pairs and 2 lone pairs → square planar." },
+            { id:7, en:"Lanthanoid contraction is caused by:", hi:"लैन्थेनॉइड आकुंचन किसके कारण होता है?", oEn:["Perfect shielding of 4f electrons","Poor shielding of 4f electrons","Increase in nuclear charge","Decrease in nuclear charge"], oHi:["4f इलेक्ट्रॉनों का पूर्ण परिरक्षण","4f इलेक्ट्रॉनों का खराब परिरक्षण","नाभिकीय आवेश में वृद्धि","नाभिकीय आवेश में कमी"], c:1, exp:"Poor shielding by 4f electrons causes increased effective nuclear charge, pulling electrons closer." },
+            { id:8, en:"The IUPAC name of [Pt(NH₃)₂Cl₂] is:", hi:"[Pt(NH₃)₂Cl₂] का IUPAC नाम है:", oEn:["Diamminedichloridoplatinum(II)","Diamminedichloridoplatinum(IV)","Platinumdiamminedichloride","Dichloridodiammineplatinum(II)"], oHi:["डाइएमीनडाइक्लोरिडोप्लैटिनम(II)","डाइएमीनडाइक्लोरिडोप्लैटिनम(IV)","प्लैटिनमडाइएमीनडाइक्लोराइड","डाइक्लोरिडोडाइएमीनप्लैटिनम(II)"], c:0, exp:"Pt in +2 oxidation state, ligands named alphabetically: diammine, dichlorido." },
+            { id:9, en:"Which transition metal oxide is used as a catalyst in the Contact Process?", hi:"संपर्क प्रक्रम में किस संक्रमण धातु ऑक्साइड का उपयोग उत्प्रेरक के रूप में किया जाता है?", oEn:["Fe₂O₃","V₂O₅","MnO₂","Cr₂O₃"], oHi:["Fe₂O₃","V₂O₅","MnO₂","Cr₂O₃"], c:1, exp:"V₂O₅ catalyses oxidation of SO₂ to SO₃ in contact process." },
+            { id:10, en:"Which of the following will undergo Sₙ1 reaction most readily?", hi:"निम्नलिखित में से कौन सबसे आसानी से Sₙ1 अभिक्रिया करेगा?", oEn:["CH₃Cl","(CH₃)₃CCl","CH₃CH₂Cl","(CH₃)₂CHCl"], oHi:["CH₃Cl","(CH₃)₃CCl","CH₃CH₂Cl","(CH₃)₂CHCl"], c:1, exp:"Tertiary carbocation is most stable, favours Sₙ1." },
+            { id:11, en:"Phenol reacts with CHCl₃ and NaOH to give salicylaldehyde. This reaction is:", hi:"फिनोल CHCl₃ और NaOH के साथ अभिक्रिया करके सैलिसिलैल्डिहाइड देता है। यह अभिक्रिया है:", oEn:["Reimer-Tiemann reaction","Kolbe's reaction","Rosenmund reduction","Friedel-Crafts reaction"], oHi:["रीमर-टीमान अभिक्रिया","कोल्बे अभिक्रिया","रोसेनमुंड अपचयन","फ्रीडल-क्राफ्ट्स अभिक्रिया"], c:0, exp:"Reimer-Tiemann: phenol to salicylaldehyde using CHCl₃/NaOH." },
+            { id:12, en:"Primary amines react with CHCl₃ and alcoholic KOH to form foul-smelling compounds. This is:", hi:"प्राथमिक एमीन CHCl₃ और अल्कोहलिक KOH के साथ अभिक्रिया करके दुर्गंधयुक्त यौगिक बनाते हैं। यह है:", oEn:["Hofmann bromamide reaction","Carbylamine reaction","Gabriel phthalimide synthesis","Sandmeyer reaction"], oHi:["हॉफमैन ब्रोमामाइड अभिक्रिया","कार्बिलऐमीन अभिक्रिया","गैब्रियल थैलिमाइड संश्लेषण","सैंडमायर अभिक्रिया"], c:1, exp:"Carbylamine test: RNH₂ + CHCl₃ + KOH → RNC (foul smell)." },
+            { id:13, en:"The most basic compound among the following is:", hi:"निम्नलिखित में से सबसे अधिक क्षारीय यौगिक है:", oEn:["Aniline","Benzylamine","p-nitroaniline","Acetamide"], oHi:["एनिलीन","बेंज़िलऐमीन","p-नाइट्रोएनिलीन","एसिटामाइड"], c:1, exp:"Benzylamine has localized lone pair on N, not involved in resonance → most basic." },
+            { id:14, en:"Which vitamin deficiency causes Night Blindness?", hi:"किस विटामिन की कमी से रतौंधी होती है?", oEn:["Vitamin B12","Vitamin C","Vitamin A","Vitamin K"], oHi:["विटामिन B12","विटामिन C","विटामिन A","विटामिन K"], c:2, exp:"Vitamin A (retinol) deficiency leads to night blindness." },
+            { id:15, en:"The value of Henry's constant K_H:", hi:"हेनरी स्थिरांक K_H का मान:", oEn:["Increases with increase in temperature","Decreases with increase in temperature","Remains constant","First increases then decreases"], oHi:["तापमान बढ़ने के साथ बढ़ता है","तापमान बढ़ने के साथ घटता है","स्थिर रहता है","पहले बढ़ता फिर घटता है"], c:0, exp:"Solubility of gases decreases with temperature → K_H increases." },
+            { id:16, en:"In the coordination compound [Co(en)₂Cl₂]Cl, the coordination number of Co is:", hi:"संयोजन यौगिक [Co(en)₂Cl₂]Cl में, Co की समन्वय संख्या है:", oEn:["4","6","3","5"], oHi:["4","6","3","5"], c:1, exp:"en is bidentate (2 sites each), plus 2 Cl⁻ = 6 coordination number." },
+            { id:17, en:"DNA contains which of the following bases that is NOT present in RNA?", hi:"DNA में निम्नलिखित में से कौन सा बेस होता है जो RNA में मौजूद नहीं होता है?", oEn:["Adenine","Guanine","Thymine","Uracil"], oHi:["एडेनिन","गुआनिन","थाइमिन","यूरेसिल"], c:2, exp:"Thymine is in DNA; RNA has Uracil instead." },
+            { id:18, en:"The monomer of Teflon is:", hi:"टेफ्लॉन का मोनोमर है:", oEn:["Vinyl chloride","Tetrafluoroethene","Isoprene","Styrene"], oHi:["विनाइल क्लोराइड","टेट्राफ्लोरोएथीन","आइसोप्रीन","स्टाइरीन"], c:1, exp:"Teflon is polytetrafluoroethene, monomer is F₂C=CF₂." },
+            { id:19, en:"Which test is used to distinguish between aldehydes and ketones?", hi:"एल्डिहाइड और कीटोन के बीच अंतर करने के लिए किस परीक्षण का उपयोग किया जाता है?", oEn:["Lucas test","Tollen's test","Hinsberg test","Biuret test"], oHi:["ल्यूकस परीक्षण","टोलेंस परीक्षण","हिन्सबर्ग परीक्षण","ब्यूरेट परीक्षण"], c:1, exp:"Tollen's test (silver mirror) positive for aldehydes, not ketones." },
+            { id:20, en:"[Fe(CN)₆]⁴⁻ is diamagnetic. What is the hybridisation of Fe²⁺ in this complex?", hi:"[Fe(CN)₆]⁴⁻ प्रतिचुम्बकीय है। इस संकुल में Fe²⁺ का संकरण है:", oEn:["sp³d²","d²sp³","sp³","dsp²"], oHi:["sp³d²","d²sp³","sp³","dsp²"], c:1, exp:"CN⁻ is strong ligand, causes pairing → inner orbital d²sp³ hybridisation." },
+            { id:21, en:"The colour of [Ti(H₂O)₆]³⁺ is due to:", hi:"[Ti(H₂O)₆]³⁺ का रंग किसके कारण होता है?", oEn:["d-d transition","Charge transfer","Ligand field","Polarisation"], oHi:["d-d संक्रमण","आवेश स्थानांतरण","लिगेंड क्षेत्र","ध्रुवण"], c:0, exp:"Ti³⁺ has d¹ configuration; colour arises from d-d transition." },
+            { id:22, en:"In the complex ion [CoF₆]³⁻, the number of unpaired electrons is:", hi:"संकुल आयन [CoF₆]³⁻ में अयुग्मित इलेक्ट्रॉनों की संख्या है:", oEn:["0","2","3","4"], oHi:["0","2","3","4"], c:3, exp:"Co³⁺ d⁶, F⁻ weak ligand → high spin → 4 unpaired electrons." },
+            { id:23, en:"KMnO₄ in acidic medium is used as an oxidising agent. The number of electrons gained per MnO₄⁻ is:", hi:"अम्लीय माध्यम में KMnO₄ ऑक्सीकारक के रूप में प्रयुक्त होता है। प्रति MnO₄⁻ प्राप्त इलेक्ट्रॉनों की संख्या है:", oEn:["1","3","5","7"], oHi:["1","3","5","7"], c:2, exp:"MnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O, gains 5 electrons." },
+            { id:24, en:"Which of the following is an example of a chelate complex?", hi:"निम्नलिखित में से कौन कीलेट संकुल का उदाहरण है?", oEn:["[Co(NH₃)₆]Cl₃","[PtCl₂(NH₃)₂]","[Co(en)₃]³⁺","K₄[Fe(CN)₆]"], oHi:["[Co(NH₃)₆]Cl₃","[PtCl₂(NH₃)₂]","[Co(en)₃]³⁺","K₄[Fe(CN)₆]"], c:2, exp:"en (ethylenediamine) is bidentate, forms chelate rings." },
+            { id:25, en:"The EMF of the cell Zn|Zn²⁺(0.1M)||Cu²⁺(0.01M)|Cu at 298 K is: (E°_cell = 1.10 V)", hi:"298 K पर सेल Zn|Zn²⁺(0.1M)||Cu²⁺(0.01M)|Cu का EMF है: (E°_cell = 1.10 V)", oEn:["1.10 V","1.07 V","1.13 V","1.04 V"], oHi:["1.10 V","1.07 V","1.13 V","1.04 V"], c:2, exp:"Nernst: E = E° - (0.0591/n) log Q; Q=0.1/0.01=10, n=2 → E = 1.10 - 0.0295 = 1.0705 ≈ 1.07 V? Actually 1.10 - (0.0591/2)=1.10-0.02955=1.07045 ≈ 1.07 V. (Answer B) Wait, we have 1.07 V option B, that's correct." },
+            { id:26, en:"According to Kohlrausch's law, the limiting molar conductivity of acetic acid (weak electrolyte) can be obtained from:", hi:"कोलराउश नियम के अनुसार, एसिटिक अम्ल (दुर्बल वैद्युतअपघट्य) की सीमांत मोलर चालकता प्राप्त की जा सकती है:", oEn:["Λ°(HCl) + Λ°(NaOAc) - Λ°(NaCl)","Λ°(NaCl) + Λ°(NaOAc)","Λ°(HCl) - Λ°(NaCl)","Λ°(NaOAc) - Λ°(HCl)"], oHi:["Λ°(HCl) + Λ°(NaOAc) - Λ°(NaCl)","Λ°(NaCl) + Λ°(NaOAc)","Λ°(HCl) - Λ°(NaCl)","Λ°(NaOAc) - Λ°(HCl)"], c:0, exp:"Λ°(HOAc) = Λ°(HCl) + Λ°(NaOAc) - Λ°(NaCl)." },
+            { id:27, en:"Freundlich adsorption isotherm is expressed as x/m = k p^(1/n). At high pressure, it becomes:", hi:"फ्रेंडलिच अधिशोषण इज़ोथर्म x/m = k p^(1/n) है। उच्च दाब पर, यह बन जाता है:", oEn:["Constant","Proportional to p","Proportional to p^(1/n)","Zero"], oHi:["स्थिर","p के समानुपाती","p^(1/n) के समानुपाती","शून्य"], c:0, exp:"At high pressure, 1/n → 0, so x/m becomes constant (saturation)." },
+            { id:28, en:"Which of the following is a lyophilic colloid?", hi:"निम्नलिखित में से कौन लायोफिलिक कोलॉइड है?", oEn:["Gold sol","Starch solution","As₂S₃ sol","Fe(OH)₃ sol"], oHi:["स्वर्ण सॉल","स्टार्च विलयन","As₂S₃ सॉल","Fe(OH)₃ सॉल"], c:1, exp:"Starch is a natural polymer, forms lyophilic colloid." },
+            { id:29, en:"For the reaction 2A + B → products, the rate law is rate = k[A]²[B]. The overall order is:", hi:"अभिक्रिया 2A + B → उत्पाद, वेग नियम rate = k[A]²[B] है। समग्र कोटि है:", oEn:["1","2","3","0"], oHi:["1","2","3","0"], c:2, exp:"Order = 2 + 1 = 3." },
+            { id:30, en:"The temperature coefficient of a reaction is usually between:", hi:"अभिक्रिया का ताप गुणांक सामान्यतः किसके बीच होता है?", oEn:["1 and 2","2 and 3","0 and 1","3 and 4"], oHi:["1 और 2","2 और 3","0 और 1","3 और 4"], c:1, exp:"Temperature coefficient (Q₁₀) typically 2-3." },
+            { id:31, en:"Which of the following undergoes Cannizzaro reaction?", hi:"निम्नलिखित में से कौन कैनिज़ारो अभिक्रिया करता है?", oEn:["Acetaldehyde","Benzaldehyde","Acetone","Propanal"], oHi:["एसीटैल्डिहाइड","बेंज़ैल्डिहाइड","एसीटोन","प्रोपेनल"], c:1, exp:"Benzaldehyde has no α-hydrogen, undergoes Cannizzaro." },
+            { id:32, en:"Aldol condensation is given by aldehydes having:", hi:"एल्डोल संघनन उन एल्डिहाइडों द्वारा दिया जाता है जिनमें होता है:", oEn:["No α-hydrogen","At least one α-hydrogen","Double bond","Hydroxyl group"], oHi:["कोई α-हाइड्रोजन नहीं","कम से कम एक α-हाइड्रोजन","द्वि-आबंध","हाइड्रॉक्सिल समूह"], c:1, exp:"Aldol requires α-hydrogen to form enolate." },
+            { id:33, en:"Glucose has the pyranose ring structure formed between:", hi:"ग्लूकोज की पाइरानोस रिंग संरचना किसके बीच बनती है?", oEn:["C₁ and C₅","C₁ and C₄","C₂ and C₅","C₁ and C₂"], oHi:["C₁ और C₅","C₁ और C₄","C₂ और C₅","C₁ और C₂"], c:0, exp:"Pyranose ring: hemiacetal linkage between C₁ (aldehyde) and C₅ (OH)." },
+            { id:34, en:"Peptide linkage is which functional group?", hi:"पेप्टाइड लिंकेज कौन सा क्रियात्मक समूह है?", oEn:["-NH-CO-","-CO-O-","-NH-O-","-CO-NH₂"], oHi:["-NH-CO-","-CO-O-","-NH-O-","-CO-NH₂"], c:0, exp:"Peptide bond: -CONH- (amide linkage)." },
+            { id:35, en:"Which reagent is used to convert a carboxylic acid to an acid chloride?", hi:"कार्बोक्सिलिक अम्ल को अम्ल क्लोराइड में बदलने के लिए कौन सा अभिकर्मक प्रयुक्त होता है?", oEn:["SOCl₂","NaOH","LiAlH₄","NH₃"], oHi:["SOCl₂","NaOH","LiAlH₄","NH₃"], c:0, exp:"Thionyl chloride (SOCl₂) converts RCOOH to RCOCl." },
+            { id:36, en:"Which of the following is an example of a condensation polymer?", hi:"निम्नलिखित में से कौन संघनन बहुलक का उदाहरण है?", oEn:["Polythene","Nylon-6,6","Teflon","PVC"], oHi:["पॉलीथीन","नायलॉन-6,6","टेफ्लॉन","PVC"], c:1, exp:"Nylon-6,6 is formed by condensation of adipic acid and hexamethylenediamine." },
+            { id:37, en:"Which of the following does not reduce Fehling's solution?", hi:"निम्नलिखित में से कौन फेहलिंग विलयन को अपचयित नहीं करता?", oEn:["Glucose","Fructose","Sucrose","Maltose"], oHi:["ग्लूकोज","फ्रक्टोज","सुक्रोज","माल्टोज"], c:2, exp:"Sucrose is a non-reducing sugar (no free aldehyde/ketone group)." },
+            { id:38, en:"The structure of DNA is a:", hi:"DNA की संरचना होती है:", oEn:["Single helix","Double helix","Triple helix","Random coil"], oHi:["एकल हेलिक्स","द्वि-हेलिक्स","त्रि-हेलिक्स","यादृच्छिक कुंडली"], c:1, exp:"Watson-Crick model: double helix." },
+            { id:39, en:"Which amino acid is optically inactive?", hi:"कौन सा अमीनो अम्ल प्रकाशतः निष्क्रिय होता है?", oEn:["Glycine","Alanine","Valine","Leucine"], oHi:["ग्लाइसिन","एलानिन","वेलिन","ल्यूसीन"], c:0, exp:"Glycine has no chiral centre (R = H), hence optically inactive." },
+            { id:40, en:"The product formed when ethanal reacts with dilute NaOH is:", hi:"तनु NaOH के साथ एथेनल अभिक्रिया करके बनाता है:", oEn:["Ethanoic acid","3-Hydroxybutanal","Butanal","Ethane"], oHi:["एथेनोइक अम्ल","3-हाइड्रॉक्सीब्यूटेनल","ब्यूटेनल","एथेन"], c:1, exp:"Aldol condensation: 2CH₃CHO → CH₃CH(OH)CH₂CHO (3-hydroxybutanal)." },
+            { id:41, en:"The catalyst used in the hydrogenation of vegetable oils is:", hi:"वनस्पति तेलों के हाइड्रोजनीकरण में प्रयुक्त उत्प्रेरक है:", oEn:["Fe","Ni","Pt","V₂O₅"], oHi:["Fe","Ni","Pt","V₂O₅"], c:1, exp:"Nickel is used as catalyst for hydrogenation of oils to vanaspati ghee." },
+            { id:42, en:"Which of the following is an artificial sweetener?", hi:"निम्नलिखित में से कौन एक कृत्रिम मधुरक है?", oEn:["Sucrose","Glucose","Saccharin","Lactose"], oHi:["सुक्रोज","ग्लूकोज","सैकेरिन","लैक्टोज"], c:2, exp:"Saccharin is an artificial sweetener, ~550 times sweeter than sugar." },
+            { id:43, en:"The drug Chloramphenicol is used as:", hi:"क्लोरैम्फेनिकॉल औषधि का उपयोग होता है:", oEn:["Analgesic","Antibiotic","Antacid","Antihistamine"], oHi:["पीड़ाहर","प्रतिजैविक","अम्लनाशक","प्रतिहिस्टामिन"], c:1, exp:"Chloramphenicol is a broad-spectrum antibiotic." },
+            { id:44, en:"Soaps are sodium or potassium salts of:", hi:"साबुन किसके सोडियम या पोटैशियम लवण होते हैं?", oEn:["Carboxylic acids","Sulphonic acids","Long chain fatty acids","Amino acids"], oHi:["कार्बोक्सिलिक अम्ल","सल्फोनिक अम्ल","दीर्घ श्रृंखला वसा अम्ल","अमीनो अम्ल"], c:2, exp:"Soaps are salts of higher fatty acids (e.g., stearic acid)." },
+            { id:45, en:"Which of the following is a disinfectant?", hi:"निम्नलिखित में से कौन एक कीटाणुनाशक है?", oEn:["Iodoform","Paracetamol","Aspirin","Chloroxylenol (Dettol)"], oHi:["आयोडोफॉर्म","पैरासिटामोल","एस्पिरिन","क्लोरोज़ाइलेनॉल (डेटॉल)"], c:3, exp:"Chloroxylenol (Dettol) is a common disinfectant." },
+            { id:46, en:"The polymer used in making non-stick utensils is:", hi:"नॉन-स्टिक बर्तन बनाने में प्रयुक्त बहुलक है:", oEn:["Polystyrene","Teflon","Nylon","Bakelite"], oHi:["पॉलीस्टाइरीन","टेफ्लॉन","नायलॉन","बैकेलाइट"], c:1, exp:"Teflon (polytetrafluoroethene) is used for non-stick coatings." },
+            { id:47, en:"Which vitamin is water soluble?", hi:"कौन सा विटामिन जल विलेय है?", oEn:["Vitamin A","Vitamin D","Vitamin B complex","Vitamin K"], oHi:["विटामिन A","विटामिन D","विटामिन B कॉम्प्लेक्स","विटामिन K"], c:2, exp:"B complex and C are water soluble." },
+            { id:48, en:"The monomer of natural rubber is:", hi:"प्राकृतिक रबर का मोनोमर है:", oEn:["Neoprene","Isoprene","Chloroprene","Styrene"], oHi:["नियोप्रीन","आइसोप्रीन","क्लोरोप्रीन","स्टाइरीन"], c:1, exp:"Natural rubber is polyisoprene, monomer is isoprene (2-methyl-1,3-butadiene)." },
+            { id:49, en:"Which of the following is a thermosetting polymer?", hi:"निम्नलिखित में से कौन ताप-दृढ़ बहुलक है?", oEn:["Polythene","PVC","Bakelite","Nylon"], oHi:["पॉलीथीन","PVC","बैकेलाइट","नायलॉन"], c:2, exp:"Bakelite is a cross-linked thermosetting plastic." }
+        ];
+
+        const TOTAL = QUESTIONS.length;
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 45 * 60,
+            timerInterval: null,
+            testSubmitted: false,
+            darkMode: true,
+            lang: 'en',
+            score: null
+        };
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('chem_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        const savedTheme = localStorage.getItem('chem_theme');
+        if (savedTheme === 'light') {
+            state.darkMode = false;
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-moon';
+        } else {
+            state.darkMode = true;
+            document.body.classList.remove('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            const btn = document.getElementById('langBtn');
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            btn.classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) {
+                renderReviewMode();
+            } else {
+                renderQuestion();
+            }
+            localStorage.setItem('chem_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        function calculateScore() {
+            let correct = 0,
+                wrong = 0,
+                score = 0;
+            Object.keys(state.answers).forEach(idx => {
+                const q = QUESTIONS[parseInt(idx)];
+                if (q) {
+                    if (state.answers[idx] === q.c) { correct++;
+                        score += 5; } else { wrong++;
+                        score -= 1; }
+                }
+            });
+            const totalMarks = TOTAL * 5;
+            const attempted = correct + wrong;
+            const unanswered = TOTAL - attempted;
+            return { score: Math.max(0, Math.round(score * 100) / 100), total: totalMarks, correct, wrong,
+                attempted, unanswered };
+        }
+
+        function renderQuestion() {
+            if (IS_REVIEW_MODE) return;
+            const q = QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${TOTAL}`;
+            const qt = document.getElementById('questionText');
+            if (state.lang === 'hi') {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>`;
+            } else {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            }
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.testSubmitted) {
+                    if (i === q.c) card.classList.add('correct');
+                    else if (state.answers[state.currentIndex] === i && state.answers[state
+                            .currentIndex] !== q.c) card.classList.add('wrong');
+                    card.style.pointerEvents = 'none';
+                } else {
+                    if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                    card.onclick = () => selectOption(i);
+                }
+                card.innerHTML =
+                    `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+            const expBox = document.getElementById('explanationBox');
+            const expText = document.getElementById('explanationText');
+            if (state.testSubmitted) { expBox.classList.add('show');
+                expText.textContent = q.exp; } else { expBox.classList.remove('show'); }
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === TOTAL - 1;
+            document.getElementById('swipeHint').style.display = state.testSubmitted ? 'none' : 'block';
+            document.getElementById('actionRow').style.display = state.testSubmitted ? 'none' : 'flex';
+            renderPalette();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if (IS_REVIEW_MODE) return;
+            const idx = state.currentIndex + dir;
+            if (idx >= 0 && idx < TOTAL) {
+                state.currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMark() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            const idx = state.currentIndex;
+            if (state.markedQuestions.has(idx)) { state.markedQuestions.delete(idx);
+                showToast('🏷️ Unmarked'); } else { state.markedQuestions.add(idx);
+                showToast('🚩 Marked for review'); }
+            renderPalette();
+        }
+
+        function clearAnswer() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            if (state.answers[state.currentIndex] !== undefined) { delete state.answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared'); }
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.testSubmitted) {
+                    const q = QUESTIONS[i];
+                    if (state.answers[i] === q.c) num.classList.add('answered');
+                    else if (state.answers[i] !== undefined && state.answers[i] !== q.c) num.classList.add(
+                        'wrong-num');
+                } else {
+                    if (state.answers[i] !== undefined) num.classList.add('answered');
+                    if (state.markedQuestions.has(i)) num.classList.add('marked');
+                }
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    if (IS_REVIEW_MODE) return;
+                    state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth',
+                        block: 'start' });
+                };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            const percent = (answered / TOTAL) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${answered}/${TOTAL} answered`;
+        }
+
+        function startTimer() {
+            if (IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) { clearInterval(state.timerInterval); return; }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) { clearInterval(state.timerInterval);
+                    autoSubmit(); }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60);
+            const s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (state.timeLeft < 600 && state.timeLeft > 0) { document.getElementById('timerPill').classList.add(
+                    'warning'); } else { document.getElementById('timerPill').classList.remove('warning'); }
+            if (!state.testSubmitted) { document.title =
+                    `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} - CUET Chemistry Mock`; }
+        }
+
+        function autoSubmit() { showToast('⏰ Time\'s up! Submitting...');
+            setTimeout(() => submitTest(true), 1500); }
+
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const answered = Object.keys(state.answers).length;
+            const unanswered = TOTAL - answered;
+            if (!skipConfirm) {
+                let confirmMsg = 'Are you sure you want to submit?';
+                if (unanswered > 0) { confirmMsg =
+                    `${unanswered} question(s) unanswered. Submit anyway?`; }
+                if (!confirm(confirmMsg)) return;
+            }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.score = calculateScore();
+            const resultData = { score: state.score.score, total: state.score.total, accuracy: state.score
+                    .attempted > 0 ? Math.round((state.score.correct / state.score.attempted) * 100) : 0,
+                correct: state.score.correct, wrong: state.score.wrong, attempted: state.score.attempted,
+                unanswered: state.score.unanswered, timeTaken: (45 * 60) - state.timeLeft,
+                testCode: 'CUET_CHEM_MOCK', examType: 'CUET UG Chemistry' };
+            localStorage.setItem('chem_last_answers', JSON.stringify(state.answers));
+            localStorage.setItem('chem_last_result', JSON.stringify(resultData));
+            if (window.parent !== window) { window.parent.postMessage({ type: 'TEST_SUBMITTED',
+                ...resultData, answers: state.answers }, '*'); }
+            showReview();
+            renderQuestion();
+            renderPalette();
+            showToast('✅ Test Submitted! Check review below.');
+            setTimeout(() => { document.getElementById('reviewPanel').scrollIntoView({ behavior: 'smooth' }); },
+                300);
+            document.title = 'Submitted - CUET Chemistry Mock';
+            document.getElementById('swipeHint').style.display = 'none';
+            document.getElementById('actionRow').style.display = 'none';
+            document.getElementById('progressCard').style.display = 'none';
+            document.getElementById('paletteCard').style.display = 'none';
+        }
+
+        function showReview() {
+            const panel = document.getElementById('reviewPanel');
+            panel.classList.add('show');
+            const result = state.score;
+            document.getElementById('resultSummary').innerHTML = `
+            <div class="result-item"><div class="value">${result.score}/${result.total}</div><div class="label">Score</div></div>
+            <div class="result-item"><div class="value" style="color:#10b981;">${result.correct}</div><div class="label">✅ Correct (+5 each)</div></div>
+            <div class="result-item"><div class="value" style="color:#ef4444;">${result.wrong}</div><div class="label">❌ Wrong (-1 each)</div></div>
+            <div class="result-item"><div class="value">${result.unanswered}</div><div class="label">⬜ Unanswered</div></div>`;
+            const reviewQs = document.getElementById('reviewQuestions');
+            reviewQs.innerHTML = '<h4 style="margin:12px 0;">📝 Question-wise Review</h4>';
+            const letters = ['A', 'B', 'C', 'D'];
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let statusIcon, statusColor;
+                if (isUnanswered) { statusIcon = '⬜';
+                    statusColor = 'var(--text-secondary)'; } else if (isCorrect) { statusIcon = '✅';
+                    statusColor = '#10b981'; } else { statusIcon = '❌';
+                    statusColor = '#ef4444'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                let optionsHTML = '<div class="options-grid" style="margin:8px 0;">';
+                opts.forEach((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c && j !== userAns) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    optionsHTML +=
+                        `<div class="${optClass}" style="pointer-events:none;font-size:12px;padding:10px 12px;"><div class="option-letter">${letters[j]}</div><span>${opt}${label}</span></div>`;
+                });
+                optionsHTML += '</div>';
+                const div = document.createElement('div');
+                div.style.cssText =
+                    'padding:12px;margin:8px 0;border-radius:10px;border:1px solid var(--border);background:var(--option-bg);';
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                div.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-weight:700;">Q${i+1}.</span><span style="color:${statusColor};font-size:18px;">${statusIcon}</span></div>
+                <div style="font-size:13px;margin-bottom:4px;white-space:pre-line;">${qDisplay}</div>
+                ${optionsHTML}
+                <div style="font-size:11px;margin-top:4px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;color:#fbbf24;">💡 ${q.exp}</div>
+                <button onclick="jumpToQuestion(${i})" style="margin-top:6px;padding:4px 12px;border-radius:6px;border:1px solid #8b5cf6;background:transparent;color:#a78bfa;cursor:pointer;font-size:11px;">Jump to Q${i+1}</button>`;
+                reviewQs.appendChild(div);
+            });
+        }
+
+        function jumpToQuestion(index) {
+            state.currentIndex = index;
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('progressCard').style.display = 'block';
+            document.getElementById('paletteCard').style.display = 'block';
+            document.getElementById('swipeHint').style.display = 'block';
+            document.getElementById('actionRow').style.display = 'flex';
+            renderQuestion();
+            document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeReview() { document.getElementById('reviewPanel').classList.remove('show'); }
+
+        function renderReviewMode() {
+            const container = document.getElementById('reviewModeContainer');
+            const letters = ['A', 'B', 'C', 'D'];
+            let html = '<div class="review-mode-badge">📝 Review Mode — All 50 Questions</div>';
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let cardClass = 'review-mode-card';
+                let statusHTML = '';
+                if (isUnanswered) { cardClass += ' unanswered-q';
+                    statusHTML =
+                    '<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>'; } else if (
+                    isCorrect) { cardClass += ' correct-answer';
+                    statusHTML =
+                    '<span class="review-mode-status status-correct">✅ Correct (+5)</span>'; } else { cardClass +=
+                        ' wrong-answer';
+                    statusHTML = '<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const optionsHTML = opts.map((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c && j !== userAns) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    return `<div class="${optClass}" style="pointer-events:none;"><div class="option-letter">${letters[j]}</div><span>${opt}${label}</span></div>`;
+                }).join('');
+                html += `
+                <div class="${cardClass}">
+                    <div class="review-mode-header"><span class="q-badge">Q ${i+1}/${TOTAL}</span>${statusHTML}</div>
+                    <div class="question-text"><div style="font-weight:600;white-space:pre-line;">${qDisplay}</div></div>
+                    <div class="options-grid">${optionsHTML}</div>
+                    <div class="explanation-box show" style="margin-top:10px;"><div class="exp-title">💡 Explanation</div><div>${q.exp}</div></div>
+                </div>`;
+            });
+            container.innerHTML = html;
+            container.style.display = 'block';
+        }
+
+        let touchStartX = 0,
+            touchStartY = 0,
+            touchMoved = false,
+            swipeHandled = false;
+        const card = document.getElementById('questionCard');
+        card.addEventListener('touchstart', (e) => {
+            if (IS_REVIEW_MODE) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchMoved = false;
+            swipeHandled = false;
+        }, { passive: true });
+        card.addEventListener('touchmove', (e) => {
+            if (IS_REVIEW_MODE || swipeHandled) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy)) {
+                touchMoved = true;
+                card.style.transform = `translateX(${dx * 0.5}px)`;
+                card.style.opacity = Math.max(0.5, 1 - Math.abs(dx) / 800);
+                card.classList.add('swiping');
+                e.preventDefault();
+            }
+        }, { passive: false });
+        card.addEventListener('touchend', (e) => {
+            if (IS_REVIEW_MODE) return;
+            card.classList.remove('swiping');
+            card.style.transform = '';
+            card.style.opacity = '';
+            if (!touchMoved) return;
+            const endX = e.changedTouches[0]?.clientX || touchStartX;
+            const dx = endX - touchStartX;
+            if (Math.abs(dx) > 80) { swipeHandled = true; if (dx > 0) navigate(-1);
+            else navigate(1); }
+            touchMoved = false;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (IS_REVIEW_MODE) return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch (e.key.toLowerCase()) {
+                case 'arrowleft':
+                    e.preventDefault();
+                    navigate(-1);
+                    break;
+                case 'arrowright':
+                    e.preventDefault();
+                    navigate(1);
+                    break;
+                case 'a':
+                case '1':
+                    e.preventDefault();
+                    selectOption(0);
+                    break;
+                case 'b':
+                case '2':
+                    e.preventDefault();
+                    selectOption(1);
+                    break;
+                case 'c':
+                case '3':
+                    e.preventDefault();
+                    selectOption(2);
+                    break;
+                case 'd':
+                case '4':
+                    e.preventDefault();
+                    selectOption(3);
+                    break;
+                case 'm':
+                    e.preventDefault();
+                    toggleMark();
+                    break;
+                case 'backspace':
+                    e.preventDefault();
+                    clearAnswer();
+                    break;
+            }
+        });
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'flex';
+            clearTimeout(t._t);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!state.testSubmitted && state.timeLeft > 0 && Object.keys(state.answers).length > 0 && !
+                IS_REVIEW_MODE) { e.preventDefault();
+                e.returnValue = ''; }
+        });
+
+        function init() {
+            state.lang = localStorage.getItem('chem_lang') || 'en';
+            if (state.lang === 'hi') {
+                document.getElementById('langBtn').classList.add('active');
+                document.getElementById('langText').textContent = 'English';
+            }
+            if (IS_REVIEW_MODE) {
+                document.getElementById('questionCard').style.display = 'none';
+                document.getElementById('progressCard').style.display = 'none';
+                document.getElementById('paletteCard').style.display = 'none';
+                document.getElementById('swipeHint').style.display = 'none';
+                document.getElementById('infoRow').style.display = 'none';
+                document.getElementById('timerPill').style.display = 'none';
+                document.getElementById('actionRow').style.display = 'none';
+                document.getElementById('reviewPanel').style.display = 'none';
+                document.title = 'Review - CUET Chemistry Mock';
+                const savedAnswers = JSON.parse(localStorage.getItem('chem_last_answers') || '{}');
+                state.answers = savedAnswers;
+                state.testSubmitted = true;
+                renderReviewMode();
+                console.log('Chemistry Review mode activated');
+            } else {
+                startTimer();
+                renderQuestion();
+                renderPalette();
+                console.log('CUET Chemistry Mock Initialized');
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
