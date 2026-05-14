@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CUET Chemistry • Chemical Kinetics Mock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-glow: #8b5cf6;
+            --accent: #ec4899;
+            --accent-glow: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray: #94a3b8;
+            --light: #f1f5f9;
+            --bg: #0f172a;
+            --bg2: #1e1b4b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --hover-bg: rgba(139, 92, 246, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.25);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.35);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg2: #ede9fe;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --option-bg: #f8fafc;
+            --hover-bg: #f3f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --glow-sm: 0 0 12px rgba(139, 92, 246, 0.15);
+            --glow-md: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-lg: 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 40%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.5s ease, color 0.3s;
+            z-index: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 40%, #fdf2f8 100%);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mock-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        .blob-1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(139, 92, 246, 0.2);
+            top: -100px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(236, 72, 153, 0.18);
+            bottom: -80px;
+            left: -60px;
+            animation-delay: -7s;
+        }
+        .blob-3 {
+            width: 220px;
+            height: 220px;
+            background: rgba(168, 85, 247, 0.16);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        @keyframes blobFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(40px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, -20px) scale(0.9);
+            }
+            75% {
+                transform: translate(20px, 40px) scale(1.05);
+            }
+        }
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.06));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.12);
+            animation: floatUp linear infinite;
+        }
+        body.light-mode .bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.04));
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.08);
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateY(-250px) translateX(30px) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-500px) translateX(-20px) scale(1);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translateY(-750px) translateX(15px) scale(0.9);
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(-1000px) translateX(-10px) scale(0.3);
+                opacity: 0;
+            }
+        }
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .top-bar:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+        .test-title .icon-dna {
+            font-size: 20px;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+        @keyframes pulseIcon {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.75;
+            }
+        }
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 2px solid #f97316;
+            background: var(--card);
+            color: #f97316;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .lang-btn:hover {
+            box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);
+            transform: translateY(-1px);
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 16px rgba(249, 115, 22, 0.4);
+        }
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+        .timer-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .timer-pill.warning {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            animation: pulse 0.8s infinite;
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
+        }
+        body.light-mode .timer-pill.warning {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+        }
+        .info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .info-chip i {
+            font-size: 11px;
+        }
+        .info-chip.exam {
+            color: #a78bfa;
+        }
+        .info-chip.subject {
+            color: #ec4899;
+        }
+        .info-chip.marks {
+            color: #fbbf24;
+        }
+        body.light-mode .info-chip.exam {
+            color: #7c3aed;
+        }
+        body.light-mode .info-chip.subject {
+            color: #be185d;
+        }
+        body.light-mode .info-chip.marks {
+            color: #d97706;
+        }
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.35s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: var(--glow-md);
+            transform: translateY(-2px);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .question-card.swiping {
+            transition: none;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-badge {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .q-marks {
+            font-weight: 600;
+            font-size: 12px;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 6px 14px;
+            border-radius: 15px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+        body.light-mode .q-marks {
+            color: #d97706;
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--option-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #8b5cf6;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--option-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            backdrop-filter: blur(4px);
+        }
+        .option-card:hover {
+            border-color: #a78bfa;
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+        .option-card.selected {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 6px 22px rgba(139, 92, 246, 0.4);
+        }
+        .option-card.correct {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+        }
+        .option-card.wrong {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4) !important;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-4px);
+            }
+            75% {
+                transform: translateX(4px);
+            }
+        }
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #a78bfa;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+        .option-card.selected .option-letter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .option-card.correct .option-letter,
+        .option-card.wrong .option-letter {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 60px;
+        }
+        .btn:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-2px);
+            border-color: #a78bfa;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .btn-mark {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+        .btn-mark:hover {
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+        }
+        .btn-clear {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #4ade80;
+        }
+        .btn-clear:hover {
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+        }
+        body.light-mode .btn-mark {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        body.light-mode .btn-clear {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        .palette-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+        .palette-card:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .palette-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+        .palette-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--option-bg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            color: var(--text);
+        }
+        .palette-num:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+            box-shadow: var(--glow-sm);
+        }
+        .palette-num.answered {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+        .palette-num.marked {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+        .palette-num.current {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.2);
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.4);
+        }
+        .palette-num.wrong-num {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+        .legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .review-panel {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+        .review-panel.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .result-item {
+            background: var(--option-bg);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .result-item:hover {
+            box-shadow: var(--glow-sm);
+        }
+        .result-item .value {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .result-item .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .explanation-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        body.light-mode .explanation-box {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .explanation-box .exp-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #fbbf24;
+        }
+        body.light-mode .explanation-box .exp-title {
+            color: #92400e;
+        }
+        .swipe-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+        .review-mode-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .review-mode-card:hover {
+            box-shadow: var(--glow-sm);
+            transform: translateY(-1px);
+        }
+        .review-mode-card.correct-answer {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .review-mode-card.wrong-answer {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .review-mode-card.unanswered-q {
+            background: var(--glass-bg);
+            border-color: var(--glass-border);
+        }
+        .review-mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .review-mode-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+        .status-correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: #4ade80;
+        }
+        .status-wrong {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        .status-unanswered {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+        body.light-mode .status-correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        body.light-mode .status-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        body.light-mode .status-unanswered {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .toast {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: var(--glow-md);
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 13px;
+            display: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .review-mode-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+        }
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+            flex-shrink: 0;
+        }
+        @media (max-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            .test-title {
+                font-size: 15px;
+            }
+            .question-text {
+                font-size: 14px;
+                padding: 14px;
+            }
+            .result-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .blob {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="bubbles-container" id="bubblesContainer"></div>
+    <div class="mock-container">
+        <div class="top-bar">
+            <div class="test-title">
+                <div class="avatar-circle" id="avatarCircle">⚗️</div>
+                CUET Chemistry • Chemical Kinetics
+            </div>
+            <div class="top-actions">
+                <button class="lang-btn" id="langBtn" onclick="toggleLanguage()"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+                <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">30:00</span></div>
+            </div>
+        </div>
+        <div class="info-row" id="infoRow">
+            <span class="info-chip exam"><i class="fas fa-graduation-cap"></i> CUET UG</span>
+            <span class="info-chip subject"><i class="fas fa-flask"></i> Chemistry</span>
+            <span class="info-chip"><i class="fas fa-tachometer-alt"></i> Chemical Kinetics</span>
+            <span class="info-chip marks"><i class="fas fa-star"></i> +5 / -1</span>
+            <span class="info-chip"><i class="fas fa-list"></i> 30 Questions</span>
+        </div>
+        <div class="progress-card" id="progressCard">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/30 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/30</span>
+                <span class="q-marks">⭐ +5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="explanation-box" id="explanationBox">
+                <div class="exp-title">💡 Explanation</div>
+                <div id="explanationText"></div>
+            </div>
+            <div class="action-row" id="actionRow">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+        </div>
+        <div id="reviewModeContainer" style="display:none;"></div>
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+        <div class="review-panel" id="reviewPanel">
+            <h3 style="margin-bottom:12px;">📋 Result Review</h3>
+            <div class="result-summary" id="resultSummary"></div>
+            <div id="reviewQuestions"></div>
+            <button class="btn" onclick="closeReview()" style="margin-top:12px;display:inline-flex !important;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-times"></i> Close Review
+            </button>
+        </div>
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:#10b981;"></span>Correct</span>
+                <span><span class="legend-dot" style="background:#ef4444;"></span>Wrong</span>
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Marked</span>
+                <span><span class="legend-dot" style="border:2px solid #8b5cf6;"></span>Current</span>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        (function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.2), rgba(252, 211, 77, 0.06))',
+                'radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.16), rgba(248, 113, 113, 0.04))',
+                'radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.06))'
+            ];
+            for (let i = 0; i < 22; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.floor(Math.random() * 60) + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                bubble.style.animationDelay = (Math.random() * 8) + 's';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(bubble);
+            }
+            setInterval(() => {
+                const bubbles = container.querySelectorAll('.bubble');
+                if (bubbles.length < 28) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+                    const size = Math.floor(Math.random() * 50) + 25;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = Math.random() * 100 + '%';
+                    bubble.style.animationDuration = (Math.random() * 8 + 7) + 's';
+                    bubble.style.animationDelay = '0s';
+                    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(bubble);
+                }
+            }, 4000);
+        })();
+
+        const QUESTIONS = [
+            {
+                id: 0,
+                en: "For a reaction 2A + B → 3C, the rate of appearance of C is 1.2×10⁻² mol L⁻¹ s⁻¹. The rate of disappearance of A is:",
+                hi: "अभिक्रिया 2A + B → 3C के लिए, C के बनने की दर 1.2×10⁻² mol L⁻¹ s⁻¹ है। A के लुप्त होने की दर है:",
+                oEn: ["0.8×10⁻²", "1.8×10⁻²", "0.4×10⁻²", "2.4×10⁻²"],
+                oHi: ["0.8×10⁻²", "1.8×10⁻²", "0.4×10⁻²", "2.4×10⁻²"],
+                c: 0,
+                exp: "Rate = -1/2 d[A]/dt = 1/3 d[C]/dt. So -d[A]/dt = (2/3)×1.2×10⁻² = 0.8×10⁻²."
+            },
+            {
+                id: 1,
+                en: "The unit of rate constant for a reaction is L² mol⁻² s⁻¹. The order of the reaction is:",
+                hi: "एक अभिक्रिया के वेग स्थिरांक की इकाई L² mol⁻² s⁻¹ है। अभिक्रिया की कोटि है:",
+                oEn: ["1", "2", "3", "0"],
+                oHi: ["1", "2", "3", "0"],
+                c: 2,
+                exp: "Unit of k = (mol L⁻¹)^(1-n) s⁻¹. For n=3, unit = L² mol⁻² s⁻¹."
+            },
+            {
+                id: 2,
+                en: "If the concentration of reactant is increased by 3 times and the rate becomes 27 times, the order of reaction is:",
+                hi: "यदि अभिकारक की सांद्रता 3 गुना बढ़ा दी जाए और दर 27 गुना हो जाए, तो अभिक्रिया की कोटि है:",
+                oEn: ["1", "2", "3", "1.5"],
+                oHi: ["1", "2", "3", "1.5"],
+                c: 2,
+                exp: "Rate ∝ [conc]ⁿ → 27 = 3ⁿ ⇒ n=3."
+            },
+            {
+                id: 3,
+                en: "For a zero-order reaction, the plot of [A] vs time (t) gives a straight line with slope equal to:",
+                hi: "शून्य कोटि की अभिक्रिया के लिए, [A] बनाम समय (t) का ग्राफ एक सीधी रेखा देता है जिसकी ढाल बराबर होती है:",
+                oEn: ["k", "-k", "k/2.303", "-k/2.303"],
+                oHi: ["k", "-k", "k/2.303", "-k/2.303"],
+                c: 1,
+                exp: "[A] = -kt + [A]₀, slope = -k."
+            },
+            {
+                id: 4,
+                en: "A first-order reaction is 75% complete in 64 minutes. The half-life (t₁/₂) of the reaction is:",
+                hi: "एक प्रथम कोटि की अभिक्रिया 64 मिनट में 75% पूर्ण होती है। अभिक्रिया की अर्धायु (t₁/₂) है:",
+                oEn: ["32 min", "16 min", "48 min", "8 min"],
+                oHi: ["32 min", "16 min", "48 min", "8 min"],
+                c: 0,
+                exp: "75% completion means 2 half-lives (100→50→25%). So t₁/₂ = 64/2 = 32 min."
+            },
+            {
+                id: 5,
+                en: "The half-life of a reaction is doubled as the initial concentration is doubled. The order of the reaction is:",
+                hi: "प्रारंभिक सांद्रता दोगुनी होने पर अभिक्रिया की अर्धायु भी दोगुनी हो जाती है। अभिक्रिया की कोटि है:",
+                oEn: ["0", "1", "2", "0.5"],
+                oHi: ["0", "1", "2", "0.5"],
+                c: 0,
+                exp: "For zero order, t₁/₂ ∝ [A]₀, so doubling conc doubles half-life."
+            },
+            {
+                id: 6,
+                en: "Decomposition of H₂O₂ is a ________ order reaction.",
+                hi: "H₂O₂ का अपघटन ________ कोटि की अभिक्रिया है।",
+                oEn: ["Zero", "First", "Second", "Third"],
+                oHi: ["शून्य", "प्रथम", "द्वितीय", "तृतीय"],
+                c: 1,
+                exp: "H₂O₂ decomposition is first order."
+            },
+            {
+                id: 7,
+                en: "The minimum energy required by a molecule to undergo a chemical reaction is called:",
+                hi: "किसी अणु को रासायनिक अभिक्रिया करने के लिए आवश्यक न्यूनतम ऊर्जा कहलाती है:",
+                oEn: ["Potential energy", "Kinetic energy", "Threshold energy", "Activation energy"],
+                oHi: ["स्थितिज ऊर्जा", "गतिज ऊर्जा", "देहली ऊर्जा", "सक्रियण ऊर्जा"],
+                c: 2,
+                exp: "Threshold energy is the minimum energy needed for reaction; activation energy is additional."
+            },
+            {
+                id: 8,
+                en: "If the temperature is increased from 300 K to 310 K, the rate of reaction almost doubles. This is primarily due to:",
+                hi: "यदि तापमान 300 K से 310 K तक बढ़ाया जाता है, तो अभिक्रिया की दर लगभग दोगुनी हो जाती है। इसका मुख्य कारण है:",
+                oEn: ["Increase in number of collisions", "Increase in the fraction of molecules having energy ≥ Ea", "Decrease in activation energy", "Increase in mean free path"],
+                oHi: ["संघट्टों की संख्या में वृद्धि", "Ea से अधिक ऊर्जा वाले अणुओं के अंश में वृद्धि", "सक्रियण ऊर्जा में कमी", "माध्य मुक्त पथ में वृद्धि"],
+                c: 1,
+                exp: "Small temperature rise increases fraction of molecules with E ≥ Ea significantly."
+            },
+            {
+                id: 9,
+                en: "In the Arrhenius equation k = A · e^(-Ea/RT), A is known as:",
+                hi: "अर्हेनियस समीकरण k = A · e^(-Ea/RT) में, A कहलाता है:",
+                oEn: ["Velocity constant", "Frequency factor", "Activation energy", "Gas constant"],
+                oHi: ["वेग स्थिरांक", "आवृत्ति गुणक", "सक्रियण ऊर्जा", "गैस नियतांक"],
+                c: 1,
+                exp: "A is pre-exponential or frequency factor."
+            },
+            {
+                id: 10,
+                en: "A catalyst increases the rate of reaction by:",
+                hi: "एक उत्प्रेरक अभिक्रिया की दर को बढ़ाता है:",
+                oEn: ["Increasing Ea", "Decreasing Ea", "Changing ΔH", "Increasing collision frequency"],
+                oHi: ["Ea बढ़ाकर", "Ea घटाकर", "ΔH बदलकर", "संघट्ट आवृत्ति बढ़ाकर"],
+                c: 1,
+                exp: "Catalyst provides alternate pathway with lower activation energy."
+            },
+            {
+                id: 11,
+                en: "Acid-catalyzed hydrolysis of ethyl acetate is an example of:",
+                hi: "एथिल एसीटेट का अम्ल-उत्प्रेरित जल-अपघटन किसका उदाहरण है?",
+                oEn: ["First order", "Second order", "Pseudo-first order", "Zero order"],
+                oHi: ["प्रथम कोटि", "द्वितीय कोटि", "छद्म प्रथम कोटि", "शून्य कोटि"],
+                c: 2,
+                exp: "Water is in excess, so reaction appears first order w.r.t. ester."
+            },
+            {
+                id: 12,
+                en: "Which of the following cannot be fractional?",
+                hi: "निम्नलिखित में से क्या भिन्नात्मक नहीं हो सकता?",
+                oEn: ["Order of reaction", "Molecularity", "Rate of reaction", "Rate constant"],
+                oHi: ["अभिक्रिया की कोटि", "आणविकता", "अभिक्रिया की दर", "वेग स्थिरांक"],
+                c: 1,
+                exp: "Molecularity is always a whole number for elementary reactions."
+            },
+            {
+                id: 13,
+                en: "Molecularity of an elementary reaction A + 2B → Products is:",
+                hi: "एक प्राथमिक अभिक्रिया A + 2B → उत्पाद की आणविकता है:",
+                oEn: ["1", "2", "3", "0"],
+                oHi: ["1", "2", "3", "0"],
+                c: 2,
+                exp: "Molecularity = 1 + 2 = 3."
+            },
+            {
+                id: 14,
+                en: "The rate constant for a first-order reaction is 6.93×10⁻³ min⁻¹. The time required to reduce 10 g of reactant to 2.5 g is:",
+                hi: "प्रथम कोटि की अभिक्रिया के लिए वेग स्थिरांक 6.93×10⁻³ min⁻¹ है। 10 g अभिकारक को 2.5 g तक घटाने में लगने वाला समय है:",
+                oEn: ["100 min", "200 min", "300 min", "400 min"],
+                oHi: ["100 min", "200 min", "300 min", "400 min"],
+                c: 1,
+                exp: "t₁/₂ = 0.693/k = 100 min. 10→5→2.5 g = two half-lives = 200 min."
+            },
+            {
+                id: 15,
+                en: "The slope of log k vs 1/T plot is -5000 K. The activation energy Ea of the reaction is: (R = 8.314 J K⁻¹ mol⁻¹)",
+                hi: "log k बनाम 1/T ग्राफ की ढाल -5000 K है। अभिक्रिया की सक्रियण ऊर्जा Ea है: (R = 8.314 J K⁻¹ mol⁻¹)",
+                oEn: ["41.57 kJ/mol", "83.14 kJ/mol", "95.7 kJ/mol", "166 kJ/mol"],
+                oHi: ["41.57 kJ/mol", "83.14 kJ/mol", "95.7 kJ/mol", "166 kJ/mol"],
+                c: 2,
+                exp: "Slope = -Ea/(2.303R) → Ea = -slope × 2.303 × R = 5000 × 2.303 × 8.314 ≈ 95.7 kJ/mol."
+            },
+            {
+                id: 16,
+                en: "For the reaction A + B → Products, doubling A increases rate 4 times, doubling B has no effect. The rate law is:",
+                hi: "अभिक्रिया A + B → उत्पाद के लिए, A की सांद्रता दोगुनी करने पर दर 4 गुना हो जाती है, B का कोई प्रभाव नहीं। वेग नियम है:",
+                oEn: ["R = k[A][B]", "R = k[A]²[B]⁰", "R = k[A][B]²", "R = k[A]²[B]²"],
+                oHi: ["R = k[A][B]", "R = k[A]²[B]⁰", "R = k[A][B]²", "R = k[A]²[B]²"],
+                c: 1,
+                exp: "Order w.r.t A = 2, w.r.t B = 0."
+            },
+            {
+                id: 17,
+                en: "Collision theory is most successful for explaining ________ reactions.",
+                hi: "संघट्ट सिद्धांत ________ अभिक्रियाओं को समझाने में सर्वाधिक सफल है।",
+                oEn: ["Unimolecular", "Bimolecular elementary", "Complex", "Zero order"],
+                oHi: ["एकाणुक", "द्वि-अणुक प्राथमिक", "जटिल", "शून्य कोटि"],
+                c: 1,
+                exp: "Collision theory works best for bimolecular elementary gas-phase reactions."
+            },
+            {
+                id: 18,
+                en: "The factor P in the collision theory equation k = P · Z_AB · e^(-Ea/RT) is called:",
+                hi: "संघट्ट सिद्धांत समीकरण k = P · Z_AB · e^(-Ea/RT) में कारक P कहलाता है:",
+                oEn: ["Probability/Steric factor", "Pressure factor", "Boltzmann constant", "Pre-exponential factor"],
+                oHi: ["प्रायिकता/त्रिविम कारक", "दाब कारक", "बोल्ट्जमान नियतांक", "पूर्व-चरघातांकी कारक"],
+                c: 0,
+                exp: "P is steric or probability factor accounting for orientation."
+            },
+            {
+                id: 19,
+                en: "In a chemical reaction, the role of a catalyst is to change:",
+                hi: "रासायनिक अभिक्रिया में उत्प्रेरक की भूमिका है:",
+                oEn: ["Enthalpy", "Equilibrium constant", "Activation energy", "Free energy"],
+                oHi: ["एन्थैल्पी", "साम्य स्थिरांक", "सक्रियण ऊर्जा", "मुक्त ऊर्जा"],
+                c: 2,
+                exp: "Catalyst alters activation energy, not thermodynamics."
+            },
+            {
+                id: 20,
+                en: "Statement I: Order of reaction can be zero or fractional. Statement II: Molecularity can be zero.",
+                hi: "कथन I: अभिक्रिया की कोटि शून्य या भिन्नात्मक हो सकती है। कथन II: आणविकता शून्य हो सकती है।",
+                oEn: ["Both I and II are correct", "I is correct, II is incorrect", "I is incorrect, II is correct", "Both are incorrect"],
+                oHi: ["दोनों सही", "I सही, II गलत", "I गलत, II सही", "दोनों गलत"],
+                c: 1,
+                exp: "Order can be zero/fractional; molecularity cannot be zero."
+            },
+            {
+                id: 21,
+                en: "Which of the following factors do NOT affect the rate constant k?",
+                hi: "निम्नलिखित में से कौन वेग स्थिरांक k को प्रभावित नहीं करता?",
+                oEn: ["Temperature", "Activation Energy", "Concentration of reactants", "Presence of Catalyst"],
+                oHi: ["तापमान", "सक्रियण ऊर्जा", "अभिकारकों की सांद्रता", "उत्प्रेरक की उपस्थिति"],
+                c: 2,
+                exp: "Rate constant is independent of concentration."
+            },
+            {
+                id: 22,
+                en: "The time required for 99% completion of a first-order reaction is approximately ____ times the time required for 90% completion.",
+                hi: "प्रथम कोटि अभिक्रिया के 99% पूर्ण होने का समय, 90% पूर्ण होने के समय का लगभग ____ गुना होता है।",
+                oEn: ["2", "3", "10", "4.5"],
+                oHi: ["2", "3", "10", "4.5"],
+                c: 0,
+                exp: "t_99% = 2 × t_90% approximately (2 × t₁/₂ relation)."
+            },
+            {
+                id: 23,
+                en: "A radioactive decay follows which kinetics?",
+                hi: "रेडियोसक्रिय क्षय किस बलगतिकी का पालन करता है?",
+                oEn: ["Zero order", "First order", "Second order", "Third order"],
+                oHi: ["शून्य कोटि", "प्रथम कोटि", "द्वितीय कोटि", "तृतीय कोटि"],
+                c: 1,
+                exp: "Radioactive decay is first order."
+            },
+            {
+                id: 24,
+                en: "For the reaction 2N₂O₅ → 4NO₂ + O₂, the rate can be expressed as k[N₂O₅]. This indicates the reaction is:",
+                hi: "अभिक्रिया 2N₂O₅ → 4NO₂ + O₂ के लिए, दर k[N₂O₅] है। यह इंगित करता है कि अभिक्रिया है:",
+                oEn: ["Bimolecular and second order", "Unimolecular and first order", "Complex and first order", "Simple and second order"],
+                oHi: ["द्वि-अणुक और द्वितीय कोटि", "एकाणुक और प्रथम कोटि", "जटिल और प्रथम कोटि", "सरल और द्वितीय कोटि"],
+                c: 2,
+                exp: "Rate law shows first order, but stoichiometry suggests complex mechanism."
+            },
+            {
+                id: 25,
+                en: "What happens to the rate constant if the temperature is increased to infinity?",
+                hi: "यदि तापमान अनंत तक बढ़ा दिया जाए तो वेग स्थिरांक का क्या होगा?",
+                oEn: ["k = 0", "k = A", "k = Ea", "k = negative"],
+                oHi: ["k = 0", "k = A", "k = Ea", "k = ऋणात्मक"],
+                c: 1,
+                exp: "As T → ∞, e^(-Ea/RT) → 1, so k → A."
+            },
+            {
+                id: 26,
+                en: "The rate of a reaction ________ as the reaction proceeds.",
+                hi: "जैसे-जैसे अभिक्रिया आगे बढ़ती है, अभिक्रिया की दर ________।",
+                oEn: ["Increases", "Decreases", "Remains same", "May increase or decrease"],
+                oHi: ["बढ़ती है", "घटती है", "समान रहती है", "बढ़ या घट सकती है"],
+                c: 1,
+                exp: "Rate decreases as reactant concentration decreases."
+            },
+            {
+                id: 27,
+                en: "In Collision Theory, only those collisions result in a product which have:",
+                hi: "संघट्ट सिद्धांत में, केवल वे संघट्ट उत्पाद देते हैं जिनमें:",
+                oEn: ["Proper orientation", "Sufficient kinetic energy", "Both A and B", "High pressure"],
+                oHi: ["उचित अभिविन्यास", "पर्याप्त गतिज ऊर्जा", "A और B दोनों", "उच्च दाब"],
+                c: 2,
+                exp: "Both sufficient energy and proper orientation are required."
+            },
+            {
+                id: 28,
+                en: "The unit of k for a second-order reaction is:",
+                hi: "द्वितीय कोटि अभिक्रिया के लिए k की इकाई है:",
+                oEn: ["mol L⁻¹ s⁻¹", "L mol⁻¹ s⁻¹", "s⁻¹", "L² mol⁻² s⁻¹"],
+                oHi: ["mol L⁻¹ s⁻¹", "L mol⁻¹ s⁻¹", "s⁻¹", "L² mol⁻² s⁻¹"],
+                c: 1,
+                exp: "For second order: k = rate/(conc)² → L mol⁻¹ s⁻¹."
+            },
+            {
+                id: 29,
+                en: "H₂(g) + Cl₂(g) —hν→ 2HCl(g) is a reaction of which order?",
+                hi: "H₂(g) + Cl₂(g) —hν→ 2HCl(g) किस कोटि की अभिक्रिया है?",
+                oEn: ["0", "1", "2", "3"],
+                oHi: ["0", "1", "2", "3"],
+                c: 0,
+                exp: "Photochemical reaction, rate independent of concentration → zero order."
+            }
+        ];
+
+        const TOTAL = QUESTIONS.length;
+        const urlParams = new URLSearchParams(window.location.search);
+        const IS_REVIEW_MODE = urlParams.get('review') === 'true';
+
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 30 * 60,
+            timerInterval: null,
+            testSubmitted: false,
+            darkMode: true,
+            lang: 'en',
+            score: null
+        };
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
+            document.getElementById('themeIcon').className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('chem_kin_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        const savedTheme = localStorage.getItem('chem_kin_theme');
+        if (savedTheme === 'light') {
+            state.darkMode = false;
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-moon';
+        } else {
+            state.darkMode = true;
+            document.body.classList.remove('light-mode');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        function toggleLanguage() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            const btn = document.getElementById('langBtn');
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            btn.classList.toggle('active', state.lang === 'hi');
+            if (IS_REVIEW_MODE) {
+                renderReviewMode();
+            } else {
+                renderQuestion();
+            }
+            localStorage.setItem('chem_kin_lang', state.lang);
+            showToast(state.lang === 'hi' ? '🇮🇳 हिंदी में बदला' : '🇬🇧 Changed to English');
+        }
+
+        function calculateScore() {
+            let correct = 0, wrong = 0, score = 0;
+            Object.keys(state.answers).forEach(idx => {
+                const q = QUESTIONS[parseInt(idx)];
+                if (q) {
+                    if (state.answers[idx] === q.c) { correct++; score += 5; }
+                    else { wrong++; score -= 1; }
+                }
+            });
+            const totalMarks = TOTAL * 5;
+            const attempted = correct + wrong;
+            const unanswered = TOTAL - attempted;
+            return { score: Math.max(0, Math.round(score * 100) / 100), total: totalMarks, correct, wrong, attempted, unanswered };
+        }
+
+        function renderQuestion() {
+            if (IS_REVIEW_MODE) return;
+            const q = QUESTIONS[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${TOTAL}`;
+            const qt = document.getElementById('questionText');
+            if (state.lang === 'hi') {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.hi}</div>`;
+            } else {
+                qt.innerHTML = `<div style="font-weight:600;white-space:pre-line;">${q.en}</div>`;
+            }
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.testSubmitted) {
+                    if (i === q.c) card.classList.add('correct');
+                    else if (state.answers[state.currentIndex] === i && state.answers[state.currentIndex] !== q.c) card.classList.add('wrong');
+                    card.style.pointerEvents = 'none';
+                } else {
+                    if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                    card.onclick = () => selectOption(i);
+                }
+                card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+            const expBox = document.getElementById('explanationBox');
+            const expText = document.getElementById('explanationText');
+            if (state.testSubmitted) { expBox.classList.add('show'); expText.textContent = q.exp; }
+            else { expBox.classList.remove('show'); }
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === TOTAL - 1;
+            document.getElementById('swipeHint').style.display = state.testSubmitted ? 'none' : 'block';
+            document.getElementById('actionRow').style.display = state.testSubmitted ? 'none' : 'flex';
+            renderPalette();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!');
+        }
+
+        function navigate(dir) {
+            if (IS_REVIEW_MODE) return;
+            const idx = state.currentIndex + dir;
+            if (idx >= 0 && idx < TOTAL) {
+                state.currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMark() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            const idx = state.currentIndex;
+            if (state.markedQuestions.has(idx)) { state.markedQuestions.delete(idx); showToast('🏷️ Unmarked'); }
+            else { state.markedQuestions.add(idx); showToast('🚩 Marked for review'); }
+            renderPalette();
+        }
+
+        function clearAnswer() {
+            if (state.testSubmitted || IS_REVIEW_MODE) return;
+            if (state.answers[state.currentIndex] !== undefined) {
+                delete state.answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared');
+            }
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.testSubmitted) {
+                    const q = QUESTIONS[i];
+                    if (state.answers[i] === q.c) num.classList.add('answered');
+                    else if (state.answers[i] !== undefined && state.answers[i] !== q.c) num.classList.add('wrong-num');
+                } else {
+                    if (state.answers[i] !== undefined) num.classList.add('answered');
+                    if (state.markedQuestions.has(i)) num.classList.add('marked');
+                }
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    if (IS_REVIEW_MODE) return;
+                    state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                grid.appendChild(num);
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            const percent = (answered / TOTAL) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${answered}/${TOTAL} answered`;
+        }
+
+        function startTimer() {
+            if (IS_REVIEW_MODE) return;
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) { clearInterval(state.timerInterval); return; }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) { clearInterval(state.timerInterval); autoSubmit(); }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60);
+            const s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (state.timeLeft < 600 && state.timeLeft > 0) {
+                document.getElementById('timerPill').classList.add('warning');
+            } else {
+                document.getElementById('timerPill').classList.remove('warning');
+            }
+            if (!state.testSubmitted) {
+                document.title = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} - CUET Chemistry Kinetics`;
+            }
+        }
+
+        function autoSubmit() { showToast('⏰ Time\'s up! Submitting...'); setTimeout(() => submitTest(true), 1500); }
+
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const answered = Object.keys(state.answers).length;
+            const unanswered = TOTAL - answered;
+            if (!skipConfirm) {
+                let confirmMsg = 'Are you sure you want to submit?';
+                if (unanswered > 0) confirmMsg = `${unanswered} question(s) unanswered. Submit anyway?`;
+                if (!confirm(confirmMsg)) return;
+            }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.score = calculateScore();
+            const resultData = {
+                score: state.score.score, total: state.score.total,
+                accuracy: state.score.attempted > 0 ? Math.round((state.score.correct / state.score.attempted) * 100) : 0,
+                correct: state.score.correct, wrong: state.score.wrong,
+                attempted: state.score.attempted, unanswered: state.score.unanswered,
+                timeTaken: (30 * 60) - state.timeLeft,
+                testCode: 'CUET_CHEM_KINETICS_30', examType: 'CUET UG Chemistry - Chemical Kinetics'
+            };
+            localStorage.setItem('chem_kin_last_answers', JSON.stringify(state.answers));
+            localStorage.setItem('chem_kin_last_result', JSON.stringify(resultData));
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'TEST_SUBMITTED', ...resultData, answers: state.answers }, '*');
+            }
+            showReview();
+            renderQuestion();
+            renderPalette();
+            showToast('✅ Test Submitted! Check review below.');
+            setTimeout(() => { document.getElementById('reviewPanel').scrollIntoView({ behavior: 'smooth' }); }, 300);
+            document.title = 'Submitted - CUET Chemistry Kinetics';
+            document.getElementById('swipeHint').style.display = 'none';
+            document.getElementById('actionRow').style.display = 'none';
+            document.getElementById('progressCard').style.display = 'none';
+            document.getElementById('paletteCard').style.display = 'none';
+        }
+
+        function showReview() {
+            const panel = document.getElementById('reviewPanel');
+            panel.classList.add('show');
+            const result = state.score;
+            document.getElementById('resultSummary').innerHTML = `
+            <div class="result-item"><div class="value">${result.score}/${result.total}</div><div class="label">Score</div></div>
+            <div class="result-item"><div class="value" style="color:#10b981;">${result.correct}</div><div class="label">✅ Correct (+5 each)</div></div>
+            <div class="result-item"><div class="value" style="color:#ef4444;">${result.wrong}</div><div class="label">❌ Wrong (-1 each)</div></div>
+            <div class="result-item"><div class="value">${result.unanswered}</div><div class="label">⬜ Unanswered</div></div>`;
+            const reviewQs = document.getElementById('reviewQuestions');
+            reviewQs.innerHTML = '<h4 style="margin:12px 0;">📝 Question-wise Review</h4>';
+            const letters = ['A', 'B', 'C', 'D'];
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let statusIcon, statusColor;
+                if (isUnanswered) { statusIcon = '⬜'; statusColor = 'var(--text-secondary)'; }
+                else if (isCorrect) { statusIcon = '✅'; statusColor = '#10b981'; }
+                else { statusIcon = '❌'; statusColor = '#ef4444'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                let optionsHTML = '<div class="options-grid" style="margin:8px 0;">';
+                opts.forEach((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c && j !== userAns) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    optionsHTML += `<div class="${optClass}" style="pointer-events:none;font-size:12px;padding:10px 12px;"><div class="option-letter">${letters[j]}</div><span>${opt}${label}</span></div>`;
+                });
+                optionsHTML += '</div>';
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const div = document.createElement('div');
+                div.style.cssText = 'padding:12px;margin:8px 0;border-radius:10px;border:1px solid var(--border);background:var(--option-bg);';
+                div.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-weight:700;">Q${i+1}.</span><span style="color:${statusColor};font-size:18px;">${statusIcon}</span></div>
+                <div style="font-size:13px;margin-bottom:4px;white-space:pre-line;">${qDisplay}</div>
+                ${optionsHTML}
+                <div style="font-size:11px;margin-top:4px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;color:#fbbf24;">💡 ${q.exp}</div>
+                <button onclick="jumpToQuestion(${i})" style="margin-top:6px;padding:4px 12px;border-radius:6px;border:1px solid #8b5cf6;background:transparent;color:#a78bfa;cursor:pointer;font-size:11px;">Jump to Q${i+1}</button>`;
+                reviewQs.appendChild(div);
+            });
+        }
+
+        function jumpToQuestion(index) {
+            state.currentIndex = index;
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('progressCard').style.display = 'block';
+            document.getElementById('paletteCard').style.display = 'block';
+            document.getElementById('swipeHint').style.display = 'block';
+            document.getElementById('actionRow').style.display = 'flex';
+            renderQuestion();
+            document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeReview() { document.getElementById('reviewPanel').classList.remove('show'); }
+
+        function renderReviewMode() {
+            const container = document.getElementById('reviewModeContainer');
+            const letters = ['A', 'B', 'C', 'D'];
+            let html = '<div class="review-mode-badge">📝 Review Mode — All 30 Questions</div>';
+            QUESTIONS.forEach((q, i) => {
+                const userAns = state.answers[i];
+                const isCorrect = userAns === q.c;
+                const isUnanswered = userAns === undefined;
+                let cardClass = 'review-mode-card';
+                let statusHTML = '';
+                if (isUnanswered) { cardClass += ' unanswered-q'; statusHTML = '<span class="review-mode-status status-unanswered">⏭️ Unanswered</span>'; }
+                else if (isCorrect) { cardClass += ' correct-answer'; statusHTML = '<span class="review-mode-status status-correct">✅ Correct (+5)</span>'; }
+                else { cardClass += ' wrong-answer'; statusHTML = '<span class="review-mode-status status-wrong">❌ Wrong (-1)</span>'; }
+                const opts = state.lang === 'hi' ? q.oHi : q.oEn;
+                const qDisplay = state.lang === 'hi' ? q.hi : q.en;
+                const optionsHTML = opts.map((opt, j) => {
+                    let optClass = 'option-card';
+                    if (j === q.c) optClass += ' correct';
+                    if (j === userAns && !isCorrect) optClass += ' wrong';
+                    if (j === userAns && isCorrect) optClass += ' selected correct';
+                    let label = '';
+                    if (j === q.c && j !== userAns) label = ' ✅';
+                    if (j === userAns && !isCorrect) label = ' ❌ (Your answer)';
+                    if (j === userAns && isCorrect) label = ' ✅ (Your answer)';
+                    return `<div class="${optClass}" style="pointer-events:none;"><div class="option-letter">${letters[j]}</div><span>${opt}${label}</span></div>`;
+                }).join('');
+                html += `
+                <div class="${cardClass}">
+                    <div class="review-mode-header"><span class="q-badge">Q ${i+1}/${TOTAL}</span>${statusHTML}</div>
+                    <div class="question-text"><div style="font-weight:600;white-space:pre-line;">${qDisplay}</div></div>
+                    <div class="options-grid">${optionsHTML}</div>
+                    <div class="explanation-box show" style="margin-top:10px;"><div class="exp-title">💡 Explanation</div><div>${q.exp}</div></div>
+                </div>`;
+            });
+            container.innerHTML = html;
+            container.style.display = 'block';
+        }
+
+        let touchStartX = 0, touchStartY = 0, touchMoved = false, swipeHandled = false;
+        const card = document.getElementById('questionCard');
+        card.addEventListener('touchstart', (e) => {
+            if (IS_REVIEW_MODE) return;
+            touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; touchMoved = false; swipeHandled = false;
+        }, { passive: true });
+        card.addEventListener('touchmove', (e) => {
+            if (IS_REVIEW_MODE || swipeHandled) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy)) {
+                touchMoved = true;
+                card.style.transform = `translateX(${dx * 0.5}px)`;
+                card.style.opacity = Math.max(0.5, 1 - Math.abs(dx) / 800);
+                card.classList.add('swiping');
+                e.preventDefault();
+            }
+        }, { passive: false });
+        card.addEventListener('touchend', (e) => {
+            if (IS_REVIEW_MODE) return;
+            card.classList.remove('swiping'); card.style.transform = ''; card.style.opacity = '';
+            if (!touchMoved) return;
+            const endX = e.changedTouches[0]?.clientX || touchStartX;
+            const dx = endX - touchStartX;
+            if (Math.abs(dx) > 80) { swipeHandled = true; if (dx > 0) navigate(-1); else navigate(1); }
+            touchMoved = false;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (IS_REVIEW_MODE) return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch (e.key.toLowerCase()) {
+                case 'arrowleft': e.preventDefault(); navigate(-1); break;
+                case 'arrowright': e.preventDefault(); navigate(1); break;
+                case 'a': case '1': e.preventDefault(); selectOption(0); break;
+                case 'b': case '2': e.preventDefault(); selectOption(1); break;
+                case 'c': case '3': e.preventDefault(); selectOption(2); break;
+                case 'd': case '4': e.preventDefault(); selectOption(3); break;
+                case 'm': e.preventDefault(); toggleMark(); break;
+                case 'backspace': e.preventDefault(); clearAnswer(); break;
+            }
+        });
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.style.display = 'flex';
+            clearTimeout(t._t); t._t = setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!state.testSubmitted && state.timeLeft > 0 && Object.keys(state.answers).length > 0 && !IS_REVIEW_MODE) {
+                e.preventDefault(); e.returnValue = '';
+            }
+        });
+
+        function init() {
+            state.lang = localStorage.getItem('chem_kin_lang') || 'en';
+            if (state.lang === 'hi') {
+                document.getElementById('langBtn').classList.add('active');
+                document.getElementById('langText').textContent = 'English';
+            }
+            if (IS_REVIEW_MODE) {
+                document.getElementById('questionCard').style.display = 'none';
+                document.getElementById('progressCard').style.display = 'none';
+                document.getElementById('paletteCard').style.display = 'none';
+                document.getElementById('swipeHint').style.display = 'none';
+                document.getElementById('infoRow').style.display = 'none';
+                document.getElementById('timerPill').style.display = 'none';
+                document.getElementById('actionRow').style.display = 'none';
+                document.getElementById('reviewPanel').style.display = 'none';
+                document.title = 'Review - CUET Chemistry Kinetics';
+                const savedAnswers = JSON.parse(localStorage.getItem('chem_kin_last_answers') || '{}');
+                state.answers = savedAnswers;
+                state.testSubmitted = true;
+                renderReviewMode();
+            } else {
+                startTimer();
+                renderQuestion();
+                renderPalette();
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
