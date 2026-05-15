@@ -32,7 +32,7 @@
             --radius: 16px;
             --radius-lg: 22px;
             --radius-xl: 28px;
-            --card-radius: 20px;
+            --card-radius: 18px;
             --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.03);
             --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 10px 28px -6px rgba(0, 0, 0, 0.09);
@@ -41,6 +41,7 @@
             --shadow-primary: 0 10px 28px -6px rgba(91, 76, 240, 0.3);
             --shadow-success: 0 8px 22px -4px rgba(16, 185, 129, 0.25);
             --font-sans: 'Poppins', sans-serif;
+            --transition: 0.24s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-smooth: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -49,6 +50,7 @@
             --glass-border: rgba(255, 255, 255, 0.55);
             --glass-blur: 18px;
             --sidebar-width: 300px;
+            --max-content-width: 600px;
         }
 
         * {
@@ -58,23 +60,35 @@
         }
         html {
             scroll-behavior: smooth;
+            height: 100%;
         }
-
         body {
             font-family: var(--font-sans);
             background: #f0f4ff;
             min-height: 100vh;
+            min-height: 100dvh;
             color: var(--dark);
             display: flex;
             flex-direction: column;
             position: relative;
             overflow-x: hidden;
+            overflow-y: auto;
             -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            max-width: 100vw;
         }
         body.sidebar-open {
             overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+        body.sheet-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
         }
 
         .bg-animation {
@@ -140,7 +154,6 @@
                 transform: translateY(-70px) translateX(-30px) scale(0.95);
             }
         }
-
         .grid-pattern {
             position: fixed;
             top: 0;
@@ -197,6 +210,7 @@
             top: 0;
             left: 0;
             height: 100%;
+            height: 100dvh;
             width: var(--sidebar-width);
             max-width: 84vw;
             background: #ffffff;
@@ -349,6 +363,7 @@
             display: flex;
             flex-direction: column;
             gap: 3px;
+            -webkit-overflow-scrolling: touch;
         }
         .sidebar-nav-label {
             font-size: 10px;
@@ -454,6 +469,10 @@
             background: #f0fdf4;
             color: #16a34a;
         }
+        .nav-icon-streak {
+            background: #ffedd5;
+            color: #ea580c;
+        }
         .sidebar-nav-item.logout-item:hover {
             background: #fef2f2;
             color: #dc2626;
@@ -536,12 +555,14 @@
             border-bottom: 1px solid var(--glass-border);
             gap: 8px;
             flex-wrap: nowrap;
+            min-height: 50px;
         }
         .nav-left {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
+            min-width: 0;
         }
         .hamburger-btn {
             width: 38px;
@@ -636,6 +657,37 @@
         .user-avatar.ultimate-ring {
             border: 3px solid #10b981;
             box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+        .category-badge-nav {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            letter-spacing: 0.2px;
+            flex-shrink: 0;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: 0 2px 8px rgba(91, 76, 240, 0.2);
+        }
+        .category-badge-nav:hover {
+            background: linear-gradient(135deg, #4a3dd4, #5b4cf0);
+            transform: scale(1.04);
+        }
+        .category-badge-nav:active {
+            transform: scale(0.94);
+            transition: 0.06s;
+        }
+        .category-badge-nav.empty {
+            background: #f1f5f9;
+            color: #94a3b8;
+            box-shadow: none;
+            font-weight: 500;
         }
         .nav-btn {
             background: #f1f5f9;
@@ -745,6 +797,7 @@
             width: 100%;
             position: relative;
             z-index: 2;
+            flex: 1;
         }
         @media (min-width: 480px) {
             .container {
@@ -779,6 +832,16 @@
             from {
                 opacity: 0;
                 transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
             }
             to {
                 opacity: 1;
@@ -849,6 +912,42 @@
             gap: 4px;
             white-space: nowrap;
             border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .streak-badge {
+            background: linear-gradient(135deg, #ffedd5, #fef3c7);
+            color: #ea580c;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: clamp(9px, 2vw, 11px);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(234, 88, 12, 0.2);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .streak-badge:hover {
+            background: #fed7aa;
+            transform: translateY(-1px);
+        }
+        .rank-mini-btn {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: clamp(9px, 2vw, 11px);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: none;
+        }
+        .rank-mini-btn:hover {
+            background: linear-gradient(135deg, #4a3dd4, #5b4cf0);
+            transform: translateY(-1px);
         }
 
         /* STATS GRID */
@@ -1101,166 +1200,330 @@
             transition: 0.08s;
         }
 
-        /* EXAM PILLS */
-        .exam-pills {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
-            padding: 10px 12px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow-xs);
+        /* ========== CATEGORY SELECTOR AREA (from exam.html) ========== */
+        .category-selector-area {
+            margin-bottom: 14px;
+            animation: fadeSlideIn 0.4s ease-out;
+        }
+        .select-category-btn {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, #eef0ff, #fafbff);
+            border: 2px dashed #c7d2fe;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 14px;
+            color: #5b4cf0;
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        .select-category-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(91, 76, 240, 0.04), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-smooth);
+        }
+        .select-category-btn:hover::before {
+            opacity: 1;
+        }
+        .select-category-btn:active {
+            transform: scale(0.97);
+            transition: 0.06s;
+            background: #e0e7ff;
+        }
+        .select-category-btn i {
+            font-size: 20px;
+            animation: bounceIcon 1.8s ease-in-out infinite;
+        }
+        @keyframes bounceIcon {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+        .category-selected-row {
+            display: flex;
             align-items: center;
             gap: 8px;
-            border: 1px solid var(--glass-border);
-        }
-        .exam-pills span.label {
-            font-weight: 700;
-            color: var(--gray-700);
-            white-space: nowrap;
-            font-size: clamp(11px, 2.4vw, 14px);
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .exam-pills-inner {
-            display: flex;
             flex-wrap: wrap;
-            gap: 6px;
         }
-        @media (min-width: 480px) {
-            .exam-pills-inner {
-                gap: 8px;
-            }
-        }
-        .exam-btn {
-            padding: 7px 13px;
-            border-radius: 40px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            font-weight: 600;
-            font-size: clamp(10px, 2.1vw, 12px);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            color: #334155;
-            white-space: nowrap;
-            flex-shrink: 0;
-            min-height: 34px;
-            font-family: var(--font-sans);
-            letter-spacing: -0.1px;
+        .category-selected-pill {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 7px;
+            box-shadow: 0 4px 14px rgba(91, 76, 240, 0.25);
+            animation: chipPopIn 0.35s var(--transition-bounce);
         }
-        .exam-btn:active {
-            transform: scale(0.93);
-            transition: 0.08s;
-        }
-        @media (min-width: 480px) {
-            .exam-btn {
-                padding: 8px 16px;
-                font-size: 12px;
-                min-height: 38px;
-            }
-        }
-        .exam-btn.selected {
-            background: linear-gradient(135deg, #5b4cf0, #6d5df7);
-            color: white;
-            border-color: #5b4cf0;
-            box-shadow: var(--shadow-primary);
-            animation: selectPop 0.3s ease-out;
-        }
-        @keyframes selectPop {
+        @keyframes chipPopIn {
             0% {
-                transform: scale(0.9);
+                transform: scale(0.8);
+                opacity: 0;
             }
             60% {
-                transform: scale(1.04);
+                transform: scale(1.05);
             }
             100% {
                 transform: scale(1);
+                opacity: 1;
             }
         }
-
-        /* FILTER BAR */
-        .filter-bar {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius);
-            padding: 10px 12px;
-            margin-bottom: 14px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            box-shadow: var(--shadow-xs);
-            border: 1px solid var(--glass-border);
-            animation: cardSlideIn 0.4s ease-out;
-            align-items: center;
+        .category-selected-pill i {
+            font-size: 14px;
         }
-        @media (min-width: 480px) {
-            .filter-bar {
-                padding: 12px 16px;
-                gap: 10px;
-            }
-        }
-        .filter-bar select,
-        .filter-bar input {
-            padding: 10px 14px;
+        .change-category-btn {
+            padding: 8px 14px;
+            border-radius: 24px;
+            background: #fff;
             border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            font-family: var(--font-sans);
-            font-size: clamp(11px, 2.3vw, 13px);
-            background: #f8fafc;
-            flex: 1 1 110px;
-            min-width: 90px;
-            transition: var(--transition-fast);
-            -webkit-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 30px;
             cursor: pointer;
-            min-height: 40px;
-        }
-        .filter-bar input {
-            background-image: none;
-            padding-right: 14px;
-        }
-        .filter-bar select:focus,
-        .filter-bar input:focus {
-            outline: none;
-            border-color: #5b4cf0;
-            box-shadow: 0 0 0 3px rgba(91, 76, 240, 0.08);
-            background: white;
-        }
-        .filter-bar .clear-filter-btn {
-            padding: 10px 16px;
-            border-radius: 40px;
-            border: 2px solid #e2e8f0;
-            background: white;
             font-weight: 600;
-            font-size: clamp(10px, 2.1vw, 12px);
-            cursor: pointer;
+            font-size: 11px;
+            color: #64748b;
             transition: var(--transition-fast);
-            white-space: nowrap;
-            min-height: 40px;
             font-family: var(--font-sans);
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            white-space: nowrap;
+        }
+        .change-category-btn:hover {
+            border-color: #cbd5e1;
             color: #475569;
         }
-        .filter-bar .clear-filter-btn:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
+        .change-category-btn:active {
+            transform: scale(0.95);
+            transition: 0.06s;
         }
 
-        /* TEST GRID */
+        /* ========== VERTICAL ACCORDION FILTERS (from exam.html) ========== */
+        .filter-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+            animation: fadeSlideIn 0.45s ease-out;
+        }
+        .filter-accordion-item {
+            border-radius: var(--radius);
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-sm);
+        }
+        .filter-accordion-item.open {
+            border-color: #c7d2fe;
+            box-shadow: 0 4px 18px rgba(91, 76, 240, 0.1);
+        }
+        .filter-accordion-header {
+            width: 100%;
+            padding: 13px 16px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 13px;
+            color: #334155;
+            transition: var(--transition-fast);
+            text-align: left;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .filter-accordion-header:active {
+            background: #fafbff;
+            transition: 0.06s;
+        }
+        .filter-accordion-header>span:first-child {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .filter-accordion-header>span:first-child i {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #5b4cf0;
+            flex-shrink: 0;
+        }
+        .accordion-badge {
+            font-size: 10px;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 3px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 0;
+        }
+        .accordion-badge.active-badge {
+            background: #eef0ff;
+            color: #5b4cf0;
+        }
+        .accordion-arrow {
+            font-size: 12px;
+            color: #94a3b8;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+        }
+        .filter-accordion-item.open .accordion-arrow {
+            transform: rotate(180deg);
+            color: #5b4cf0;
+        }
+        .filter-accordion-body {
+            max-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-overflow-scrolling: touch;
+            border-top: 0px solid transparent;
+            transition-property: max-height, border-top-width;
+        }
+        .filter-accordion-item.open .filter-accordion-body {
+            max-height: 340px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .vertical-chip-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 6px 10px 10px;
+        }
+        .vertical-chip {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 10px;
+            background: #fafbff;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            color: #475569;
+            transition: var(--transition-fast);
+            text-align: left;
+            font-family: var(--font-sans);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vertical-chip:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .vertical-chip:active {
+            transform: scale(0.97);
+            transition: 0.06s;
+            background: #eef0ff;
+        }
+        .vertical-chip.active {
+            background: #eef0ff;
+            border-color: #5b4cf0;
+            color: #5b4cf0;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(91, 76, 240, 0.1);
+        }
+        .vertical-chip .vc-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            flex-shrink: 0;
+            transition: var(--transition-fast);
+        }
+        .vertical-chip.active .vc-dot {
+            background: #5b4cf0;
+            box-shadow: 0 0 0 4px rgba(91, 76, 240, 0.15);
+        }
+        .search-row-vertical {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+        .search-chip-vertical {
+            padding: 11px 14px;
+            border-radius: var(--radius);
+            background: white;
+            border: 2px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: text;
+            color: #334155;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            font-family: var(--font-sans);
+            box-shadow: var(--shadow-sm);
+        }
+        .search-chip-vertical input {
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 12px;
+            color: #334155;
+            width: 100%;
+            background: transparent;
+            min-width: 0;
+        }
+        .search-chip-vertical:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 76, 240, 0.08);
+        }
+        .clear-chip-vertical {
+            padding: 11px 16px;
+            border-radius: var(--radius);
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            color: #dc2626;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-family: var(--font-sans);
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
+        }
+        .clear-chip-vertical:hover {
+            background: #fde8e8;
+        }
+        .clear-chip-vertical:active {
+            transform: scale(0.94);
+            transition: 0.06s;
+        }
+
+        /* ========== TEST CARDS (from exam.html style) ========== */
         .test-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -1287,64 +1550,62 @@
         }
         .test-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--card-radius);
             padding: 16px;
-            box-shadow: var(--shadow-xs);
-            cursor: pointer;
+            box-shadow: var(--shadow-sm);
             transition: var(--transition-smooth);
             border: 2px solid transparent;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            animation: cardSlideIn 0.5s ease-out;
+            animation: cardSlideIn 0.45s ease-out;
             animation-fill-mode: both;
         }
         .test-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(91, 76, 240, 0.04) 0%, transparent 70%);
+            top: -40%;
+            right: -40%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(91, 76, 240, 0.03) 0%, transparent 70%);
             border-radius: 50%;
             transition: var(--transition-smooth);
             pointer-events: none;
         }
         .test-card:hover::before {
-            width: 180px;
-            height: 180px;
-            top: -60%;
-            right: -60%;
+            width: 150px;
+            height: 150px;
+            top: -50%;
+            right: -50%;
         }
         .test-card:hover {
-            border-color: rgba(91, 76, 240, 0.3);
+            border-color: rgba(91, 76, 240, 0.25);
             box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
+            transform: translateY(-3px);
         }
         .test-card:active {
-            transform: scale(0.97);
-            transition: 0.08s;
-        }
-        @media (min-width: 480px) {
-            .test-card {
-                padding: 20px;
-            }
+            transform: scale(0.975);
+            transition: 0.06s;
         }
         .test-card.premium-card {
-            border-color: rgba(245, 158, 11, 0.25);
-            background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(255, 215, 0, 0.05));
+            border: 2px solid #ffd700;
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.88), rgba(255, 215, 0, 0.04));
+            box-shadow: 0 8px 26px rgba(218, 165, 32, 0.12);
+        }
+        .test-card.premium-card::before {
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
         }
         .test-card.plus-card {
-            border-color: rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.2);
         }
         .premium-badge {
             position: absolute;
             top: 10px;
-            right: 10px;
+            right: 12px;
             font-size: 18px;
             z-index: 2;
         }
@@ -1352,54 +1613,54 @@
             background: linear-gradient(135deg, #eef0ff, #e0e7ff);
             color: #4338ca;
             padding: 3px 12px;
-            border-radius: 30px;
-            font-size: clamp(9px, 2vw, 11px);
-            font-weight: 700;
-            align-self: flex-start;
-            margin-bottom: 8px;
-            border: 1px solid rgba(91, 76, 240, 0.12);
-            letter-spacing: 0.2px;
-        }
-        .badge-type {
-            padding: 3px 12px;
-            border-radius: 30px;
-            font-size: clamp(9px, 2vw, 11px);
+            border-radius: 24px;
+            font-size: 10px;
             font-weight: 700;
             align-self: flex-start;
             margin-bottom: 6px;
+            border: 1px solid rgba(91, 76, 240, 0.1);
+        }
+        .badge-type {
+            padding: 3px 12px;
+            border-radius: 24px;
+            font-size: 10px;
+            font-weight: 700;
+            align-self: flex-start;
+            margin-bottom: 5px;
         }
         .badge-free {
             background: #ecfdf5;
             color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.18);
         }
         .badge-paid {
             background: #fef3c7;
             color: #d97706;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.25);
         }
         .badge-premium {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             color: #92400e;
-            border: 1px solid rgba(245, 158, 11, 0.3);
         }
         .badge-premium-plus {
             background: linear-gradient(135deg, #ecfdf5, #d1fae5);
             color: #065f46;
-            border: 1px solid rgba(16, 185, 129, 0.3);
         }
         .badge-ultimate {
             background: linear-gradient(135deg, #fef3c7, #fde68a, #d1fae5);
             color: #78350f;
-            border: 1px solid rgba(245, 158, 11, 0.4);
         }
         .difficulty-tag {
             padding: 3px 10px;
-            border-radius: 20px;
-            font-size: clamp(8px, 1.8vw, 10px);
+            border-radius: 18px;
+            font-size: 9px;
             font-weight: 700;
             align-self: flex-start;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
+        }
+        .diff-easy {
+            background: #ecfdf5;
+            color: #059669;
         }
         .diff-moderate {
             background: #fefce8;
@@ -1409,18 +1670,14 @@
             background: #fef2f2;
             color: #dc2626;
         }
-        .diff-easy {
-            background: #ecfdf5;
-            color: #059669;
-        }
         .diff-prev-year {
             background: #f0f9ff;
             color: #0369a1;
         }
         .test-card h4 {
-            font-size: clamp(14px, 3vw, 16px);
+            font-size: 14px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             line-height: 1.3;
             letter-spacing: -0.2px;
         }
@@ -1428,59 +1685,50 @@
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
-            margin: 4px 0;
+            margin: 3px 0;
         }
         .chip {
             background: #f1f5f9;
-            padding: 4px 9px;
+            padding: 4px 10px;
             border-radius: 10px;
-            font-size: clamp(9px, 2vw, 11px);
+            font-size: 10px;
             color: #334155;
             display: flex;
             align-items: center;
             gap: 3px;
             font-weight: 500;
             border: 1px solid #e2e8f0;
-            transition: var(--transition-fast);
         }
         .chip.language-chip {
             background: #eef0ff;
             color: #5b4cf0;
-            border-color: rgba(91, 76, 240, 0.2);
-        }
-        .test-code {
-            font-weight: 700;
-            color: #5b4cf0;
-            font-size: clamp(11px, 2.3vw, 13px);
-            margin: 6px 0;
-            letter-spacing: 0.3px;
+            border-color: rgba(91, 76, 240, 0.18);
         }
         .score-preview {
-            font-size: clamp(9px, 2vw, 11px);
+            font-size: 10px;
             color: #10b981;
-            margin-top: 4px;
+            margin-top: 3px;
             font-weight: 600;
             background: #ecfdf5;
-            padding: 3px 10px;
-            border-radius: 8px;
+            padding: 3px 9px;
+            border-radius: 7px;
             display: inline-block;
             align-self: flex-start;
-            border: 1px solid rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.12);
         }
         .action-buttons {
             display: flex;
             gap: 8px;
-            margin-top: auto;
-            padding-top: 8px;
+            margin-top: 10px;
         }
         .attempt-btn {
             background: linear-gradient(135deg, #5b4cf0, #6d5df7);
             color: white;
             border: none;
             padding: 10px 14px;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: clamp(11px, 2.4vw, 13px);
+            font-size: 12px;
             cursor: pointer;
             transition: var(--transition-smooth);
             display: flex;
@@ -1488,10 +1736,8 @@
             justify-content: center;
             gap: 5px;
             font-family: var(--font-sans);
-            min-height: 40px;
-            letter-spacing: -0.1px;
-            box-shadow: 0 4px 12px rgba(91, 76, 240, 0.2);
             flex: 2;
+            box-shadow: 0 3px 10px rgba(91, 76, 240, 0.18);
             position: relative;
             overflow: hidden;
         }
@@ -1502,23 +1748,23 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.18);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
+            transition: width 0.45s, height 0.45s;
         }
         .attempt-btn:active::after {
-            width: 250px;
-            height: 250px;
+            width: 220px;
+            height: 220px;
             transition: 0s;
         }
         .attempt-btn:active {
-            transform: scale(0.94);
-            transition: 0.08s;
+            transform: scale(0.93);
+            transition: 0.06s;
         }
         .attempt-btn:hover {
             background: linear-gradient(135deg, #4a3dd4, #5b4cf0);
-            box-shadow: var(--shadow-primary);
+            box-shadow: 0 6px 18px rgba(91, 76, 240, 0.3);
             transform: translateY(-2px);
         }
         .attempt-btn.locked {
@@ -1535,9 +1781,9 @@
             color: #1e293b;
             border: none;
             padding: 10px 14px;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: clamp(11px, 2.4vw, 13px);
+            font-size: 12px;
             cursor: pointer;
             transition: var(--transition-smooth);
             display: flex;
@@ -1545,10 +1791,8 @@
             justify-content: center;
             gap: 5px;
             font-family: var(--font-sans);
-            min-height: 40px;
-            letter-spacing: -0.1px;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
             flex: 1;
+            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -1559,33 +1803,24 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.22);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
+            transition: width 0.45s, height 0.45s;
         }
         .leaderboard-btn:active::after {
-            width: 250px;
-            height: 250px;
+            width: 220px;
+            height: 220px;
             transition: 0s;
         }
         .leaderboard-btn:active {
-            transform: scale(0.94);
-            transition: 0.08s;
+            transform: scale(0.93);
+            transition: 0.06s;
         }
         .leaderboard-btn:hover {
             background: linear-gradient(135deg, #d97706, #f59e0b);
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
             transform: translateY(-2px);
-        }
-        @media (min-width: 480px) {
-            .attempt-btn,
-            .leaderboard-btn {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-                border-radius: 16px;
-            }
         }
         .hidden {
             display: none !important;
@@ -1604,8 +1839,16 @@
             display: block;
             opacity: 0.5;
         }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
-        /* BOTTOM SHEET */
+        /* ========== BOTTOM SHEET (Category) ========== */
         .sheet-overlay {
             position: fixed;
             inset: 0;
@@ -1616,100 +1859,228 @@
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
+            transition: opacity 0.28s;
         }
         .sheet-overlay.active {
             opacity: 1;
             pointer-events: all;
         }
+        .bottom-sheet {
+            background: white;
+            border-radius: 24px 24px 0 0;
+            width: 100%;
+            max-width: var(--max-content-width);
+            max-height: 80vh;
+            max-height: 80dvh;
+            padding: 20px 14px;
+            transform: translateY(100%);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.14);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+        }
+        .sheet-overlay.active .bottom-sheet {
+            transform: translateY(0);
+        }
         .instruction-sheet {
             background: white;
-            border-radius: 28px 28px 0 0;
+            border-radius: 24px 24px 0 0;
             width: 100%;
-            max-width: 500px;
+            max-width: var(--max-content-width);
             max-height: 85vh;
-            padding: 24px 20px;
+            max-height: 85dvh;
+            padding: 22px 16px;
             transform: translateY(100%);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.14);
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .sheet-overlay.active .instruction-sheet {
             transform: translateY(0);
         }
         .sheet-handle {
-            width: 40px;
+            width: 36px;
             height: 4px;
             background: #cbd5e1;
             border-radius: 2px;
-            margin: 0 auto 16px;
+            margin: 0 auto 14px;
+            flex-shrink: 0;
         }
-        .sheet-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .sheet-header h2 {
-            font-size: 18px;
+        .sheet-title {
             font-weight: 800;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 14px;
+            letter-spacing: -0.3px;
+            flex-shrink: 0;
+        }
+        .category-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .category-option {
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            color: #334155;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-sans);
+        }
+        .category-option:hover {
+            background: #eef0ff;
+            border-color: #c7d2fe;
+            color: #5b4cf0;
+        }
+        .category-option:active {
+            transform: scale(0.97);
+            transition: 0.06s;
+            background: #e0e7ff;
+        }
+        .category-option.selected-option {
+            background: #eef0ff;
+            border-color: #5b4cf0;
+            color: #5b4cf0;
+            box-shadow: 0 2px 10px rgba(91, 76, 240, 0.12);
+        }
+        .category-option i {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #eef0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: #5b4cf0;
+            flex-shrink: 0;
+        }
+        .category-option .cat-count {
+            margin-left: auto;
+            font-size: 11px;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 3px 10px;
+            border-radius: 14px;
+            font-weight: 500;
+        }
+        .sheet-close-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 10px;
+            transition: var(--transition-fast);
+            font-family: var(--font-sans);
+            flex-shrink: 0;
+        }
+        .sheet-close-btn:hover {
+            background: #e2e8f0;
+        }
+        .sheet-close-btn:active {
+            transform: scale(0.96);
+            transition: 0.06s;
         }
         .instruction-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
         .inst-card {
             background: #f8fafc;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
         }
         .inst-card i {
-            font-size: 20px;
+            font-size: 18px;
             color: #5b4cf0;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .inst-card p {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+        }
+        .inst-card span {
+            font-size: 10px;
+            color: #94a3b8;
         }
         .rules-list {
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .rules-list li {
-            padding: 8px 0;
-            font-size: 13px;
+            padding: 7px 0;
+            font-size: 12px;
             border-bottom: 1px solid #f1f5f9;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
         .sheet-footer {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
         .cancel-sheet {
             flex: 1;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 12px;
+            border-radius: 12px;
             border: 2px solid #e2e8f0;
             background: white;
             font-weight: 600;
             cursor: pointer;
             font-family: var(--font-sans);
+            font-size: 13px;
         }
         .confirm-start {
             flex: 2;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 12px;
+            border-radius: 12px;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
             font-weight: 700;
             cursor: pointer;
             font-family: var(--font-sans);
+            font-size: 13px;
+        }
+
+        @media (min-width: 600px) {
+            .category-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .category-option {
+                padding: 12px 14px;
+                font-size: 12px;
+            }
+            .vertical-chip-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
+            }
+            .vertical-chip {
+                font-size: 11px;
+                padding: 10px 12px;
+            }
         }
 
         /* FOOTER */
@@ -1721,6 +2092,8 @@
             text-align: center;
             font-size: 12px;
             letter-spacing: 0.5px;
+            z-index: 2;
+            position: relative;
         }
         .footer-content {
             max-width: 800px;
@@ -1844,6 +2217,7 @@
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><span class="nav-icon nav-icon-leaderboard"><i class="fas fa-trophy"></i></span><span>Leaderboard</span></button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span><span>Chat</span></button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('achievements')"><span class="nav-icon nav-icon-achievements"><i class="fas fa-medal"></i></span><span>Achievements</span></button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><span class="nav-icon nav-icon-streak"><i class="fas fa-fire"></i></span><span>Streak Ranking 🔥</span></button>
                 <div class="sidebar-nav-label">Premium</div>
                 <button class="sidebar-nav-item premium-nav-item" id="sidebarPremiumBtn" onclick="sidebarNavigate('premium')"><span class="nav-icon nav-icon-premium"><i class="fas fa-crown"></i></span><span id="sidebarPremiumBtnText">Buy Premium</span></button>
                 <div class="sidebar-nav-label">Account</div>
@@ -1869,6 +2243,7 @@
             <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i><span>TestMaster Pro</span></div>
         </div>
         <div class="nav-right">
+            <span class="category-badge-nav empty" id="navCategoryBadge" onclick="openCategorySheet()" title="Select Category">📂 Category</span>
             <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">S</div>
             <span id="welcomeUser">Welcome</span>
             <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
@@ -1926,35 +2301,76 @@
             <a href="exam.html" class="open-full-btn"><i class="fas fa-external-link-alt"></i> Open Full Library</a>
         </div>
 
-        <!-- Exam Pills -->
-        <div class="exam-pills" id="examSelector">
-            <span class="label">📚 Exam:</span>
-            <div class="exam-pills-inner" id="examButtons">Loading exams...</div>
-        </div>
+        <!-- Category Selector Area (from exam.html) -->
+        <div class="category-selector-area" id="categorySelectorArea"></div>
 
-        <!-- Filter Bar -->
-        <div class="filter-bar hidden" id="filterBar">
-            <select id="subjectFilter" onchange="onSubjectChange()"><option value="">📖 All Subjects</option></select>
-            <select id="chapterFilter" onchange="applyFilters()"><option value="">📑 All Chapters</option></select>
-            <select id="typeFilter" onchange="applyFilters()"><option value="">🔓 All Types</option><option value="free">🆓 Free</option><option value="paid">👑 Premium</option></select>
-            <input type="text" id="searchInput" placeholder="🔍 Search tests..." oninput="applyFilters()">
-            <button class="clear-filter-btn" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Clear</button>
+        <!-- VERTICAL ACCORDION FILTERS (from exam.html) -->
+        <div class="filter-accordion" id="filterAccordion" style="display:none;">
+            <!-- Exam Accordion -->
+            <div class="filter-accordion-item" id="examAccordionItem">
+                <button class="filter-accordion-header" onclick="toggleAccordion('examAccordionBody','examArrow','examAccordionItem')">
+                    <span><i class="fas fa-file-alt"></i> Exam</span>
+                    <span class="accordion-badge" id="examBadge">All</span>
+                    <i class="fas fa-chevron-down accordion-arrow" id="examArrow"></i>
+                </button>
+                <div class="filter-accordion-body" id="examAccordionBody">
+                    <div class="vertical-chip-list" id="examChips"></div>
+                </div>
+            </div>
+            <!-- Subject Accordion -->
+            <div class="filter-accordion-item" id="subjectAccordionItem">
+                <button class="filter-accordion-header" onclick="toggleAccordion('subjectAccordionBody','subjectArrow','subjectAccordionItem')">
+                    <span><i class="fas fa-book"></i> Subject</span>
+                    <span class="accordion-badge" id="subjectBadge">All</span>
+                    <i class="fas fa-chevron-down accordion-arrow" id="subjectArrow"></i>
+                </button>
+                <div class="filter-accordion-body" id="subjectAccordionBody">
+                    <div class="vertical-chip-list" id="subjectChips"></div>
+                </div>
+            </div>
+            <!-- Chapter Accordion -->
+            <div class="filter-accordion-item" id="chapterAccordionItem">
+                <button class="filter-accordion-header" onclick="toggleAccordion('chapterAccordionBody','chapterArrow','chapterAccordionItem')">
+                    <span><i class="fas fa-layer-group"></i> Chapter</span>
+                    <span class="accordion-badge" id="chapterBadge">All</span>
+                    <i class="fas fa-chevron-down accordion-arrow" id="chapterArrow"></i>
+                </button>
+                <div class="filter-accordion-body" id="chapterAccordionBody">
+                    <div class="vertical-chip-list" id="chapterChips"></div>
+                </div>
+            </div>
+            <!-- Search Row -->
+            <div class="search-row-vertical">
+                <div class="search-chip-vertical">
+                    <i class="fas fa-search" style="color:#5b4cf0;"></i>
+                    <input type="text" id="searchInput" placeholder="Search tests by name or code..." oninput="applyFilters()">
+                </div>
+                <button class="clear-chip-vertical" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
+            </div>
         </div>
 
         <!-- Test Grid -->
         <div class="test-grid" id="testGrid">
-            <div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam above to view mock tests</div>
+            <div class="empty-state"><i class="fas fa-folder-open"></i> Select a Category First<p style="font-size:11px;margin-top:6px;">Tap the <b>"Select Category"</b> button above to browse mock tests</p></div>
         </div>
     </div>
 
-    <!-- BOTTOM SHEET -->
-    <div class="sheet-overlay" id="sheetOverlay">
+    <!-- Category Bottom Sheet -->
+    <div class="sheet-overlay" id="categorySheetOverlay">
+        <div class="bottom-sheet" id="categoryBottomSheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title">📂 Select Category</div>
+            <div class="category-grid" id="categoryGrid"></div>
+            <button class="sheet-close-btn" onclick="closeCategorySheet()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Instruction Bottom Sheet -->
+    <div class="sheet-overlay" id="instructionSheetOverlay">
         <div class="instruction-sheet">
             <div class="sheet-handle"></div>
-            <div class="sheet-header">
-                <h2 id="sheetTestName">Test Instructions</h2>
-                <span style="color:#64748b;font-size:13px;" id="sheetTestCode">#CODE</span>
-            </div>
+            <div class="sheet-title" id="sheetTestName">Test Instructions</div>
+            <span style="color:#64748b;font-size:12px;text-align:center;display:block;margin-bottom:12px;" id="sheetTestCode">#CODE</span>
             <div class="instruction-grid">
                 <div class="inst-card"><i class="fas fa-clock"></i><p id="sheetDuration">--</p><span>Minutes</span></div>
                 <div class="inst-card"><i class="fas fa-question-circle"></i><p id="sheetQs">--</p><span>Questions</span></div>
@@ -1967,7 +2383,7 @@
                 <li><i class="fas fa-info-circle" style="color:#5b4cf0;"></i> Test will auto-submit when time runs out.</li>
             </ul>
             <div class="sheet-footer">
-                <button class="cancel-sheet" onclick="closeSheet()">Cancel</button>
+                <button class="cancel-sheet" onclick="closeInstructionSheet()">Cancel</button>
                 <button class="confirm-start" id="finalStartBtn">Begin Test</button>
             </div>
         </div>
@@ -1996,13 +2412,20 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbyVPG4x6CSrtwpfI_LPRCjvCjCcN8ZY7d0Z2P3ef_e_BL2hatfDLbIpdStSIG69JhCggg/exec';
         let allMocks = [];
         let userResults = [];
+        let selectedCategory = '';
         let selectedExam = '';
+        let selectedSubject = '';
+        let selectedChapter = '';
         let userPremiumPlans = [];
         let currentTestData = {};
         let previousAvgScore = 0;
+        let allCategories = [];
+        let categoryTestCounts = {};
 
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
+
+        const savedCategory = localStorage.getItem('selectedCategory') || user.targetExam || '';
 
         function setAvatarWithPic(elId, u) {
             const el = document.getElementById(elId);
@@ -2031,11 +2454,25 @@
         if (user.education) userExtra.innerHTML +=
             `<span class="info-tag"><i class="fas fa-graduation-cap"></i> ${user.education}</span>`;
 
-        // Only one target line kept in subtitle, so no goal-badge here.
+        function addStreakWidget() {
+            const streak = user.streak || 0;
+            const streakHtml = `
+                <span class="streak-badge" onclick="window.location.href='streak.html'">
+                    <i class="fas fa-fire"></i> Streak: ${streak} days
+                </span>
+                <button class="rank-mini-btn" onclick="window.location.href='streak.html'">
+                    <i class="fas fa-trophy"></i> Rank
+                </button>
+            `;
+            userExtra.insertAdjacentHTML('beforeend', streakHtml);
+        }
+        addStreakWidget();
+
         document.getElementById('welcomeSubtitle').textContent = user.preparingFor ?
             `🎯 Target: ${user.preparingFor} • Stay focused!` : '🎯 Your focused test dashboard';
 
         function logout() { localStorage.removeItem('user');
+            localStorage.removeItem('selectedCategory');
             window.location.href = 'index.html'; }
 
         function openSidebar() {
@@ -2043,7 +2480,6 @@
             o.classList.remove('hidden');
             o.classList.add('active');
             document.body.classList.add('sidebar-open');
-            document.body.style.overflow = 'hidden';
         }
 
         function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
@@ -2052,7 +2488,6 @@
             const o = document.getElementById('sidebarOverlay');
             o.classList.remove('active');
             document.body.classList.remove('sidebar-open');
-            document.body.style.overflow = '';
             setTimeout(() => { if (!o.classList.contains('active')) o.classList.add('hidden'); }, 350);
         }
 
@@ -2068,6 +2503,7 @@
                     'leaderboard': 'leaderboard.html',
                     'chat': 'chat.html',
                     'achievements': 'achievements.html',
+                    'streak': 'streak.html',
                     'premium': 'payment.html',
                     'profile': 'profile.html',
                     'instructions': 'javascript:openHowToUse()',
@@ -2084,13 +2520,14 @@
                 title: '📖 How to Use TestMaster Pro',
                 html: `
                     <div style="text-align:left;font-size:13px;line-height:1.8;">
-                        <p><b>1.</b> Select an <b>Exam</b> from the pills above.</p>
-                        <p><b>2.</b> Use <b>Subject, Chapter & Type</b> filters to narrow tests.</p>
+                        <p><b>1.</b> Select a <b>Category</b> from the top button.</p>
+                        <p><b>2.</b> Use <b>Exam, Subject & Chapter</b> accordions to narrow tests.</p>
                         <p><b>3.</b> Click <b>"Attempt Now"</b> to start a test.</p>
                         <p><b>4.</b> Premium tests require a subscription - tap <b>Buy Premium</b>.</p>
                         <p><b>5.</b> Check <b>Leaderboard</b> to see your rank.</p>
                         <p><b>6.</b> View <b>My Results</b> for detailed analytics.</p>
                         <p style="margin-top:8px;color:#5b4cf0;"><b>Tip:</b> Tests are available in Hindi + English.</p>
+                        <p><b>🔥 Streak:</b> Attempt any test daily to increase your streak!</p>
                     </div>`,
                 confirmButtonText: 'Got it!',
                 confirmButtonColor: '#5b4cf0',
@@ -2128,16 +2565,59 @@
             });
         }
 
+        // ========== ACCORDION TOGGLE ==========
+        function toggleAccordion(bodyId, arrowId, itemId) {
+            const item = document.getElementById(itemId);
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
+            if (!isOpen) {
+                item.classList.add('open');
+                setTimeout(() => {
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const clickedInsideAccordion = e.target.closest('.filter-accordion-item');
+            const clickedOnHeader = e.target.closest('.filter-accordion-header');
+            if (!clickedInsideAccordion && !clickedOnHeader) {
+                document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove(
+                    'open'));
+            }
+        });
+
+        // ========== LOAD MOCKS ==========
         async function loadMocks() {
             try {
                 const r = await fetch('mocks.json');
                 allMocks = await r.json();
-                renderExamButtons();
+                extractCategories();
                 updateStats([]);
+                if (savedCategory) {
+                    selectedCategory = savedCategory;
+                    updateNavBadge();
+                    renderCategorySelected();
+                    renderFilterAccordions();
+                    applyFilters();
+                } else {
+                    renderCategoryPrompt();
+                }
             } catch (e) {
-                document.getElementById('examButtons').innerHTML =
-                    '<span style="color:#b91c1c;">Error loading exams</span>';
+                document.getElementById('testGrid').innerHTML =
+                    '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i> Failed to load tests</div>';
             }
+        }
+
+        function extractCategories() {
+            const catMap = {};
+            allMocks.forEach(m => {
+                const cat = m.category || 'Uncategorized';
+                if (!catMap[cat]) catMap[cat] = 0;
+                catMap[cat]++;
+            });
+            allCategories = Object.keys(catMap).sort();
+            categoryTestCounts = catMap;
         }
 
         async function loadUserResults() {
@@ -2211,91 +2691,225 @@
             }
         }
 
-        function renderExamButtons() {
-            const exams = [...new Set(allMocks.map(m => m.exam))];
-            document.getElementById('examButtons').innerHTML = exams.map(exam => {
-                const icons = { 'SSC': '🏛️', 'UPSC': '🇮🇳', 'CUET': '🎓', 'JEE': '⚡', 'NEET': '💊',
-                    'Banking': '🏦', 'Railway': '🚂' };
-                return `<button class="exam-btn" onclick="selectExam('${exam.replace(/'/g,"\\'")}',this)">${icons[exam]||'📝'} ${exam}</button>`;
-            }).join('');
-        }
-
-        function selectExam(exam, btn) {
-            document.querySelectorAll('#examButtons .exam-btn').forEach(b => b.classList.remove('selected'));
-            if (selectedExam === exam) {
-                selectedExam = '';
-                document.getElementById('filterBar').classList.add('hidden');
-                document.getElementById('testGrid').innerHTML =
-                    '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
-                updateStats([]);
+        // ========== CATEGORY UI ==========
+        function updateNavBadge() {
+            const badge = document.getElementById('navCategoryBadge');
+            if (selectedCategory) {
+                badge.textContent = selectedCategory.length > 10 ? selectedCategory.substring(0, 9) + '…' :
+                    selectedCategory;
+                badge.classList.remove('empty');
+                badge.title = 'Category: ' + selectedCategory + ' (tap to change)';
             } else {
-                selectedExam = exam;
-                btn.classList.add('selected');
-                btn.style.animation = 'none';
-                btn.offsetHeight;
-                btn.style.animation = 'selectPop 0.3s ease-out';
-                document.getElementById('filterBar').classList.remove('hidden');
-                const filtered = allMocks.filter(m => m.exam === exam);
-                populateSubjectFilter(filtered);
-                displayTests(filtered);
-                updateStats(filtered);
+                badge.textContent = '📂 Category';
+                badge.classList.add('empty');
+                badge.title = 'Select a category';
             }
         }
 
-        function populateSubjectFilter(tests) {
-            const subjects = [...new Set(tests.map(t => t.subject))].sort();
-            const sel = document.getElementById('subjectFilter');
-            sel.innerHTML = '<option value="">📖 All Subjects</option>';
-            subjects.forEach(s => { const o = document.createElement('option');
-                o.value = s;
-                o.textContent = s;
-                sel.appendChild(o); });
-            document.getElementById('chapterFilter').innerHTML = '<option value="">📑 All Chapters</option>';
-            document.getElementById('searchInput').value = '';
-            document.getElementById('typeFilter').value = '';
+        function renderCategoryPrompt() {
+            document.getElementById('categorySelectorArea').innerHTML = `
+            <button class="select-category-btn" onclick="openCategorySheet()">
+              <i class="fas fa-layer-group"></i> Select Category
+            </button>`;
+            document.getElementById('filterAccordion').style.display = 'none';
+            document.getElementById('testGrid').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-folder-open"></i>
+              <p style="margin-top:8px;">Select a Category First</p>
+              <p style="font-size:11px;">Tap the <b>"Select Category"</b> button above to browse mock tests</p>
+            </div>`;
+            document.getElementById('navCategoryBadge').classList.add('empty');
+            document.getElementById('navCategoryBadge').textContent = '📂 Category';
         }
 
-        function onSubjectChange() {
-            const subject = document.getElementById('subjectFilter').value;
-            let filtered = allMocks;
-            if (selectedExam) filtered = filtered.filter(m => m.exam === selectedExam);
-            if (subject) filtered = filtered.filter(m => m.subject === subject);
-            const chapters = [...new Set(filtered.map(m => m.chapter).filter(Boolean))].sort();
-            const sel = document.getElementById('chapterFilter');
-            sel.innerHTML = '<option value="">📑 All Chapters</option>';
-            chapters.forEach(ch => { const o = document.createElement('option');
-                o.value = ch;
-                o.textContent = ch;
-                sel.appendChild(o); });
+        function renderCategorySelected() {
+            document.getElementById('categorySelectorArea').innerHTML = `
+            <div class="category-selected-row">
+              <div class="category-selected-pill">
+                <i class="fas fa-folder"></i> ${selectedCategory}
+                <span style="font-size:10px;opacity:0.8;font-weight:500;">(${categoryTestCounts[selectedCategory]||0} tests)</span>
+              </div>
+              <button class="change-category-btn" onclick="openCategorySheet()">
+                <i class="fas fa-exchange-alt"></i> Change
+              </button>
+            </div>`;
+            document.getElementById('filterAccordion').style.display = 'flex';
+            updateNavBadge();
+        }
+
+        function openCategorySheet() {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = allCategories.map(cat => `
+            <div class="category-option ${cat===selectedCategory?'selected-option':''}" onclick="selectCategory('${cat.replace(/'/g,"\\'")}')">
+              <i class="fas fa-folder${cat===selectedCategory?'-open':''}"></i>
+              <span>${cat}</span>
+              <span class="cat-count">${categoryTestCounts[cat]||0}</span>
+            </div>
+          `).join('');
+            document.getElementById('categorySheetOverlay').classList.add('active');
+            document.body.classList.add('sheet-open');
+        }
+
+        function closeCategorySheet() {
+            document.getElementById('categorySheetOverlay').classList.remove('active');
+            document.body.classList.remove('sheet-open');
+        }
+
+        async function selectCategory(category) {
+            selectedCategory = category;
+            selectedExam = '';
+            selectedSubject = '';
+            selectedChapter = '';
+            document.getElementById('searchInput').value = '';
+
+            localStorage.setItem('selectedCategory', category);
+            if (user) {
+                user.targetExam = category;
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+
+            await syncCategoryToSheet(category);
+
+            document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
+            closeCategorySheet();
+            renderCategorySelected();
+            renderFilterAccordions();
+            applyFilters();
+            updateNavBadge();
+            updateStats([]);
+        }
+
+        async function syncCategoryToSheet(category) {
+            try {
+                const storedPwd = sessionStorage.getItem('userPassword');
+                if (storedPwd && user && user.username) {
+                    await fetch(
+                        `${API_URL}?action=updateProfile&username=${encodeURIComponent(user.username)}&password=${encodeURIComponent(storedPwd)}&targetExam=${encodeURIComponent(category)}`
+                        );
+                }
+            } catch (e) {
+                console.log('Sheet sync deferred:', e.message);
+            }
+        }
+
+        // ========== RENDER VERTICAL ACCORDION FILTERS ==========
+        function renderFilterAccordions() {
+            let filtered = allMocks.filter(m => (m.category || 'Uncategorized') === selectedCategory);
+
+            const exams = [...new Set(filtered.map(m => m.exam))].sort();
+            const examContainer = document.getElementById('examChips');
+            examContainer.innerHTML = `
+            <button class="vertical-chip ${selectedExam===''?'active':''}" onclick="selectExamFilter('')">
+              <span class="vc-dot"></span> 📋 All Exams
+            </button>` + exams.map(ex =>
+                `<button class="vertical-chip ${selectedExam===ex?'active':''}" onclick="selectExamFilter('${ex.replace(/'/g,"\\'")}')">
+              <span class="vc-dot"></span> ${ex}
+            </button>`
+            ).join('');
+            document.getElementById('examBadge').textContent = selectedExam || 'All';
+            document.getElementById('examBadge').className = selectedExam ? 'accordion-badge active-badge' :
+                'accordion-badge';
+
+            let examFiltered = filtered;
+            if (selectedExam) examFiltered = examFiltered.filter(m => m.exam === selectedExam);
+            const subjects = [...new Set(examFiltered.map(m => m.subject))].sort();
+            const subjectContainer = document.getElementById('subjectChips');
+            subjectContainer.innerHTML = `
+            <button class="vertical-chip ${selectedSubject===''?'active':''}" onclick="selectSubjectFilter('')">
+              <span class="vc-dot"></span> 📖 All Subjects
+            </button>` + subjects.map(s =>
+                `<button class="vertical-chip ${selectedSubject===s?'active':''}" onclick="selectSubjectFilter('${s.replace(/'/g,"\\'")}')">
+              <span class="vc-dot"></span> ${s}
+            </button>`
+            ).join('');
+            document.getElementById('subjectBadge').textContent = selectedSubject || 'All';
+            document.getElementById('subjectBadge').className = selectedSubject ? 'accordion-badge active-badge' :
+                'accordion-badge';
+
+            let subjFiltered = examFiltered;
+            if (selectedSubject) subjFiltered = subjFiltered.filter(m => m.subject === selectedSubject);
+            const chapters = [...new Set(subjFiltered.map(m => m.chapter).filter(Boolean))].sort();
+            const chapterContainer = document.getElementById('chapterChips');
+            if (chapters.length > 0) {
+                chapterContainer.innerHTML = `
+                <button class="vertical-chip ${selectedChapter===''?'active':''}" onclick="selectChapterFilter('')">
+                  <span class="vc-dot"></span> 📑 All Chapters
+                </button>` + chapters.map(ch =>
+                    `<button class="vertical-chip ${selectedChapter===ch?'active':''}" onclick="selectChapterFilter('${ch.replace(/'/g,"\\'")}')">
+                  <span class="vc-dot"></span> ${ch}
+                </button>`
+                ).join('');
+                document.getElementById('chapterAccordionItem').style.display = '';
+            } else {
+                chapterContainer.innerHTML =
+                    '<div style="padding:10px;color:#94a3b8;font-size:11px;text-align:center;">No chapters available</div>';
+                document.getElementById('chapterAccordionItem').style.display = '';
+            }
+            document.getElementById('chapterBadge').textContent = selectedChapter || 'All';
+            document.getElementById('chapterBadge').className = selectedChapter ? 'accordion-badge active-badge' :
+                'accordion-badge';
+        }
+
+        function selectExamFilter(exam) {
+            selectedExam = (selectedExam === exam) ? '' : exam;
+            if (selectedExam && selectedSubject) {
+                const valid = allMocks.some(m => (m.category || 'Uncategorized') === selectedCategory && m.exam ===
+                    selectedExam && m.subject === selectedSubject);
+                if (!valid) selectedSubject = '';
+            }
+            if (selectedExam && selectedChapter) {
+                const valid = allMocks.some(m => (m.category || 'Uncategorized') === selectedCategory && m.exam ===
+                    selectedExam && m.chapter === selectedChapter);
+                if (!valid) selectedChapter = '';
+            }
+            renderFilterAccordions();
+            applyFilters();
+            updateStats(getFilteredTests());
+        }
+
+        function selectSubjectFilter(subject) {
+            selectedSubject = (selectedSubject === subject) ? '' : subject;
+            if (selectedSubject && selectedChapter) {
+                const valid = allMocks.some(m => (m.category || 'Uncategorized') === selectedCategory && m.subject ===
+                    selectedSubject && m.chapter === selectedChapter);
+                if (!valid) selectedChapter = '';
+            }
+            renderFilterAccordions();
             applyFilters();
         }
 
-        function applyFilters() {
-            if (!selectedExam) return;
-            let filtered = allMocks.filter(m => m.exam === selectedExam);
-            const subject = document.getElementById('subjectFilter').value;
-            const chapter = document.getElementById('chapterFilter').value;
-            const type = document.getElementById('typeFilter').value;
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            if (subject) filtered = filtered.filter(m => m.subject === subject);
-            if (chapter) filtered = filtered.filter(m => m.chapter === chapter);
-            if (type) filtered = filtered.filter(m => m.type === type);
-            if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode
-                .toLowerCase().includes(search));
-            displayTests(filtered);
+        function selectChapterFilter(chapter) {
+            selectedChapter = (selectedChapter === chapter) ? '' : chapter;
+            renderFilterAccordions();
+            applyFilters();
         }
 
         function clearAllFilters() {
             selectedExam = '';
-            document.querySelectorAll('#examButtons .exam-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('filterBar').classList.add('hidden');
-            document.getElementById('subjectFilter').value = '';
-            document.getElementById('chapterFilter').innerHTML = '<option value="">📑 All Chapters</option>';
-            document.getElementById('typeFilter').value = '';
+            selectedSubject = '';
+            selectedChapter = '';
             document.getElementById('searchInput').value = '';
-            document.getElementById('testGrid').innerHTML =
-                '<div class="empty-state"><i class="fas fa-hand-pointer"></i> 👆 Select an exam</div>';
-            updateStats([]);
+            document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
+            renderFilterAccordions();
+            applyFilters();
+            updateStats(getFilteredTests());
+        }
+
+        function getFilteredTests() {
+            if (!selectedCategory) return [];
+            let filtered = allMocks.filter(m => (m.category || 'Uncategorized') === selectedCategory);
+            if (selectedExam) filtered = filtered.filter(m => m.exam === selectedExam);
+            if (selectedSubject) filtered = filtered.filter(m => m.subject === selectedSubject);
+            if (selectedChapter) filtered = filtered.filter(m => m.chapter === selectedChapter);
+            const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+            if (search) filtered = filtered.filter(m => m.testName.toLowerCase().includes(search) || m.testCode.toLowerCase()
+                .includes(search));
+            return filtered;
+        }
+
+        function applyFilters() {
+            const tests = getFilteredTests();
+            displayTests(tests);
         }
 
         function hasAccess(test) {
@@ -2324,10 +2938,9 @@
             return '';
         }
 
-        // Parse difficulty from mock.json (optional)
         function getDifficultyInfo(difficulty) {
             if (!difficulty || typeof difficulty !== 'string') return null;
-            const d = difficulty.trim();
+            const d = difficulty.trim().toLowerCase();
             const map = {
                 'easy': { cls: 'diff-easy', emoji: '✅', label: 'Easy' },
                 'moderate': { cls: 'diff-moderate', emoji: '📊', label: 'Moderate' },
@@ -2338,17 +2951,19 @@
                 'advanced': { cls: 'diff-hard', emoji: '🔥', label: 'Advanced' },
                 'medium': { cls: 'diff-moderate', emoji: '📊', label: 'Medium' },
             };
-            const key = d.toLowerCase();
-            if (map[key]) return map[key];
-            // Default fallback if unknown string
-            return { cls: 'diff-moderate', emoji: '📊', label: d };
+            return map[d] || { cls: 'diff-moderate', emoji: '📊', label: d };
         }
 
         function displayTests(tests) {
             const grid = document.getElementById('testGrid');
+            if (!selectedCategory) {
+                grid.innerHTML =
+                    '<div class="empty-state"><i class="fas fa-folder-open"></i> Select a Category First<p style="font-size:11px;margin-top:6px;">Tap the <b>"Select Category"</b> button above</p></div>';
+                return;
+            }
             if (!tests.length) {
                 grid.innerHTML =
-                    '<div class="empty-state"><i class="fas fa-search"></i> No tests match your filters.<br><small style="font-size:11px;">Try adjusting subject, chapter, or search.</small></div>';
+                    '<div class="empty-state"><i class="fas fa-search"></i> No tests match your filters.<br><small style="font-size:11px;">Try adjusting exam, subject, chapter, or search.</small></div>';
                 return;
             }
             const attemptedCodes = userResults.map(r => r.testCode);
@@ -2360,42 +2975,35 @@
                 const cardClass = test.type === 'paid' ?
                     (test.requiredPlan === 'premium_plus' || test.requiredPlan === 'ultimate' ?
                         'premium-card plus-card' : 'premium-card') : '';
-
-                // Difficulty from JSON (optional)
                 const diffInfo = getDifficultyInfo(test.difficulty);
                 const diffTagHTML = diffInfo ?
                     `<span class="difficulty-tag ${diffInfo.cls}">${diffInfo.emoji} ${diffInfo.label}</span>` : '';
-
-                // Language from JSON (optional)
                 const lang = test.language;
                 const langChipHTML = (lang && typeof lang === 'string' && lang.trim()) ?
                     `<span class="chip language-chip"><i class="fas fa-globe"></i> ${lang.trim()}</span>` : '';
-
                 const scorePreview = userResult ?
                     `<div class="score-preview">🏆 Best: ${userResult.score}/${userResult.totalMarks||test.totalQuestions*test.marksPerQuestion} (${userResult.accuracy}%)</div>` :
                     '';
-
                 const attemptBtn = accessible ?
                     `<button class="attempt-btn" onclick="openInstructions('${test.file.replace(/'/g,"\\'")}','${test.testCode.replace(/'/g,"\\'")}','${test.exam.replace(/'/g,"\\'")}','${test.testName.replace(/'/g,"\\'")}',${test.duration||30},${test.totalQuestions},${test.marksPerQuestion},${test.negativeMarking})"><i class="fas fa-play-circle"></i> ${attempted?'Retake':'Attempt Now'}</button>` :
                     `<button class="attempt-btn locked" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock ${(test.requiredPlan||'premium').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</button>`;
 
-                // No test code display
                 return `
-                <div class="test-card ${cardClass}" style="animation-delay:${idx*0.04}s">
+                <div class="test-card ${cardClass}" style="animation-delay:${idx*0.03}s">
                     ${premiumIcon?`<div class="premium-badge">${premiumIcon}</div>`:''}
                     <span class="badge-exam">${test.exam}</span>
                     ${getTypeBadge(test)}
                     ${diffTagHTML}
                     <h4>${test.testName}</h4>
                     <div class="meta-row">
-                        <span class="chip"><i class="fas fa-book"></i> ${test.subject}</span>
-                        <span class="chip"><i class="fas fa-list"></i> ${test.chapter||'General'}</span>
+                        <span class="chip"><i class="fas fa-bookmark"></i> ${test.subject}</span>
+                        <span class="chip"><i class="fas fa-layer-group"></i> ${test.chapter||'General'}</span>
                         ${langChipHTML}
                     </div>
                     <div class="meta-row">
                         <span class="chip"><i class="fas fa-clock"></i> ${test.duration||30}m</span>
-                        <span class="chip"><i class="fas fa-star"></i> +${test.marksPerQuestion} / -${test.negativeMarking}</span>
-                        <span class="chip"><i class="fas fa-question-circle"></i> ${test.totalQuestions} Qs</span>
+                        <span class="chip"><i class="fas fa-star"></i> +${test.marksPerQuestion}/-${test.negativeMarking}</span>
+                        <span class="chip">${test.totalQuestions} Qs</span>
                     </div>
                     ${scorePreview}
                     <div class="action-buttons">
@@ -2432,10 +3040,14 @@
             document.getElementById('sheetQs').textContent = totalQs;
             document.getElementById('sheetPositive').textContent = '+' + marks;
             document.getElementById('sheetNegative').textContent = '-' + negative;
-            document.getElementById('sheetOverlay').classList.add('active');
+            document.getElementById('instructionSheetOverlay').classList.add('active');
+            document.body.classList.add('sheet-open');
         }
 
-        function closeSheet() { document.getElementById('sheetOverlay').classList.remove('active'); }
+        function closeInstructionSheet() {
+            document.getElementById('instructionSheetOverlay').classList.remove('active');
+            document.body.classList.remove('sheet-open');
+        }
 
         document.getElementById('finalStartBtn').addEventListener('click', () => {
             localStorage.setItem('last_mock_file', currentTestData.file);
@@ -2444,24 +3056,23 @@
                 `test.html?file=${encodeURIComponent(currentTestData.file)}&testCode=${encodeURIComponent(currentTestData.code)}`;
         });
 
-        document.getElementById('sheetOverlay').addEventListener('click', function(e) { if (e.target === this)
-                closeSheet(); });
-
         function updateStats(tests) {
-            const examFilter = selectedExam;
+            const filteredTests = tests.length ? tests : getFilteredTests();
+            const totalAvail = selectedCategory ? filteredTests.length : allMocks.length;
+            document.getElementById('totalTests').textContent = totalAvail;
+
             let relevant = userResults;
-            if (examFilter) {
-                const codes = allMocks.filter(m => m.exam === examFilter).map(m => m.testCode);
+            if (selectedCategory) {
+                const codes = allMocks.filter(m => (m.category || 'Uncategorized') === selectedCategory).map(m => m
+                    .testCode);
                 relevant = userResults.filter(r => codes.includes(r.testCode));
             }
-            const totalAvail = tests.length || (examFilter ? allMocks.filter(m => m.exam === examFilter).length : allMocks
-                .length);
-            document.getElementById('totalTests').textContent = totalAvail;
             if (relevant.length) {
                 document.getElementById('attemptedTests').textContent = relevant.length;
                 const accs = relevant.map(r => parseFloat(r.accuracy) || 0);
                 const avg = Math.round(accs.reduce((a, b) => a + b, 0) / accs.length);
-                document.getElementById('avgScore').innerHTML = `${avg}% <span id="scoreTrend" class="trend-neutral"></span>`;
+                document.getElementById('avgScore').innerHTML =
+                    `${avg}% <span id="scoreTrend" class="trend-neutral"></span>`;
                 document.getElementById('bestScore').textContent = Math.max(...accs) + '%';
                 const trendEl = document.getElementById('scoreTrend');
                 if (trendEl && previousAvgScore > 0) {
@@ -2502,8 +3113,7 @@
                 b.style.background = colors[Math.floor(Math.random() * colors.length)];
                 b.style.setProperty('--dur', (Math.random() * 15 + 10) + 's');
                 b.style.setProperty('--delay', (Math.random() * 8) + 's');
-                b.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math.random() *
-                    3)];
+                b.style.animationName = ['floatBubble', 'floatBubbleSlow', 'floatBubbleWide'][Math.floor(Math.random() * 3)];
                 c.appendChild(b);
             }
         }
@@ -2512,8 +3122,19 @@
             if (e.key === 'Escape') {
                 const so = document.getElementById('sidebarOverlay');
                 if (so.classList.contains('active')) closeSidebarDirect();
-                if (document.getElementById('sheetOverlay').classList.contains('active')) closeSheet();
+                if (document.getElementById('categorySheetOverlay').classList.contains('active'))
+                    closeCategorySheet();
+                if (document.getElementById('instructionSheetOverlay').classList.contains('active'))
+                    closeInstructionSheet();
+                document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
             }
+        });
+
+        document.getElementById('categorySheetOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeCategorySheet();
+        });
+        document.getElementById('instructionSheetOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeInstructionSheet();
         });
 
         let resizeT;
@@ -2524,11 +3145,12 @@
         });
 
         (function init() {
+            createBg();
             loadMocks();
             loadUserResults();
             loadPremium();
             loadNotice();
-            createBg();
+            updateNavBadge();
         })();
     </script>
 </body>
