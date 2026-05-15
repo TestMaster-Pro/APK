@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Streak Leaderboard • TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #5b4cf0;
+            --primary-dark: #4338ca;
+            --primary-light: #eef0ff;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray-800: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --light: #ffffff;
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 28px -6px rgba(0, 0, 0, 0.09);
+            --shadow-lg: 0 18px 40px -10px rgba(0, 0, 0, 0.12);
+            --shadow-primary: 0 10px 28px -6px rgba(91, 76, 240, 0.3);
+            --font-sans: 'Poppins', sans-serif;
+            --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-sidebar: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.55);
+            --glass-blur: 18px;
+            --sidebar-width: 300px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: #f0f4ff;
+            min-height: 100vh;
+            color: var(--dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        body.sidebar-open { overflow: hidden; }
+
+        /* Background animations */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatBubble var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0.35;
+        }
+        @keyframes floatBubble {
+            0%,100% { transform: translateY(0) translateX(0) scale(1); }
+            20% { transform: translateY(-35px) translateX(18px) scale(1.06); }
+            40% { transform: translateY(-60px) translateX(-14px) scale(0.94); }
+            60% { transform: translateY(-25px) translateX(22px) scale(1.08); }
+            80% { transform: translateY(-50px) translateX(-20px) scale(0.92); }
+        }
+        .grid-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            opacity: 0.025; background-image: linear-gradient(rgba(91,76,240,0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(91,76,240,0.5) 1px, transparent 1px); background-size: 50px 50px;
+        }
+        .grain-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
+            opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        /* ========= SIDEBAR (exactly like dashboard) ========= */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.55);
+            z-index: 250; opacity: 0; visibility: hidden; transition: var(--transition-sidebar);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        .sidebar-overlay.hidden { display: none; }
+        .sidebar {
+            position: fixed; top: 0; left: 0; height: 100%; width: var(--sidebar-width); max-width: 84vw;
+            background: #ffffff; z-index: 251; transform: translateX(-105%); transition: transform var(--transition-sidebar);
+            display: flex; flex-direction: column; box-shadow: 8px 0 40px rgba(0,0,0,0.18); border-radius: 0 20px 20px 0;
+        }
+        .sidebar-overlay.active .sidebar { transform: translateX(0); }
+        .sidebar-brand {
+            background: linear-gradient(135deg, #5b4cf0, #6d5df7, #8b5cf6); padding: 20px 20px 18px;
+            display: flex; align-items: center; gap: 12px; position: relative; flex-shrink: 0;
+        }
+        .sidebar-logo { width: 44px; height: 44px; background: rgba(255,255,255,0.22); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; }
+        .sidebar-brand-text { color: #fff; font-weight: 800; font-size: 17px; letter-spacing: -0.3px; }
+        .sidebar-brand-text small { display: block; font-weight: 400; font-size: 10px; opacity: 0.8; }
+        .sidebar-close-btn {
+            position: absolute; top: 16px; right: 14px; width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); border: none; color: #fff; cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .sidebar-close-btn:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
+        .sidebar-user-card { padding: 16px 20px; background: #fafbff; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .sidebar-avatar {
+            width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #eef0ff, #e0e7ff);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px;
+            color: #5b4cf0; overflow: hidden; border: 2px solid #fff; box-shadow: 0 3px 12px rgba(91,76,240,0.12);
+        }
+        .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+        .sidebar-user-info .name { font-weight: 700; font-size: 14px; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-user-info .tag { font-size: 11px; color: #5b4cf0; background: #eef0ff; padding: 2px 10px; border-radius: 20px; display: inline-block; margin-top: 3px; }
+        .plan-badge-mini { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 4px; background: linear-gradient(135deg,#fef3c7,#fde68a); color:#92400e; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 3px; }
+        .sidebar-nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #94a3b8; font-weight: 700; padding: 10px 10px 6px; }
+        .sidebar-nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; cursor: pointer;
+            font-weight: 600; font-size: 13px; color: #475569; transition: var(--transition-fast);
+            background: transparent; width: 100%; text-align: left; font-family: var(--font-sans);
+        }
+        .sidebar-nav-item:hover { background: #f8fafc; color: #1e293b; transform: translateX(3px); }
+        .sidebar-nav-item.active-nav { background: #eef0ff; color: #5b4cf0; font-weight: 700; }
+        .nav-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+        .nav-icon-dashboard { background: #eef0ff; color: #5b4cf0; }
+        .nav-icon-mocks { background: #eef0ff; color: #5b4cf0; }
+        .nav-icon-books { background: #fff7ed; color: #f97316; }
+        .nav-icon-study { background: #f0fdf4; color: #16a34a; }
+        .nav-icon-results { background: #ecfdf5; color: #10b981; }
+        .nav-icon-chat { background: #f0f9ff; color: #06b6d4; }
+        .nav-icon-achievements { background: #fdf2f8; color: #db2777; }
+        .nav-icon-premium { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706; }
+        .nav-icon-profile { background: #fdf2f8; color: #db2777; }
+        .nav-icon-instructions { background: #fefce8; color: #ca8a04; }
+        .nav-icon-logout { background: #fef2f2; color: #dc2626; }
+        .sidebar-divider { height: 1px; background: #f1f5f9; margin: 6px 10px; flex-shrink: 0; }
+        .sidebar-contact { padding: 14px 18px; background: #fafbff; border-top: 1px solid #f1f5f9; flex-shrink: 0; }
+        .sidebar-contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #94a3b8; font-weight: 700; margin-bottom: 10px; }
+        .sidebar-contact-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; font-size: 11px; color: #475569; text-decoration: none; transition: var(--transition-fast); }
+        .sidebar-contact-item:hover { background: #f1f5f9; color: #1e293b; }
+        .contact-icon-email { color: #ea4335; }
+        .contact-icon-telegram { color: #26a7de; }
+        .sidebar-version { text-align: center; font-size: 10px; color: #cbd5e1; padding: 6px; flex-shrink: 0; }
+
+        /* ========= NAVBAR ========= */
+        .navbar {
+            background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); padding: 10px 14px;
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--glass-border); gap: 8px;
+        }
+        .nav-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .hamburger-btn { width: 38px; height: 38px; border-radius: 12px; background: #f1f5f9; border: none; cursor: pointer; font-size: 18px; transition: var(--transition-fast); }
+        .hamburger-btn:hover { background: #e2e8f0; }
+        .nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 800; background: linear-gradient(135deg, #5b4cf0, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        .nav-right { display: flex; align-items: center; gap: 6px; }
+        .user-avatar { width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #eef0ff, #e0e7ff); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-btn { background: #f1f5f9; border: none; padding: 7px 12px; border-radius: 30px; font-weight: 600; font-size: 12px; cursor: pointer; transition: var(--transition-fast); display: flex; align-items: center; gap: 5px; }
+        .btn-chat { background: linear-gradient(135deg, #eef0ff, #e0e7ff); color: #5b4cf0; }
+        .btn-premium { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .btn-logout { background: #fef2f2; color: #dc2626; }
+        @media (min-width: 521px) {
+            .navbar { padding: 12px 18px; }
+            .user-avatar { width: 36px; height: 36px; }
+            .hamburger-btn { width: 40px; height: 40px; font-size: 19px; }
+        }
+        @media (max-width: 420px) {
+            .nav-btn { padding: 5px 8px; font-size: 10px; gap: 3px; }
+        }
+
+        /* ========= CONTAINER ========= */
+        .container { max-width: 1250px; margin: 0 auto; padding: 18px 16px 30px; position: relative; z-index: 2; }
+        @media (max-width: 480px) { .container { padding: 12px 12px 20px; } }
+
+        /* ========= STREAK HERO ========= */
+        .streak-hero {
+            background: linear-gradient(135deg, #5b4cf0, #8b5cf6);
+            border-radius: 28px;
+            padding: 24px 20px;
+            margin-bottom: 24px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+        .hero-title h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .hero-title h1 i { margin-right: 8px; }
+        .hero-title p { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+        .your-rank-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 12px 20px;
+            text-align: center;
+            min-width: 170px;
+        }
+        .your-rank-card .label { font-size: 12px; opacity: 0.9; }
+        .your-rank-card .value { font-size: 28px; font-weight: 800; line-height: 1; }
+        .stats-strip {
+            display: flex;
+            gap: 15px;
+            background: white;
+            border-radius: 60px;
+            padding: 8px 20px;
+            color: #1e293b;
+            font-weight: 700;
+            align-items: center;
+        }
+        @media (max-width: 680px) {
+            .streak-hero { flex-direction: column; text-align: center; align-items: stretch; }
+            .your-rank-card { align-self: center; min-width: auto; width: 100%; max-width: 220px; }
+            .stats-strip { justify-content: center; }
+            .hero-title h1 { font-size: 22px; }
+        }
+
+        /* ========= STREAK INFO ========= */
+        .streak-info {
+            background: linear-gradient(135deg, #ffedd5, #fef3c7);
+            border-radius: 20px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            border-left: 5px solid #ea580c;
+        }
+        .streak-info-icon { font-size: 32px; color: #ea580c; }
+        .streak-info-text h4 { font-size: 16px; font-weight: 800; color: #7c2d12; }
+        .streak-info-text p { font-size: 13px; color: #92400e; margin-top: 2px; }
+        @media (max-width: 480px) {
+            .streak-info { padding: 12px 16px; gap: 10px; }
+            .streak-info-icon { font-size: 28px; }
+            .streak-info-text h4 { font-size: 14px; }
+            .streak-info-text p { font-size: 11px; }
+        }
+
+        /* ========= LEADERBOARD TABLE (enhanced mobile) ========= */
+        .leaderboard-table {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .leaderboard-header {
+            display: grid;
+            grid-template-columns: 70px 1fr 100px;
+            background: rgba(91,76,240,0.08);
+            padding: 14px 16px;
+            font-weight: 700;
+            color: #334155;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .leaderboard-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 100px;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(226,232,240,0.6);
+            transition: var(--transition-fast);
+        }
+        .leaderboard-row:hover { background: rgba(91,76,240,0.04); transform: translateX(4px); }
+        .rank-cell { font-weight: 800; font-size: 18px; }
+        .rank-top-1 { color: #f59e0b; text-shadow: 0 0 4px rgba(245,158,11,0.3); }
+        .rank-top-2 { color: #94a3b8; }
+        .rank-top-3 { color: #cd7f32; }
+        .user-info-leader { display: flex; align-items: center; gap: 12px; }
+        .avatar-small { width: 42px; height: 42px; border-radius: 14px; background: #eef0ff; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+        .user-name { font-weight: 700; color: #1e293b; }
+        .user-username { font-size: 11px; color: #64748b; }
+        .streak-cell { font-weight: 800; font-size: 22px; display: flex; align-items: center; gap: 6px; color: #ea580c; }
+        .current-user-highlight { background: linear-gradient(90deg, #eef0ff, #ffffff); border-left: 4px solid #5b4cf0; }
+        .empty-state { text-align: center; padding: 50px; color: #64748b; }
+        .loading-spinner { text-align: center; padding: 60px; font-size: 18px; color: #5b4cf0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Mobile responsive table */
+        @media (max-width: 680px) {
+            .leaderboard-header, .leaderboard-row {
+                grid-template-columns: 50px 1fr 80px;
+                padding: 10px 12px;
+            }
+            .rank-cell { font-size: 14px; }
+            .streak-cell { font-size: 18px; gap: 3px; }
+            .avatar-small { width: 32px; height: 32px; }
+            .user-name { font-size: 12px; }
+            .user-username { font-size: 9px; }
+        }
+        @media (max-width: 480px) {
+            .leaderboard-header, .leaderboard-row {
+                padding: 8px 10px;
+            }
+            .user-info-leader { gap: 8px; }
+            .avatar-small { width: 28px; height: 28px; border-radius: 10px; }
+        }
+
+        /* ========= FOOTER ========= */
+        .pro-footer {
+            margin-top: 40px; background: linear-gradient(135deg, #1e293b, #0f172a); color: rgba(255,255,255,0.7);
+            padding: 20px 16px; text-align: center; font-size: 12px;
+        }
+        .footer-content { max-width: 800px; margin: 0 auto; }
+        .footer-logo { font-weight: 800; margin-bottom: 8px; font-size: 15px; }
+        .footer-logo span { color: #fbbf24; }
+        .footer-links { margin-top: 8px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+        .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; cursor: pointer; transition: var(--transition-fast); padding: 4px 8px; border-radius: 6px; }
+        .footer-links a:hover { color: #fbbf24; background: rgba(255,255,255,0.05); }
+        .footer-social { margin-top: 6px; display: flex; justify-content: center; gap: 12px; align-items: center; font-size: 13px; }
+        .footer-social a { color: rgba(255,255,255,0.6); text-decoration: none; cursor: pointer; }
+        .footer-social a:hover { color: #e1306c; }
+
+        /* ========= FLOATING HELP BUTTON (same as dashboard) ========= */
+        .floating-help-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 16px;
+            z-index: 90;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5b4cf0, #8b5cf6);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            animation: floatBtnPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes floatBtnPulse {
+            0%,100% { box-shadow: 0 8px 28px rgba(91,76,240,0.3); }
+            50% { box-shadow: 0 14px 38px rgba(91,76,240,0.5); }
+        }
+        .floating-help-btn:active { transform: scale(0.88); }
+        .floating-help-btn:hover { transform: scale(1.06); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="bg-animation" id="bgAnimation"></div>
+<div class="grid-pattern"></div>
+<div class="grain-overlay"></div>
+
+<!-- SIDEBAR (identical to dashboard) -->
+<div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+    <aside class="sidebar" onclick="event.stopPropagation()">
+        <div class="sidebar-brand">
+            <div class="sidebar-logo"><i class="fas fa-fire"></i></div>
+            <div class="sidebar-brand-text">TestMaster Pro<small>Streak Arena</small></div>
+            <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="sidebar-user-card">
+            <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+            <div class="sidebar-user-info">
+                <div class="name" id="sidebarUserName">Student</div>
+                <span class="tag" id="sidebarUserTag">Learner</span>
+                <span class="plan-badge-mini hidden" id="sidebarPlanBadgeMini"></span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-nav-label">Main Menu</div>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><span class="nav-icon nav-icon-dashboard"><i class="fas fa-th-large"></i></span><span>Dashboard</span></button>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><span class="nav-icon nav-icon-mocks"><i class="fas fa-file-alt"></i></span><span>Mock Tests</span></button>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span><span>Books & PYQ</span></button>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><span class="nav-icon nav-icon-study"><i class="fas fa-folder-open"></i></span><span>Study Material</span></button>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span><span>My Results</span></button>
+            <!-- Leaderboard button removed as per design -->
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span><span>Chat</span></button>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('achievements')"><span class="nav-icon nav-icon-achievements"><i class="fas fa-medal"></i></span><span>Achievements</span></button>
+            <div class="sidebar-nav-label">Premium</div>
+            <button class="sidebar-nav-item premium-nav-item" id="sidebarPremiumBtn" onclick="sidebarNavigate('premium')"><span class="nav-icon nav-icon-premium"><i class="fas fa-crown"></i></span><span id="sidebarPremiumBtnText">Buy Premium</span></button>
+            <div class="sidebar-nav-label">Account</div>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><span class="nav-icon nav-icon-profile"><i class="fas fa-user-circle"></i></span><span>Profile</span></button>
+            <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><span class="nav-icon nav-icon-instructions"><i class="fas fa-question-circle"></i></span><span>How to Use</span></button>
+            <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><span class="nav-icon nav-icon-logout"><i class="fas fa-sign-out-alt"></i></span><span>Logout</span></button>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-contact">
+            <div class="sidebar-contact-label">Contact Us</div>
+            <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-contact-item" target="_blank"><i class="fas fa-envelope contact-icon-email"></i><span>testmaster.helpdesk@gmail.com</span></a>
+            <a href="https://t.me/cuet007_bot" class="sidebar-contact-item" target="_blank" rel="noopener"><i class="fab fa-telegram-plane contact-icon-telegram"></i><span>@cuet007_bot</span></a>
+            <a href="https://instagram.com/testmasterpro" class="sidebar-contact-item" target="_blank" rel="noopener"><i class="fab fa-instagram contact-icon-instagram"></i><span>@testmasterpro</span></a>
+        </div>
+        <div class="sidebar-version">TestMaster Pro v2.0 • 🔥 Streak Wars</div>
+    </aside>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-left">
+        <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-fire"></i><span>Streak Leaderboard</span></div>
+    </div>
+    <div class="nav-right">
+        <div class="user-avatar" id="userInitial" onclick="openSidebar()">S</div>
+        <a href="chat.html" class="nav-btn btn-chat"><i class="fas fa-comments"></i> Chat</a>
+        <a href="payment.html" class="nav-btn btn-premium"><i class="fas fa-crown"></i> Premium</a>
+        <button class="nav-btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="streak-hero">
+        <div class="hero-title">
+            <h1><i class="fas fa-fire"></i> World Streak Ranking</h1>
+            <p>🔥 Most consistent learners dominate the flames</p>
+        </div>
+        <div class="stats-strip">
+            <span><i class="fas fa-users"></i> Warriors: <strong id="totalUsersCount">0</strong></span>
+        </div>
+        <div class="your-rank-card" id="yourRankCard">
+            <div class="label">🔥 Your Streak & Rank</div>
+            <div class="value" id="userStreakValue">-</div>
+            <div class="label" id="userRankLabel">Rank #--</div>
+        </div>
+    </div>
+
+    <div class="streak-info">
+        <div class="streak-info-icon"><i class="fas fa-fire"></i></div>
+        <div class="streak-info-text">
+            <h4>How to increase your streak? 🔥</h4>
+            <p>Attempt any mock test every single day. Your streak increases by +1 for each consecutive day you submit a test. Miss a day? Your streak resets to 0. Stay consistent and climb the global leaderboard!</p>
+        </div>
+    </div>
+
+    <div class="leaderboard-table">
+        <div class="leaderboard-header">
+            <div>RANK</div>
+            <div>USER</div>
+            <div>🔥 STREAK</div>
+        </div>
+        <div id="leaderboardList">
+            <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Loading streak champions...</div>
+        </div>
+    </div>
+</div>
+
+<footer class="pro-footer">
+    <div class="footer-content">
+        <div class="footer-logo">TestMaster<span>Pro</span></div>
+        <p>© 2026 TestMaster Pro. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a onclick="showPrivacy()">Privacy</a> •
+            <a onclick="showTerms()">Terms</a> •
+            <a onclick="showSupport()">Support</a>
+        </div>
+        <div class="footer-social">
+            <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i> @testmasterpro</a>
+        </div>
+    </div>
+</footer>
+
+<!-- FLOATING HELP BUTTON (same as dashboard) -->
+<button class="floating-help-btn" onclick="showSupport()" title="Need help?"><i class="fas fa-question"></i></button>
+
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyVPG4x6CSrtwpfI_LPRCjvCjCcN8ZY7d0Z2P3ef_e_BL2hatfDLbIpdStSIG69JhCggg/exec';
+    let allUsers = [];
+    let currentUserRanking = [];
+
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) window.location.href = 'index.html';
+    const user = JSON.parse(storedUser);
+
+    function setAvatarPic(elId, u) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        if (u && u.avatarUrl) el.innerHTML = `<img src="${u.avatarUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+        else if (u && u.profilePicUrl) el.innerHTML = `<img src="${u.profilePicUrl}" alt="avatar">`;
+        else el.textContent = (u && u.name) ? u.name.charAt(0).toUpperCase() : 'S';
+    }
+    setAvatarPic('userInitial', user);
+    setAvatarPic('sidebarAvatar', user);
+    document.getElementById('sidebarUserName').textContent = user.name || 'Student';
+    document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
+
+    async function loadStreakLeaderboard() {
+        try {
+            const response = await fetch(`${API_URL}?action=getAllUsers&_=${Date.now()}`);
+            const data = await response.json();
+            if (data.success && data.users) {
+                allUsers = data.users;
+                computeAndRender();
+            } else {
+                document.getElementById('leaderboardList').innerHTML = '<div class="empty-state"><i class="fas fa-database"></i> Could not load streak data. Try again later.</div>';
+            }
+        } catch (err) {
+            document.getElementById('leaderboardList').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i> Network error: ${err.message}</div>`;
+        }
+    }
+
+    function computeAndRender() {
+        let ranked = allUsers.map(u => ({
+            ...u,
+            streak: (typeof u.streak === 'number' ? u.streak : parseInt(u.streak) || 0)
+        }));
+        ranked.sort((a,b) => b.streak - a.streak);
+        currentUserRanking = ranked;
+        document.getElementById('totalUsersCount').innerText = ranked.length;
+
+        const currentIdx = ranked.findIndex(u => u.username === user.username);
+        if (currentIdx !== -1) {
+            const currentUser = ranked[currentIdx];
+            const streakVal = currentUser.streak || 0;
+            document.getElementById('userStreakValue').innerHTML = `${streakVal} <i class="fas fa-fire" style="font-size:14px;"></i>`;
+            document.getElementById('userRankLabel').innerHTML = `Rank #${currentIdx+1} of ${ranked.length}`;
+        } else {
+            document.getElementById('userStreakValue').innerHTML = '0';
+            document.getElementById('userRankLabel').innerHTML = 'Rank #--';
+        }
+
+        const top50 = ranked.slice(0, 50);
+        renderLeaderboard(top50, currentIdx);
+    }
+
+    function renderLeaderboard(usersArray, currentUserGlobalIndex) {
+        const container = document.getElementById('leaderboardList');
+        if (!usersArray.length) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-fire"></i> No streak warriors yet. Be the first!</div>';
+            return;
+        }
+        let html = '';
+        usersArray.forEach((u, idx) => {
+            const rank = idx+1;
+            let rankClass = '';
+            if (rank === 1) rankClass = 'rank-top-1';
+            else if (rank === 2) rankClass = 'rank-top-2';
+            else if (rank === 3) rankClass = 'rank-top-3';
+            const isCurrent = (u.username === user.username);
+            const rowClass = isCurrent ? 'leaderboard-row current-user-highlight' : 'leaderboard-row';
+            const avatarImg = u.avatarUrl ? `<img src="${u.avatarUrl}" alt="avatar" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>';">` : '<i class="fas fa-user"></i>';
+            html += `
+                <div class="${rowClass}">
+                    <div class="rank-cell ${rankClass}">#${rank}</div>
+                    <div class="user-info-leader">
+                        <div class="avatar-small">${avatarImg}</div>
+                        <div>
+                            <div class="user-name">${escapeHtml(u.name || 'Anonymous')}</div>
+                            <div class="user-username">@${escapeHtml(u.username || 'user')}</div>
+                        </div>
+                    </div>
+                    <div class="streak-cell">
+                        ${u.streak || 0} <i class="fas fa-fire" style="color:#f97316;"></i>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    // Sidebar navigation
+    function openSidebar() {
+        const o = document.getElementById('sidebarOverlay');
+        o.classList.remove('hidden');
+        o.classList.add('active');
+        document.body.classList.add('sidebar-open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+    function closeSidebarDirect() {
+        const o = document.getElementById('sidebarOverlay');
+        o.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+        document.body.style.overflow = '';
+        setTimeout(() => { if (!o.classList.contains('active')) o.classList.add('hidden'); }, 350);
+    }
+    function sidebarNavigate(action) {
+        closeSidebarDirect();
+        setTimeout(() => {
+            const map = {
+                'dashboard': 'dashboard.html',
+                'mocks': 'exam.html',
+                'books': 'book.html',
+                'study': 'book.html',
+                'results': 'allresult.html',
+                'chat': 'chat.html',
+                'achievements': 'achievements.html',
+                'premium': 'payment.html',
+                'profile': 'profile.html',
+                'instructions': 'javascript:openHowToUse()',
+                'logout': 'logout'
+            };
+            if (action === 'logout') logout();
+            else if (action === 'instructions') openHowToUse();
+            else if (map[action]) window.location.href = map[action];
+        }, 300);
+    }
+    function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+    function openHowToUse() {
+        Swal.fire({
+            title: '📖 How to Use TestMaster Pro',
+            html: `<div style="text-align:left;font-size:13px;line-height:1.8;">
+                <p><b>1.</b> Select an <b>Exam</b> from the pills above.</p>
+                <p><b>2.</b> Use filters to narrow tests.</p>
+                <p><b>3.</b> Click <b>"Attempt Now"</b> to start a test.</p>
+                <p><b>4.</b> Premium tests require a subscription.</p>
+                <p><b>5.</b> Your streak increases when you attempt tests on consecutive days!</p>
+            </div>`,
+            confirmButtonText: 'Got it!',
+            confirmButtonColor: '#5b4cf0',
+            icon: 'info'
+        });
+    }
+
+    // Support functions (same as dashboard)
+    function showPrivacy() {
+        Swal.fire({
+            title: 'Privacy Policy',
+            html: '<div style="text-align:left;font-size:13px;"><p><b>TestMaster Pro</b> respects your privacy.</p><p>• We collect only essential data to provide services.</p><p>• Your data is stored securely and never shared.</p><p>• Contact support for data deletion requests.</p><p>📧 testmaster.helpdesk@gmail.com</p></div>',
+            icon: 'info',
+            confirmButtonColor: '#5b4cf0'
+        });
+    }
+    function showTerms() {
+        Swal.fire({
+            title: 'Terms & Conditions',
+            html: '<div style="text-align:left;font-size:13px;"><p>• TestMaster Pro provides mock tests for educational purposes.</p><p>• Premium content requires a valid subscription.</p><p>• Users must not share or redistribute test content.</p><p>• Refund policy: Contact support within 48 hours.</p></div>',
+            icon: 'info',
+            confirmButtonColor: '#5b4cf0'
+        });
+    }
+    function showSupport() {
+        Swal.fire({
+            title: 'Support & Help',
+            html: '<div style="text-align:center;font-size:14px;"><p><i class="fas fa-envelope" style="color:#ea4335;"></i> <b>Email:</b><br>testmaster.helpdesk@gmail.com</p><p><i class="fab fa-telegram-plane" style="color:#26a7de;"></i> <b>Telegram:</b><br>@cuet007_bot</p><p><i class="fab fa-instagram" style="color:#e1306c;"></i> <b>Instagram:</b><br>@testmasterpro</p><p style="margin-top:8px;font-size:12px;">We respond within 24 hours.</p></div>',
+            icon: 'question',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#5b4cf0'
+        });
+    }
+
+    // Background bubbles
+    function createBg() {
+        const c = document.getElementById('bgAnimation');
+        const colors = ['radial-gradient(circle at 30% 30%, rgba(91,76,240,0.18), rgba(139,92,246,0.06))',
+                        'radial-gradient(circle at 30% 30%, rgba(245,158,11,0.14), rgba(251,191,36,0.04))'];
+        for (let i = 0; i < 10; i++) {
+            const b = document.createElement('div');
+            b.className = 'bg-bubble';
+            const s = Math.floor(Math.random() * 140) + 60;
+            b.style.width = s + 'px'; b.style.height = s + 'px';
+            b.style.left = Math.random() * 90 + '%'; b.style.top = Math.random() * 85 + '%';
+            b.style.background = colors[Math.floor(Math.random() * colors.length)];
+            b.style.setProperty('--dur', (Math.random() * 12 + 8) + 's');
+            b.style.setProperty('--delay', (Math.random() * 6) + 's');
+            c.appendChild(b);
+        }
+    }
+
+    async function loadPremiumStatus() {
+        try {
+            const r = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user.username)}`);
+            const d = await r.json();
+            if (d.success && d.premiumPlans && d.premiumPlans.length) {
+                const badge = document.getElementById('sidebarPlanBadgeMini');
+                badge.classList.remove('hidden');
+                badge.textContent = (d.premiumPlans[0].planName || 'Premium').replace(/_/g,' ');
+            }
+        } catch(e) {}
+    }
+
+    createBg();
+    loadStreakLeaderboard();
+    loadPremiumStatus();
+</script>
+</body>
+</html>
