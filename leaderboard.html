@@ -4,47 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Leaderboard • TestMaster Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --primary: #5b4cf0;
-            --primary-dark: #4338ca;
-            --primary-light: #eef0ff;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #e0e7ff;
             --secondary: #8b5cf6;
             --accent: #06b6d4;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             --dark: #0f172a;
+            --gray-900: #0f172a;
             --gray-800: #1e293b;
             --gray-700: #334155;
             --gray-600: #475569;
             --gray-500: #64748b;
             --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
             --gray-200: #e2e8f0;
             --gray-100: #f1f5f9;
             --gray-50: #f8fafc;
             --light: #ffffff;
             --radius-sm: 12px;
             --radius: 16px;
-            --radius-lg: 22px;
-            --radius-xl: 28px;
-            --card-radius: 20px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 28px;
             --shadow-xs: 0 2px 8px rgba(0,0,0,0.03);
             --shadow-sm: 0 4px 14px rgba(0,0,0,0.05);
             --shadow-md: 0 10px 28px -6px rgba(0,0,0,0.09);
             --shadow-lg: 0 18px 40px -10px rgba(0,0,0,0.12);
             --shadow-xl: 0 24px 52px -14px rgba(0,0,0,0.16);
-            --shadow-primary: 0 10px 28px -6px rgba(91,76,240,0.3);
+            --shadow-primary: 0 10px 28px -6px rgba(99,102,241,0.3);
+            --shadow-gold: 0 10px 28px -6px rgba(251,191,36,0.35);
+            --shadow-silver: 0 10px 28px -6px rgba(148,163,184,0.3);
+            --shadow-bronze: 0 10px 28px -6px rgba(249,115,22,0.3);
             --font-sans: 'Poppins', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
             --transition-fast: 0.18s cubic-bezier(0.4,0,0.2,1);
             --transition-smooth: 0.28s cubic-bezier(0.4,0,0.2,1);
             --transition-bounce: 0.35s cubic-bezier(0.34,1.56,0.64,1);
-            --glass-bg: rgba(255,255,255,0.78);
-            --glass-border: rgba(255,255,255,0.55);
-            --glass-blur: 18px;
+            --glass-bg: rgba(255,255,255,0.82);
+            --glass-border: rgba(255,255,255,0.6);
+            --glass-blur: 20px;
+            --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+            --gradient-gold: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+            --gradient-silver: linear-gradient(135deg, #e2e8f0, #cbd5e1, #94a3b8);
+            --gradient-bronze: linear-gradient(135deg, #fdba74, #f97316, #ea580c);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -62,10 +72,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ========== BACKGROUND ========== */
         .bg-animation { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
         .bg-bubble {
             position:absolute; border-radius:50%; animation:floatBubble var(--dur) ease-in-out infinite;
-            animation-delay:var(--delay); opacity:0.2; will-change:transform; filter:blur(1px);
+            animation-delay:var(--delay); opacity:0.15; will-change:transform; filter:blur(1px);
         }
         @keyframes floatBubble {
             0%,100%{ transform:translateY(0) translateX(0) scale(1); }
@@ -102,31 +113,34 @@
             background-size:200px 200px;
         }
         .grid-pattern {
-            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.015;
+            position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.012;
             background-image:linear-gradient(rgba(91,76,240,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(91,76,240,0.6) 1px, transparent 1px);
             background-size:50px 50px;
         }
 
+        /* ========== NAVBAR ========== */
         .navbar {
             background:var(--glass-bg); backdrop-filter:blur(var(--glass-blur)); -webkit-backdrop-filter:blur(var(--glass-blur));
-            padding:10px 16px; display:flex; justify-content:space-between; align-items:center; color:var(--dark);
+            padding:10px 14px; display:flex; justify-content:space-between; align-items:center; color:var(--dark);
             position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.04);
             border-bottom:1px solid var(--glass-border); gap:8px; flex-wrap:nowrap;
         }
         .nav-brand {
             display:flex; align-items:center; gap:8px; font-size:clamp(16px,3.5vw,20px); font-weight:800;
-            background:linear-gradient(135deg,#5b4cf0,#8b5cf6,#06b6d4);
+            background:var(--gradient-primary);
             -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
             white-space:nowrap; letter-spacing:-0.3px; cursor:pointer;
         }
-        .nav-brand i { font-size:clamp(20px,4vw,24px); -webkit-text-fill-color:#5b4cf0; animation:iconPulse 2.5s ease-in-out infinite; }
+        .nav-brand i { font-size:clamp(20px,4vw,24px); -webkit-text-fill-color:#6366f1; animation:iconPulse 2.5s ease-in-out infinite; }
         @keyframes iconPulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
         .nav-user { display:flex; align-items:center; gap:6px; flex-wrap:nowrap; flex-shrink:0; }
         .user-avatar {
             width:34px; height:34px; background:linear-gradient(135deg,#eef0ff,#e0e7ff); border-radius:12px;
-            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#5b4cf0;
+            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#6366f1;
             flex-shrink:0; box-shadow:0 2px 8px rgba(91,76,240,0.12); overflow:hidden; cursor:pointer;
+            transition:var(--transition-fast);
         }
+        .user-avatar:hover { transform:scale(1.08); }
         .user-avatar img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
         .nav-btn {
             background:#f1f5f9; border:none; color:#334155; padding:7px 13px; border-radius:30px; cursor:pointer;
@@ -135,87 +149,330 @@
         }
         .nav-btn:active { transform:scale(0.95); transition:0.08s; }
         .nav-btn:hover { background:#e2e8f0; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.06); }
-        .btn-back { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15); }
-        .btn-back:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
-        .btn-chat { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#5b4cf0; border:1.5px solid rgba(91,76,240,0.15); }
-        .btn-chat:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(91,76,240,0.18); }
+        .btn-back { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#6366f1; border:1.5px solid rgba(99,102,241,0.15); }
+        .btn-back:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(99,102,241,0.18); }
+        .btn-chat { background:linear-gradient(135deg,#eef0ff,#e0e7ff); color:#6366f1; border:1.5px solid rgba(99,102,241,0.15); }
+        .btn-chat:hover { background:linear-gradient(135deg,#e0e7ff,#c7d2fe); box-shadow:0 4px 16px rgba(99,102,241,0.18); }
         .btn-logout { background:#fef2f2; color:#dc2626; border:1.5px solid rgba(220,38,38,0.1); }
         .btn-logout:hover { background:#fee2e2; box-shadow:0 4px 14px rgba(220,38,38,0.12); }
         #welcomeUser { display:none; }
         @media (min-width:480px) { #welcomeUser { display:inline; font-weight:600; font-size:13px; color:#334155; white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis; } .navbar { padding:12px 22px; } .nav-btn { padding:8px 14px; font-size:12px; min-height:38px; } .user-avatar { width:36px; height:36px; } }
         @media (min-width:768px) { .navbar { padding:14px 28px; } .nav-btn { padding:8px 18px; font-size:13px; min-height:40px; } .user-avatar { width:38px; height:38px; font-size:16px; } }
 
-        .container { max-width:750px; margin:0 auto; padding:14px 12px 28px; width:100%; position:relative; z-index:2; }
+        /* ========== CONTAINER ========== */
+        .container { max-width:800px; margin:0 auto; padding:14px 12px 28px; width:100%; position:relative; z-index:2; }
         @media (min-width:480px) { .container { padding:18px 18px 30px; } }
         @media (min-width:768px) { .container { padding:22px 24px 32px; } }
 
+        /* ========== CARD ========== */
         .card {
-            background:var(--glass-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-            border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-md);
+            background:var(--glass-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+            border-radius:var(--radius-xl); padding:20px; box-shadow:var(--shadow-md);
             border:1px solid var(--glass-border); animation:slideUp 0.5s ease-out;
         }
         @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
 
-        .card-title {
-            font-size:clamp(18px,4vw,22px); font-weight:800; color:var(--dark);
-            margin-bottom:16px; display:flex; align-items:center; gap:8px;
-            flex-wrap:wrap;
+        /* ========== HEADER ========== */
+        .lb-header {
+            text-align:center; margin-bottom:24px; padding-bottom:16px;
+            border-bottom:1px solid rgba(226,232,240,0.6);
+        }
+        .lb-header-icon {
+            width:56px; height:56px; border-radius:16px;
+            background:var(--gradient-primary);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 12px; box-shadow:var(--shadow-primary);
+            animation:iconPulse 2.5s ease-in-out infinite;
+        }
+        .lb-header-icon i { font-size:26px; color:white; }
+        .lb-header h1 {
+            font-family:var(--font-display); font-size:clamp(24px,5vw,32px);
+            font-weight:700; color:var(--dark); letter-spacing:-0.5px;
+            margin-bottom:6px;
+        }
+        .lb-header-sub {
+            display:flex; align-items:center; justify-content:center; gap:8px;
+            flex-wrap:wrap; margin-top:8px;
         }
         .test-badge {
-            display:inline-block; background:#e0e7ff; color:#4f46e5;
-            padding:4px 14px; border-radius:20px; font-weight:700; font-size:12px;
+            display:inline-flex; align-items:center; gap:5px;
+            background:#e0e7ff; color:#4f46e5;
+            padding:5px 14px; border-radius:20px; font-weight:700; font-size:12px;
         }
         .exam-badge {
-            display:inline-block; background:#fef3c7; color:#92400e;
-            padding:4px 14px; border-radius:20px; font-weight:600; font-size:12px;
+            display:inline-flex; align-items:center; gap:5px;
+            background:#fef3c7; color:#92400e;
+            padding:5px 14px; border-radius:20px; font-weight:600; font-size:12px;
         }
 
-        .lb-list { display:flex; flex-direction:column; gap:8px; max-height:65vh; overflow-y:auto; }
+        /* ========== PODIUM ========== */
+        .podium {
+            display:flex; align-items:flex-end; justify-content:center;
+            gap:10px; margin:24px 0 32px; padding:0 4px;
+            min-height:200px;
+        }
+        .podium-card {
+            position:relative; border-radius:var(--radius-lg); padding:16px 10px 12px;
+            text-align:center; transition:var(--transition-smooth);
+            cursor:pointer; flex-shrink:0;
+        }
+        .podium-card:hover { transform:translateY(-6px); }
+        .podium-card .crown {
+            position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+            font-size:22px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+            animation:crownBounce 2s ease-in-out infinite;
+        }
+        @keyframes crownBounce { 0%,100%{ transform:translateX(-50%) translateY(0); } 50%{ transform:translateX(-50%) translateY(-4px); } }
+        .podium-card .avatar-wrap {
+            width:52px; height:52px; border-radius:50%;
+            margin:0 auto 8px; display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size:20px; color:white; overflow:hidden;
+            position:relative; border:3px solid white; box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+        .podium-card .avatar-wrap img { width:100%; height:100%; object-fit:cover; }
+        .podium-card .name {
+            font-weight:700; font-size:13px; color:var(--dark);
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+            max-width:90px; margin:0 auto 2px;
+        }
+        .podium-card .score {
+            font-family:var(--font-display); font-weight:800; font-size:18px;
+            color:var(--dark); line-height:1.2;
+        }
+        .podium-card .acc {
+            font-size:11px; color:var(--gray-500); font-weight:500;
+        }
+        .podium-card .rank-num {
+            font-family:var(--font-display); font-weight:900; font-size:28px;
+            line-height:1; margin-top:6px;
+        }
+
+        /* Rank 1 */
+        .podium-1 {
+            width:130px; background:linear-gradient(180deg, rgba(251,191,36,0.15), rgba(251,191,36,0.05));
+            border:2px solid rgba(251,191,36,0.3); box-shadow:var(--shadow-gold);
+            order:2; z-index:3; padding-top:20px;
+        }
+        .podium-1 .avatar-wrap { background:var(--gradient-gold); width:60px; height:60px; }
+        .podium-1 .rank-num { color:#d97706; }
+        .podium-1 .score { color:#b45309; }
+
+        /* Rank 2 */
+        .podium-2 {
+            width:110px; background:linear-gradient(180deg, rgba(203,213,225,0.2), rgba(203,213,225,0.05));
+            border:2px solid rgba(148,163,184,0.3); box-shadow:var(--shadow-silver);
+            order:1; z-index:2; padding-top:14px;
+        }
+        .podium-2 .avatar-wrap { background:var(--gradient-silver); }
+        .podium-2 .rank-num { color:#64748b; }
+        .podium-2 .score { color:#475569; }
+
+        /* Rank 3 */
+        .podium-3 {
+            width:110px; background:linear-gradient(180deg, rgba(253,186,116,0.15), rgba(253,186,116,0.05));
+            border:2px solid rgba(249,115,22,0.3); box-shadow:var(--shadow-bronze);
+            order:3; z-index:2; padding-top:14px;
+        }
+        .podium-3 .avatar-wrap { background:var(--gradient-bronze); }
+        .podium-3 .rank-num { color:#c2410c; }
+        .podium-3 .score { color:#9a3412; }
+
+        @media (min-width:480px) {
+            .podium { gap:16px; }
+            .podium-1 { width:160px; padding:24px 14px 16px; }
+            .podium-2, .podium-3 { width:130px; padding:18px 12px 14px; }
+            .podium-card .avatar-wrap { width:60px; height:60px; }
+            .podium-1 .avatar-wrap { width:72px; height:72px; }
+            .podium-card .name { font-size:14px; max-width:110px; }
+            .podium-card .score { font-size:20px; }
+            .podium-card .rank-num { font-size:32px; }
+        }
+
+        /* ========== STATS BAR ========== */
+        .stats-bar {
+            display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;
+            margin-bottom:24px;
+        }
+        .stat-box {
+            background:var(--gray-50); border-radius:var(--radius); padding:14px 8px;
+            text-align:center; border:1px solid rgba(226,232,240,0.6);
+            transition:var(--transition-fast);
+        }
+        .stat-box:hover { background:white; transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+        .stat-box .stat-icon { font-size:18px; margin-bottom:4px; }
+        .stat-box .stat-value {
+            font-family:var(--font-display); font-weight:700; font-size:clamp(16px,4vw,20px);
+            color:var(--dark); line-height:1.2;
+        }
+        .stat-box .stat-label {
+            font-size:11px; color:var(--gray-500); font-weight:500; margin-top:2px;
+        }
+
+        /* ========== LIST HEADER ========== */
+        .list-header {
+            display:grid; grid-template-columns:44px 1fr 60px 70px;
+            gap:10px; padding:8px 14px; margin-bottom:6px;
+            font-size:11px; font-weight:600; color:var(--gray-500); text-transform:uppercase;
+            letter-spacing:0.5px;
+        }
+        .list-header span:nth-child(3) { text-align:center; }
+        .list-header span:nth-child(4) { text-align:right; }
+
+        /* ========== LIST ========== */
+        .lb-list { display:flex; flex-direction:column; gap:6px; max-height:55vh; overflow-y:auto; padding-right:4px; }
+        .lb-list::-webkit-scrollbar { width:4px; }
+        .lb-list::-webkit-scrollbar-track { background:transparent; }
+        .lb-list::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:4px; }
+
         .lb-item {
-            display:flex; align-items:center; gap:12px;
-            padding:12px 14px; border-radius:14px;
-            background:#f8fafc; transition:var(--transition-fast);
+            display:grid; grid-template-columns:44px 1fr 60px 70px;
+            gap:10px; align-items:center;
+            padding:10px 14px; border-radius:var(--radius);
+            background:var(--gray-50); transition:var(--transition-fast);
+            border:1px solid transparent; cursor:pointer;
+            animation:itemSlideIn 0.4s ease-out both;
         }
-        .lb-item.you { background:#eef2ff; border:2px solid #6366f1; box-shadow:0 4px 15px rgba(99,102,241,0.15); }
-        .lb-rank {
-            width:34px; height:34px; border-radius:50%;
-            display:flex; align-items:center; justify-content:center;
-            font-weight:800; font-size:14px; flex-shrink:0;
+        @keyframes itemSlideIn {
+            from { opacity:0; transform:translateX(-12px); }
+            to { opacity:1; transform:translateX(0); }
         }
-        .rank-1 { background:#fbbf24; color:#78350f; font-size:18px; }
-        .rank-2 { background:#e2e8f0; color:#475569; font-size:18px; }
-        .rank-3 { background:#fed7aa; color:#7c2d12; font-size:18px; }
-        .rank-other { background:#f1f5f9; color:#64748b; }
+        .lb-item:hover {
+            background:white; border-color:rgba(99,102,241,0.15);
+            box-shadow:var(--shadow-sm); transform:translateX(4px);
+        }
+        .lb-item.you {
+            background:linear-gradient(135deg, #eef2ff, #e0e7ff);
+            border:2px solid #6366f1; box-shadow:var(--shadow-primary);
+            position:relative; overflow:hidden;
+        }
+        .lb-item.you::before {
+            content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+            background:var(--gradient-primary);
+        }
+        .lb-item.you:hover { transform:translateX(4px) scale(1.01); }
 
-        .lb-avatar {
-            width:38px; height:38px; border-radius:50%;
-            background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white;
+        .lb-rank {
+            width:32px; height:32px; border-radius:50%;
             display:flex; align-items:center; justify-content:center;
-            font-weight:700; font-size:14px; flex-shrink:0; overflow:hidden;
+            font-weight:800; font-size:13px; flex-shrink:0;
+            font-family:var(--font-display);
+        }
+        .rank-1 { background:var(--gradient-gold); color:white; font-size:16px; box-shadow:0 2px 8px rgba(251,191,36,0.4); }
+        .rank-2 { background:var(--gradient-silver); color:white; font-size:16px; box-shadow:0 2px 8px rgba(148,163,184,0.4); }
+        .rank-3 { background:var(--gradient-bronze); color:white; font-size:16px; box-shadow:0 2px 8px rgba(249,115,22,0.4); }
+        .rank-other { background:var(--gray-200); color:var(--gray-500); }
+
+        .lb-user {
+            display:flex; align-items:center; gap:10px; min-width:0;
+        }
+        .lb-avatar {
+            width:36px; height:36px; border-radius:50%;
+            background:var(--gradient-primary); color:white;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size:13px; flex-shrink:0; overflow:hidden;
+            border:2px solid white; box-shadow:0 2px 6px rgba(99,102,241,0.2);
         }
         .lb-avatar img { width:100%; height:100%; object-fit:cover; }
-        .lb-item.you .lb-avatar { background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+        .lb-item.you .lb-avatar { background:var(--gradient-gold); box-shadow:0 2px 6px rgba(251,191,36,0.3); }
         .lb-info { flex:1; min-width:0; }
-        .lb-name { font-weight:600; font-size:14px; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .lb-meta { font-size:11px; color:#64748b; }
-        .lb-stat { text-align:right; flex-shrink:0; }
-        .lb-stat .score { font-weight:700; font-size:15px; color:var(--dark); }
-        .lb-stat .acc { font-size:11px; color:#64748b; }
+        .lb-name { font-weight:600; font-size:13px; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px; }
+        .lb-meta { font-size:11px; color:var(--gray-500); margin-top:2px; }
         .you-tag {
             background:#6366f1; color:white;
-            padding:2px 10px; border-radius:10px;
-            font-size:10px; font-weight:700; margin-left:6px;
+            padding:2px 8px; border-radius:8px;
+            font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px;
+            flex-shrink:0;
         }
-        .empty-state { text-align:center; padding:30px; color:#94a3b8; }
-        .empty-state i { font-size:40px; margin-bottom:10px; display:block; opacity:0.5; }
 
-        .loading-screen { text-align:center; padding:40px; color:#64748b; }
+        .lb-score-cell { text-align:center; }
+        .lb-score { font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--dark); }
+        .lb-acc { font-size:11px; color:var(--gray-500); }
+
+        .lb-bar-cell { text-align:right; }
+        .progress-bar {
+            width:100%; height:6px; background:var(--gray-200); border-radius:3px;
+            overflow:hidden; margin-bottom:4px;
+        }
+        .progress-fill {
+            height:100%; border-radius:3px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .progress-fill.high { background:var(--gradient-primary); }
+        .progress-fill.mid { background:linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-fill.low { background:linear-gradient(90deg, #ef4444, #f87171); }
+        .lb-percent { font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--dark); }
+
+        /* ========== STICKY YOU BAR ========== */
+        .you-sticky {
+            position:sticky; bottom:0; left:0; right:0;
+            background:var(--glass-bg); backdrop-filter:blur(var(--glass-blur));
+            border-top:1px solid var(--glass-border); padding:10px 14px;
+            display:none; align-items:center; gap:10px;
+            box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:50;
+            border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+            margin:0 -12px -20px;
+        }
+        .you-sticky.show { display:flex; animation:slideUp 0.3s ease-out; }
+        .you-sticky .lb-rank { width:28px; height:28px; font-size:12px; }
+        .you-sticky .lb-avatar { width:32px; height:32px; font-size:12px; }
+        .you-sticky .lb-name { font-size:12px; }
+        .you-sticky .lb-score { font-size:14px; }
+
+        /* ========== EMPTY / ERROR STATES ========== */
+        .empty-state { text-align:center; padding:40px 20px; color:var(--gray-400); }
+        .empty-state .empty-icon {
+            width:72px; height:72px; border-radius:20px;
+            background:var(--gray-100); display:flex; align-items:center; justify-content:center;
+            margin:0 auto 16px; font-size:28px; color:var(--gray-400);
+        }
+        .empty-state h3 { font-size:16px; font-weight:700; color:var(--gray-600); margin-bottom:4px; }
+        .empty-state p { font-size:13px; color:var(--gray-500); }
+
+        .loading-screen { text-align:center; padding:50px 20px; color:var(--gray-500); }
+        .loading-spinner-wrap {
+            width:48px; height:48px; margin:0 auto 16px;
+            position:relative;
+        }
         .loading-spinner {
-            width:40px; height:40px; border:4px solid #e2e8f0;
-            border-top:4px solid #5b4cf0; border-radius:50%;
-            animation:spin 0.8s linear infinite; margin:0 auto 12px;
+            width:100%; height:100%; border:3px solid var(--gray-200);
+            border-top-color:var(--primary); border-radius:50%;
+            animation:spin 0.8s linear infinite;
+        }
+        .loading-spinner-wrap::after {
+            content:''; position:absolute; inset:-6px;
+            border:2px solid transparent; border-top-color:rgba(99,102,241,0.2);
+            border-radius:50%; animation:spin 1.2s linear infinite reverse;
         }
         @keyframes spin { to{transform:rotate(360deg);} }
+        .loading-screen p { font-size:14px; font-weight:500; }
+        .loading-screen .loading-dots::after {
+            content:''; animation:loadingDots 1.5s infinite;
+        }
+        @keyframes loadingDots {
+            0% { content:'.'; }
+            33% { content:'..'; }
+            66% { content:'...'; }
+            100% { content:'.'; }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        @keyframes scaleIn { from{opacity:0;transform:scale(0.9);} to{opacity:1;transform:scale(1);} }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width:400px) {
+            .podium { gap:6px; }
+            .podium-1 { width:110px; padding:14px 6px 10px; }
+            .podium-2, .podium-3 { width:95px; padding:12px 6px 10px; }
+            .podium-card .avatar-wrap { width:44px; height:44px; font-size:16px; }
+            .podium-1 .avatar-wrap { width:52px; height:52px; }
+            .podium-card .name { font-size:11px; max-width:70px; }
+            .podium-card .score { font-size:15px; }
+            .podium-card .rank-num { font-size:22px; }
+            .list-header { display:none; }
+            .lb-item { grid-template-columns:36px 1fr 55px; }
+            .lb-bar-cell { display:none; }
+            .lb-score-cell { text-align:right; }
+        }
     </style>
 </head>
 <body>
@@ -239,24 +496,46 @@
     <div class="container">
         <div class="card" id="leaderboardCard">
             <div class="loading-screen" id="loadingScreen">
-                <div class="loading-spinner"></div>
-                <p>Loading leaderboard...</p>
+                <div class="loading-spinner-wrap"><div class="loading-spinner"></div></div>
+                <p>Loading leaderboard<span class="loading-dots"></span></p>
             </div>
             <div id="leaderboardContent" style="display:none;">
-                <div class="card-title">
-                    <i class="fas fa-trophy" style="color:#fbbf24;"></i>
-                    Leaderboard
-                    <span class="test-badge" id="testCodeDisplay">📝 TEST</span>
-                    <span class="exam-badge" id="examDisplay" style="display:none;"></span>
+                <!-- Header -->
+                <div class="lb-header">
+                    <div class="lb-header-icon"><i class="fas fa-trophy"></i></div>
+                    <h1>Leaderboard</h1>
+                    <div class="lb-header-sub">
+                        <span class="test-badge" id="testCodeDisplay"><i class="fas fa-file-alt"></i> TEST</span>
+                        <span class="exam-badge" id="examDisplay" style="display:none;"><i class="fas fa-book"></i> <span></span></span>
+                    </div>
                 </div>
+
+                <!-- Podium -->
+                <div class="podium" id="podium"></div>
+
+                <!-- Stats -->
+                <div class="stats-bar" id="statsBar"></div>
+
+                <!-- List Header -->
+                <div class="list-header">
+                    <span>Rank</span>
+                    <span>Student</span>
+                    <span>Score</span>
+                    <span>Accuracy</span>
+                </div>
+
+                <!-- List -->
                 <div class="lb-list" id="leaderboardList"></div>
+
+                <!-- Sticky You Bar -->
+                <div class="you-sticky" id="youSticky"></div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyVPG4x6CSrtwpfI_LPRCjvCjCcN8ZY7d0Z2P3ef_e_BL2hatfDLbIpdStSIG69JhCggg/exec';
-        
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQjzTsPfPH1mSA0Y_RfJ0CDZphwpohenOuX1InOn_apBpAhvRXW--MaAaruNV4o3KC/exec';
+
         const params = new URLSearchParams(window.location.search);
         const testCode = params.get('testCode') || 'TEST';
         const exam = params.get('exam') || '';
@@ -284,27 +563,35 @@
             window.location.href = 'index.html';
         }
 
-        function getAvatarHTML(entry) {
+        function getAvatarHTML(entry, size = 'normal') {
+            const s = size === 'large' ? 'font-size:18px;' : 'font-size:13px;';
             if (entry.avatarUrl) {
-                return `<img src="${entry.avatarUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.textContent='${(entry.name||'S').charAt(0).toUpperCase()}'">`;
+                return `<img src="${entry.avatarUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.innerHTML='${(entry.name||'S').charAt(0).toUpperCase()}';this.parentElement.style.${s}">`;
             } else if (entry.profilePicUrl) {
-                return `<img src="${entry.profilePicUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                return `<img src="${entry.profilePicUrl}" alt="${entry.name||'User'}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.innerHTML='${(entry.name||'S').charAt(0).toUpperCase()}';this.parentElement.style.${s}">`;
             } else {
                 return (entry.name||'S').charAt(0).toUpperCase();
             }
         }
 
+        function getProgressClass(acc) {
+            if (acc >= 80) return 'high';
+            if (acc >= 50) return 'mid';
+            return 'low';
+        }
+
         async function fetchLeaderboard() {
-            document.getElementById('testCodeDisplay').textContent = testCode;
+            document.getElementById('testCodeDisplay').innerHTML = `<i class="fas fa-file-alt"></i> ${testCode}`;
             if (exam) {
-                document.getElementById('examDisplay').textContent = '📚 ' + exam;
-                document.getElementById('examDisplay').style.display = 'inline-block';
+                const examEl = document.getElementById('examDisplay');
+                examEl.querySelector('span').textContent = exam;
+                examEl.style.display = 'inline-flex';
             }
 
             try {
                 const res = await fetch(`${API_URL}?action=getLeaderboard&testCode=${encodeURIComponent(testCode)}`);
                 const data = await res.json();
-                
+
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('leaderboardContent').style.display = 'block';
 
@@ -312,50 +599,151 @@
                     renderLeaderboard(data.leaderboard);
                 } else {
                     document.getElementById('leaderboardList').innerHTML = 
-                        '<div class="empty-state"><i class="fas fa-trophy"></i><p>No attempts yet. Be the first!</p></div>';
+                        `<div class="empty-state">
+                            <div class="empty-icon"><i class="fas fa-trophy"></i></div>
+                            <h3>No attempts yet</h3>
+                            <p>Be the first to take this test and claim the top spot!</p>
+                        </div>`;
                 }
             } catch (e) {
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('leaderboardContent').style.display = 'block';
                 document.getElementById('leaderboardList').innerHTML = 
-                    '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading leaderboard</p></div>';
+                    `<div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Unable to load</h3>
+                        <p>Something went wrong. Please try again later.</p>
+                    </div>`;
             }
         }
 
         function renderLeaderboard(lb) {
-            const list = document.getElementById('leaderboardList');
-            const top20 = lb.slice(0, 20);
-            
-            list.innerHTML = top20.map(entry => {
-                let rc = 'rank-other', rd = entry.rank;
-                if (entry.rank === 1) { rc='rank-1'; rd='🥇'; }
-                else if (entry.rank === 2) { rc='rank-2'; rd='🥈'; }
-                else if (entry.rank === 3) { rc='rank-3'; rd='🥉'; }
+            const podiumEl = document.getElementById('podium');
+            const listEl = document.getElementById('leaderboardList');
+            const statsEl = document.getElementById('statsBar');
+            const stickyEl = document.getElementById('youSticky');
+
+            // Stats
+            const totalParticipants = lb.length;
+            const avgScore = Math.round(lb.reduce((a,b) => a + (b.score||0), 0) / totalParticipants);
+            const avgAcc = Math.round(lb.reduce((a,b) => a + (parseFloat(b.accuracy)||0), 0) / totalParticipants);
+
+            statsEl.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">${totalParticipants}</div>
+                    <div class="stat-label">Participants</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">${avgScore}</div>
+                    <div class="stat-label">Avg Score</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value">${avgAcc}%</div>
+                    <div class="stat-label">Avg Accuracy</div>
+                </div>
+            `;
+
+            // Podium (top 3)
+            const top3 = lb.slice(0, 3);
+            const medals = ['🥇', '🥈', '🥉'];
+            const podiumHTML = top3.map((entry, i) => {
                 const isYou = entry.username === user.username;
-                
-                return `<div class="lb-item ${isYou?'you':''}">
-                    <div class="lb-rank ${rc}">${rd}</div>
-                    <div class="lb-avatar">${getAvatarHTML(entry)}</div>
-                    <div class="lb-info">
-                        <div class="lb-name">${entry.name||'Student'}${isYou?'<span class="you-tag">You</span>':''}</div>
-                        <div class="lb-meta">Accuracy: ${entry.accuracy}%</div>
+                const rankClass = `podium-${i+1}`;
+                return `
+                <div class="podium-card ${rankClass}" style="animation:scaleIn 0.5s ${i*0.1}s ease-out both;">
+                    <div class="crown">${medals[i]}</div>
+                    <div class="avatar-wrap">${getAvatarHTML(entry, 'large')}</div>
+                    <div class="name">${entry.name||'Student'}${isYou?' <span style="color:#6366f1;font-size:10px;">(You)</span>':''}</div>
+                    <div class="score">${entry.score}/${entry.totalMarks||'?'}</div>
+                    <div class="acc">${entry.accuracy}% accuracy</div>
+                    <div class="rank-num">#${entry.rank}</div>
+                </div>`;
+            }).join('');
+            podiumEl.innerHTML = podiumHTML;
+
+            // List (ranks 4+)
+            const rest = lb.slice(3, 20);
+            const userEntry = lb.find(e => e.username === user.username);
+            const userInTop20 = userEntry && userEntry.rank <= 20;
+
+            let listHTML = rest.map((entry, i) => {
+                const isYou = entry.username === user.username;
+                const rc = 'rank-other';
+                const delay = (i + 1) * 0.05;
+                const acc = parseFloat(entry.accuracy) || 0;
+
+                return `<div class="lb-item ${isYou?'you':''}" style="animation-delay:${delay}s">
+                    <div class="lb-rank ${rc}">${entry.rank}</div>
+                    <div class="lb-user">
+                        <div class="lb-avatar">${getAvatarHTML(entry)}</div>
+                        <div class="lb-info">
+                            <div class="lb-name">${entry.name||'Student'}${isYou?'<span class="you-tag">You</span>':''}</div>
+                            <div class="lb-meta">Accuracy: ${entry.accuracy}%</div>
+                        </div>
                     </div>
-                    <div class="lb-stat">
-                        <div class="score">${entry.score}/${entry.totalMarks||'?'}</div>
-                        <div class="acc">${entry.accuracy}%</div>
+                    <div class="lb-score-cell">
+                        <div class="lb-score">${entry.score}</div>
+                        <div class="lb-acc">/${entry.totalMarks||'?'}</div>
+                    </div>
+                    <div class="lb-bar-cell">
+                        <div class="progress-bar">
+                            <div class="progress-fill ${getProgressClass(acc)}" style="width:${acc}%"></div>
+                        </div>
+                        <div class="lb-percent">${entry.accuracy}%</div>
                     </div>
                 </div>`;
             }).join('');
 
-            const userEntry = lb.find(e => e.username === user.username);
-            if (userEntry && userEntry.rank > 20) {
-                list.innerHTML += `<div style="text-align:center;color:#94a3b8;padding:8px;font-size:12px;">• • • • •</div>
-                <div class="lb-item you">
+            // If user not in top 20, show separator + user entry
+            if (userEntry && !userInTop20) {
+                listHTML += `
+                <div style="text-align:center;color:var(--gray-400);padding:10px 0;font-size:12px;letter-spacing:2px;">• • •</div>
+                <div class="lb-item you" style="animation-delay:0s">
                     <div class="lb-rank rank-other">${userEntry.rank}</div>
-                    <div class="lb-avatar">${getAvatarHTML(userEntry)}</div>
-                    <div class="lb-info"><div class="lb-name">${user.name} <span class="you-tag">You</span></div></div>
-                    <div class="lb-stat"><div class="score">${userEntry.score}/${userEntry.totalMarks||'?'}</div><div class="acc">${userEntry.accuracy}%</div></div>
+                    <div class="lb-user">
+                        <div class="lb-avatar">${getAvatarHTML(userEntry)}</div>
+                        <div class="lb-info">
+                            <div class="lb-name">${user.name}<span class="you-tag">You</span></div>
+                            <div class="lb-meta">Accuracy: ${userEntry.accuracy}%</div>
+                        </div>
+                    </div>
+                    <div class="lb-score-cell">
+                        <div class="lb-score">${userEntry.score}</div>
+                        <div class="lb-acc">/${userEntry.totalMarks||'?'}</div>
+                    </div>
+                    <div class="lb-bar-cell">
+                        <div class="progress-bar">
+                            <div class="progress-fill ${getProgressClass(parseFloat(userEntry.accuracy)||0)}" style="width:${userEntry.accuracy}%"></div>
+                        </div>
+                        <div class="lb-percent">${userEntry.accuracy}%</div>
+                    </div>
                 </div>`;
+            }
+
+            listEl.innerHTML = listHTML;
+
+            // Sticky bar for user not in view
+            if (userEntry && userInTop20 && userEntry.rank > 3) {
+                const acc = parseFloat(userEntry.accuracy) || 0;
+                stickyEl.innerHTML = `
+                    <div class="lb-rank rank-other">${userEntry.rank}</div>
+                    <div class="lb-user">
+                        <div class="lb-avatar">${getAvatarHTML(userEntry)}</div>
+                        <div class="lb-info">
+                            <div class="lb-name">${user.name}<span class="you-tag">You</span></div>
+                        </div>
+                    </div>
+                    <div class="lb-score-cell">
+                        <div class="lb-score">${userEntry.score}/${userEntry.totalMarks||'?'}</div>
+                    </div>
+                    <div class="lb-bar-cell">
+                        <div class="lb-percent">${userEntry.accuracy}%</div>
+                    </div>
+                `;
+                stickyEl.classList.add('show');
             }
         }
 
