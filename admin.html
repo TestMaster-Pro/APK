@@ -16,9 +16,7 @@
             --warning: #f59e0b;
             --info: #3b82f6;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             background: #0f172a;
@@ -26,18 +24,17 @@
             min-height: 100vh;
             display: flex;
         }
-
         .sidebar {
             width: 260px;
             background: #1e293b;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             border-right: 1px solid #334155;
             min-height: 100vh;
+            overflow-y: auto;
         }
-
         .sidebar h2 {
             font-size: 18px;
             margin-bottom: 16px;
@@ -46,10 +43,9 @@
             gap: 8px;
             color: #fbbf24;
         }
-
         .sidebar button {
             width: 100%;
-            padding: 12px 14px;
+            padding: 11px 14px;
             background: #334155;
             color: white;
             border: none;
@@ -64,70 +60,45 @@
             transition: 0.2s;
             position: relative;
         }
-
-        .sidebar button:hover, .sidebar button.active {
-            background: #6366f1;
-            transform: translateX(2px);
-        }
-
+        .sidebar button:hover, .sidebar button.active { background: #6366f1; transform: translateX(2px); }
         .sidebar button .badge-count {
-            position: absolute;
-            right: 10px;
-            background: #ef4444;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 700;
+            position: absolute; right: 10px;
+            background: #ef4444; color: white; font-size: 10px;
+            padding: 2px 8px; border-radius: 10px; font-weight: 700;
         }
-
         .main-content {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
             max-height: 100vh;
         }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeSlideIn 0.3s ease-out; }
-        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeSlideIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px; margin-bottom: 20px;
         }
-        @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 500px) { .stats-grid { grid-template-columns: 1fr; } }
-
         .stat-card {
-            background: #1e293b;
-            padding: 18px 20px;
-            border-radius: 14px;
-            border: 1px solid #334155;
-            cursor: pointer;
-            transition: 0.2s;
+            background: #1e293b; padding: 18px 20px; border-radius: 14px;
+            border: 1px solid #334155; cursor: pointer; transition: 0.2s;
         }
         .stat-card:hover { border-color: #6366f1; transform: translateY(-2px); }
         .stat-card h3 { font-size: 26px; margin-bottom: 4px; font-weight: 800; }
         .stat-card p { font-size: 12px; color: #94a3b8; }
         .stat-card .stat-icon { float: right; font-size: 32px; opacity: 0.3; }
 
-        /* Payment Stats */
         .payment-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 18px;
+            gap: 12px; margin-bottom: 18px;
         }
-        @media (max-width: 600px) { .payment-stats { grid-template-columns: 1fr; } }
+        @media (max-width:600px){ .payment-stats { grid-template-columns: 1fr; } }
         .payment-stat {
-            background: #1e293b;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            text-align: center;
+            background: #1e293b; padding: 14px 16px; border-radius: 12px;
+            border: 1px solid #334155; text-align: center;
         }
         .payment-stat .count { font-size: 28px; font-weight: 800; }
         .payment-stat .label { font-size: 11px; color: #94a3b8; margin-top: 2px; }
@@ -135,41 +106,20 @@
         .payment-stat.verified .count { color: #10b981; }
         .payment-stat.rejected .count { color: #ef4444; }
 
-        /* Tables */
         .table-wrapper {
-            background: #1e293b;
-            border-radius: 14px;
-            overflow-x: auto;
+            background: #1e293b; border-radius: 14px; overflow-x: auto;
             border: 1px solid #334155;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 700px;
-        }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
         th, td {
-            padding: 10px 14px;
-            text-align: left;
-            border-bottom: 1px solid #334155;
-            font-size: 12px;
-            white-space: nowrap;
+            padding: 10px 14px; text-align: left; border-bottom: 1px solid #334155;
+            font-size: 12px; white-space: nowrap;
         }
-        th {
-            background: #334155;
-            font-weight: 700;
-            color: #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        tbody tr:hover { background: rgba(99, 102, 241, 0.08); }
+        th { background: #334155; font-weight: 700; color: #e2e8f0; position: sticky; top: 0; z-index: 1; }
+        tbody tr:hover { background: rgba(99,102,241,0.08); }
 
         .badge {
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: 700;
-            white-space: nowrap;
+            padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 700; white-space: nowrap;
         }
         .badge-success { background: #065f46; color: #6ee7b7; }
         .badge-warning { background: #78350f; color: #fbbf24; }
@@ -180,48 +130,28 @@
         .badge-ultimate { background: #064e3b; color: #6ee7b7; }
 
         .action-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            margin: 1px 2px;
-            transition: 0.2s;
+            padding: 5px 10px; border: none; border-radius: 6px; cursor: pointer;
+            font-size: 10px; font-family: 'Poppins', sans-serif; font-weight: 600;
+            margin: 1px 2px; transition: 0.2s;
         }
         .btn-verify { background: #059669; color: white; }
-        .btn-verify:hover { background: #10b981; }
         .btn-reject { background: #dc2626; color: white; }
-        .btn-reject:hover { background: #ef4444; }
         .btn-edit { background: #6366f1; color: white; }
-        .btn-edit:hover { background: #818cf8; }
         .btn-delete { background: #991b1b; color: white; }
-        .btn-delete:hover { background: #b91c1c; }
         .btn-reply { background: #0369a1; color: white; }
+        .btn-approve { background: #10b981; color: white; }
+        .btn-activate { background: #6366f1; color: white; }
 
-        /* Chat Panel */
         .chat-panel {
-            background: #1e293b;
-            border-radius: 16px;
-            border: 1px solid #334155;
-            height: 65vh;
-            display: flex;
-            flex-direction: column;
+            background: #1e293b; border-radius: 16px; border: 1px solid #334155;
+            height: 65vh; display: flex; flex-direction: column;
         }
         .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            flex: 1; overflow-y: auto; padding: 16px;
+            display: flex; flex-direction: column; gap: 8px;
         }
         .msg-bubble {
-            padding: 10px 14px;
-            border-radius: 12px;
-            max-width: 75%;
-            font-size: 13px;
+            padding: 10px 14px; border-radius: 12px; max-width: 75%; font-size: 13px;
         }
         .msg-bubble.user-msg { align-self: flex-start; background: #334155; border-left: 3px solid #6366f1; }
         .msg-bubble.admin-msg { align-self: flex-end; background: #1e3a5f; border-right: 3px solid #fbbf24; }
@@ -235,53 +165,29 @@
         .msg-bubble.deleted { opacity: 0.5; background: rgba(239,68,68,0.15); }
 
         .admin-reply-area {
-            padding: 14px;
-            border-top: 1px solid #334155;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            padding: 14px; border-top: 1px solid #334155; display: flex; gap: 10px; flex-wrap: wrap;
         }
         .admin-reply-area select, .admin-reply-area input {
-            padding: 10px;
-            border-radius: 8px;
-            background: #334155;
-            color: white;
-            border: 1px solid #475569;
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
+            padding: 10px; border-radius: 8px; background: #334155; color: white;
+            border: 1px solid #475569; font-family: 'Poppins', sans-serif; font-size: 13px;
         }
         .admin-reply-area select { min-width: 140px; }
         .admin-reply-area input { flex: 1; min-width: 150px; }
         .admin-reply-area button {
-            padding: 10px 18px;
-            background: #6366f1;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
+            padding: 10px 18px; background: #6366f1; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif;
         }
-        .admin-reply-area button:hover { background: #818cf8; }
 
-        /* Modal */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.75);
-            display: none; justify-content: center; align-items: center;
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.75); display: none; justify-content: center; align-items: center;
             z-index: 1000;
         }
         .modal-overlay.active { display: flex; }
         .modal {
-            background: #1e293b;
-            padding: 28px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 520px;
-            border: 1px solid #334155;
-            max-height: 85vh;
-            overflow-y: auto;
+            background: #1e293b; padding: 28px; border-radius: 16px;
+            width: 90%; max-width: 520px; border: 1px solid #334155;
+            max-height: 85vh; overflow-y: auto;
         }
         .modal h3 { margin-bottom: 18px; font-size: 18px; }
         .modal .form-group { margin-bottom: 12px; }
@@ -300,49 +206,15 @@
         .btn-cancel { background: #64748b; color: white; }
         .btn-danger { background: #dc2626; color: white; }
 
-        /* Confirm Dialog */
-        .confirm-dialog {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1001;
-        }
-        .confirm-dialog.active { display: flex; }
-        .confirm-box {
-            background: #1e293b; padding: 28px; border-radius: 16px; text-align: center;
-            border: 1px solid #334155; max-width: 400px;
-        }
-        .confirm-box p { font-size: 14px; margin-bottom: 18px; }
-        .confirm-box .confirm-btns { display: flex; gap: 10px; justify-content: center; }
-
-        /* Login */
-        .login-screen {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 9999;
-        }
-        .login-box {
-            background: #1e293b; padding: 36px; border-radius: 20px; border: 1px solid #334155;
-            width: 90%; max-width: 400px; text-align: center;
-        }
-        .login-box h2 { margin-bottom: 20px; font-size: 20px; }
-        .login-box input {
-            width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px;
-            background: #334155; color: white; border: 1px solid #475569;
-            font-family: 'Poppins', sans-serif; font-size: 14px;
-        }
-        .login-box button {
-            width: 100%; padding: 13px; background: #6366f1; color: white;
-            border: none; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 15px;
-        }
-        .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; }
-
         .section-title {
-            font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+            font-size: 16px; font-weight: 700; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
         }
         .refresh-btn {
-            padding: 8px 14px; background: #334155; color: white; border: none; border-radius: 8px;
-            cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 12px; margin-left: auto;
-            transition: 0.2s;
+            padding: 8px 14px; background: #334155; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-size: 12px; margin-left: auto; transition: 0.2s;
         }
-        .refresh-btn:hover { background: #475569; }
         .search-input {
             padding: 8px 14px; border-radius: 8px; background: #334155; color: white;
             border: 1px solid #475569; font-family: 'Poppins', sans-serif; font-size: 12px;
@@ -360,13 +232,13 @@
 </head>
 <body>
     <!-- Login Screen -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-box">
+    <div class="login-screen" id="loginScreen" style="position:fixed;inset:0;background:#0f172a;display:flex;justify-content:center;align-items:center;z-index:9999;">
+        <div style="background:#1e293b;padding:36px;border-radius:20px;border:1px solid #334155;width:90%;max-width:400px;text-align:center;">
             <h2><i class="fas fa-shield-halved" style="color:#fbbf24;"></i> Admin Login</h2>
-            <input type="text" id="adminUsername" placeholder="Admin Username" value="admin">
-            <input type="password" id="adminPassword" placeholder="Admin Password" onkeypress="if(event.key==='Enter')adminLoginSubmit()">
-            <button onclick="adminLoginSubmit()"><i class="fas fa-sign-in-alt"></i> Login</button>
-            <p class="login-error" id="loginError"></p>
+            <input type="text" id="adminUsername" placeholder="Admin Username" value="admin" style="width:100%;padding:12px;margin-bottom:12px;border-radius:10px;background:#334155;color:white;border:1px solid #475569;font-family:'Poppins',sans-serif;font-size:14px;">
+            <input type="password" id="adminPassword" placeholder="Admin Password" onkeypress="if(event.key==='Enter')adminLoginSubmit()" style="width:100%;padding:12px;margin-bottom:12px;border-radius:10px;background:#334155;color:white;border:1px solid #475569;font-family:'Poppins',sans-serif;font-size:14px;">
+            <button onclick="adminLoginSubmit()" style="width:100%;padding:13px;background:#6366f1;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:15px;"><i class="fas fa-sign-in-alt"></i> Login</button>
+            <p style="color:#ef4444;font-size:13px;margin-top:8px;" id="loginError"></p>
         </div>
     </div>
 
@@ -376,30 +248,35 @@
             <h2><i class="fas fa-shield-halved"></i> Admin Panel</h2>
             <button class="active" onclick="switchAdminTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
             <button onclick="switchAdminTab('payments')"><i class="fas fa-credit-card"></i> Payments <span class="badge-count" id="pendingBadge" style="display:none;">0</span></button>
-            <button onclick="switchAdminTab('chats')"><i class="fas fa-comments"></i> Manage Chats</button>
+            <button onclick="switchAdminTab('chats')"><i class="fas fa-comments"></i> Chats</button>
             <button onclick="switchAdminTab('users')"><i class="fas fa-users"></i> Users</button>
             <button onclick="switchAdminTab('results')"><i class="fas fa-clipboard-list"></i> Results</button>
+            <button onclick="switchAdminTab('coinRequests')"><i class="fas fa-coins"></i> Coin Requests</button>
+            <button onclick="switchAdminTab('dailyChallenges')"><i class="fas fa-bolt"></i> Daily Challenges</button>
+            <button onclick="switchAdminTab('reviews')"><i class="fas fa-star"></i> Reviews</button>
+            <button onclick="switchAdminTab('settings')"><i class="fas fa-cog"></i> Settings</button>
             <button onclick="logout()" style="background:#dc2626;margin-top:auto;"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
 
         <div class="main-content">
             <!-- Dashboard -->
             <div class="tab-content active" id="dashboardTab">
-                <h2 style="margin-bottom:18px;">📊 Overview</h2>
+                <h2 style="margin-bottom:18px;">📊 Dashboard</h2>
                 <div class="stats-grid">
                     <div class="stat-card" onclick="switchAdminTab('users')"><p>Total Users</p><h3 id="totalUsers">--</h3></div>
-                    <div class="stat-card" onclick="switchAdminTab('results')"><p>Total Tests Taken</p><h3 id="totalTests">--</h3></div>
+                    <div class="stat-card" onclick="switchAdminTab('results')"><p>Total Tests</p><h3 id="totalTests">--</h3></div>
                     <div class="stat-card" onclick="switchAdminTab('payments')"><p>Total Payments</p><h3 id="totalPayments">--</h3></div>
-                    <div class="stat-card" onclick="switchAdminTab('chats')"><p>Chat Messages</p><h3 id="totalChats">--</h3></div>
+                    <div class="stat-card" onclick="switchAdminTab('reviews')"><p>Total Reviews</p><h3 id="totalReviews">--</h3></div>
+                    <div class="stat-card"><p>Total Coins</p><h3 id="totalCoins">--</h3></div>
                 </div>
                 <div class="payment-stats">
-                    <div class="payment-stat pending"><div class="count" id="pendingCount">0</div><div class="label">⏳ Pending Verification</div></div>
-                    <div class="payment-stat verified"><div class="count" id="verifiedCount">0</div><div class="label">✅ Verified Payments</div></div>
-                    <div class="payment-stat rejected"><div class="count" id="rejectedCount">0</div><div class="label">❌ Rejected Payments</div></div>
+                    <div class="payment-stat pending"><div class="count" id="pendingCount">0</div><div class="label">⏳ Pending Payments</div></div>
+                    <div class="payment-stat verified"><div class="count" id="verifiedCount">0</div><div class="label">✅ Verified</div></div>
+                    <div class="payment-stat rejected"><div class="count" id="rejectedCount">0</div><div class="label">❌ Rejected</div></div>
                 </div>
             </div>
 
-            <!-- Payments Tab -->
+            <!-- Payments -->
             <div class="tab-content" id="paymentsTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
                     <h2 style="margin:0;">💳 Payment Management</h2>
@@ -422,31 +299,31 @@
                 <div class="table-wrapper">
                     <table>
                         <thead><tr><th>Payment ID</th><th>User</th><th>Plan</th><th>Amount</th><th>Method</th><th>Txn ID</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-                        <tbody id="paymentsTableBody"><tr><td colspan="9" style="text-align:center;">Loading payments...</td></tr></tbody>
+                        <tbody id="paymentsTableBody"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Chats Tab -->
+            <!-- Chats -->
             <div class="tab-content" id="chatsTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
                     <h2 style="margin:0;">💬 Live Chat Management</h2>
                     <button class="refresh-btn" onclick="loadAllChatsForAdmin()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
                 <div class="chat-panel">
-                    <div class="chat-messages" id="adminChatMessages"><p style="color:#94a3b8;text-align:center;">Loading chats...</p></div>
+                    <div class="chat-messages" id="adminChatMessages"></div>
                     <div class="admin-reply-area">
                         <select id="replyToSelect"><option value="">Reply to all</option></select>
-                        <input type="text" id="adminReplyInput" placeholder="Type reply..." onkeypress="if(event.key==='Enter')sendAdminReply()">
+                        <input type="text" id="adminReplyInput" placeholder="Type reply...">
                         <button onclick="sendAdminReply()"><i class="fas fa-reply"></i> Reply</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Users Tab -->
+            <!-- Users -->
             <div class="tab-content" id="usersTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-                    <h2 style="margin:0;">👥 Registered Users</h2>
+                    <h2 style="margin:0;">👥 Users</h2>
                     <div style="display:flex;gap:8px;">
                         <input type="text" id="userSearch" placeholder="Search..." oninput="loadAllUsers()" class="search-input">
                         <button class="refresh-btn" onclick="loadAllUsers()"><i class="fas fa-sync-alt"></i></button>
@@ -455,114 +332,157 @@
                 <div class="table-wrapper">
                     <table>
                         <thead><tr><th>Name</th><th>Username</th><th>Mobile</th><th>Email</th><th>State</th><th>Preparing</th><th>Joined</th><th>Actions</th></tr></thead>
-                        <tbody id="usersTableBody"><tr><td colspan="8" style="text-align:center;">Loading...</td></tr></tbody>
+                        <tbody id="usersTableBody"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Results Tab -->
+            <!-- Results -->
             <div class="tab-content" id="resultsTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-                    <h2 style="margin:0;">📋 All Test Results</h2>
+                    <h2 style="margin:0;">📋 Test Results</h2>
                     <button class="refresh-btn" onclick="loadAllResults()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
                 <div class="table-wrapper">
                     <table>
                         <thead><tr><th>User</th><th>Test Code</th><th>Score</th><th>Accuracy</th><th>Correct/Wrong</th><th>Date</th><th>Actions</th></tr></thead>
-                        <tbody id="resultsTableBody"><tr><td colspan="7" style="text-align:center;">Loading...</td></tr></tbody>
+                        <tbody id="resultsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Coin Requests -->
+            <div class="tab-content" id="coinRequestsTab">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                    <h2 style="margin:0;">🪙 Coin Requests</h2>
+                    <button class="refresh-btn" onclick="loadCoinRequests()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Request ID</th><th>User</th><th>Amount</th><th>Reason</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="coinRequestsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Daily Challenges -->
+            <div class="tab-content" id="dailyChallengesTab">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                    <h2 style="margin:0;">⚡ Daily Challenges</h2>
+                    <button class="refresh-btn" onclick="loadDailyChallenges()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button class="action-btn btn-edit" onclick="openChallengeCreateModal()" style="font-size:12px;padding:8px 14px;"><i class="fas fa-plus"></i> New Challenge</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>ID</th><th>Date</th><th>Question (Hindi)</th><th>Answer</th><th>Reward</th><th>Active</th><th>Actions</th></tr></thead>
+                        <tbody id="challengesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="tab-content" id="reviewsTab">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                    <h2 style="margin:0;">⭐ Reviews</h2>
+                    <button class="refresh-btn" onclick="loadAllReviews()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Review ID</th><th>User</th><th>Rating</th><th>Review</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="reviewsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="tab-content" id="settingsTab">
+                <h2 style="margin-bottom:18px;">⚙️ Coin & Reward Settings</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Setting Key</th><th>Value</th><th>Action</th></tr></thead>
+                        <tbody id="settingsBody"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Verify Payment Modal -->
+    <!-- Modals -->
     <div class="modal-overlay" id="verifyPaymentModal">
         <div class="modal">
-            <h3><i class="fas fa-check-circle" style="color:#10b981;"></i> Verify Payment</h3>
+            <h3>Verify Payment</h3>
             <input type="hidden" id="verifyPaymentId">
-            <div class="form-group"><label>Payment ID</label><input type="text" id="verifyPaymentIdDisplay" disabled></div>
-            <div class="form-group"><label>User</label><input type="text" id="verifyPaymentUser" disabled></div>
-            <div class="form-group"><label>Plan</label><input type="text" id="verifyPaymentPlan" disabled></div>
-            <div class="form-group"><label>Amount (₹)</label><input type="text" id="verifyPaymentAmount" disabled></div>
-            <div class="form-group"><label>Transaction ID</label><input type="text" id="verifyPaymentTxn" disabled></div>
-            <div class="form-group"><label>Duration (days) *</label>
-                <select id="verifyDuration">
-                    <option value="30">30 Days</option>
-                    <option value="90" selected>90 Days</option>
-                    <option value="180">180 Days</option>
-                    <option value="365">365 Days</option>
-                </select>
-            </div>
-            <div class="form-group"><label>Admin Note</label><textarea id="verifyNote" placeholder="Payment verified successfully">Payment verified successfully</textarea></div>
-            <div class="modal-btns">
-                <button class="btn-cancel" onclick="closeVerifyModal()">Cancel</button>
-                <button class="btn-save" onclick="confirmVerifyPayment()"><i class="fas fa-check"></i> Verify Payment</button>
-            </div>
+            <div class="form-group"><label>Payment ID</label><input id="verifyPaymentIdDisplay" disabled></div>
+            <div class="form-group"><label>User</label><input id="verifyPaymentUser" disabled></div>
+            <div class="form-group"><label>Plan</label><input id="verifyPaymentPlan" disabled></div>
+            <div class="form-group"><label>Amount</label><input id="verifyPaymentAmount" disabled></div>
+            <div class="form-group"><label>Duration (days)</label><select id="verifyDuration"><option value="30">30</option><option value="90" selected>90</option><option value="180">180</option><option value="365">365</option></select></div>
+            <div class="form-group"><label>Note</label><textarea id="verifyNote">Payment verified</textarea></div>
+            <div class="modal-btns"><button class="btn-cancel" onclick="closeVerifyModal()">Cancel</button><button class="btn-save" onclick="confirmVerifyPayment()">Verify</button></div>
         </div>
     </div>
-
-    <!-- Reject Payment Modal -->
     <div class="modal-overlay" id="rejectPaymentModal">
         <div class="modal">
-            <h3><i class="fas fa-times-circle" style="color:#ef4444;"></i> Reject Payment</h3>
+            <h3>Reject Payment</h3>
             <input type="hidden" id="rejectPaymentId">
-            <div class="form-group"><label>Reason for Rejection *</label><textarea id="rejectReason" placeholder="Enter reason...">Payment details could not be verified. Please resubmit with correct information.</textarea></div>
-            <div class="modal-btns">
-                <button class="btn-cancel" onclick="closeRejectModal()">Cancel</button>
-                <button class="btn-danger" onclick="confirmRejectPayment()"><i class="fas fa-times"></i> Reject Payment</button>
-            </div>
+            <div class="form-group"><label>Reason</label><textarea id="rejectReason">Payment details incorrect</textarea></div>
+            <div class="modal-btns"><button class="btn-cancel" onclick="closeRejectModal()">Cancel</button><button class="btn-danger" onclick="confirmRejectPayment()">Reject</button></div>
         </div>
     </div>
-
-    <!-- Edit User Modal -->
     <div class="modal-overlay" id="editUserModal">
         <div class="modal">
-            <h3><i class="fas fa-edit"></i> Edit User</h3>
+            <h3>Edit User</h3>
             <input type="hidden" id="editUsername">
-            <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
-            <div class="form-group"><label>Mobile</label><input type="text" id="editMobile"></div>
-            <div class="form-group"><label>State</label><input type="text" id="editState"></div>
-            <div class="form-group"><label>Preparing For</label><input type="text" id="editPreparingFor"></div>
-            <div class="form-group"><label>Target Exam</label><input type="text" id="editTargetExam"></div>
-            <div class="form-group"><label>Education</label><input type="text" id="editEducation"></div>
-            <div class="modal-btns">
-                <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-                <button class="btn-save" onclick="saveUserEdit()">Save Changes</button>
-            </div>
+            <div class="form-group"><label>Name</label><input id="editName"></div>
+            <div class="form-group"><label>Mobile</label><input id="editMobile"></div>
+            <div class="form-group"><label>State</label><input id="editState"></div>
+            <div class="form-group"><label>Preparing For</label><input id="editPreparingFor"></div>
+            <div class="form-group"><label>Target Exam</label><input id="editTargetExam"></div>
+            <div class="form-group"><label>Education</label><input id="editEducation"></div>
+            <div class="modal-btns"><button class="btn-cancel" onclick="closeEditModal()">Cancel</button><button class="btn-save" onclick="saveUserEdit()">Save</button></div>
         </div>
     </div>
-
-    <!-- Confirm Dialog -->
-    <div class="confirm-dialog" id="confirmDialog">
-        <div class="confirm-box">
-            <p id="confirmMessage">Are you sure?</p>
-            <div class="confirm-btns">
-                <button class="btn-cancel" onclick="closeConfirmDialog()">No</button>
-                <button class="btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
-            </div>
+    <div class="modal-overlay" id="challengeModal">
+        <div class="modal">
+            <h3 id="challengeModalTitle">Create Challenge</h3>
+            <input type="hidden" id="challengeId">
+            <div class="form-group"><label>Date</label><input type="date" id="challengeDate"></div>
+            <div class="form-group"><label>Question (Hindi)</label><input id="challengeQHindi"></div>
+            <div class="form-group"><label>Question (English)</label><input id="challengeQEnglish"></div>
+            <div class="form-group"><label>Options (Hindi) – JSON array</label><input id="challengeOptsHindi" placeholder='["A","B","C","D"]'></div>
+            <div class="form-group"><label>Options (English) – JSON array</label><input id="challengeOptsEnglish" placeholder='["A","B","C","D"]'></div>
+            <div class="form-group"><label>Correct Answer</label><input id="challengeAnswer"></div>
+            <div class="form-group"><label>Coin Reward</label><input type="number" id="challengeReward" value="20"></div>
+            <div class="form-group"><label>Active</label><select id="challengeActive"><option value="true">Yes</option><option value="false">No</option></select></div>
+            <div class="modal-btns"><button class="btn-cancel" onclick="closeChallengeModal()">Cancel</button><button class="btn-save" onclick="saveChallenge()">Save</button></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="replyReviewModal">
+        <div class="modal">
+            <h3>Reply to Review</h3>
+            <input type="hidden" id="replyReviewId">
+            <div class="form-group"><label>Admin Reply</label><textarea id="replyReviewText"></textarea></div>
+            <div class="modal-btns"><button class="btn-cancel" onclick="closeReplyReviewModal()">Cancel</button><button class="btn-save" onclick="submitReviewReply()">Reply</button></div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwaKMquyJKJjDZe1kBKpVbY6jqFPKMOGgCP_WLKpegUmqXskP8KtQ3U8Ns_P77KVd8QOg/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxDGnZ29sutkoDz_EeJEK0KqrfDhDQD0fpJUO0iYUCHCPo0Uv5qeWpUV4YOpSWlaPdqFg/exec';
         let pendingDelete = { type: '', id: '' };
-        let allPaymentsData = [];
 
-        // ==================== ADMIN LOGIN ====================
+        // ==================== LOGIN ====================
         async function adminLoginSubmit() {
             const username = document.getElementById('adminUsername').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
-            if (!username || !password) { document.getElementById('loginError').textContent = 'Please fill all fields'; return; }
+            if (!username || !password) { document.getElementById('loginError').textContent = 'Fill all fields'; return; }
             try {
-                const response = await fetch(`${API_URL}?action=adminLogin&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-                const data = await response.json();
+                const res = await fetch(`${API_URL}?action=adminLogin&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+                const data = await res.json();
                 if (data.success) {
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('mainPanel').style.display = 'flex';
                     localStorage.setItem('adminLoggedIn', 'true');
                     loadDashboardStats();
-                    loadPendingPaymentCount();
                 } else {
                     document.getElementById('loginError').textContent = data.error || 'Invalid credentials';
                 }
@@ -572,122 +492,95 @@
         function logout() {
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('mainPanel').style.display = 'none';
-            document.getElementById('adminUsername').value = '';
             document.getElementById('adminPassword').value = '';
-            document.getElementById('loginError').textContent = '';
             localStorage.removeItem('adminLoggedIn');
         }
 
-        // ==================== TAB SWITCHING ====================
+        // ==================== TABS ====================
         function switchAdminTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-            
-            const tabMap = { dashboard: 0, payments: 1, chats: 2, users: 3, results: 4 };
-            const buttons = document.querySelectorAll('.sidebar button');
-            if (buttons[tabMap[tab]]) buttons[tabMap[tab]].classList.add('active');
-            
+            const idx = ['dashboard','payments','chats','users','results','coinRequests','dailyChallenges','reviews','settings'].indexOf(tab);
+            const btns = document.querySelectorAll('.sidebar button');
+            if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
             document.getElementById(tab + 'Tab').classList.add('active');
-            
-            if (tab === 'chats') loadAllChatsForAdmin();
-            if (tab === 'users') loadAllUsers();
-            if (tab === 'results') loadAllResults();
-            if (tab === 'dashboard') { loadDashboardStats(); loadPendingPaymentCount(); }
-            if (tab === 'payments') loadAllPayments();
+
+            const loaders = {
+                dashboard: loadDashboardStats,
+                payments: loadAllPayments,
+                chats: loadAllChatsForAdmin,
+                users: loadAllUsers,
+                results: loadAllResults,
+                coinRequests: loadCoinRequests,
+                dailyChallenges: loadDailyChallenges,
+                reviews: loadAllReviews,
+                settings: loadSettings
+            };
+            if (loaders[tab]) loaders[tab]();
         }
 
         // ==================== DASHBOARD ====================
         async function loadDashboardStats() {
             try {
-                const [usersRes, resultsRes, chatsRes, paymentsRes] = await Promise.all([
-                    fetch(`${API_URL}?action=getAllUsers`),
-                    fetch(`${API_URL}?action=getAllResults`),
-                    fetch(`${API_URL}?action=getAllChats`),
-                    fetch(`${API_URL}?action=getAllPayments`)
-                ]);
-                const usersData = await usersRes.json();
-                const resultsData = await resultsRes.json();
-                const chatsData = await chatsRes.json();
-                const paymentsData = await paymentsRes.json();
-
-                document.getElementById('totalUsers').textContent = usersData.total || 0;
-                document.getElementById('totalTests').textContent = resultsData.total || 0;
-                document.getElementById('totalChats').textContent = chatsData.total || 0;
-                document.getElementById('totalPayments').textContent = paymentsData.total || 0;
-
-                if (paymentsData.success) {
-                    allPaymentsData = paymentsData.payments || [];
-                    document.getElementById('pendingCount').textContent = allPaymentsData.filter(p => p.status === 'Pending').length;
-                    document.getElementById('verifiedCount').textContent = allPaymentsData.filter(p => p.status === 'Verified').length;
-                    document.getElementById('rejectedCount').textContent = allPaymentsData.filter(p => p.status === 'Rejected').length;
-                }
-            } catch (e) { console.error('Dashboard error:', e); }
-        }
-
-        async function loadPendingPaymentCount() {
-            try {
-                const res = await fetch(`${API_URL}?action=getAllPayments`);
+                const res = await fetch(`${API_URL}?action=getDashboardStats`);
                 const data = await res.json();
                 if (data.success) {
-                    const pending = data.payments.filter(p => p.status === 'Pending').length;
-                    const badge = document.getElementById('pendingBadge');
-                    if (pending > 0) { badge.style.display = 'inline'; badge.textContent = pending; }
-                    else { badge.style.display = 'none'; }
+                    const stats = data.stats;
+                    document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+                    document.getElementById('totalTests').textContent = stats.totalResults || 0;
+                    document.getElementById('totalPayments').textContent = stats.totalPayments || 0;
+                    document.getElementById('totalReviews').textContent = stats.totalReviews || 0;
+                    document.getElementById('totalCoins').textContent = stats.totalCoins || 0;
                 }
-            } catch (e) {}
+                const payRes = await fetch(`${API_URL}?action=getAllPayments`);
+                const payData = await payRes.json();
+                if (payData.success) {
+                    const ps = payData.payments || [];
+                    document.getElementById('pendingCount').textContent = ps.filter(p => p.status === 'Pending').length;
+                    document.getElementById('verifiedCount').textContent = ps.filter(p => p.status === 'Verified').length;
+                    document.getElementById('rejectedCount').textContent = ps.filter(p => p.status === 'Rejected').length;
+                    document.getElementById('pendingBadge').textContent = ps.filter(p => p.status === 'Pending').length;
+                    document.getElementById('pendingBadge').style.display = ps.filter(p => p.status === 'Pending').length > 0 ? 'inline' : 'none';
+                }
+            } catch (e) { console.error(e); }
         }
 
         // ==================== PAYMENTS ====================
         async function loadAllPayments() {
+            const filter = document.getElementById('paymentFilter')?.value || '';
+            const search = document.getElementById('paymentSearch')?.value?.toLowerCase() || '';
             try {
-                const filter = document.getElementById('paymentFilter')?.value || '';
-                const search = document.getElementById('paymentSearch')?.value?.toLowerCase() || '';
-                
                 const res = await fetch(`${API_URL}?action=getAllPayments`);
                 const data = await res.json();
-                
                 if (data.success) {
-                    allPaymentsData = data.payments || [];
-                    
-                    // Apply filters
-                    let filtered = allPaymentsData;
-                    if (filter) filtered = filtered.filter(p => p.status === filter);
-                    if (search) filtered = filtered.filter(p => p.username.toLowerCase().includes(search) || (p.name && p.name.toLowerCase().includes(search)));
-                    
-                    // Update stats
-                    document.getElementById('payPendingCount').textContent = allPaymentsData.filter(p => p.status === 'Pending').length;
-                    document.getElementById('payVerifiedCount').textContent = allPaymentsData.filter(p => p.status === 'Verified').length;
-                    document.getElementById('payRejectedCount').textContent = allPaymentsData.filter(p => p.status === 'Rejected').length;
-                    
+                    let payments = data.payments || [];
+                    if (filter) payments = payments.filter(p => p.status === filter);
+                    if (search) payments = payments.filter(p => p.username.toLowerCase().includes(search) || (p.name && p.name.toLowerCase().includes(search)));
+                    document.getElementById('payPendingCount').textContent = (data.payments || []).filter(p => p.status === 'Pending').length;
+                    document.getElementById('payVerifiedCount').textContent = (data.payments || []).filter(p => p.status === 'Verified').length;
+                    document.getElementById('payRejectedCount').textContent = (data.payments || []).filter(p => p.status === 'Rejected').length;
                     const tbody = document.getElementById('paymentsTableBody');
-                    if (filtered.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#94a3b8;">No payments found</td></tr>';
+                    if (!payments.length) {
+                        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">No payments</td></tr>';
                     } else {
-                        tbody.innerHTML = filtered.map(p => {
+                        tbody.innerHTML = payments.map(p => {
                             const planBadge = p.planType === 'premium_plus' ? 'badge-plus' : p.planType === 'ultimate' ? 'badge-ultimate' : 'badge-premium';
                             const statusBadge = p.status === 'Verified' ? 'badge-success' : p.status === 'Rejected' ? 'badge-danger' : 'badge-warning';
-                            return `
-                            <tr>
+                            return `<tr>
                                 <td style="font-size:10px;">${p.paymentId}</td>
-                                <td><strong>${p.name || '--'}</strong><br><small style="color:#94a3b8;">@${p.username}</small></td>
+                                <td><strong>${p.name || '--'}</strong><br><small>@${p.username}</small></td>
                                 <td><span class="badge ${planBadge}">${p.planName || p.planType}</span></td>
                                 <td>₹${p.amount}</td>
                                 <td>${p.paymentMethod || '--'}</td>
                                 <td style="font-size:10px;">${p.transactionID || '--'}</td>
                                 <td><span class="badge ${statusBadge}">${p.status}</span></td>
-                                <td style="font-size:10px;">${new Date(p.requestDate).toLocaleDateString('en-IN')}</td>
-                                <td>
-                                    ${p.status === 'Pending' ? `
-                                        <button class="action-btn btn-verify" onclick="openVerifyModal('${p.paymentId}','${p.username}','${p.planName || p.planType}','${p.amount}','${p.transactionID || ''}')"><i class="fas fa-check"></i></button>
-                                        <button class="action-btn btn-reject" onclick="openRejectModal('${p.paymentId}')"><i class="fas fa-times"></i></button>
-                                    ` : (p.status === 'Verified' ? '<span style="color:#10b981;font-size:11px;">✅ Verified</span>' : '<span style="color:#ef4444;font-size:11px;">❌ Rejected</span>')}
-                                    ${p.validUntil ? `<br><small style="font-size:9px;color:#94a3b8;">Till: ${new Date(p.validUntil).toLocaleDateString('en-IN')}</small>` : ''}
-                                </td>
+                                <td>${new Date(p.requestDate).toLocaleDateString('en-IN')}</td>
+                                <td>${p.status === 'Pending' ? `<button class="action-btn btn-verify" onclick="openVerifyModal('${p.paymentId}','${p.username}','${p.planName||p.planType}','${p.amount}','${p.transactionID||''}')"><i class="fas fa-check"></i></button> <button class="action-btn btn-reject" onclick="openRejectModal('${p.paymentId}')"><i class="fas fa-times"></i></button>` : ''}</td>
                             </tr>`;
                         }).join('');
                     }
                 }
-            } catch (e) { console.error('Payments error:', e); }
+            } catch (e) { console.error(e); }
         }
 
         function openVerifyModal(paymentId, username, plan, amount, txnId) {
@@ -696,177 +589,100 @@
             document.getElementById('verifyPaymentUser').value = username;
             document.getElementById('verifyPaymentPlan').value = plan;
             document.getElementById('verifyPaymentAmount').value = '₹' + amount;
-            document.getElementById('verifyPaymentTxn').value = txnId;
             document.getElementById('verifyPaymentModal').classList.add('active');
         }
-
-        function closeVerifyModal() {
-            document.getElementById('verifyPaymentModal').classList.remove('active');
-        }
-
+        function closeVerifyModal() { document.getElementById('verifyPaymentModal').classList.remove('active'); }
         async function confirmVerifyPayment() {
-            const paymentId = document.getElementById('verifyPaymentId').value;
+            const id = document.getElementById('verifyPaymentId').value;
             const duration = document.getElementById('verifyDuration').value;
             const note = document.getElementById('verifyNote').value;
-
-            try {
-                const params = new URLSearchParams({
-                    action: 'verifyPayment',
-                    paymentId: paymentId,
-                    duration: duration,
-                    adminNote: note
-                });
-                const res = await fetch(API_URL, { method: 'POST', body: params });
-                const data = await res.json();
-                if (data.success) {
-                    Swal.fire({ icon: 'success', title: 'Payment Verified!', text: 'User has been granted premium access.', timer: 2000, showConfirmButton: false });
-                    closeVerifyModal();
-                    loadAllPayments();
-                    loadPendingPaymentCount();
-                } else {
-                    Swal.fire({ icon: 'error', title: 'Error', text: data.error || 'Failed to verify' });
-                }
-            } catch (e) { Swal.fire({ icon: 'error', title: 'Error', text: 'Network error' }); }
+            const params = new URLSearchParams({ action:'verifyPayment', paymentId:id, duration, adminNote:note });
+            const res = await fetch(API_URL, { method:'POST', body:params });
+            const data = await res.json();
+            if (data.success) { Swal.fire('Verified!','','success'); closeVerifyModal(); loadAllPayments(); loadDashboardStats(); }
+            else Swal.fire('Error', data.error, 'error');
         }
 
         function openRejectModal(paymentId) {
             document.getElementById('rejectPaymentId').value = paymentId;
             document.getElementById('rejectPaymentModal').classList.add('active');
         }
-
-        function closeRejectModal() {
-            document.getElementById('rejectPaymentModal').classList.remove('active');
-        }
-
+        function closeRejectModal() { document.getElementById('rejectPaymentModal').classList.remove('active'); }
         async function confirmRejectPayment() {
-            const paymentId = document.getElementById('rejectPaymentId').value;
+            const id = document.getElementById('rejectPaymentId').value;
             const reason = document.getElementById('rejectReason').value;
-
-            try {
-                const params = new URLSearchParams({ action: 'rejectPayment', paymentId: paymentId, reason: reason });
-                const res = await fetch(API_URL, { method: 'POST', body: params });
-                const data = await res.json();
-                if (data.success) {
-                    Swal.fire({ icon: 'info', title: 'Payment Rejected', text: 'The payment has been rejected.', timer: 2000, showConfirmButton: false });
-                    closeRejectModal();
-                    loadAllPayments();
-                    loadPendingPaymentCount();
-                } else {
-                    Swal.fire({ icon: 'error', title: 'Error', text: data.error || 'Failed to reject' });
-                }
-            } catch (e) { Swal.fire({ icon: 'error', title: 'Error', text: 'Network error' }); }
+            const params = new URLSearchParams({ action:'rejectPayment', paymentId:id, reason });
+            const res = await fetch(API_URL, { method:'POST', body:params });
+            const data = await res.json();
+            if (data.success) { Swal.fire('Rejected','','info'); closeRejectModal(); loadAllPayments(); loadDashboardStats(); }
+            else Swal.fire('Error', data.error, 'error');
         }
 
         // ==================== CHATS ====================
         async function loadAllChatsForAdmin() {
-            try {
-                const res = await fetch(`${API_URL}?action=getAllChats`);
-                const data = await res.json();
-                if (data.success && data.chats) {
-                    const container = document.getElementById('adminChatMessages');
-                    const select = document.getElementById('replyToSelect');
-                    const users = [...new Set(data.chats.filter(c => c.status !== 'deleted').map(c => c.username))];
-                    
-                    select.innerHTML = '<option value="">Reply to all</option>';
-                    users.forEach(u => {
-                        const userChat = data.chats.find(c => c.username === u);
-                        select.innerHTML += `<option value="${u}">${userChat?.name || u} (@${u})</option>`;
-                    });
-
-                    container.innerHTML = data.chats.map(chat => {
-                        const isAdmin = chat.isAdmin === 'true';
-                        const isDeleted = chat.status === 'deleted';
-                        const time = new Date(chat.timestamp).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
-                        let replyHtml = '';
-                        if (chat.replyToUsername) {
-                            replyHtml = `<div class="msg-reply-badge" title="Replying to ${chat.replyToName || chat.replyToUsername}">↩ Replying to @${chat.replyToUsername}</div>`;
-                        }
-                        return `
-                        <div class="msg-bubble ${isAdmin ? 'admin-msg' : 'user-msg'} ${isDeleted ? 'deleted' : ''}">
-                            <div class="msg-sender" style="color:${isAdmin ? '#fbbf24' : '#93c5fd'}">
-                                ${chat.name || 'User'} ${isAdmin ? '(Admin)' : ''} ${isDeleted ? '(Deleted)' : ''}
-                            </div>
-                            <div class="msg-text">${escapeHtml(chat.message)}</div>
-                            ${replyHtml}
-                            <div class="msg-time">${time} | ID: ${chat.chatId}</div>
-                        </div>`;
-                    }).join('');
-                    container.scrollTop = container.scrollHeight;
-                }
-            } catch (e) { console.error('Chats error:', e); }
+            const res = await fetch(`${API_URL}?action=getAllChats`);
+            const data = await res.json();
+            if (data.success) {
+                const chats = data.chats || [];
+                const users = [...new Set(chats.filter(c => c.status !== 'deleted').map(c => c.username))];
+                const select = document.getElementById('replyToSelect');
+                select.innerHTML = '<option value="">Reply to all</option>';
+                users.forEach(u => {
+                    const userChat = chats.find(c => c.username === u);
+                    select.innerHTML += `<option value="${u}">${userChat?.name || u} (@${u})</option>`;
+                });
+                document.getElementById('adminChatMessages').innerHTML = chats.map(chat => {
+                    const isAdmin = chat.isAdmin === 'true';
+                    const isDeleted = chat.status === 'deleted';
+                    const time = new Date(chat.timestamp).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+                    let replyHtml = chat.replyToUsername ? `<div class="msg-reply-badge">↩ Replying to @${chat.replyToUsername}</div>` : '';
+                    return `<div class="msg-bubble ${isAdmin ? 'admin-msg' : 'user-msg'} ${isDeleted ? 'deleted' : ''}">
+                        <div class="msg-sender">${chat.name || 'User'} ${isAdmin ? '(Admin)' : ''} ${isDeleted ? '(Deleted)' : ''}</div>
+                        <div class="msg-text">${chat.message}</div>${replyHtml}
+                        <div class="msg-time">${time} | ${chat.chatId}</div>
+                    </div>`;
+                }).join('');
+            }
         }
-
         async function sendAdminReply() {
             const replyTo = document.getElementById('replyToSelect').value;
             const message = document.getElementById('adminReplyInput').value.trim();
             if (!message) return;
-            try {
-                await fetch(`${API_URL}?action=adminReply&replyTo=${encodeURIComponent(replyTo || 'all')}&message=${encodeURIComponent(message)}&replyToUsername=${encodeURIComponent(replyTo)}`);
-                document.getElementById('adminReplyInput').value = '';
-                loadAllChatsForAdmin();
-            } catch (e) { console.error('Reply error:', e); }
+            await fetch(`${API_URL}?action=adminReply&replyTo=${encodeURIComponent(replyTo || 'all')}&message=${encodeURIComponent(message)}&replyToUsername=${encodeURIComponent(replyTo)}`);
+            document.getElementById('adminReplyInput').value = '';
+            loadAllChatsForAdmin();
         }
 
         // ==================== USERS ====================
         async function loadAllUsers() {
-            try {
-                const res = await fetch(`${API_URL}?action=getAllUsers`);
-                const data = await res.json();
-                const search = document.getElementById('userSearch')?.value?.toLowerCase() || '';
-                if (data.success && data.users) {
-                    let users = data.users;
-                    if (search) users = users.filter(u => u.username.toLowerCase().includes(search) || (u.name && u.name.toLowerCase().includes(search)));
-                    
-                    document.getElementById('usersTableBody').innerHTML = users.map(user => `
-                        <tr>
-                            <td><strong>${user.name}</strong></td>
-                            <td>@${user.username}</td>
-                            <td>${user.mobile}</td>
-                            <td>${user.email || '--'}</td>
-                            <td>${user.state || '--'}</td>
-                            <td><span class="badge badge-info">${user.preparingFor || '--'}</span></td>
-                            <td>${new Date(user.createdAt).toLocaleDateString('en-IN')}</td>
-                            <td>
-                                <button class="action-btn btn-edit" onclick='openEditModal(${JSON.stringify(user).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
-                                <button class="action-btn btn-delete" onclick='confirmDeleteUser("${user.username}")'><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `).join('');
-                }
-            } catch (e) { console.error('Users error:', e); }
+            const res = await fetch(`${API_URL}?action=getAllUsers`);
+            const data = await res.json();
+            const search = document.getElementById('userSearch')?.value?.toLowerCase() || '';
+            if (data.success) {
+                let users = data.users || [];
+                if (search) users = users.filter(u => u.username.toLowerCase().includes(search) || (u.name && u.name.toLowerCase().includes(search)));
+                document.getElementById('usersTableBody').innerHTML = users.map(user => `<tr>
+                    <td><strong>${user.name}</strong></td><td>@${user.username}</td><td>${user.mobile}</td><td>${user.email||'--'}</td>
+                    <td>${user.state||'--'}</td><td>${user.preparingFor||'--'}</td><td>${new Date(user.createdAt).toLocaleDateString('en-IN')}</td>
+                    <td><button class="action-btn btn-edit" onclick="openEditModal('${user.username}')">Edit</button> <button class="action-btn btn-delete" onclick="confirmDelete('user','${user.username}')">Del</button></td>
+                </tr>`).join('');
+            }
         }
 
-        // ==================== RESULTS ====================
-        async function loadAllResults() {
-            try {
-                const res = await fetch(`${API_URL}?action=getAllResults`);
-                const data = await res.json();
-                if (data.success) {
-                    document.getElementById('resultsTableBody').innerHTML = data.results.slice(0, 100).map(r => `
-                        <tr>
-                            <td>${r.name} (@${r.username})</td>
-                            <td>${r.testCode}</td>
-                            <td><span class="badge badge-success">${r.score}/${r.totalMarks}</span></td>
-                            <td>${r.accuracy}%</td>
-                            <td>✅${r.correct} ❌${r.wrong}</td>
-                            <td>${new Date(r.date).toLocaleDateString('en-IN')}</td>
-                            <td><button class="action-btn btn-delete" onclick='confirmDeleteResult("${r.timestamp}")'><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                    `).join('');
+        function openEditModal(username) {
+            fetch(`${API_URL}?action=getAllUsers`).then(r => r.json()).then(data => {
+                const user = (data.users||[]).find(u => u.username === username);
+                if (user) {
+                    document.getElementById('editUsername').value = username;
+                    document.getElementById('editName').value = user.name || '';
+                    document.getElementById('editMobile').value = user.mobile || '';
+                    document.getElementById('editState').value = user.state || '';
+                    document.getElementById('editPreparingFor').value = user.preparingFor || '';
+                    document.getElementById('editTargetExam').value = user.targetExam || '';
+                    document.getElementById('editEducation').value = user.education || '';
+                    document.getElementById('editUserModal').classList.add('active');
                 }
-            } catch (e) { console.error('Results error:', e); }
-        }
-
-        // ==================== EDIT USER ====================
-        function openEditModal(user) {
-            document.getElementById('editUsername').value = user.username;
-            document.getElementById('editName').value = user.name || '';
-            document.getElementById('editMobile').value = user.mobile || '';
-            document.getElementById('editState').value = user.state || '';
-            document.getElementById('editPreparingFor').value = user.preparingFor || '';
-            document.getElementById('editTargetExam').value = user.targetExam || '';
-            document.getElementById('editEducation').value = user.education || '';
-            document.getElementById('editUserModal').classList.add('active');
+            });
         }
         function closeEditModal() { document.getElementById('editUserModal').classList.remove('active'); }
         async function saveUserEdit() {
@@ -880,61 +696,212 @@
                 targetExam: document.getElementById('editTargetExam').value.trim(),
                 education: document.getElementById('editEducation').value.trim()
             });
-            try {
-                const res = await fetch(API_URL + '?' + params.toString());
-                const data = await res.json();
-                if (data.success) { Swal.fire({ icon:'success', title:'Updated!', timer:1500, showConfirmButton:false }); closeEditModal(); loadAllUsers(); }
-                else { Swal.fire({ icon:'error', title:'Error', text:data.error }); }
-            } catch (e) { Swal.fire({ icon:'error', title:'Error', text:'Failed to update' }); }
+            const res = await fetch(API_URL + '?' + params.toString());
+            const data = await res.json();
+            if (data.success) { Swal.fire('Updated!','','success'); closeEditModal(); loadAllUsers(); }
+            else Swal.fire('Error', data.error, 'error');
         }
 
-        // ==================== DELETE CONFIRMATIONS ====================
-        function confirmDeleteUser(username) {
-            pendingDelete = { type: 'user', id: username };
-            document.getElementById('confirmMessage').textContent = `Delete user "${username}"? This cannot be undone.`;
-            document.getElementById('confirmDialog').classList.add('active');
-            document.getElementById('confirmDeleteBtn').onclick = executeDelete;
+        // ==================== RESULTS ====================
+        async function loadAllResults() {
+            const res = await fetch(`${API_URL}?action=getAllResults`);
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('resultsTableBody').innerHTML = data.results.slice(0,200).map(r => `<tr>
+                    <td>${r.name} (@${r.username})</td><td>${r.testCode}</td><td>${r.score}/${r.totalMarks}</td><td>${r.accuracy}%</td>
+                    <td>✅${r.correct} ❌${r.wrong}</td><td>${new Date(r.date).toLocaleDateString('en-IN')}</td>
+                    <td><button class="action-btn btn-delete" onclick="confirmDelete('result','${r.timestamp}')">Del</button></td>
+                </tr>`).join('');
+            }
         }
-        function confirmDeleteResult(timestamp) {
-            pendingDelete = { type: 'result', id: timestamp };
-            document.getElementById('confirmMessage').textContent = 'Delete this result?';
-            document.getElementById('confirmDialog').classList.add('active');
-            document.getElementById('confirmDeleteBtn').onclick = executeDelete;
+
+        // ==================== COIN REQUESTS ====================
+        async function loadCoinRequests() {
+            const res = await fetch(`${API_URL}?action=getAllCoinRequests`);
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('coinRequestsBody').innerHTML = data.requests.map(r => {
+                    const statusBadge = r.status === 'Approved' ? 'badge-success' : r.status === 'Rejected' ? 'badge-danger' : 'badge-warning';
+                    return `<tr>
+                        <td>${r.requestId}</td><td>@${r.username}</td><td>${r.amount}</td><td>${r.reason}</td>
+                        <td><span class="badge ${statusBadge}">${r.status}</span></td><td>${new Date(r.requestDate).toLocaleDateString('en-IN')}</td>
+                        <td>${r.status === 'Pending' ? `<button class="action-btn btn-approve" onclick="approveCoinRequest('${r.requestId}')">Approve</button> <button class="action-btn btn-reject" onclick="rejectCoinRequest('${r.requestId}')">Reject</button>` : ''}</td>
+                    </tr>`;
+                }).join('');
+            }
         }
-        function closeConfirmDialog() { document.getElementById('confirmDialog').classList.remove('active'); pendingDelete = { type: '', id: '' }; }
+        async function approveCoinRequest(id) {
+            await fetch(`${API_URL}?action=approveCoinRequest&requestId=${id}`);
+            Swal.fire('Approved','','success');
+            loadCoinRequests();
+        }
+        async function rejectCoinRequest(id) {
+            await fetch(`${API_URL}?action=rejectCoinRequest&requestId=${id}`);
+            Swal.fire('Rejected','','info');
+            loadCoinRequests();
+        }
+
+        // ==================== DAILY CHALLENGES ====================
+        async function loadDailyChallenges() {
+            const res = await fetch(`${API_URL}?action=adminGetDailyChallenges`);
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('challengesBody').innerHTML = data.challenges.map(c => {
+                    const isActive = (c.active === 'true' || c.active === true || c.active === 'TRUE');
+                    return `<tr>
+                        <td>${c.challengeId}</td>
+                        <td>${c.date}</td>
+                        <td>${c.questionHindi}</td>
+                        <td>${c.correctAnswer}</td>
+                        <td>${c.coinReward}</td>
+                        <td><span class="badge ${isActive ? 'badge-success' : 'badge-danger'}">${isActive ? 'Active' : 'Inactive'}</span></td>
+                        <td>
+                            <button class="action-btn btn-edit" onclick="openChallengeEditModal('${c.challengeId}')">Edit</button>
+                            <button class="action-btn btn-delete" onclick="deleteChallenge('${c.challengeId}')">Del</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+        }
+        function openChallengeCreateModal() {
+            document.getElementById('challengeModalTitle').textContent = 'Create Challenge';
+            document.getElementById('challengeId').value = '';
+            document.getElementById('challengeDate').value = new Date().toISOString().slice(0,10);
+            document.getElementById('challengeQHindi').value = '';
+            document.getElementById('challengeQEnglish').value = '';
+            document.getElementById('challengeOptsHindi').value = '["A","B","C","D"]';
+            document.getElementById('challengeOptsEnglish').value = '["A","B","C","D"]';
+            document.getElementById('challengeAnswer').value = '';
+            document.getElementById('challengeReward').value = '20';
+            document.getElementById('challengeActive').value = 'true';
+            document.getElementById('challengeModal').classList.add('active');
+        }
+        function openChallengeEditModal(id) {
+            fetch(`${API_URL}?action=adminGetDailyChallenges`).then(r => r.json()).then(data => {
+                const chal = data.challenges.find(c => c.challengeId === id);
+                if (chal) {
+                    document.getElementById('challengeModalTitle').textContent = 'Edit Challenge';
+                    document.getElementById('challengeId').value = chal.challengeId;
+                    document.getElementById('challengeDate').value = chal.date;
+                    document.getElementById('challengeQHindi').value = chal.questionHindi;
+                    document.getElementById('challengeQEnglish').value = chal.questionEnglish;
+                    document.getElementById('challengeOptsHindi').value = chal.optionsHindi;
+                    document.getElementById('challengeOptsEnglish').value = chal.optionsEnglish;
+                    document.getElementById('challengeAnswer').value = chal.correctAnswer;
+                    document.getElementById('challengeReward').value = chal.coinReward;
+                    document.getElementById('challengeActive').value = chal.active;
+                    document.getElementById('challengeModal').classList.add('active');
+                }
+            });
+        }
+        function closeChallengeModal() { document.getElementById('challengeModal').classList.remove('active'); }
+        async function saveChallenge() {
+            const id = document.getElementById('challengeId').value;
+            const action = id ? 'updateDailyChallenge' : 'createDailyChallenge';
+            const params = new URLSearchParams({ action });
+            params.append('challengeId', id || '');
+            params.append('date', document.getElementById('challengeDate').value);
+            params.append('questionHindi', document.getElementById('challengeQHindi').value);
+            params.append('questionEnglish', document.getElementById('challengeQEnglish').value);
+            params.append('optionsHindi', document.getElementById('challengeOptsHindi').value);
+            params.append('optionsEnglish', document.getElementById('challengeOptsEnglish').value);
+            params.append('correctAnswer', document.getElementById('challengeAnswer').value);
+            params.append('coinReward', document.getElementById('challengeReward').value);
+            params.append('active', document.getElementById('challengeActive').value);
+            const res = await fetch(API_URL, { method: 'POST', body: params });
+            const data = await res.json();
+            if (data.success) { Swal.fire('Saved!','','success'); closeChallengeModal(); loadDailyChallenges(); }
+            else Swal.fire('Error', data.error, 'error');
+        }
+        async function deleteChallenge(id) {
+            if (confirm('Delete challenge?')) {
+                await fetch(`${API_URL}?action=deleteDailyChallenge&challengeId=${id}`);
+                loadDailyChallenges();
+            }
+        }
+
+        // ==================== REVIEWS ====================
+        async function loadAllReviews() {
+            const res = await fetch(`${API_URL}?action=adminGetAllReviews`);
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('reviewsBody').innerHTML = data.reviews.map(r => {
+                    const statusBadge = r.status === 'active' ? 'badge-success' : 'badge-danger';
+                    return `<tr>
+                        <td>${r.reviewId}</td><td>@${r.username}</td><td>${'⭐'.repeat(r.rating)}</td><td>${r.reviewText} ${r.adminReply ? `<br><b>Reply:</b> ${r.adminReply}` : ''}</td>
+                        <td><span class="badge ${statusBadge}">${r.status}</span></td><td>${new Date(r.date).toLocaleDateString('en-IN')}</td>
+                        <td>
+                            <button class="action-btn btn-activate" onclick="moderateReview('${r.reviewId}','${r.status==='active'?'deleted':'active'}')">${r.status==='active'?'Hide':'Show'}</button>
+                            <button class="action-btn btn-reply" onclick="openReplyReviewModal('${r.reviewId}')">Reply</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+        }
+        async function moderateReview(id, status) {
+            await fetch(`${API_URL}?action=moderateReview&reviewId=${id}&status=${status}`);
+            loadAllReviews();
+        }
+        function openReplyReviewModal(reviewId) {
+            document.getElementById('replyReviewId').value = reviewId;
+            document.getElementById('replyReviewModal').classList.add('active');
+        }
+        function closeReplyReviewModal() { document.getElementById('replyReviewModal').classList.remove('active'); }
+        async function submitReviewReply() {
+            const id = document.getElementById('replyReviewId').value;
+            const text = document.getElementById('replyReviewText').value;
+            await fetch(`${API_URL}?action=adminReplyReview&reviewId=${id}&adminReply=${encodeURIComponent(text)}`);
+            Swal.fire('Replied!','','success');
+            closeReplyReviewModal();
+            loadAllReviews();
+        }
+
+        // ==================== SETTINGS ====================
+        async function loadSettings() {
+            const res = await fetch(`${API_URL}?action=getCoinSettings`);
+            const data = await res.json();
+            if (data.success) {
+                const settings = data.settings;
+                let html = '';
+                for (const [key, value] of Object.entries(settings)) {
+                    html += `<tr><td>${key}</td><td><input id="setting_${key}" value="${value}" style="background:#334155;color:white;border:1px solid #475569;padding:6px 10px;border-radius:6px;font-size:12px;width:120px;"></td><td><button class="action-btn btn-edit" onclick="updateSetting('${key}')">Save</button></td></tr>`;
+                }
+                document.getElementById('settingsBody').innerHTML = html;
+            }
+        }
+        async function updateSetting(key) {
+            const value = document.getElementById('setting_' + key).value;
+            await fetch(`${API_URL}?action=updateCoinSettings&key=${key}&value=${value}`);
+            Swal.fire('Updated','','success');
+        }
+
+        // ==================== DELETE HELPERS ====================
+        function confirmDelete(type, id) {
+            pendingDelete = { type, id };
+            if (confirm(`Delete ${type}?`)) executeDelete();
+        }
         async function executeDelete() {
             const { type, id } = pendingDelete;
             const action = type === 'user' ? 'deleteUser' : 'deleteResult';
             const param = type === 'user' ? 'username' : 'timestamp';
-            try {
-                const res = await fetch(`${API_URL}?action=${action}&${param}=${encodeURIComponent(id)}`);
-                const data = await res.json();
-                if (data.success) { Swal.fire({ icon:'success', title:'Deleted!', timer:1500, showConfirmButton:false }); closeConfirmDialog(); if (type==='user') loadAllUsers(); if (type==='result') loadAllResults(); }
-                else { Swal.fire({ icon:'error', title:'Error', text:data.error }); }
-            } catch (e) { Swal.fire({ icon:'error', title:'Error', text:'Failed to delete' }); }
+            await fetch(`${API_URL}?action=${action}&${param}=${encodeURIComponent(id)}`);
+            if (type === 'user') loadAllUsers();
+            if (type === 'result') loadAllResults();
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Auto-refresh chats
+        // Auto refresh
         setInterval(() => {
             if (document.getElementById('chatsTab')?.classList.contains('active')) loadAllChatsForAdmin();
         }, 8000);
+        setInterval(() => {
+            if (document.getElementById('dashboardTab')?.classList.contains('active')) loadDashboardStats();
+        }, 30000);
 
-        // Auto-refresh pending count
-        setInterval(loadPendingPaymentCount, 30000);
-
-        // Init
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainPanel').style.display = 'flex';
             loadDashboardStats();
-            loadPendingPaymentCount();
         }
     </script>
 </body>
-</html>
+                                                                                                                                                                                                  </html>
