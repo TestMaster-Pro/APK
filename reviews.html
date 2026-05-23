@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TestMaster Pro · Reviews & Ratings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* ==================================================
+           DESIGN TOKENS & RESET (same as dashboard)
+           ================================================== */
+        :root {
+            --primary-50: #eef2ff; --primary-100: #e0e7ff; --primary-200: #c7d2fe; --primary-300: #a5b4fc;
+            --primary-400: #818cf8; --primary-500: #6366f1; --primary-600: #4f46e5; --primary-700: #4338ca; --primary-800: #3730a3;
+            --accent-cyan: #06b6d4; --accent-purple: #8b5cf6; --accent-pink: #ec4899; --accent-amber: #f59e0b;
+            --accent-emerald: #10b981; --accent-rose: #f43f5e; --accent-sky: #0ea5e9;
+            --slate-0: #ffffff; --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+            --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+            --bg-body: #f0f4ff; --bg-card: rgba(255, 255, 255, 0.82); --bg-elevated: rgba(255, 255, 255, 0.94);
+            --border-glass: rgba(255, 255, 255, 0.6); --text-primary: var(--slate-900); --text-secondary: var(--slate-600);
+            --text-tertiary: var(--slate-400);
+            --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+            --radius-sm: 10px; --radius-md: 14px; --radius-lg: 18px; --radius-xl: 24px; --radius-2xl: 28px; --radius-full: 9999px;
+            --shadow-xs: 0 1px 3px rgba(15,23,42,0.04); --shadow-sm: 0 2px 8px rgba(15,23,42,0.06);
+            --shadow-md: 0 8px 24px -4px rgba(15,23,42,0.08); --shadow-lg: 0 16px 40px -8px rgba(15,23,42,0.12);
+            --shadow-glow-primary: 0 8px 24px -4px rgba(99,102,241,0.35);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --duration-fast: 150ms; --duration-base: 250ms; --duration-slow: 350ms;
+            --sidebar-width: 300px; --max-width: 1200px; --header-height: 64px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior:smooth; height:100%; font-size:16px; }
+        body {
+            font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+            background:var(--bg-body); color:var(--text-primary);
+            min-height:100vh; min-height:100dvh; overflow-x:hidden;
+            -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            overscroll-behavior-y:contain;
+        }
+        body.sidebar-open, body.sheet-open { overflow:hidden; position:fixed; width:100%; height:100%; }
+
+        /* Ambient Background */
+        .ambient-bg { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+        .ambient-mesh {
+            position:absolute; inset:0;
+            background: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99,102,241,0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse 60% 60% at 80% 20%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse 70% 40% at 50% 90%, rgba(6,182,212,0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse 50% 50% at 10% 80%, rgba(16,185,129,0.05) 0%, transparent 50%);
+            filter:blur(60px); animation:meshShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes meshShift { 0%{transform:translate(0,0) scale(1);} 33%{transform:translate(2%,-2%) scale(1.02);} 66%{transform:translate(-1%,1%) scale(0.98);} 100%{transform:translate(0,0) scale(1);} }
+        .ambient-grid {
+            position:absolute; inset:0;
+            background-image: linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+            background-size:60px 60px;
+            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
+        }
+        .ambient-grain {
+            position:absolute; inset:0; opacity:0.025;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size:256px 256px;
+        }
+        .orb {
+            position:absolute; border-radius:50%; filter:blur(40px); opacity:0.4;
+            animation:orbFloat var(--orb-duration,12s) var(--ease-out) infinite alternate;
+        }
+        @keyframes orbFloat { 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(var(--tx,30px),var(--ty,-40px)) scale(1.1);} }
+
+        /* Sidebar & Header (identical to dashboard) */
+        .sidebar-backdrop { position:fixed; inset:0; background:rgba(15,23,42,0.45); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:250; opacity:0; visibility:hidden; transition:opacity var(--duration-slow) var(--ease-out), visibility var(--duration-slow); }
+        .sidebar-backdrop.active { opacity:1; visibility:visible; }
+        .sidebar-drawer {
+            position:fixed; top:0; left:0; height:100%; height:100dvh; width:min(var(--sidebar-width),85vw);
+            background:var(--bg-elevated); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+            z-index:251; transform:translateX(-110%); transition:transform var(--duration-slow) var(--ease-out);
+            display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.15);
+            border-radius:0 var(--radius-xl) var(--radius-xl) 0; overflow:hidden;
+        }
+        .sidebar-backdrop.active .sidebar-drawer { transform:translateX(0); }
+        .sidebar-header {
+            background:linear-gradient(135deg,var(--primary-600),var(--accent-purple)); padding:var(--space-5);
+            display:flex; align-items:center; gap:var(--space-3); position:relative; flex-shrink:0;
+        }
+        .sidebar-logo-icon { width:42px; height:42px; background:rgba(255,255,255,0.2); backdrop-filter:blur(8px); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:20px; color:white; flex-shrink:0; border:1px solid rgba(255,255,255,0.2); }
+        .sidebar-brand-meta h2 { color:white; font-weight:800; font-size:15px; letter-spacing:-0.3px; line-height:1.2; }
+        .sidebar-brand-meta span { color:rgba(255,255,255,0.75); font-size:10px; font-weight:500; letter-spacing:0.5px; }
+        .sidebar-close { position:absolute; top:var(--space-3); right:var(--space-3); width:32px; height:32px; border-radius:var(--radius-full); background:rgba(255,255,255,0.15); border:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--duration-fast) var(--ease-out); backdrop-filter:blur(4px); }
+        .sidebar-close:hover { background:rgba(255,255,255,0.3); transform:rotate(90deg); }
+        .sidebar-profile { padding:var(--space-4) var(--space-5); background:linear-gradient(180deg,var(--primary-50),transparent); border-bottom:1px solid var(--slate-200); display:flex; align-items:center; gap:var(--space-3); flex-shrink:0; }
+        .sidebar-avatar { width:48px; height:48px; border-radius:var(--radius-lg); background:linear-gradient(135deg,var(--primary-100),var(--primary-200)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:var(--primary-700); flex-shrink:0; border:2.5px solid white; box-shadow:var(--shadow-sm); overflow:hidden; }
+        .sidebar-avatar img { width:100%; height:100%; object-fit:cover; }
+        .sidebar-profile-info { overflow:hidden; }
+        .sidebar-profile-info .name { font-weight:700; font-size:14px; color:var(--slate-800); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .sidebar-profile-info .role { font-size:11px; color:var(--primary-600); font-weight:600; background:var(--primary-100); padding:2px 10px; border-radius:var(--radius-full); display:inline-block; margin-top:2px; }
+        .sidebar-scroll { flex:1; overflow-y:auto; padding:var(--space-3); display:flex; flex-direction:column; gap:2px; -webkit-overflow-scrolling:touch; }
+        .nav-section-label { font-size:10px; text-transform:uppercase; letter-spacing:1.2px; color:var(--slate-400); font-weight:700; padding:var(--space-4) var(--space-3) var(--space-1); }
+        .nav-item { display:flex; align-items:center; gap:var(--space-3); padding:11px var(--space-3); border-radius:var(--radius-md); cursor:pointer; font-weight:600; font-size:13px; color:var(--slate-600); transition:all var(--duration-fast) var(--ease-out); border:none; background:transparent; width:100%; text-align:left; font-family:inherit; letter-spacing:-0.1px; position:relative; }
+        .nav-item:hover { background:var(--slate-100); color:var(--slate-800); transform:translateX(3px); }
+        .nav-item:active { transform:scale(0.97); transition:80ms; }
+        .nav-item.active { background:var(--primary-50); color:var(--primary-600); font-weight:700; box-shadow:inset 2px 0 0 var(--primary-500); }
+        .nav-icon-box { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; transition:transform var(--duration-fast) var(--ease-spring); }
+        .nav-item:hover .nav-icon-box { transform:scale(1.08); }
+        .nav-item.active .nav-icon-box { background:var(--primary-100); color:var(--primary-600); }
+        .nav-icon-box.style-dashboard { background:var(--primary-50); color:var(--primary-600); }
+        .nav-icon-box.style-review { background:#fef2f2; color:#b91c1c; }
+        .sidebar-footer { padding:var(--space-4) var(--space-5); background:var(--slate-50); border-top:1px solid var(--slate-200); flex-shrink:0; }
+        .contact-link { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--radius-md); font-size:11px; color:var(--slate-500); text-decoration:none; transition:all var(--duration-fast); font-weight:500; cursor:pointer; }
+        .contact-link:hover { background:var(--slate-100); color:var(--slate-700); }
+        .sidebar-version { text-align:center; font-size:10px; color:var(--slate-300); padding:var(--space-2); flex-shrink:0; }
+
+        .app-header { position:sticky; top:0; z-index:100; height:var(--header-height); background:rgba(255,255,255,0.75); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.6); box-shadow:0 1px 12px rgba(15,23,42,0.04); display:flex; align-items:center; justify-content:space-between; padding:0 var(--space-3); gap:var(--space-2); }
+        .header-left { display:flex; align-items:center; gap:var(--space-2); flex-shrink:0; min-width:0; }
+        .menu-trigger { width:40px; height:40px; border-radius:var(--radius-md); background:var(--slate-100); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--slate-600); font-size:18px; transition:all var(--duration-fast) var(--ease-out); flex-shrink:0; }
+        .menu-trigger:hover { background:var(--slate-200); color:var(--slate-800); }
+        .brand-mark { display:flex; align-items:center; gap:8px; font-weight:800; font-size:clamp(14px,3.5vw,17px); background:linear-gradient(135deg,var(--primary-600),var(--accent-purple),var(--accent-cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; white-space:nowrap; letter-spacing:-0.3px; }
+        .header-right { display:flex; align-items:center; gap:var(--space-2); flex-shrink:0; }
+        .header-pill { display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:var(--radius-full); font-size:11px; font-weight:700; cursor:pointer; transition:all var(--duration-fast) var(--ease-out); white-space:nowrap; border:none; font-family:inherit; }
+        .pill-premium { background:linear-gradient(135deg,var(--accent-amber),#d97706); color:white; box-shadow:0 2px 8px rgba(245,158,11,0.25); text-decoration:none; }
+        .avatar-btn { width:36px; height:36px; border-radius:var(--radius-md); background:linear-gradient(135deg,var(--primary-100),var(--primary-200)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--primary-700); flex-shrink:0; box-shadow:var(--shadow-sm); cursor:pointer; transition:all var(--duration-fast) var(--ease-out); overflow:hidden; border:none; }
+        .avatar-btn img { width:100%; height:100%; object-fit:cover; }
+
+        .main-wrapper { max-width:var(--max-width); margin:0 auto; padding:var(--space-4) var(--space-3) var(--space-10); width:100%; position:relative; z-index:2; display:flex; flex-direction:column; gap:var(--space-5); }
+        @media (min-width:640px){ .main-wrapper { padding:var(--space-6) var(--space-5) var(--space-10); } }
+
+        /* Review-specific styles */
+        .review-header-card {
+            background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,255,255,0.7));
+            backdrop-filter:blur(16px); border-radius:var(--radius-xl); padding:var(--space-5);
+            border:1px solid var(--border-glass); box-shadow:var(--shadow-md); animation:slideUp var(--duration-slow) var(--ease-out) both;
+            display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center; justify-content:space-between;
+        }
+        @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+        .rating-summary { display:flex; align-items:center; gap:var(--space-4); }
+        .avg-rating-box { text-align:center; background:linear-gradient(135deg,var(--accent-amber),#fbbf24); border-radius:var(--radius-lg); padding:var(--space-4) var(--space-5); color:white; box-shadow:0 8px 20px rgba(245,158,11,0.3); }
+        .avg-rating-box .big-score { font-size:42px; font-weight:800; line-height:1; }
+        .stars-display { color:#fbbf24; font-size:20px; letter-spacing:2px; }
+        .review-count { font-size:14px; color:var(--slate-400); }
+        .review-form-card {
+            background:var(--bg-card); backdrop-filter:blur(10px); border-radius:var(--radius-lg);
+            padding:var(--space-5); border:1px solid var(--border-glass); box-shadow:var(--shadow-sm);
+            animation:slideUp var(--duration-slow) var(--ease-out) 0.1s both;
+        }
+        .star-input { display:flex; gap:4px; font-size:28px; cursor:pointer; color:var(--slate-300); user-select:none; }
+        .star-input .fa-star.active, .star-input .fa-star:hover { color:var(--accent-amber); }
+        .input-group { margin-bottom:var(--space-4); }
+        .input-group label { display:block; font-weight:700; font-size:13px; color:var(--slate-600); margin-bottom:var(--space-2); }
+        .input-group textarea {
+            width:100%; padding:12px; border-radius:var(--radius-md); border:1.5px solid var(--slate-200);
+            font-family:inherit; font-size:13px; resize:vertical; transition:border var(--duration-fast);
+            background:white; color:var(--slate-700);
+        }
+        .input-group textarea:focus { outline:none; border-color:var(--primary-400); box-shadow:0 0 0 4px rgba(99,102,241,0.08); }
+        .btn-submit {
+            background:linear-gradient(135deg,var(--accent-rose),#dc2626); color:white; border:none;
+            padding:10px 24px; border-radius:var(--radius-full); font-weight:700; font-size:13px;
+            cursor:pointer; transition:all var(--duration-fast) var(--ease-out); font-family:inherit;
+            display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(244,63,94,0.3);
+        }
+        .btn-submit:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(244,63,94,0.4); }
+        .btn-submit:disabled { background:var(--slate-300); box-shadow:none; cursor:not-allowed; transform:none; }
+
+        .reviews-grid {
+            display:grid; grid-template-columns:1fr; gap:var(--space-4);
+            animation:slideUp var(--duration-slow) var(--ease-out) 0.2s both;
+        }
+        @media (min-width:640px){ .reviews-grid{ grid-template-columns:repeat(2,1fr); } }
+        @media (min-width:900px){ .reviews-grid{ grid-template-columns:repeat(3,1fr); } }
+        .review-card {
+            background:var(--bg-card); backdrop-filter:blur(8px); border-radius:var(--radius-xl);
+            padding:var(--space-5); border:1px solid var(--border-glass); box-shadow:var(--shadow-sm);
+            transition:all var(--duration-base) var(--ease-out); display:flex; flex-direction:column; gap:var(--space-3);
+            position:relative; overflow:hidden;
+        }
+        .review-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+        .review-header { display:flex; align-items:center; gap:var(--space-3); }
+        .review-avatar { width:40px; height:40px; border-radius:var(--radius-md); background:linear-gradient(135deg,var(--primary-100),var(--primary-200)); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--primary-700); flex-shrink:0; overflow:hidden; }
+        .review-avatar img { width:100%; height:100%; object-fit:cover; }
+        .review-meta { flex:1; min-width:0; }
+        .review-name { font-weight:700; font-size:14px; color:var(--slate-800); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .review-date { font-size:11px; color:var(--slate-400); }
+        .review-stars { color:#fbbf24; font-size:14px; letter-spacing:1px; }
+        .review-text { font-size:13px; color:var(--slate-600); line-height:1.5; word-break:break-word; }
+        .admin-reply-box {
+            background:var(--primary-50); border-radius:var(--radius-md); padding:var(--space-3); margin-top:var(--space-2);
+            border-left:3px solid var(--primary-400); font-size:12px; color:var(--slate-700);
+            display:none;
+        }
+        .admin-reply-box.visible { display:block; }
+        .review-actions {
+            display:flex; gap:var(--space-2); margin-top:var(--space-2);
+        }
+        .btn-icon {
+            background:transparent; border:1px solid var(--slate-300); border-radius:var(--radius-md);
+            padding:6px 10px; cursor:pointer; font-size:12px; color:var(--slate-600); transition:all var(--duration-fast);
+            font-family:inherit; display:flex; align-items:center; gap:4px;
+        }
+        .btn-icon:hover { background:var(--slate-100); border-color:var(--slate-400); color:var(--slate-800); }
+        .btn-icon.delete:hover { background:#fee2e2; border-color:#fecaca; color:#dc2626; }
+        .empty-reviews {
+            text-align:center; padding:var(--space-10); color:var(--slate-400); animation:fadeIn var(--duration-base) ease-out;
+        }
+        .empty-reviews i { font-size:40px; margin-bottom:var(--space-3); display:block; opacity:0.4; color:var(--slate-300); }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+        .app-footer { margin-top:auto; background:linear-gradient(135deg,var(--slate-800),var(--slate-900)); color:var(--slate-400); padding:var(--space-8) var(--space-5); text-align:center; font-size:12px; z-index:2; position:relative; }
+        .footer-inner { max-width:600px; margin:0 auto; }
+        .footer-brand { font-weight:800; font-size:16px; color:white; margin-bottom:var(--space-2); }
+        .footer-social { margin-top:var(--space-3); display:flex; justify-content:center; gap:var(--space-4); }
+        .footer-social a { color:var(--slate-400); text-decoration:none; font-size:14px; }
+
+        .fab { position:fixed; bottom:24px; right:20px; z-index:90; width:52px; height:52px; border-radius:var(--radius-full); background:linear-gradient(135deg,var(--primary-500),var(--accent-purple)); color:white; border:none; cursor:pointer; font-size:22px; box-shadow:var(--shadow-lg); display:flex; align-items:center; justify-content:center; transition:all var(--duration-base) var(--ease-out); }
+        .fab:hover { transform:scale(1.08); }
+        .hidden { display:none !important; }
+        ::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-thumb { background:var(--slate-300); border-radius:10px; }
+        @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;} }
+    </style>
+</head>
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="ambient-mesh"></div><div class="ambient-grid"></div><div class="ambient-grain"></div>
+        <div class="orb" style="width:300px;height:300px;background:rgba(99,102,241,0.15);top:10%;left:-5%;--orb-duration:14s;--tx:40px;--ty:-30px;"></div>
+        <div class="orb" style="width:250px;height:250px;background:rgba(139,92,246,0.1);top:60%;right:-5%;--orb-duration:18s;--tx:-30px;--ty:-50px;"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-backdrop hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar-drawer" id="sidebar" onclick="event.stopPropagation()">
+            <div class="sidebar-header">
+                <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-meta"><h2>TestMaster Pro</h2><span>Smart Learning Platform</span></div>
+                <button class="sidebar-close" onclick="closeSidebarDirect()" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="sidebar-profile">
+                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                <div class="sidebar-profile-info">
+                    <div class="name" id="sidebarUserName">Student</div>
+                    <span class="role" id="sidebarUserTag">Learner</span>
+                </div>
+            </div>
+            <nav class="sidebar-scroll">
+                <div class="nav-section-label">Main Menu</div>
+                <button class="nav-item" onclick="sidebarNavigate('dashboard')"><span class="nav-icon-box style-dashboard"><i class="fas fa-th-large"></i></span> Dashboard</button>
+                <button class="nav-item active" onclick="sidebarNavigate('reviews')"><span class="nav-icon-box style-review"><i class="fas fa-star"></i></span> Reviews & Ratings</button>
+                <button class="nav-item" onclick="sidebarNavigate('leaderboard')"><span class="nav-icon-box" style="background:#fefce8;color:#ca8a04;"><i class="fas fa-trophy"></i></span> Leaderboard</button>
+                <button class="nav-item" onclick="sidebarNavigate('chat')"><span class="nav-icon-box" style="background:#ecfeff;color:var(--accent-cyan);"><i class="fas fa-comments"></i></span> Chat</button>
+                <button class="nav-item" onclick="sidebarNavigate('premium')"><span class="nav-icon-box" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#d97706;"><i class="fas fa-crown"></i></span> Premium</button>
+                <div class="nav-section-label">Account</div>
+                <button class="nav-item" onclick="sidebarNavigate('profile')"><span class="nav-icon-box" style="background:#f5f3ff;color:var(--accent-purple);"><i class="fas fa-user-circle"></i></span> Profile</button>
+                <button class="nav-item" onclick="sidebarNavigate('logout')"><span class="nav-icon-box" style="background:#fef2f2;color:#dc2626;"><i class="fas fa-sign-out-alt"></i></span> Logout</button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="nav-section-label" style="padding:0 0 8px;">Contact</div>
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="contact-link"><i class="fas fa-envelope" style="color:#ea4335;"></i> testmaster.helpdesk@gmail.com</a>
+                <a href="https://t.me/cuet007_bot" class="contact-link"><i class="fab fa-telegram-plane" style="color:#26a7de;"></i> @cuet007_bot</a>
+            </div>
+            <div class="sidebar-version">TestMaster Pro v2.0</div>
+        </aside>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <button class="menu-trigger" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="brand-mark" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i> TestMaster Pro</div>
+        </div>
+        <div class="header-right">
+            <span class="welcome-text-header" id="welcomeUser">Hi</span>
+            <a href="payment.html" class="header-pill pill-premium"><i class="fas fa-crown"></i> Premium</a>
+            <button class="avatar-btn" id="userInitial" onclick="openSidebar()">S</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+        <!-- Rating Summary & Form -->
+        <section class="review-header-card" id="ratingSummaryCard">
+            <div class="rating-summary">
+                <div class="avg-rating-box">
+                    <div class="big-score" id="avgRating">--</div>
+                    <div class="stars-display" id="avgStars">☆</div>
+                    <div style="font-size:12px; opacity:0.9;" id="reviewCount">0 reviews</div>
+                </div>
+                <div>
+                    <h1 style="font-weight:800; font-size:clamp(20px,4vw,26px);">Test Reviews</h1>
+                    <p style="color:var(--slate-500);">See what students say about our tests</p>
+                </div>
+            </div>
+            <div style="flex-shrink:0;">
+                <i class="fas fa-star" style="font-size:48px; color:var(--accent-amber); opacity:0.6;"></i>
+            </div>
+        </section>
+
+        <!-- Submit Review Form -->
+        <section class="review-form-card" id="submitReviewCard">
+            <h2 style="font-weight:800; font-size:18px; margin-bottom:var(--space-3);">Write a Review</h2>
+            <div id="alreadyReviewed" class="hidden" style="background:#fef2f2; padding:10px 14px; border-radius:var(--radius-md); color:#b91c1c; font-weight:600; font-size:13px; margin-bottom:var(--space-4);">
+                You've already submitted a review. Thank you!
+            </div>
+            <div id="reviewFormContent">
+                <div class="input-group">
+                    <label>Your Rating</label>
+                    <div class="star-input" id="starContainer">
+                        <i class="fa-solid fa-star" data-value="1"></i>
+                        <i class="fa-solid fa-star" data-value="2"></i>
+                        <i class="fa-solid fa-star" data-value="3"></i>
+                        <i class="fa-solid fa-star" data-value="4"></i>
+                        <i class="fa-solid fa-star" data-value="5"></i>
+                    </div>
+                    <input type="hidden" id="ratingValue" value="0">
+                </div>
+                <div class="input-group">
+                    <label>Your Review</label>
+                    <textarea id="reviewText" rows="3" placeholder="Share your experience with the tests..."></textarea>
+                </div>
+                <button class="btn-submit" id="submitReviewBtn" onclick="submitReview()">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </div>
+        </section>
+
+        <!-- Reviews List -->
+        <div class="reviews-grid" id="reviewsContainer">
+            <div class="empty-reviews"><i class="fas fa-comment-slash"></i><p>No reviews yet. Be the first!</p></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">TestMaster<span style="color:#fbbf24;">Pro</span></div>
+            <p>© 2026 TestMaster Pro. All Rights Reserved.</p>
+            <div class="footer-social">
+                <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://t.me/cuet007_bot" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+    <script>
+        // ==============================================
+        // CONFIG & STATE
+        // ==============================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxDGnZ29sutkoDz_EeJEK0KqrfDhDQD0fpJUO0iYUCHCPo0Uv5qeWpUV4YOpSWlaPdqFg/exec';
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+        let allReviews = [];
+        let userHasReviewed = false;
+        let isAdmin = sessionStorage.getItem('adminLogged') === 'true'; // Admin flag from session
+
+        // ==============================================
+        // UI HELPERS
+        // ==============================================
+        function setAvatar(elId, userObj) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            if (userObj?.avatarUrl) el.innerHTML = `<img src="${userObj.avatarUrl}" alt="avatar">`;
+            else if (userObj?.profilePicUrl) el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="avatar">`;
+            else el.textContent = userObj?.name ? userObj.name.charAt(0).toUpperCase() : 'S';
+        }
+        setAvatar('userInitial', user);
+        setAvatar('sidebarAvatar', user);
+        document.getElementById('sidebarUserName').textContent = user.name || 'Student';
+        document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
+        document.getElementById('welcomeUser').textContent = `Hi, ${user.name.split(' ')[0]}`;
+
+        // Admin login prompt (if not admin)
+        function promptAdminLogin() {
+            Swal.fire({
+                title: 'Admin Login',
+                html: `<input type="text" id="adminUser" class="swal2-input" placeholder="Username" value="admin">
+                       <input type="password" id="adminPass" class="swal2-input" placeholder="Password" value="1001">`,
+                confirmButtonText: 'Login',
+                showCancelButton: true,
+                preConfirm: async () => {
+                    const uname = Swal.getPopup().querySelector('#adminUser').value;
+                    const pass = Swal.getPopup().querySelector('#adminPass').value;
+                    try {
+                        const resp = await fetch(`${API_URL}?action=adminLogin&username=${encodeURIComponent(uname)}&password=${encodeURIComponent(pass)}`);
+                        const data = await resp.json();
+                        if (data.success) {
+                            sessionStorage.setItem('adminLogged', 'true');
+                            isAdmin = true;
+                            loadReviews(); // reload with admin privileges
+                            return true;
+                        } else {
+                            throw new Error(data.error || 'Invalid credentials');
+                        }
+                    } catch (err) {
+                        Swal.showValidationMessage(err.message);
+                    }
+                }
+            });
+        }
+
+        // Sidebar navigation (same logic as dashboard)
+        function openSidebar() {
+            const o = document.getElementById('sidebarOverlay');
+            o.classList.remove('hidden');
+            requestAnimationFrame(() => o.classList.add('active'));
+            document.body.classList.add('sidebar-open');
+        }
+        function closeSidebar(e) {
+            if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect();
+        }
+        function closeSidebarDirect() {
+            const o = document.getElementById('sidebarOverlay');
+            o.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            setTimeout(() => { if (!o.classList.contains('active')) o.classList.add('hidden'); }, 350);
+        }
+        function sidebarNavigate(action) {
+            closeSidebarDirect();
+            setTimeout(() => {
+                const map = {
+                    dashboard: 'dashboard.html',
+                    reviews: 'reviews.html',
+                    leaderboard: 'leaderboard.html',
+                    chat: 'chat.html',
+                    premium: 'payment.html',
+                    profile: 'profile.html',
+                    logout: 'logout'
+                };
+                if (action === 'logout') {
+                    localStorage.removeItem('user');
+                    sessionStorage.removeItem('adminLogged');
+                    window.location.href = 'index.html';
+                } else if (map[action]) window.location.href = map[action];
+            }, 300);
+        }
+
+        // Star rating interaction
+        function initStarRating() {
+            const stars = document.querySelectorAll('#starContainer .fa-star');
+            const ratingInput = document.getElementById('ratingValue');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const val = parseInt(star.getAttribute('data-value'));
+                    ratingInput.value = val;
+                    updateStars(val);
+                });
+                star.addEventListener('mouseenter', () => {
+                    const val = parseInt(star.getAttribute('data-value'));
+                    updateStars(val);
+                });
+            });
+            document.getElementById('starContainer').addEventListener('mouseleave', () => {
+                updateStars(parseInt(ratingInput.value));
+            });
+        }
+        function updateStars(rating) {
+            const stars = document.querySelectorAll('#starContainer .fa-star');
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-value'));
+                star.classList.toggle('active', val <= rating);
+            });
+        }
+
+        // Load reviews (with admin option)
+        async function loadReviews() {
+            let endpoint = 'getReviews';
+            if (isAdmin) endpoint = 'adminGetAllReviews'; // admin sees all, including moderated
+            try {
+                const response = await fetch(`${API_URL}?action=${endpoint}`);
+                const data = await response.json();
+                if (data.success) {
+                    allReviews = data.reviews || [];
+                    userHasReviewed = allReviews.some(r => r.username === user.username);
+                    renderReviews();
+                    updateSummary();
+                } else {
+                    showEmptyState('Could not load reviews');
+                }
+            } catch (error) {
+                showEmptyState('Failed to load reviews. Check connection.');
+            } finally {
+                // Update submit form visibility
+                if (userHasReviewed) {
+                    document.getElementById('alreadyReviewed').classList.remove('hidden');
+                    document.getElementById('reviewFormContent').classList.add('hidden');
+                } else {
+                    document.getElementById('alreadyReviewed').classList.add('hidden');
+                    document.getElementById('reviewFormContent').classList.remove('hidden');
+                }
+            }
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            if (!allReviews.length) {
+                showEmptyState('No reviews yet. Be the first to share your experience!');
+                return;
+            }
+            container.innerHTML = allReviews.map(review => {
+                const starsHTML = Array.from({length:5}, (_,i) => 
+                    `<i class="fa-solid fa-star" style="color:${i < review.rating ? '#fbbf24' : '#e2e8f0'};"></i>`
+                ).join('');
+                const avatarLetter = review.name ? review.name.charAt(0).toUpperCase() : '?';
+                const isOwner = review.username === user.username;
+                const adminReply = review.adminReply || '';
+                const replyDate = review.replyDate ? formatDate(review.replyDate) : '';
+
+                return `
+                    <div class="review-card" id="review-${review.reviewId}">
+                        <div class="review-header">
+                            <div class="review-avatar">${avatarLetter}</div>
+                            <div class="review-meta">
+                                <div class="review-name">${review.name || 'Anonymous'} ${review.status === 'deleted' ? '<span style="color:red; font-size:10px;">(hidden)</span>' : ''}</div>
+                                <div class="review-date">${formatDate(review.date)}</div>
+                            </div>
+                            <div class="review-stars">${starsHTML}</div>
+                        </div>
+                        <div class="review-text">${review.reviewText || '<em>No text provided</em>'}</div>
+                        ${adminReply ? `
+                        <div class="admin-reply-box visible">
+                            <strong>Admin reply:</strong> ${adminReply}
+                            <div style="font-size:10px; color:var(--slate-400); margin-top:2px;">${replyDate}</div>
+                        </div>` : (isAdmin ? `<div class="admin-reply-box" id="replyBox-${review.reviewId}">
+                            <textarea id="replyText-${review.reviewId}" rows="2" placeholder="Write a reply..." style="width:100%; border:1px solid var(--slate-200); border-radius:6px; padding:6px; font-family:inherit; font-size:12px;"></textarea>
+                            <button class="btn-icon" onclick="submitAdminReply('${review.reviewId}')" style="margin-top:4px;"><i class="fas fa-reply"></i> Reply</button>
+                        </div>` : '')}
+                        ${isOwner || isAdmin ? `<div class="review-actions">
+                            ${isOwner ? `<button class="btn-icon" onclick="editReview('${review.reviewId}', ${review.rating}, '${escapeHtml(review.reviewText)}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-icon delete" onclick="deleteReview('${review.reviewId}')"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                            ${isAdmin && !isOwner ? `<button class="btn-icon" onclick="moderateReview('${review.reviewId}', 'deleted')"><i class="fas fa-ban"></i> Hide</button>` : ''}
+                            ${isAdmin && isOwner ? `<button class="btn-icon" onclick="moderateReview('${review.reviewId}', 'active')"><i class="fas fa-eye"></i> Show</button>` : ''}
+                        </div>` : ''}
+                    </div>`;
+            }).join('');
+        }
+
+        function showEmptyState(message) {
+            document.getElementById('reviewsContainer').innerHTML = `
+                <div class="empty-reviews">
+                    <i class="fas fa-comment-slash"></i>
+                    <p>${message}</p>
+                </div>`;
+        }
+
+        function updateSummary() {
+            const activeReviews = allReviews.filter(r => r.status !== 'deleted'); // for average
+            const count = activeReviews.length;
+            document.getElementById('reviewCount').textContent = `${count} review${count!==1?'s':''}`;
+            if (count === 0) {
+                document.getElementById('avgRating').textContent = '--';
+                document.getElementById('avgStars').innerHTML = '☆';
+                return;
+            }
+            const avg = activeReviews.reduce((sum, r) => sum + (r.rating||0), 0) / count;
+            const rounded = Math.round(avg * 10) / 10;
+            document.getElementById('avgRating').textContent = rounded;
+            const fullStars = Math.floor(rounded);
+            const hasHalf = rounded - fullStars >= 0.5;
+            let starsStr = '';
+            for (let i=0; i<5; i++) {
+                if (i < fullStars) starsStr += '<i class="fa-solid fa-star"></i>';
+                else if (i === fullStars && hasHalf) starsStr += '<i class="fa-solid fa-star-half-stroke"></i>';
+                else starsStr += '<i class="fa-regular fa-star"></i>';
+            }
+            document.getElementById('avgStars').innerHTML = starsStr;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe?.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") || '';
+        }
+
+        // Submit review
+        async function submitReview() {
+            const rating = parseInt(document.getElementById('ratingValue').value);
+            const reviewText = document.getElementById('reviewText').value.trim();
+            if (rating === 0) {
+                Swal.fire({ icon:'warning', title:'Rating required', text:'Please select a star rating.', confirmButtonColor:'#6366f1' });
+                return;
+            }
+            if (!reviewText) {
+                Swal.fire({ icon:'warning', title:'Review text required', text:'Please write a short review.', confirmButtonColor:'#6366f1' });
+                return;
+            }
+            if (userHasReviewed && !isAdmin) {
+                Swal.fire({ icon:'info', title:'Already submitted', text:'You have already reviewed. Thank you!', confirmButtonColor:'#6366f1' });
+                return;
+            }
+
+            const btn = document.getElementById('submitReviewBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            try {
+                const response = await fetch(`${API_URL}?action=submitReview&username=${encodeURIComponent(user.username)}&name=${encodeURIComponent(user.name)}&rating=${rating}&reviewText=${encodeURIComponent(reviewText)}`);
+                const data = await response.json();
+                if (data.success) {
+                    Swal.fire({ icon:'success', title:'Thank you!', text:'Your review has been submitted.', timer:2000, showConfirmButton:false });
+                    document.getElementById('ratingValue').value = 0;
+                    updateStars(0);
+                    document.getElementById('reviewText').value = '';
+                    await loadReviews();
+                } else {
+                    throw new Error(data.error || 'Submission failed');
+                }
+            } catch (err) {
+                Swal.fire({ icon:'error', title:'Error', text:err.message, confirmButtonColor:'#6366f1' });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review';
+            }
+        }
+
+        // Edit review
+        async function editReview(reviewId, currentRating, currentText) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Edit your review',
+                html: `
+                    <div style="margin-bottom:10px;">
+                        <label>Rating</label>
+                        <select id="editRating" class="swal2-input" style="display:inline-block; width:auto;">
+                            ${[1,2,3,4,5].map(n => `<option value="${n}" ${n===currentRating?'selected':''}>${n} Star${n>1?'s':''}</option>`).join('')}
+                        </select>
+                    </div>
+                    <textarea id="editText" class="swal2-textarea" placeholder="Review text" style="height:100px;">${currentText || ''}</textarea>
+                `,
+                confirmButtonText: 'Update',
+                showCancelButton: true,
+                preConfirm: () => {
+                    const rating = document.getElementById('editRating').value;
+                    const text = document.getElementById('editText').value.trim();
+                    if (!text) { Swal.showValidationMessage('Please write your review'); return false; }
+                    return { rating, text };
+                }
+            });
+            if (formValues) {
+                try {
+                    const resp = await fetch(`${API_URL}?action=editReview&reviewId=${reviewId}&username=${encodeURIComponent(user.username)}&rating=${formValues.rating}&reviewText=${encodeURIComponent(formValues.text)}`);
+                    const data = await resp.json();
+                    if (data.success) {
+                        Swal.fire('Updated!', 'Your review has been updated.', 'success');
+                        loadReviews();
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
+                    }
+                } catch (err) {
+                    Swal.fire('Error', 'Failed to update review.', 'error');
+                }
+            }
+        }
+
+        // Delete review
+        async function deleteReview(reviewId) {
+            const result = await Swal.fire({
+                title: 'Delete review?',
+                text: 'This cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: 'Yes, delete'
+            });
+            if (result.isConfirmed) {
+                try {
+                    const resp = await fetch(`${API_URL}?action=deleteReview&reviewId=${reviewId}&username=${encodeURIComponent(user.username)}`);
+                    const data = await resp.json();
+                    if (data.success) {
+                        Swal.fire('Deleted!', 'Your review has been removed.', 'success');
+                        loadReviews();
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
+                    }
+                } catch (err) {
+                    Swal.fire('Error', 'Failed to delete review.', 'error');
+                }
+            }
+        }
+
+        // Admin reply to review
+        async function submitAdminReply(reviewId) {
+            const replyText = document.getElementById(`replyText-${reviewId}`).value.trim();
+            if (!replyText) {
+                Swal.fire('Missing reply', 'Please type a reply.', 'warning');
+                return;
+            }
+            try {
+                const resp = await fetch(`${API_URL}?action=adminReplyReview&reviewId=${reviewId}&adminReply=${encodeURIComponent(replyText)}`);
+                const data = await resp.json();
+                if (data.success) {
+                    Swal.fire('Replied!', 'Admin reply added.', 'success');
+                    loadReviews();
+                } else {
+                    Swal.fire('Error', data.error || 'Failed to reply', 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'Connection error.', 'error');
+            }
+        }
+
+        // Moderate review (admin hide/show)
+        async function moderateReview(reviewId, status) {
+            const action = status === 'deleted' ? 'hide' : 'unhide';
+            const result = await Swal.fire({
+                title: `${status === 'deleted' ? 'Hide' : 'Unhide'} review?`,
+                text: `Are you sure you want to ${action} this review?`,
+                icon: 'question',
+                showCancelButton: true
+            });
+            if (result.isConfirmed) {
+                try {
+                    const resp = await fetch(`${API_URL}?action=moderateReview&reviewId=${reviewId}&status=${status}`);
+                    const data = await resp.json();
+                    if (data.success) {
+                        Swal.fire('Done!', `Review ${action}d.`, 'success');
+                        loadReviews();
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
+                    }
+                } catch (err) {
+                    Swal.fire('Error', 'Failed to moderate review.', 'error');
+                }
+            }
+        }
+
+        // Admin login prompt button in header
+        function toggleAdmin() {
+            if (isAdmin) {
+                sessionStorage.removeItem('adminLogged');
+                isAdmin = false;
+                loadReviews();
+                Swal.fire('Logged out', 'Admin session ended.', 'info');
+            } else {
+                promptAdminLogin();
+            }
+        }
+
+        // Add admin button to header
+        const adminBtn = document.createElement('button');
+        adminBtn.className = 'header-pill pill-premium';
+        adminBtn.style.marginLeft = '8px';
+        adminBtn.innerHTML = `<i class="fas fa-user-shield"></i> ${isAdmin ? 'Admin' : 'Admin Login'}`;
+        adminBtn.onclick = toggleAdmin;
+        document.querySelector('.header-right').appendChild(adminBtn);
+
+        // Initialize
+        (function init() {
+            initStarRating();
+            loadReviews();
+        })();
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sidebarOverlay = document.getElementById('sidebarOverlay');
+                if (sidebarOverlay.classList.contains('active')) closeSidebarDirect();
+            }
+        });
+    </script>
+</body>
+</html>
