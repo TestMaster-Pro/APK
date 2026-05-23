@@ -52,7 +52,6 @@
             position: relative;
             overflow-x: hidden;
         }
-        /* Subtle dot pattern overlay */
         body::before {
             content: '';
             position: fixed;
@@ -63,7 +62,6 @@
             pointer-events: none;
             z-index: 0;
         }
-        /* Soft gradient glow */
         body::after {
             content: '';
             position: fixed;
@@ -106,7 +104,7 @@
             from { opacity: 0; transform: translateY(24px) scale(0.98); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
-        .score-card, .card, .bot-card {
+        .score-card, .card, .bot-card, .review-card {
             animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
             border: 1px solid rgba(255,255,255,0.18);
             backdrop-filter: blur(14px);
@@ -115,6 +113,7 @@
         .card:nth-child(2) { animation-delay: 0.1s; }
         .card:nth-child(3) { animation-delay: 0.15s; }
         .bot-card { animation-delay: 0.12s; }
+        .review-card { animation-delay: 0.18s; }
 
         /* Score Card */
         .score-card {
@@ -239,6 +238,7 @@
         .btn-review:hover::after { left: 100%; }
         .btn-outline { background: white; border: 2px solid var(--gray-200); color: var(--dark); }
         .btn-dark { background: var(--gray-900); color: white; }
+        .btn-reviews { background: #f59e0b; color: white; }
 
         /* Cards */
         .card {
@@ -251,6 +251,44 @@
             font-size: 17px; font-weight: 800; color: var(--dark);
             margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
         }
+
+        .review-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: var(--radius-xl);
+            padding: 22px 18px;
+            box-shadow: var(--shadow-lg);
+        }
+        .stars-display { color: #f59e0b; font-size: 24px; letter-spacing: 3px; }
+        .stars-display .fa-star { filter: drop-shadow(0 2px 4px rgba(245,158,11,0.3)); }
+        .stars-input {
+            display: flex; gap: 6px; font-size: 28px; cursor: pointer;
+            color: #cbd5e1; user-select: none; width: fit-content;
+        }
+        .stars-input .fa-star {
+            transition: all 0.2s ease;
+        }
+        .stars-input .fa-star.active {
+            color: #f59e0b;
+            transform: scale(1.15);
+            filter: drop-shadow(0 2px 6px rgba(245,158,11,0.4));
+        }
+        .review-textarea {
+            width: 100%; padding: 12px; border-radius: var(--radius-sm);
+            border: 1.5px solid var(--gray-200); font-family: var(--font-sans);
+            resize: vertical; min-height: 80px; margin-top: 10px;
+            font-size: 13px;
+        }
+        .review-textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .btn-submit-review {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; border: none; padding: 12px 20px; border-radius: var(--radius);
+            font-weight: 700; cursor: pointer; margin-top: 10px; transition: var(--transition);
+            display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.25);
+        }
+        .btn-submit-review:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99,102,241,0.4); }
+        .btn-submit-review:disabled { background: var(--gray-400); cursor: not-allowed; box-shadow: none; transform: none; }
+        .already-reviewed-text { color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
         /* Attempts & Leaderboard */
         .attempts-list, .lb-list {
@@ -479,12 +517,43 @@
                 <button class="btn btn-review" onclick="openReview()">
                     <i class="fas fa-search"></i> Review Answers
                 </button>
+                <button class="btn btn-reviews" onclick="window.location.href='test-reviews.html?testCode=${encodeURIComponent(testCode)}&testName=${encodeURIComponent(testCode)}'">
+                    <i class="fas fa-star"></i> All Reviews
+                </button>
                 <button class="btn btn-outline" onclick="shareResult()">
                     <i class="fas fa-share-alt"></i> Share
                 </button>
                 <button class="btn btn-dark" onclick="downloadPDF()">
                     <i class="fas fa-file-pdf"></i> PDF
                 </button>
+            </div>
+        </div>
+
+        <!-- Inline Review Card -->
+        <div class="review-card" id="reviewCard">
+            <div class="card-title">
+                <i class="fas fa-star" style="color:#f59e0b;"></i> Rate this Test
+            </div>
+            <div id="reviewSummary" style="margin-bottom:12px;">
+                <span class="stars-display" id="avgStarsDisplay">☆</span>
+                <span style="font-size:13px; color:var(--gray-600); margin-left:8px;" id="reviewCountDisplay">(0 reviews)</span>
+            </div>
+            <div id="reviewForm">
+                <div class="stars-input" id="starRatingInput">
+                    <i class="fa-solid fa-star" data-value="1"></i>
+                    <i class="fa-solid fa-star" data-value="2"></i>
+                    <i class="fa-solid fa-star" data-value="3"></i>
+                    <i class="fa-solid fa-star" data-value="4"></i>
+                    <i class="fa-solid fa-star" data-value="5"></i>
+                </div>
+                <input type="hidden" id="ratingValue" value="0">
+                <textarea class="review-textarea" id="reviewText" placeholder="Write your review about this test..."></textarea>
+                <button class="btn-submit-review" id="submitReviewBtn" onclick="submitReview()">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </div>
+            <div id="alreadyReviewedMsg" class="already-reviewed-text hidden">
+                <i class="fas fa-check-circle"></i> You've already reviewed this test. Thanks!
             </div>
         </div>
 
@@ -563,6 +632,9 @@
         const examType = params.get('examType') || '';
 
         const user = JSON.parse(localStorage.getItem('user')) || { username: 'student', name: 'Student' };
+
+        let selectedRating = 0;
+        let userHasReviewed = false;
 
         function setAvatarWithPic(elementId, userObj) {
             const el = document.getElementById(elementId);
@@ -812,11 +884,113 @@
             }
         }
 
+        // ---- REVIEW SYSTEM ----
+        function initStarInput() {
+            const stars = document.querySelectorAll('#starRatingInput .fa-star');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.dataset.value);
+                    document.getElementById('ratingValue').value = selectedRating;
+                    updateStarDisplay();
+                });
+                star.addEventListener('mouseenter', () => {
+                    const val = parseInt(star.dataset.value);
+                    stars.forEach(s => {
+                        if (parseInt(s.dataset.value) <= val) s.classList.add('active');
+                        else s.classList.remove('active');
+                    });
+                });
+                star.addEventListener('mouseleave', () => {
+                    updateStarDisplay();
+                });
+            });
+        }
+
+        function updateStarDisplay() {
+            const stars = document.querySelectorAll('#starRatingInput .fa-star');
+            stars.forEach(s => {
+                if (parseInt(s.dataset.value) <= selectedRating) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+        }
+
+        async function loadReviewSummary() {
+            try {
+                const res = await fetch(`${API_URL}?action=getReviews&testCode=${encodeURIComponent(testCode)}`);
+                const data = await res.json();
+                if (data.success && data.reviews) {
+                    const reviews = data.reviews.filter(r => r.status !== 'deleted');
+                    const count = reviews.length;
+                    document.getElementById('reviewCountDisplay').textContent = `(${count} review${count!==1?'s':''})`;
+                    if (count > 0) {
+                        const avg = reviews.reduce((sum, r) => sum + (r.rating||0), 0) / count;
+                        const fullStars = Math.floor(avg);
+                        const hasHalf = avg - fullStars >= 0.5;
+                        let starsHTML = '';
+                        for (let i=0; i<5; i++) {
+                            if (i < fullStars) starsHTML += '<i class="fa-solid fa-star"></i>';
+                            else if (i === fullStars && hasHalf) starsHTML += '<i class="fa-solid fa-star-half-stroke"></i>';
+                            else starsHTML += '<i class="fa-regular fa-star"></i>';
+                        }
+                        document.getElementById('avgStarsDisplay').innerHTML = starsHTML;
+                    }
+                    // Check if user already reviewed
+                    if (reviews.some(r => r.username === user.username)) {
+                        userHasReviewed = true;
+                        document.getElementById('reviewForm').classList.add('hidden');
+                        document.getElementById('alreadyReviewedMsg').classList.remove('hidden');
+                    }
+                }
+            } catch(e) {}
+        }
+
+        async function submitReview() {
+            if (selectedRating === 0) {
+                Swal.fire({ icon:'warning', title:'Rating required', text:'Please select a star rating.', confirmButtonColor:'#6366f1' });
+                return;
+            }
+            const reviewText = document.getElementById('reviewText').value.trim();
+            if (!reviewText) {
+                Swal.fire({ icon:'warning', title:'Review text required', text:'Please write a short review.', confirmButtonColor:'#6366f1' });
+                return;
+            }
+            const btn = document.getElementById('submitReviewBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            try {
+                const params = new URLSearchParams({
+                    action: 'submitReview',
+                    username: user.username,
+                    name: user.name,
+                    rating: selectedRating,
+                    reviewText: reviewText,
+                    testCode: testCode
+                });
+                const res = await fetch(API_URL + '?' + params.toString());
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire({ icon:'success', title:'Review submitted!', text:'Thank you for your feedback.', confirmButtonColor:'#10b981' });
+                    document.getElementById('reviewForm').classList.add('hidden');
+                    document.getElementById('alreadyReviewedMsg').classList.remove('hidden');
+                    userHasReviewed = true;
+                    loadReviewSummary();
+                } else {
+                    Swal.fire({ icon:'error', title:'Failed', text:data.error || 'Could not submit review.', confirmButtonColor:'#6366f1' });
+                }
+            } catch(e) {
+                Swal.fire({ icon:'error', title:'Error', text:'Network error.', confirmButtonColor:'#6366f1' });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review';
+            }
+        }
+
         // Init
         async function init() {
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('mainContent').style.display = 'flex';
-            await Promise.all([fetchUserAttempts(), fetchLeaderboard()]);
+            initStarInput();
+            await Promise.all([fetchUserAttempts(), fetchLeaderboard(), loadReviewSummary()]);
         }
         setTimeout(init, 500);
     </script>
