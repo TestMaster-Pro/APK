@@ -1187,6 +1187,7 @@
             display: flex;
             gap: 8px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
         .attempt-btn {
             background: linear-gradient(135deg, #5b4cf0, #6d5df7);
@@ -1288,6 +1289,35 @@
             background: linear-gradient(135deg, #d97706, #f59e0b);
             box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
             transform: translateY(-2px);
+        }
+        /* NEW: Review button style */
+        .review-btn {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-family: var(--font-sans);
+            flex: 0.8;
+            white-space: nowrap;
+        }
+        .review-btn:hover {
+            background: #fefce8;
+            color: #b45309;
+            border-color: #fcd34d;
+            transform: scale(1.05);
+        }
+        .review-btn:active {
+            transform: scale(0.94);
+            transition: 0.06s;
         }
 
         /* BOTTOM SHEET */
@@ -2302,6 +2332,8 @@
                     `<button class="attempt-btn" onclick="openInstructions('${test.file.replace(/'/g,"\\'")}','${test.testCode.replace(/'/g,"\\'")}','${test.exam.replace(/'/g,"\\'")}','${test.testName.replace(/'/g,"\\'")}',${test.duration||30},${test.totalQuestions},${test.marksPerQuestion},${test.negativeMarking})"><i class="fas fa-play-circle"></i> ${attempted?'Retake':'Attempt Now'}</button>` :
                     `<button class="attempt-btn locked" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock ${(test.requiredPlan||'premium').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</button>`;
 
+                const reviewBtn = `<button class="review-btn" onclick="event.stopPropagation(); window.location.href='test-reviews.html?testCode=${encodeURIComponent(test.testCode)}&testName=${encodeURIComponent(test.testName)}'"><i class="fas fa-star"></i> Reviews</button>`;
+
                 return `
                 <div class="test-card ${cardClass}" style="animation-delay:${idx*0.03}s">
                   ${premiumIcon?`<div class="premium-badge">${premiumIcon}</div>`:''}
@@ -2323,6 +2355,7 @@
                   <div class="action-buttons">
                     ${attemptBtn}
                     <button class="leaderboard-btn" onclick="viewLeaderboard('${test.testCode.replace(/'/g,"\\'")}','${test.exam.replace(/'/g,"\\'")}')"><i class="fas fa-trophy"></i> Rank</button>
+                    ${reviewBtn}
                   </div>
                 </div>`;
             }).join('');
