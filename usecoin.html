@@ -1498,6 +1498,12 @@
                 <button class="modal-close" onclick="closeModalDirect()"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
+                <!-- Instant deduction notice -->
+                <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #a7f3d0; border-radius: var(--radius-lg); padding: 12px 16px; margin-bottom: 16px; font-size: 13px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-info-circle" style="color: var(--emerald-600); font-size: 18px;"></i>
+                    <span><strong>Coins are deducted immediately</strong> when you submit. If your request is <strong>rejected</strong>, the coins will be returned to your balance.</span>
+                </div>
+
                 <!-- Preview -->
                 <div class="modal-preview" id="modalPreview">
                     <div class="modal-preview-icon cash" id="modalPreviewIcon"><i class="fas fa-money-bill-wave"></i></div>
@@ -1533,7 +1539,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-modal-submit" id="modalSubmitBtn" disabled onclick="submitFromModal()">
-                    <i class="fas fa-paper-plane"></i> Submit Redemption Request
+                    <i class="fas fa-paper-plane"></i> Submit & Deduct Coins
                 </button>
             </div>
         </div>
@@ -1663,7 +1669,7 @@
     </footer>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxDGnZ29sutkoDz_EeJEK0KqrfDhDQD0fpJUO0iYUCHCPo0Uv5qeWpUV4YOpSWlaPdqFg/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
@@ -1876,6 +1882,9 @@
                 const dateStr = new Date(req.requestDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
                 const timeStr = new Date(req.requestDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+                // Show adminMessage if it exists, else fallback to adminNote
+                const message = req.adminMessage || req.adminNote || '';
+
                 html += `
                     <div class="history-item" style="animation-delay:${index * 0.05}s">
                         <div class="txn-left">
@@ -1883,7 +1892,7 @@
                             <div class="txn-details">
                                 <h4>${req.reason || 'Redemption Request'}</h4>
                                 <span><i class="fas fa-calendar"></i> ${dateStr} · ${timeStr}</span>
-                                ${req.adminNote ? `<div class="txn-note">📝 ${req.adminNote}</div>` : ''}
+                                ${message ? `<div class="txn-note">📝 ${message}</div>` : ''}
                             </div>
                         </div>
                         <span class="txn-status ${req.status}">${req.status}</span>
@@ -1914,23 +1923,21 @@
             const upiId = document.getElementById('modalUpiId').value.trim();
             let reason = selectedReason;
 
-            // Append UPI details to reason for admin reference
-            reason += ` | UPI Name: ${upiName} | UPI ID: ${upiId}`;
-
             const confirmResult = await Swal.fire({
-                title: 'Confirm Redemption',
+                title: 'Confirm & Deduct Coins',
                 html: `
                     <p style="font-size:15px;">You are about to redeem:</p>
                     <p style="font-size:24px;font-weight:800;color:#7c3aed;margin:8px 0;">
                         <i class="fas fa-coins" style="color:#f59e0b;"></i> ${selectedCoins.toLocaleString('en-IN')} Coins
                     </p>
-                    <p style="font-size:13px;color:#64748b;">${selectedReason.split(' | ')[0]}</p>
+                    <p style="font-size:13px;color:#64748b;">${reason.split(' | ')[0]}</p>
                     <p style="font-size:12px;color:#94a3b8;margin-top:8px;">UPI: ${upiName} (${upiId})</p>
-                    <p style="font-size:12px;color:#94a3b8;margin-top:4px;">This request will be reviewed by admin.</p>
+                    <p style="font-size:12px;color:#059669;margin-top:8px;"><i class="fas fa-check-circle"></i> If approved: coins remain deducted.</p>
+                    <p style="font-size:12px;color:#dc2626;margin-top:4px;"><i class="fas fa-times-circle"></i> If rejected: coins will be returned.</p>
                 `,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, Submit!',
+                confirmButtonText: 'Yes, deduct & submit',
                 cancelButtonText: 'Cancel',
                 confirmButtonColor: '#10b981',
                 cancelButtonColor: '#94a3b8'
@@ -1947,15 +1954,17 @@
                     action: 'submitCoinRequest',
                     username: user.username,
                     amount: selectedCoins,
-                    reason: reason
+                    reason: reason,
+                    upiName: upiName,
+                    upiId: upiId
                 });
                 const res = await fetch(API_URL, { method: 'POST', body: params });
                 const data = await res.json();
 
                 if (data.success) {
                     Swal.fire({
-                        title: 'Request Submitted! 🎉',
-                        text: 'Your redemption request has been sent to admin for review. You\'ll be notified once processed.',
+                        title: 'Coins Deducted! 🎉',
+                        text: 'Your redemption request has been submitted and coins have been deducted from your balance. We will process your request shortly.',
                         icon: 'success',
                         confirmButtonColor: '#10b981'
                     });
@@ -1965,26 +1974,21 @@
                     selectedCoins = 0;
                     selectedReason = '';
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Redemption Request';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit & Deduct Coins';
                     // Reload
                     await loadBalance();
                     await loadRequests();
                 } else {
                     Swal.fire({ title: 'Error', text: data.error || 'Something went wrong.', icon: 'error', confirmButtonColor: '#7c3aed' });
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Redemption Request';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit & Deduct Coins';
                 }
             } catch (e) {
                 Swal.fire({ title: 'Network Error', text: 'Please check your connection and try again.', icon: 'error', confirmButtonColor: '#7c3aed' });
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Redemption Request';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit & Deduct Coins';
             }
             validateModalForm();
-        }
-
-        // Legacy function kept for compatibility
-        async function submitRequest() {
-            await submitFromModal();
         }
 
         function showPrivacy() { 
