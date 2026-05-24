@@ -98,7 +98,7 @@
             background-size: 200px 200px;
         }
 
-        /* ========= SIDEBAR (exactly like dashboard) ========= */
+        /* ========= SIDEBAR ========= */
         .sidebar-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.55);
             z-index: 250; opacity: 0; visibility: hidden; transition: var(--transition-sidebar);
@@ -140,7 +140,7 @@
         .sidebar-nav-item {
             display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; cursor: pointer;
             font-weight: 600; font-size: 13px; color: #475569; transition: var(--transition-fast);
-            background: transparent; width: 100%; text-align: left; font-family: var(--font-sans);
+            background: transparent; width: 100%; text-align: left; font-family: var(--font-sans); border: none;
         }
         .sidebar-nav-item:hover { background: #f8fafc; color: #1e293b; transform: translateX(3px); }
         .sidebar-nav-item.active-nav { background: #eef0ff; color: #5b4cf0; font-weight: 700; }
@@ -178,7 +178,7 @@
         .nav-right { display: flex; align-items: center; gap: 6px; }
         .user-avatar { width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #eef0ff, #e0e7ff); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
         .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .nav-btn { background: #f1f5f9; border: none; padding: 7px 12px; border-radius: 30px; font-weight: 600; font-size: 12px; cursor: pointer; transition: var(--transition-fast); display: flex; align-items: center; gap: 5px; }
+        .nav-btn { background: #f1f5f9; border: none; padding: 7px 12px; border-radius: 30px; font-weight: 600; font-size: 12px; cursor: pointer; transition: var(--transition-fast); display: flex; align-items: center; gap: 5px; text-decoration: none; color: inherit; }
         .btn-chat { background: linear-gradient(135deg, #eef0ff, #e0e7ff); color: #5b4cf0; }
         .btn-premium { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-logout { background: #fef2f2; color: #dc2626; }
@@ -208,6 +208,7 @@
             flex-wrap: wrap;
             gap: 16px;
             box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.5s ease-out;
         }
         .hero-title h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
         .hero-title h1 i { margin-right: 8px; }
@@ -250,10 +251,11 @@
             gap: 14px;
             flex-wrap: wrap;
             border-left: 5px solid #ea580c;
+            animation: fadeIn 0.5s ease-out 0.1s both;
         }
         .streak-info-icon { font-size: 32px; color: #ea580c; }
         .streak-info-text h4 { font-size: 16px; font-weight: 800; color: #7c2d12; }
-        .streak-info-text p { font-size: 13px; color: #92400e; margin-top: 2px; }
+        .streak-info-text p { font-size: 13px; color: #92400e; margin-top: 2px; line-height: 1.5; }
         @media (max-width: 480px) {
             .streak-info { padding: 12px 16px; gap: 10px; }
             .streak-info-icon { font-size: 28px; }
@@ -261,14 +263,14 @@
             .streak-info-text p { font-size: 11px; }
         }
 
-        /* ========= LEADERBOARD TABLE (enhanced mobile) ========= */
+        /* ========= LEADERBOARD TABLE ========= */
         .leaderboard-table {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border-radius: var(--radius-lg);
             border: 1px solid var(--glass-border);
             overflow: hidden;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.5s ease-out 0.2s both;
         }
         .leaderboard-header {
             display: grid;
@@ -303,7 +305,6 @@
         .loading-spinner { text-align: center; padding: 60px; font-size: 18px; color: #5b4cf0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Mobile responsive table */
         @media (max-width: 680px) {
             .leaderboard-header, .leaderboard-row {
                 grid-template-columns: 50px 1fr 80px;
@@ -316,12 +317,78 @@
             .user-username { font-size: 9px; }
         }
         @media (max-width: 480px) {
-            .leaderboard-header, .leaderboard-row {
-                padding: 8px 10px;
-            }
+            .leaderboard-header, .leaderboard-row { padding: 8px 10px; }
             .user-info-leader { gap: 8px; }
             .avatar-small { width: 28px; height: 28px; border-radius: 10px; }
         }
+
+        /* ========= FAQ SECTION ========= */
+        .faq-section {
+            margin-top: 28px;
+            animation: fadeIn 0.5s ease-out 0.3s both;
+        }
+        .faq-header {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .faq-header i { color: var(--warning); font-size: 22px; }
+        .faq-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+        .faq-card:hover { box-shadow: var(--shadow-sm); }
+        .faq-question {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--gray-700);
+            transition: var(--transition-fast);
+            user-select: none;
+        }
+        .faq-question:hover { background: rgba(91,76,240,0.03); }
+        .faq-question i {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--gray-400);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex-shrink: 0;
+        }
+        .faq-card.open .faq-question i { transform: rotate(180deg); background: #ecfdf5; color: var(--success); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: linear-gradient(180deg, var(--gray-50), rgba(255,255,255,0.5));
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.8;
+            font-weight: 500;
+        }
+        .faq-card.open .faq-answer {
+            max-height: 400px;
+            padding: 0 20px 16px;
+        }
+        .faq-icon { font-size: 16px; margin-right: 6px; }
 
         /* ========= FOOTER ========= */
         .pro-footer {
@@ -338,7 +405,7 @@
         .footer-social a { color: rgba(255,255,255,0.6); text-decoration: none; cursor: pointer; }
         .footer-social a:hover { color: #e1306c; }
 
-        /* ========= FLOATING HELP BUTTON (same as dashboard) ========= */
+        /* ========= FLOATING HELP BUTTON ========= */
         .floating-help-btn {
             position: fixed;
             bottom: 20px;
@@ -374,12 +441,12 @@
 <div class="grid-pattern"></div>
 <div class="grain-overlay"></div>
 
-<!-- SIDEBAR (identical to dashboard) -->
+<!-- SIDEBAR -->
 <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
     <aside class="sidebar" onclick="event.stopPropagation()">
         <div class="sidebar-brand">
             <div class="sidebar-logo"><i class="fas fa-fire"></i></div>
-            <div class="sidebar-brand-text">TestMaster Pro<small>Streak Arena</small></div>
+            <div class="sidebar-brand-text">TestMaster Pro<<small>Streak Arena</small></div>
             <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
         </div>
         <div class="sidebar-user-card">
@@ -397,7 +464,6 @@
             <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><span class="nav-icon nav-icon-books"><i class="fas fa-book"></i></span><span>Books & PYQ</span></button>
             <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><span class="nav-icon nav-icon-study"><i class="fas fa-folder-open"></i></span><span>Study Material</span></button>
             <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><span class="nav-icon nav-icon-results"><i class="fas fa-chart-bar"></i></span><span>My Results</span></button>
-            <!-- Leaderboard button removed as per design -->
             <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><span class="nav-icon nav-icon-chat"><i class="fas fa-comments"></i></span><span>Chat</span></button>
             <button class="sidebar-nav-item" onclick="sidebarNavigate('achievements')"><span class="nav-icon nav-icon-achievements"><i class="fas fa-medal"></i></span><span>Achievements</span></button>
             <div class="sidebar-nav-label">Premium</div>
@@ -419,7 +485,7 @@
 </div>
 
 <!-- NAVBAR -->
-<nav class="navbar">
+<<nav class="navbar">
     <div class="nav-left">
         <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
         <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-fire"></i><span>Streak Leaderboard</span></div>
@@ -433,6 +499,7 @@
 </nav>
 
 <div class="container">
+    <!-- HERO -->
     <div class="streak-hero">
         <div class="hero-title">
             <h1><i class="fas fa-fire"></i> World Streak Ranking</h1>
@@ -442,20 +509,22 @@
             <span><i class="fas fa-users"></i> Warriors: <strong id="totalUsersCount">0</strong></span>
         </div>
         <div class="your-rank-card" id="yourRankCard">
-            <div class="label">🔥 Your Streak & Rank</div>
+            <div class="label">🔥 Your Test Streak</div>
             <div class="value" id="userStreakValue">-</div>
             <div class="label" id="userRankLabel">Rank #--</div>
         </div>
     </div>
 
+    <!-- INFO -->
     <div class="streak-info">
         <div class="streak-info-icon"><i class="fas fa-fire"></i></div>
         <div class="streak-info-text">
             <h4>How to increase your streak? 🔥</h4>
-            <p>Attempt any mock test every single day. Your streak increases by +1 for each consecutive day you submit a test. Miss a day? Your streak resets to 0. Stay consistent and climb the global leaderboard!</p>
+            <p>Attempt any mock test every single day. Your streak increases by +1 for each consecutive day you submit a test. The day resets at 12:00 PM IST — so a test taken at 11:00 AM counts as yesterday, while 1:00 PM counts as today. Miss a day? Your streak resets to 0.</p>
         </div>
     </div>
 
+    <!-- LEADERBOARD -->
     <div class="leaderboard-table">
         <div class="leaderboard-header">
             <div>RANK</div>
@@ -466,9 +535,75 @@
             <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Loading streak champions...</div>
         </div>
     </div>
+
+    <!-- FAQ SECTION -->
+    <div class="faq-section">
+        <div class="faq-header"><i class="fas fa-question-circle"></i> Streak FAQ</div>
+        
+        <div class="faq-card">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span><span class="faq-icon">🔥</span> What is the Test-Taking Streak?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Your Test-Taking Streak counts how many consecutive days you have completed at least one mock test. It is calculated from 12:00 PM to 12:00 PM the next day (IST). Taking multiple tests on the same day does not increase your streak further — only the first test of that day counts.
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span><span class="faq-icon">📅</span> What is the Daily Login Streak?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                The Daily Login Streak is a separate system tracked for coin rewards. It also uses the 12:00 PM IST cutoff. Logging in every day lets you claim daily coin rewards. This streak is different from your Test-Taking Streak shown on this leaderboard.
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span><span class="faq-icon">🕛</span> When does the day reset?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Both streaks reset at 12:00 PM IST (noon). For example: if you take a test at 11:00 AM on Monday, it is counted as Sunday's test. If you take it at 1:00 PM on Monday, it counts as Monday's test. Plan your test timing accordingly!
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span><span class="faq-icon">📉</span> What happens if I miss a day?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                If you do not submit any test for a full day (based on the 12:00 PM to 12:00 PM window), your Test-Taking Streak resets to 0. You will need to start building it again from day 1. There is no grace period — consistency is key!
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span><span class="faq-icon">🔄</span> Can I submit multiple requests?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Yes! You can submit as many redemption requests as you want from the Coin Use page, as long as you have sufficient coins. Each request is reviewed independently by our admin team.
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span><span class="faq-icon">❌</span> What if my coin request is rejected?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                If your coin redemption request is rejected, your coins are fully returned to your balance. You will see an admin note explaining the reason. You can always submit a new request with corrected details.
+            </div>
+        </div>
+    </div>
 </div>
 
-<footer class="pro-footer">
+<!-- FOOTER -->
+<<footer class="pro-footer">
     <div class="footer-content">
         <div class="footer-logo">TestMaster<span>Pro</span></div>
         <p>© 2026 TestMaster Pro. All Rights Reserved.</p>
@@ -483,7 +618,7 @@
     </div>
 </footer>
 
-<!-- FLOATING HELP BUTTON (same as dashboard) -->
+<!-- FLOATING HELP BUTTON -->
 <button class="floating-help-btn" onclick="showSupport()" title="Need help?"><i class="fas fa-question"></i></button>
 
 <script>
@@ -583,7 +718,7 @@
 
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-    // Sidebar navigation
+    // Sidebar
     function openSidebar() {
         const o = document.getElementById('sidebarOverlay');
         o.classList.remove('hidden');
@@ -629,7 +764,7 @@
                 <p><b>2.</b> Use filters to narrow tests.</p>
                 <p><b>3.</b> Click <b>"Attempt Now"</b> to start a test.</p>
                 <p><b>4.</b> Premium tests require a subscription.</p>
-                <p><b>5.</b> Your streak increases when you attempt tests on consecutive days!</p>
+                <p><b>5.</b> Your streak increases when you attempt tests on consecutive days (12 PM to 12 PM)!</p>
             </div>`,
             confirmButtonText: 'Got it!',
             confirmButtonColor: '#5b4cf0',
@@ -637,7 +772,7 @@
         });
     }
 
-    // Support functions (same as dashboard)
+    // Support
     function showPrivacy() {
         Swal.fire({
             title: 'Privacy Policy',
