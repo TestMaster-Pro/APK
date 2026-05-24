@@ -110,7 +110,7 @@
             background: #1e293b; border-radius: 14px; overflow-x: auto;
             border: 1px solid #334155;
         }
-        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th, td {
             padding: 10px 14px; text-align: left; border-bottom: 1px solid #334155;
             font-size: 12px; white-space: nowrap;
@@ -220,6 +220,12 @@
             border: 1px solid #475569; font-family: 'Poppins', sans-serif; font-size: 12px;
             min-width: 200px;
         }
+
+        .coin-policy-note {
+            background: #1e3a5f; border: 1px solid #3b82f6; border-radius: 10px;
+            padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: #93c5fd;
+        }
+        .coin-policy-note i { margin-right: 6px; }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
@@ -351,15 +357,36 @@
                 </div>
             </div>
 
-            <!-- Coin Requests -->
+            <!-- Coin Requests – UPDATED -->
             <div class="tab-content" id="coinRequestsTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-                    <h2 style="margin:0;">🪙 Coin Requests</h2>
+                    <h2 style="margin:0;">🪙 Coin Redemption Requests</h2>
                     <button class="refresh-btn" onclick="loadCoinRequests()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
+
+                <div class="coin-policy-note">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Policy:</strong> Coins are deducted when the user submits. Approval keeps them deducted, rejection returns them. 
+                    Provide an internal note and a user-visible message.
+                </div>
+
                 <div class="table-wrapper">
                     <table>
-                        <thead><tr><th>Request ID</th><th>User</th><th>Amount</th><th>Reason</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Reason</th>
+                                <th>UPI Name</th>
+                                <th>UPI ID</th>
+                                <th>Status</th>
+                                <th>Admin Note</th>
+                                <th>User Message</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
                         <tbody id="coinRequestsBody"></tbody>
                     </table>
                 </div>
@@ -407,7 +434,7 @@
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Modals (unchanged except we removed the old coin modals; we use Swal instead) -->
     <div class="modal-overlay" id="verifyPaymentModal">
         <div class="modal">
             <h3>Verify Payment</h3>
@@ -467,6 +494,7 @@
     </div>
 
     <script>
+        // Use the new API URL you provided
         const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
         let pendingDelete = { type: '', id: '' };
 
@@ -715,30 +743,78 @@
             }
         }
 
-        // ==================== COIN REQUESTS ====================
+        // ==================== COIN REQUESTS (UPDATED) ====================
         async function loadCoinRequests() {
             const res = await fetch(`${API_URL}?action=getAllCoinRequests`);
             const data = await res.json();
             if (data.success) {
-                document.getElementById('coinRequestsBody').innerHTML = data.requests.map(r => {
+                const requests = data.requests || [];
+                document.getElementById('coinRequestsBody').innerHTML = requests.map(r => {
                     const statusBadge = r.status === 'Approved' ? 'badge-success' : r.status === 'Rejected' ? 'badge-danger' : 'badge-warning';
                     return `<tr>
-                        <td>${r.requestId}</td><td>@${r.username}</td><td>${r.amount}</td><td>${r.reason}</td>
-                        <td><span class="badge ${statusBadge}">${r.status}</span></td><td>${new Date(r.requestDate).toLocaleDateString('en-IN')}</td>
-                        <td>${r.status === 'Pending' ? `<button class="action-btn btn-approve" onclick="approveCoinRequest('${r.requestId}')">Approve</button> <button class="action-btn btn-reject" onclick="rejectCoinRequest('${r.requestId}')">Reject</button>` : ''}</td>
+                        <td style="font-size:10px;">${r.requestId}</td>
+                        <td><strong>${r.name || '--'}</strong><br><small>@${r.username}</small></td>
+                        <td>${r.amount} 🪙</td>
+                        <td style="max-width:150px; white-space:normal;">${r.reason}</td>
+                        <td>${r.upiName || '--'}</td>
+                        <td style="font-size:10px;">${r.upiId || '--'}</td>
+                        <td><span class="badge ${statusBadge}">${r.status}</span></td>
+                        <td style="font-size:10px; max-width:100px; white-space:normal;">${r.adminNote || ''}</td>
+                        <td style="font-size:10px; max-width:100px; white-space:normal;">${r.adminMessage || ''}</td>
+                        <td>${new Date(r.requestDate).toLocaleDateString('en-IN')}</td>
+                        <td>
+                            ${r.status === 'Pending' ? `
+                                <button class="action-btn btn-approve" onclick="processCoinRequest('${r.requestId}','approve')">Approve</button>
+                                <button class="action-btn btn-reject" onclick="processCoinRequest('${r.requestId}','reject')">Reject</button>
+                            ` : '<span style="font-size:10px;">--</span>'}
+                        </td>
                     </tr>`;
                 }).join('');
             }
         }
-        async function approveCoinRequest(id) {
-            await fetch(`${API_URL}?action=approveCoinRequest&requestId=${id}`);
-            Swal.fire('Approved','','success');
-            loadCoinRequests();
-        }
-        async function rejectCoinRequest(id) {
-            await fetch(`${API_URL}?action=rejectCoinRequest&requestId=${id}`);
-            Swal.fire('Rejected','','info');
-            loadCoinRequests();
+
+        // New function to handle approve/reject with note and message
+        async function processCoinRequest(requestId, action) {
+            const { value: formValues } = await Swal.fire({
+                title: action === 'approve' ? 'Approve Request' : 'Reject Request',
+                html:
+                    `<label for="adminNote" style="display:block;text-align:left;color:#94a3b8;font-size:11px;margin-bottom:4px;">Admin Note (internal)</label>
+                    <input id="adminNote" class="swal2-input" placeholder="Internal note" style="margin-bottom:10px;">
+                    <label for="adminMessage" style="display:block;text-align:left;color:#94a3b8;font-size:11px;margin-bottom:4px;">Message for user</label>
+                    <textarea id="adminMessage" class="swal2-textarea" placeholder="User-visible message" style="height:80px;"></textarea>`,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: action === 'approve' ? 'Yes, approve' : 'Yes, reject',
+                confirmButtonColor: action === 'approve' ? '#10b981' : '#dc2626',
+                preConfirm: () => {
+                    return {
+                        note: document.getElementById('adminNote').value || '',
+                        message: document.getElementById('adminMessage').value || ''
+                    }
+                }
+            });
+
+            if (!formValues) return; // cancelled
+
+            const params = new URLSearchParams({
+                action: action === 'approve' ? 'approveCoinRequest' : 'rejectCoinRequest',
+                requestId: requestId,
+                note: formValues.note,
+                message: formValues.message
+            });
+
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: params });
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success');
+                    loadCoinRequests();
+                } else {
+                    Swal.fire('Error', data.error, 'error');
+                }
+            } catch (e) {
+                Swal.fire('Error', 'Network error', 'error');
+            }
         }
 
         // ==================== DAILY CHALLENGES ====================
@@ -904,4 +980,4 @@
         }
     </script>
 </body>
-                                                                                                                                                                                                  </html>
+</html>
