@@ -2363,6 +2363,33 @@
             .btn-premium { padding: 6px 10px; }
         }
     </style>
+
+    <!-- Force correct title/meta (moved outside <style>) -->
+    <script>
+      (function() {
+        // Force correct title
+        document.title = "TestMaster Pro | Smart Mock Tests for Serious Students";
+        
+        // Force correct meta description
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta');
+          metaDesc.name = "description";
+          document.head.appendChild(metaDesc);
+        }
+        metaDesc.content = "Boost your exam preparation with chapter-wise mock tests, real exam pattern questions, instant results, and detailed analysis. Practice smarter with TestMaster Pro.";
+        
+        // Force Open Graph and Twitter cards
+        let ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.content = document.title;
+        let ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.content = metaDesc.content;
+        let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) twitterTitle.content = document.title;
+        let twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDesc) twitterDesc.content = metaDesc.content;
+      })();
+    </script>
 </head>
 <body>
     <!-- Background -->
