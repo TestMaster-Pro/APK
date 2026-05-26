@@ -82,7 +82,7 @@
         .offline-banner { position:fixed; top:0; left:0; width:100%; background:var(--red); color:#fff; text-align:center; padding:6px; font-size:11px; font-weight:700; z-index:999; transform:translateY(-100%); transition:transform 0.3s ease; }
         .offline-banner.show { transform:translateY(0); }
 
-        /* Sidebar – identical to dashboard.html */
+        /* Sidebar – identical to dashboard */
         .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250; opacity:0; visibility:hidden; transition:opacity 0.35s ease,visibility 0.35s; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
         .sidebar-overlay.active { opacity:1; visibility:visible; }
         .sidebar { position:fixed; top:0; left:0; height:100%; height:100dvh; width:290px; max-width:82vw; background:#fff; z-index:251; transform:translateX(-110%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.18); border-radius:0 22px 22px 0; overflow:hidden; border-right:1px solid rgba(0,0,0,0.04); }
@@ -161,6 +161,7 @@
         .test-card:hover { border-color:rgba(36,55,72,0.2); box-shadow:var(--shadow-md); transform:translateY(-3px); }
         .test-card:active { transform:scale(0.985) translateY(-1px); }
         .badge-exam { background:var(--primary-light); color:var(--primary-dark); padding:4px 12px; border-radius:20px; font-size:10px; font-weight:700; display:inline-block; margin-bottom:8px; }
+        .test-image { width:100%; height:140px; object-fit:cover; border-radius:var(--radius-sm); margin-bottom:12px; border:1px solid var(--gray-200); display:block; }
         .test-card h4 { font-size:15px; font-weight:700; color:var(--gray-800); margin-bottom:10px; line-height:1.35; letter-spacing:-0.2px; }
         .meta-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
         .meta-item { background:var(--gray-100); padding:8px 10px; border-radius:var(--radius-sm); text-align:center; border:1px solid var(--gray-200); }
@@ -275,7 +276,6 @@
 
     <div class="container">
         <div class="filter-accordion" id="filterAccordion">
-            <!-- Only Subject and Chapter filters; no Exam -->
             <div class="filter-accordion-item" id="subjectAccordionItem">
                 <button class="filter-accordion-header" onclick="toggleAccordion('subjectAccordionBody','subjectArrow','subjectAccordionItem')">
                     <span><i class="fas fa-book"></i> Subject</span>
@@ -356,23 +356,23 @@
         };
 
         const FALLBACK_MOCKS = [
-            { file:'sbi_po.html', exam:'SBI PO', subject:'Quantitative Aptitude', chapter:'Full Syllabus', testName:'SBI PO Mock 1', testCode:'SBI-PO-01', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank' },
-            { file:'ibps_clerk.html', exam:'IBPS Clerk', subject:'Reasoning', chapter:'Full Syllabus', testName:'IBPS Clerk Mock 1', testCode:'IBPS-CLK-01', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank' },
-            { file:'rbi_grade_b.html', exam:'RBI Grade B', subject:'General Awareness', chapter:'Full Syllabus', testName:'RBI Grade B Mock 1', testCode:'RBI-GB-01', duration:120, totalQuestions:200, marksPerQuestion:1, negativeMarking:0.25, type:'premium', requiredPlan:'premium', difficulty:'Hard', language:'English & Hindi', category:'Bank' },
-            { file:'ssc_cgl.html', exam:'SSC CGL', subject:'General Intelligence', chapter:'Full Syllabus', testName:'SSC CGL Tier-I Mock 1', testCode:'SSC-CGL-T1-01', duration:60, totalQuestions:100, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'SSC' },
-            { file:'ssc_chsl.html', exam:'SSC CHSL', subject:'English Language', chapter:'Full Syllabus', testName:'SSC CHSL Mock 1', testCode:'SSC-CHSL-01', duration:60, totalQuestions:100, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'SSC' },
-            { file:'rrb_ntpc.html', exam:'RRB NTPC', subject:'General Awareness', chapter:'Full Syllabus', testName:'RRB NTPC CBT-1 Mock 1', testCode:'RRB-NTPC-01', duration:90, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.33, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Railway' },
-            { file:'cuet_gat.html', exam:'CUET GAT', subject:'General Test', chapter:'Full Syllabus', testName:'CUET General Test Mock 1', testCode:'CUET-GAT-01', duration:60, totalQuestions:50, marksPerQuestion:5, negativeMarking:1, type:'premium', requiredPlan:'premium', difficulty:'Hard', language:'English & Hindi', category:'CUET' }
+            { file:'sbi_po.html', exam:'SBI PO', subject:'Quantitative Aptitude', chapter:'Full Syllabus', testName:'SBI PO Mock 1', testCode:'SBI-PO-01', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank', imageurl:'' },
+            { file:'ibps_clerk.html', exam:'IBPS Clerk', subject:'Reasoning', chapter:'Full Syllabus', testName:'IBPS Clerk Mock 1', testCode:'IBPS-CLK-01', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank', imageurl:'' },
+            { file:'rbi_grade_b.html', exam:'RBI Grade B', subject:'General Awareness', chapter:'Full Syllabus', testName:'RBI Grade B Mock 1', testCode:'RBI-GB-01', duration:120, totalQuestions:200, marksPerQuestion:1, negativeMarking:0.25, type:'premium', requiredPlan:'premium', difficulty:'Hard', language:'English & Hindi', category:'Bank', imageurl:'' },
+            { file:'ssc_cgl.html', exam:'SSC CGL', subject:'General Intelligence', chapter:'Full Syllabus', testName:'SSC CGL Tier-I Mock 1', testCode:'SSC-CGL-T1-01', duration:60, totalQuestions:100, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'SSC', imageurl:'' },
+            { file:'ssc_chsl.html', exam:'SSC CHSL', subject:'English Language', chapter:'Full Syllabus', testName:'SSC CHSL Mock 1', testCode:'SSC-CHSL-01', duration:60, totalQuestions:100, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'SSC', imageurl:'' },
+            { file:'rrb_ntpc.html', exam:'RRB NTPC', subject:'General Awareness', chapter:'Full Syllabus', testName:'RRB NTPC CBT-1 Mock 1', testCode:'RRB-NTPC-01', duration:90, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.33, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Railway', imageurl:'' },
+            { file:'cuet_gat.html', exam:'CUET GAT', subject:'General Test', chapter:'Full Syllabus', testName:'CUET General Test Mock 1', testCode:'CUET-GAT-01', duration:60, totalQuestions:50, marksPerQuestion:5, negativeMarking:1, type:'premium', requiredPlan:'premium', difficulty:'Hard', language:'English & Hindi', category:'CUET', imageurl:'' }
         ];
         const FALLBACK_POPULAR = [
-            { file:'cuet_pyp.html', exam:'CUET GAT', subject:'General Test', chapter:'Full Syllabus', testName:'CUET General Aptitude Test PYP', testCode:'CUET-GAT-PYP', duration:60, totalQuestions:50, marksPerQuestion:5, negativeMarking:1, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'CUET', attempts:'2296 Attempts', badge:'NEW' },
-            { file:'ssc_cgl_full.html', exam:'SSC CGL', subject:'General Intelligence', chapter:'Full Syllabus', testName:'SSC CGL Tier-I Full Mock 2026', testCode:'SSC-CGL-FULL', duration:60, totalQuestions:100, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'SSC', attempts:'4512 Attempts', badge:'HOT' },
-            { file:'ibps_po.html', exam:'IBPS PO', subject:'Quantitative Aptitude', chapter:'Full Syllabus', testName:'IBPS PO Prelims Mock', testCode:'IBPS-PO-PRE', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank', attempts:'3187 Attempts', badge:'TRENDING' }
+            { file:'cuet_pyp.html', exam:'CUET GAT', subject:'General Test', chapter:'Full Syllabus', testName:'CUET General Aptitude Test PYP', testCode:'CUET-GAT-PYP', duration:60, totalQuestions:50, marksPerQuestion:5, negativeMarking:1, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'CUET', attempts:'2296 Attempts', badge:'NEW', imageurl:'' },
+            { file:'ssc_cgl_full.html', exam:'SSC CGL', subject:'General Intelligence', chapter:'Full Syllabus', testName:'SSC CGL Tier-I Full Mock 2026', testCode:'SSC-CGL-FULL', duration:60, totalQuestions:100, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'SSC', attempts:'4512 Attempts', badge:'HOT', imageurl:'' },
+            { file:'ibps_po.html', exam:'IBPS PO', subject:'Quantitative Aptitude', chapter:'Full Syllabus', testName:'IBPS PO Prelims Mock', testCode:'IBPS-PO-PRE', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank', attempts:'3187 Attempts', badge:'TRENDING', imageurl:'' }
         ];
         const FALLBACK_UPCOMING = [
-            { file:'ssc_cgl_2026.html', exam:'SSC CGL', subject:'General Intelligence', chapter:'Full Syllabus', testName:'SSC CGL 2026 Reasoning Mock', testCode:'SSC-CGL-2026-01', duration:60, totalQuestions:50, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'SSC 2026', date:'12 June 2026' },
-            { file:'', exam:'IBPS PO', subject:'Quantitative Aptitude', chapter:'Full Syllabus', testName:'IBPS PO 2026 Mock', testCode:'IBPS-PO-2026', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank', date:'18 Aug 2026' },
-            { file:'rrb_ntpc_2026.html', exam:'RRB NTPC', subject:'General Awareness', chapter:'Full Syllabus', testName:'RRB NTPC 2026 Mock', testCode:'RRB-NTPC-2026', duration:90, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.33, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Railway', date:'25 July 2026' }
+            { file:'ssc_cgl_2026.html', exam:'SSC CGL', subject:'General Intelligence', chapter:'Full Syllabus', testName:'SSC CGL 2026 Reasoning Mock', testCode:'SSC-CGL-2026-01', duration:60, totalQuestions:50, marksPerQuestion:2, negativeMarking:0.5, type:'free', requiredPlan:'none', difficulty:'Hard', language:'English & Hindi', category:'SSC 2026', date:'12 June 2026', imageurl:'' },
+            { file:'', exam:'IBPS PO', subject:'Quantitative Aptitude', chapter:'Full Syllabus', testName:'IBPS PO 2026 Mock', testCode:'IBPS-PO-2026', duration:60, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.25, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Bank', date:'18 Aug 2026', imageurl:'' },
+            { file:'rrb_ntpc_2026.html', exam:'RRB NTPC', subject:'General Awareness', chapter:'Full Syllabus', testName:'RRB NTPC 2026 Mock', testCode:'RRB-NTPC-2026', duration:90, totalQuestions:100, marksPerQuestion:1, negativeMarking:0.33, type:'free', requiredPlan:'none', difficulty:'Moderate', language:'English & Hindi', category:'Railway', date:'25 July 2026', imageurl:'' }
         ];
         const FALLBACK_UPCOMING_FOOTER = [
             { id:1,name:'ReNEET UG 2026',date:'15 May 2026' },
@@ -534,8 +534,11 @@
                     (accessible?`<button class="attempt-btn" onclick="startTest('${test.file.replace(/'/g,"\\'")}','${(test.testCode||'').replace(/'/g,"\\'")}')"><i class="fas fa-play-circle"></i> Attempt Now</button>`
                     :`<button class="attempt-btn locked" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock</button>`)
                     :`<button class="attempt-btn locked" disabled><i class="fas fa-hourglass-half"></i> Coming Soon</button>`;
+                // Show image if available
+                const imageHTML = test.imageurl ? `<img src="${test.imageurl}" alt="${test.testName}" class="test-image" loading="lazy">` : '';
                 return `
                     <div class="test-card" style="animation-delay:${idx*0.04}s">
+                        ${imageHTML}
                         <span class="badge-exam">${test.exam||'General'}</span>
                         ${badgeHTML}
                         <h4>${test.testName||'Untitled Test'}</h4>
@@ -593,7 +596,6 @@
             const cats=new Map();
             data.forEach(item=>{const cat=item.category||'Other';if(!cats.has(cat))cats.set(cat,new Set());cats.get(cat).add(item.exam);});
             let html='';
-            // IMPORTANT: Now redirects to exam2.html (self) instead of exam.html
             cats.forEach((exams,cat)=>html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}&exam=${encodeURIComponent([...exams][0]||'')}')">${cat}</a></li>`);
             html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html+=`<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
