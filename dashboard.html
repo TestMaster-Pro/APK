@@ -223,18 +223,20 @@
         .mock-exam-item:hover { background:var(--primary-light); color:var(--primary); border-color:rgba(36,55,72,0.1); transform:translateX(3px); }
         .mock-exam-item:active { transform:scale(0.98); }
 
-        /* Popular cards – taller + blue background */
-        .popular-scroll { display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:8px; scrollbar-width:none; -ms-overflow-style:none; }
-        .popular-scroll::-webkit-scrollbar { display:none; }
-        .popular-card {
-            min-width:270px; max-width:320px; flex-shrink:0; scroll-snap-align:start;
+        /* Popular slider – added for infinite loop & dots */
+        .popular-slider-wrap { position:relative; width:100%; overflow:hidden; border-radius:var(--radius-lg); margin-bottom:8px; }
+        .popular-slider { display:flex; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform; }
+        .popular-slide { min-width:100%; flex-shrink:0; cursor:pointer; }
+        .popular-slide .popular-card {
+            margin: 0 auto; /* center card inside slide */
+            min-width: 270px; max-width: 320px; /* keep original sizing */
             background:#f0f9ff; border-radius:var(--radius-md); padding:24px 18px;
             border:1px solid #b9d8f0; box-shadow:var(--shadow-sm);
-            cursor:pointer; transition:var(--transition); position:relative; overflow:hidden;
+            transition:var(--transition); position:relative; overflow:hidden;
             display:flex; flex-direction:column; gap:14px;
         }
-        .popular-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:#8ebce8; }
-        .popular-card:active { transform:scale(0.97); transition:0.06s; }
+        .popular-slide .popular-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:#8ebce8; }
+        .popular-slide .popular-card:active { transform:scale(0.97); transition:0.06s; }
         .popular-card .pop-badge { position:absolute; top:12px; right:12px; background:var(--red); color:#fff; padding:3px 10px; border-radius:12px; font-size:9px; font-weight:700; letter-spacing:0.5px; z-index:1; }
         .popular-card .pop-icon { width:50px; height:50px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--primary); margin-bottom:4px; overflow:hidden; }
         .popular-card .pop-icon img { width:100%; height:100%; object-fit:cover; }
@@ -246,16 +248,28 @@
         .popular-card .pop-explore:hover { background:var(--primary-dark); }
         .popular-card .pop-explore:active { transform:scale(0.96); }
 
+        /* Dots for popular slider */
+        .popular-dots { display:flex; justify-content:center; gap:8px; padding:8px 0 2px; }
+        .popular-dot { width:8px; height:8px; border-radius:50%; background:var(--gray-300); cursor:pointer; transition:all 0.3s; border:none; padding:0; }
+        .popular-dot.active { background:var(--primary); width:24px; border-radius:4px; }
+        .popular-slider-wrap.dragging .popular-slider { transition:none; }
+
         .social-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
         @media (max-width:400px) { .social-grid { grid-template-columns:repeat(2,1fr); } }
-        .social-card { background:#fff; border-radius:var(--radius); padding:16px 10px; text-align:center; border:1px solid #e8ecf0; box-shadow:var(--shadow-xs); cursor:pointer; transition:var(--transition); text-decoration:none; color:inherit; display:flex; flex-direction:column; align-items:center; gap:8px; }
+        .social-card { background:#fff; border-radius:var(--radius); padding:16px 10px; text-align:center; border:1px solid #e8ecf0; box-shadow:var(--shadow-xs); cursor:pointer; transition:var(--transition); text-decoration:none; color:inherit; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; }
         .social-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); }
         .social-card i { font-size:28px; }
         .social-card.whatsapp i { color:#25d366; }
         .social-card.telegram i { color:#26a7de; }
-        .social-card.facebook i { color:#1877f2; }
+        .social-card.instagram i { color:#E4405F; }
         .social-card.youtube i { color:#ff0000; }
         .social-card span { font-size:11px; font-weight:600; color:var(--gray-600); }
+        .social-card.coming-soon { opacity:0.6; cursor:default; }
+        .social-card.coming-soon::after {
+            content:'Coming Soon'; position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
+            font-size:8px; font-weight:700; background:#ff4d5a; color:#fff; padding:2px 6px;
+            border-radius:4px; white-space:nowrap;
+        }
 
         /* --- Feedback & Testimonials (vertical marquee) --- */
         .feedback-section {
@@ -333,7 +347,6 @@
             body { padding-bottom:0; }
             .container { padding:18px 18px calc(24px + var(--safe-bottom)); }
             .upcoming-scroll { gap:14px; }
-            .popular-scroll { gap:16px; }
             .pro-footer { padding-bottom:30px; }
         }
         @media (max-width:480px) {
@@ -465,15 +478,18 @@
             </div>
         </section>
 
-        <!-- Popular Mock Tests (taller, blue bg) -->
+        <!-- Popular Mock Tests (Slider with dots & infinite loop) -->
         <section style="margin-bottom:20px;">
             <div class="section-header">
                 <div class="section-icon"><i class="fas fa-fire"></i></div>
                 <h2>Popular Mock Tests</h2>
                 <span class="badge-tag">TRENDING</span>
             </div>
-            <div class="popular-scroll" id="popularScroll">
-                <div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;width:100%;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div>
+            <div class="popular-slider-wrap" id="popularSliderWrap">
+                <div class="popular-slider" id="popularSlider">
+                    <div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);font-size:13px;display:flex;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div>
+                </div>
+                <div class="popular-dots" id="popularDots"></div>
             </div>
         </section>
 
@@ -484,23 +500,29 @@
                 <h2>Stay Connected With Mockers</h2>
             </div>
             <div class="social-grid">
-                <a href="https://wa.me/?text=Join%20TestMasterPro.space" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-                <a href="https://t.me/cuet007_bot" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span></a>
-                <a href="https://facebook.com/testmasterpro" target="_blank" class="social-card facebook"><i class="fab fa-facebook-f"></i><span>Facebook</span></a>
-                <a href="https://youtube.com/@testmasterpro" target="_blank" class="social-card youtube"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+                <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp">
+                    <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                </a>
+                <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram">
+                    <i class="fab fa-telegram-plane"></i><span>Telegram</span>
+                </a>
+                <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram">
+                    <i class="fab fa-instagram"></i><span>Instagram</span>
+                </a>
+                <a href="#" class="social-card youtube coming-soon" onclick="return false;">
+                    <i class="fab fa-youtube"></i><span>YouTube</span>
+                </a>
             </div>
         </section>
 
         <!-- Feedback Section with vertical scrolling testimonials -->
         <div class="feedback-section">
-            <h3>❤️ What Our Students Say</h3>
+            <h3>💬 What Our Students Say</h3>
             <div class="feedback-marquee">
                 <div class="feedback-marquee-inner">
-                    <!-- Duplicate testimonials for seamless loop -->
                     <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a game‑changer!"</p></div>
                     <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
-                    <!-- Duplicate for continuous loop -->
                     <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a game‑changer!"</p></div>
                     <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
@@ -529,9 +551,9 @@
         <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
         <div class="footer-social">
             <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://t.me/cuet007_bot" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
             <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="https://youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
         </div>
         <div class="footer-bottom">
             <p>© 2026 TestMasterPro.space</p>
@@ -549,11 +571,11 @@
 
     <script>
         const JSON_PATHS = {
-            upcoming: './json/upcoming.json',
+            upcoming: './upcoming.json',
             mocks: './mocks.json',
-            popular: './json/popular.json',
-            upcomingfooter: './json/upcomingfooter.json',
-            notices: './json/notices.json'
+            popular: './popular.json',
+            upcomingfooter: './upcomingfooter.json',
+            notices: './notices.json'
         };
         const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
         const STREAK_API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
@@ -700,7 +722,6 @@
             return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams}));
         }
 
-        // Real‑time streak fetch
         async function fetchAndDisplayServerStreak() {
             const streakEl = document.getElementById('sidebarStreak');
             const streakCount = document.getElementById('streakCount');
@@ -756,32 +777,97 @@
             if(!isOpen){item.classList.add('open');setTimeout(()=>item.scrollIntoView({behavior:'smooth',block:'nearest'}),150);}
         }
 
-        async function renderPopularTests(){
-            const c=document.getElementById('popularScroll');
-            const data=await fetchJSON(JSON_PATHS.popular,FALLBACK_POPULAR);
-            const grouped=groupByCategoryUniqueExams(data);
-            if(!grouped.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No popular tests found</div>';return;}
-            const allExams=[];
-            grouped.forEach(cat=>cat.exams.forEach(ex=>allExams.push(ex)));
-            c.innerHTML=allExams.map(ex=>`
-                <div class="popular-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
-                    ${ex.badge?`<div class="pop-badge">${ex.badge}</div>`:''}
-                    <div class="pop-icon">
-                        ${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}
+        // --- Popular Slider Logic (infinite loop, dots, auto-play) ---
+        const popularSlider = document.getElementById('popularSlider');
+        const popularDots = document.getElementById('popularDots');
+        const popularWrap = document.getElementById('popularSliderWrap');
+        let popularSlidesData = [];
+        let popularCurrent = 0;
+        let popularAutoInterval;
+        let popularDragging = false, popularStartX = 0, popularSliderX = 0;
+
+        async function renderPopularSlider() {
+            const data = await fetchJSON(JSON_PATHS.popular, FALLBACK_POPULAR);
+            const grouped = groupByCategoryUniqueExams(data);
+            const allExams = [];
+            grouped.forEach(cat => cat.exams.forEach(ex => allExams.push(ex)));
+            if (!allExams.length) {
+                popularSlider.innerHTML = '<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);">No popular tests</div>';
+                return;
+            }
+            popularSlidesData = allExams;
+            // Build slides
+            popularSlider.innerHTML = allExams.map(ex => `
+                <div class="popular-slide" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
+                    <div class="popular-card">
+                        ${ex.badge?`<div class="pop-badge">${ex.badge}</div>`:''}
+                        <div class="pop-icon">
+                            ${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}
+                        </div>
+                        <h4>${ex.exam||'Untitled'}</h4>
+                        ${ex.attempts?`<div class="pop-attempts"><i class="fas fa-users"></i> ${ex.attempts}</div>`:''}
+                        <div class="pop-meta">
+                            <span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span>
+                            <span><i class="fas fa-trophy"></i> +${ex.marksPerQuestion||'?'} Marks</span>
+                            <span><i class="fas fa-clock"></i> ${ex.duration||'?'}m</span>
+                        </div>
+                        <button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
+                            <i class="fas fa-play"></i> Explore
+                        </button>
                     </div>
-                    <h4>${ex.exam||'Untitled'}</h4>
-                    ${ex.attempts?`<div class="pop-attempts"><i class="fas fa-users"></i> ${ex.attempts}</div>`:''}
-                    <div class="pop-meta">
-                        <span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span>
-                        <span><i class="fas fa-trophy"></i> +${ex.marksPerQuestion||'?'} Marks</span>
-                        <span><i class="fas fa-clock"></i> ${ex.duration||'?'}m</span>
-                    </div>
-                    <button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
-                        <i class="fas fa-play"></i> Explore
-                    </button>
                 </div>
             `).join('');
+            popularDots.innerHTML = allExams.map((_, i) => `<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join('');
+            startPopularAutoSlide();
         }
+
+        function goToPopularSlide(idx) {
+            popularCurrent = idx;
+            popularSlider.style.transform = `translateX(${-idx * 100}%)`;
+            document.querySelectorAll('.popular-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+        }
+
+        function nextPopularSlide() {
+            if (!popularSlidesData.length) return;
+            popularCurrent = (popularCurrent + 1) % popularSlidesData.length;
+            goToPopularSlide(popularCurrent);
+        }
+
+        function startPopularAutoSlide() {
+            if (popularSlidesData.length) popularAutoInterval = setInterval(nextPopularSlide, 5000);
+        }
+        function stopPopularAutoSlide() { clearInterval(popularAutoInterval); }
+
+        popularWrap.addEventListener('mousedown', popDragStart);
+        popularWrap.addEventListener('touchstart', popDragStart, { passive: true });
+        popularWrap.addEventListener('mousemove', popDragMove);
+        popularWrap.addEventListener('touchmove', popDragMove, { passive: true });
+        popularWrap.addEventListener('mouseup', popDragEnd);
+        popularWrap.addEventListener('mouseleave', popDragEnd);
+        popularWrap.addEventListener('touchend', popDragEnd);
+
+        function popDragStart(e) {
+            popularDragging = true; popularWrap.classList.add('dragging'); stopPopularAutoSlide();
+            popularStartX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            popularSliderX = -popularCurrent * popularWrap.offsetWidth;
+        }
+        function popDragMove(e) {
+            if(!popularDragging) return; e.preventDefault();
+            const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            popularSlider.style.transform = `translateX(${popularSliderX + (x - popularStartX)}px)`;
+        }
+        function popDragEnd(e) {
+            if(!popularDragging) return; popularDragging = false; popularWrap.classList.remove('dragging');
+            const x = e.type.includes('mouse') ? e.pageX : (e.changedTouches ? e.changedTouches[0].pageX : popularStartX);
+            const walk = x - popularStartX;
+            const threshold = popularWrap.offsetWidth * 0.2;
+            if (walk < -threshold && popularCurrent < popularSlidesData.length-1) popularCurrent++;
+            else if (walk > threshold && popularCurrent > 0) popularCurrent--;
+            goToPopularSlide(popularCurrent);
+            startPopularAutoSlide();
+        }
+
+        document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopPopularAutoSlide(); else startPopularAutoSlide(); });
 
         async function renderFooterExamCategories(){
             const c=document.getElementById('footerExamCategories');
@@ -825,17 +911,15 @@
         let slidesData = [];
         let currentSlide = 0;
         let autoSlideInterval;
-        let isDragging = false, startX = 0, sliderX = 0;
 
         async function loadHeroSlides() {
             try {
-                const res = await fetch('./json/frontpage.json', { cache: 'no-store' });
+                const res = await fetch('./frontpage.json', { cache: 'no-store' });
                 if (!res.ok) throw new Error('Failed');
                 slidesData = await res.json();
                 renderSlides();
                 startAutoSlide();
             } catch (e) {
-                // fallback
                 heroSlider.innerHTML = `
                     <div class="hero-slide" onclick="location.href='exam.html?id=1'">
                         <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default">
@@ -871,7 +955,7 @@
         }
 
         function nextSlide() { currentSlide = (currentSlide + 1) % slidesData.length; goToSlide(currentSlide); }
-        function startAutoSlide() { if(slidesData.length) autoSlideInterval = setInterval(nextSlide, 4000); }
+        function startAutoSlide() { if(slidesData.length) autoSlideInterval = setInterval(nextSlide, 6000); } // slowed down to 6s
         function stopAutoSlide() { clearInterval(autoSlideInterval); }
 
         heroWrap.addEventListener('mousedown', dragStart);
@@ -935,7 +1019,7 @@
             loadHeroSlides();
             renderUpcomingExams();
             renderMockAccordion();
-            renderPopularTests();
+            renderPopularSlider(); // renders the new slider with dots
             renderFooterExamCategories();
             renderFooterUpcoming();
         }
