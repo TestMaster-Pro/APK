@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#243748">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>TestMasterPro.space · Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #243748;
+            --primary-dark: #1a2a36;
+            --primary-light: #e8edf2;
+            --secondary: #1f3140;
+            --blue: #0066ff;
+            --green: #4cd38a;
+            --red: #ff4d5a;
+            --light: #f7f7f7;
+            --white: #ffffff;
+            --gray-100: #f5f5f5;
+            --gray-200: #e8e8e8;
+            --gray-300: #d4d4d4;
+            --gray-400: #a0a0a0;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --accent: #fbbf24;
+            --radius: 14px;
+            --radius-md: 18px;
+            --radius-lg: 22px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 6px 20px rgba(0,0,0,0.08);
+            --font: 'Poppins', sans-serif;
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+            --bottom-nav-height: 68px;
+            --safe-bottom: env(safe-area-inset-bottom,0px);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body {
+            font-family:var(--font); background:var(--light); min-height:100vh; min-height:100dvh;
+            color:var(--gray-800); display:flex; flex-direction:column; overflow-x:hidden;
+            -webkit-font-smoothing:antialiased;
+            padding-bottom:calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
+        }
+
+        /* ---- Sidebar, Navbar, Bottom Nav (same as dashboard) ---- */
+        .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250; opacity:0; visibility:hidden; transition:opacity 0.35s ease,visibility 0.35s; backdrop-filter:blur(6px); }
+        .sidebar-overlay.active { opacity:1; visibility:visible; }
+        .sidebar { position:fixed; top:0; left:0; height:100%; height:100dvh; width:290px; max-width:82vw; background:#fff; z-index:251; transform:translateX(-110%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.18); border-radius:0 22px 22px 0; overflow:hidden; }
+        .sidebar-overlay.active .sidebar { transform:translateX(0); }
+        .sidebar-brand { background:linear-gradient(135deg,#243748,#1f3140); padding:20px 16px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0; position:relative; }
+        .sidebar-logo { width:40px; height:40px; background:rgba(255,255,255,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; }
+        .sidebar-brand-text { color:#fff; font-weight:700; font-size:14px; }
+        .sidebar-close-btn { position:absolute; top:14px; right:12px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; cursor:pointer; }
+        .sidebar-user-card { padding:14px 16px; background:#fafbfc; border-bottom:1px solid #eee; display:flex; align-items:center; gap:10px; }
+        .sidebar-avatar { width:44px; height:44px; border-radius:14px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:var(--primary); overflow:hidden; border:2px solid #fff; }
+        .sidebar-nav { flex:1; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column; gap:2px; }
+        .sidebar-nav-item { display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:12px; cursor:pointer; font-weight:500; font-size:13px; color:var(--gray-600); transition:var(--transition); background:transparent; border:none; width:100%; text-align:left; font-family:var(--font); }
+        .sidebar-nav-item:hover { background:var(--gray-100); color:var(--gray-800); }
+        .sidebar-nav-item.active-nav { background:var(--primary-light); color:var(--primary); font-weight:700; }
+        .sidebar-nav-item i { width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--gray-100); color:var(--gray-500); }
+        .sidebar-nav-item.active-nav i { background:var(--primary); color:#fff; }
+        .navbar { background:#fff; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 1px 16px rgba(0,0,0,0.04); min-height:54px; }
+        .nav-left { display:flex; align-items:center; gap:8px; }
+        .hamburger-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; }
+        .nav-brand { font-weight:700; font-size:15px; color:var(--primary); display:flex; align-items:center; gap:6px; }
+        .nav-right { display:flex; align-items:center; gap:8px; }
+        .bell-icon-btn, .chat-icon-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; }
+        .user-avatar { width:34px; height:34px; border-radius:10px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:var(--primary); position:relative; overflow:visible; cursor:pointer; border:2px solid #fff; }
+        .premium-badge { position:absolute; top:-4px; right:-4px; width:18px; height:18px; background:linear-gradient(135deg,#f59e0b,#fbbf24); border-radius:50%; display:none; align-items:center; justify-content:center; font-size:9px; color:#1e293b; border:1px solid #fff; }
+        .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:calc(var(--bottom-nav-height) + var(--safe-bottom)); background:#fff; border-top:1px solid #e8ecf0; z-index:95; display:flex; justify-content:space-around; align-items:flex-start; padding-top:8px; padding-bottom:var(--safe-bottom); }
+        .bottom-nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px; border:none; background:transparent; cursor:pointer; color:var(--gray-400); font-family:var(--font); }
+        .bottom-nav-item.active { color:var(--primary); }
+        .bottom-nav-item i { font-size:20px; }
+        .bottom-nav-item span { font-size:10px; font-weight:600; }
+        .hidden { display:none !important; }
+
+        /* ---- Page Content ---- */
+        .container { max-width:1000px; margin:0 auto; padding:20px 16px; flex:1; }
+        .section-title { font-size:24px; font-weight:800; color:var(--primary); margin-bottom:20px; }
+
+        /* Blog Cards */
+        .blog-list { display:flex; flex-direction:column; gap:16px; }
+        .blog-card { background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); transition:var(--transition); border:1px solid #e8ecf0; }
+        .blog-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+        .blog-card h3 { font-size:18px; font-weight:700; color:var(--gray-800); margin-bottom:6px; }
+        .blog-meta { display:flex; gap:16px; font-size:12px; color:var(--gray-500); margin-bottom:10px; flex-wrap:wrap; }
+        .blog-excerpt { font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:14px; }
+        .read-more { display:inline-flex; align-items:center; gap:6px; background:var(--primary); color:#fff; padding:8px 18px; border-radius:20px; font-weight:600; font-size:12px; text-decoration:none; transition:0.2s; cursor:pointer; border:none; }
+        .read-more:hover { background:var(--primary-dark); }
+
+        .pagination { display:flex; justify-content:center; gap:10px; margin-top:24px; flex-wrap:wrap; }
+        .pagination button { padding:8px 16px; border-radius:8px; background:var(--gray-100); border:none; font-weight:600; font-size:13px; cursor:pointer; color:var(--gray-700); transition:0.2s; }
+        .pagination button.active-page { background:var(--primary); color:#fff; }
+        .pagination button:disabled { opacity:0.5; cursor:default; }
+
+        /* FAQ Accordion */
+        .faq-section { margin-top:32px; }
+        .mock-accordion { display:flex; flex-direction:column; gap:6px; }
+        .mock-accordion-item { background:#fff; border-radius:var(--radius); border:1px solid #e8ecf0; overflow:hidden; }
+        .mock-accordion-header { width:100%; padding:14px 16px; background:transparent; border:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; font-weight:600; font-size:14px; color:var(--gray-700); }
+        .mock-accordion-body { max-height:0; overflow:hidden; transition:max-height 0.4s; padding:0 16px; }
+        .mock-accordion-item.open .mock-accordion-body { max-height:300px; padding:0 16px 12px; }
+        .ma-arrow { transition:transform 0.3s; }
+        .mock-accordion-item.open .ma-arrow { transform:rotate(180deg); }
+
+        /* Rating & Reviews */
+        .review-section { margin-top:32px; background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); }
+        .star-rating { display:flex; gap:6px; margin-bottom:12px; }
+        .star-rating i { font-size:24px; color:#ddd; cursor:pointer; transition:0.2s; }
+        .star-rating i.active, .star-rating i:hover { color:#f59e0b; }
+        .review-form textarea { width:100%; border:1px solid #e8ecf0; border-radius:10px; padding:12px; font-family:var(--font); resize:vertical; }
+        .review-form button { margin-top:10px; padding:10px 20px; background:var(--primary); color:#fff; border:none; border-radius:20px; font-weight:600; cursor:pointer; }
+        .review-list { margin-top:20px; display:flex; flex-direction:column; gap:12px; }
+        .review-item { padding:12px; border-radius:10px; background:var(--gray-100); }
+        .review-item .stars { color:#f59e0b; }
+        .review-item .comment { font-size:13px; color:var(--gray-600); margin-top:4px; }
+        .review-item .meta { font-size:11px; color:var(--gray-400); margin-top:4px; }
+
+        @media (max-width:480px) {
+            .blog-card h3 { font-size:16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar overlay (same as dashboard) -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="sidebar-user-card">
+                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                <div style="font-weight:600; font-size:13px;" id="sidebarUserName">Student</div>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
+                <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('blog')"><i class="fas fa-blog"></i> Blog</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
+                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </nav>
+        </aside>
+    </div>
+
+    <!-- Navbar (same as updated dashboard: no premium, chat added) -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
+        </div>
+        <div class="nav-right">
+            <button class="bell-icon-btn" onclick="navigate('notices.html')"><i class="fas fa-bell"></i></button>
+            <button class="chat-icon-btn" onclick="navigate('chat.html')"><i class="fas fa-comments"></i></button>
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()">
+                <span class="premium-badge" id="premiumBadge"><i class="fas fa-crown"></i></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="section-title"><i class="fas fa-blog" style="color:var(--blue); margin-right:10px;"></i> Blog & Updates</h1>
+        <div class="blog-list" id="blogContainer"></div>
+        <div class="pagination" id="paginationContainer"></div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="section-title" style="font-size:20px;">📌 Frequently Asked Questions</h2>
+            <div class="mock-accordion" id="faqAccordion"></div>
+        </div>
+
+        <!-- Rating & Review Section -->
+        <div class="review-section">
+            <h2 style="font-weight:700; margin-bottom:16px;">⭐ Rate Our Platform</h2>
+            <div class="star-rating" id="starRating">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="review-form">
+                <textarea id="reviewComment" rows="3" placeholder="Share your experience..."></textarea>
+                <button onclick="submitReview()"><i class="fas fa-paper-plane"></i> Submit Review</button>
+            </div>
+            <div class="review-list" id="reviewList"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
+        <button class="bottom-nav-item active" onclick="navigate('blogs.html')"><i class="fas fa-blog"></i><span>Blog</span></button>
+        <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
+    </nav>
+
+    <script>
+        const BLOG_JSON = './blog.json';
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        let allBlogs = [];
+        let currentPage = 1;
+        const perPage = 10;
+
+        // ---- Sidebar & Nav Helpers ----
+        function openSidebar() { const o=document.getElementById('sidebarOverlay'); o.classList.remove('hidden'); o.classList.add('active'); document.body.style.overflow='hidden'; }
+        function closeSidebar(e) { if(e.target===document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+        function closeSidebarDirect() { const o=document.getElementById('sidebarOverlay'); o.classList.remove('active'); document.body.style.overflow=''; setTimeout(()=>{ if(!o.classList.contains('active')) o.classList.add('hidden') },400); }
+        function navigate(u) { window.location.href = u; }
+        function sidebarNavigate(action) {
+            closeSidebarDirect();
+            const map = {
+                dashboard:'dashboard.html', mocks:'exam.html', books:'book.html',
+                results:'allresult.html', blog:'blogs.html', chat:'chat.html',
+                profile:'profile.html', logout:'logout'
+            };
+            if(action==='logout'){ logoutUser(); return; }
+            setTimeout(()=>{ if(map[action]) window.location.href=map[action]; },300);
+        }
+        function logoutUser(){
+            Swal.fire({ title:'Logout?', text:'Are you sure?', icon:'question', showCancelButton:true, confirmButtonText:'Yes', confirmButtonColor:'#ff4d5a' })
+            .then(r=>{ if(r.isConfirmed){ localStorage.removeItem('user'); window.location.href='index.html'; } });
+        }
+
+        // ---- Fetch Blogs ----
+        async function loadBlogs() {
+            try {
+                const res = await fetch(BLOG_JSON, { cache: 'no-store' });
+                if (!res.ok) throw new Error('Failed');
+                allBlogs = await res.json();
+            } catch (e) {
+                // fallback data
+                allBlogs = [
+                    { id:1, title:'SSC CGL 2026 Strategy', file:'blog1.html', author:'Admin', date:'2026-05-20', excerpt:'Top tips and subject-wise plan.', image:'' },
+                    { id:2, title:'IBPS PO Study Material', file:'blog2.html', author:'TestMaster', date:'2026-05-18', excerpt:'Best resources for banking exams.', image:'' },
+                    { id:3, title:'RRB NTPC Mock Analysis', file:'blog3.html', author:'Team', date:'2026-05-15', excerpt:'Understand your weak areas.', image:'' }
+                ];
+                // Ensure at least 12 items for pagination demo (duplicate if needed)
+                while(allBlogs.length < 12) {
+                    let base = allBlogs[allBlogs.length % 3];
+                    allBlogs.push({ ...base, id: allBlogs.length+1, title: base.title + ' (Part '+(allBlogs.length+1)+')', file: base.file });
+                }
+            }
+            renderPage();
+        }
+
+        function renderPage() {
+            const start = (currentPage - 1) * perPage;
+            const pageBlogs = allBlogs.slice(start, start + perPage);
+            const container = document.getElementById('blogContainer');
+            container.innerHTML = pageBlogs.map(b => `
+                <div class="blog-card">
+                    <h3>${b.title}</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-user"></i> ${b.author || 'TestMaster'}</span>
+                        <span><i class="far fa-calendar"></i> ${b.date || ''}</span>
+                    </div>
+                    <div class="blog-excerpt">${b.excerpt || 'Click to read the full article.'}</div>
+                    <a class="read-more" href="${b.file}" target="_blank"><i class="fas fa-arrow-right"></i> Read More</a>
+                </div>
+            `).join('');
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(allBlogs.length / perPage);
+            const pagDiv = document.getElementById('paginationContainer');
+            if (totalPages <= 1) { pagDiv.innerHTML = ''; return; }
+            let html = '';
+            html += `<button onclick="changePage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            for (let i=1; i<=totalPages; i++) {
+                html += `<button class="${i===currentPage?'active-page':''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            html += `<button onclick="changePage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            pagDiv.innerHTML = html;
+        }
+
+        function changePage(p) {
+            if (p < 1 || p > Math.ceil(allBlogs.length/perPage)) return;
+            currentPage = p;
+            renderPage();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ---- FAQ Accordion ----
+        function initFAQ() {
+            const faqs = [
+                { q:'How do I attempt a mock test?', a:'Go to Mock Tests, choose a category, exam, and start the test. Your results are saved automatically.' },
+                { q:'Are the tests bilingual?', a:'Yes, most tests are available in English and Hindi.' },
+                { q:'How can I earn coins?', a:'Complete daily challenges, refer friends, and stay active.' },
+                { q:'Is premium worth it?', a:'Premium unlocks advanced analytics, priority support, and exclusive tests.' },
+                { q:'How to reset password?', a:'Contact support via chat or email testmaster.helpdesk@gmail.com.' }
+            ];
+            const faqContainer = document.getElementById('faqAccordion');
+            faqContainer.innerHTML = faqs.map((f,idx) => `
+                <div class="mock-accordion-item" id="faq${idx}">
+                    <button class="mock-accordion-header" onclick="toggleFaq(${idx})">
+                        <span>${f.q}</span>
+                        <i class="fas fa-chevron-down ma-arrow"></i>
+                    </button>
+                    <div class="mock-accordion-body"><p style="padding:8px 0; color:var(--gray-600);">${f.a}</p></div>
+                </div>
+            `).join('');
+        }
+        function toggleFaq(idx) {
+            const item = document.getElementById('faq'+idx);
+            item.classList.toggle('open');
+        }
+
+        // ---- Reviews ----
+        let selectedRating = 0;
+        document.addEventListener('DOMContentLoaded', () => {
+            const stars = document.querySelectorAll('#starRating i');
+            stars.forEach(s => {
+                s.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.value);
+                    stars.forEach(st => st.classList.remove('active'));
+                    for (let i=0; i<selectedRating; i++) stars[i].classList.add('active');
+                });
+                s.addEventListener('mouseenter', function() {
+                    const val = parseInt(this.dataset.value);
+                    stars.forEach(st => st.classList.remove('active'));
+                    for (let i=0; i<val; i++) stars[i].classList.add('active');
+                });
+                s.addEventListener('mouseleave', () => {
+                    stars.forEach(st => st.classList.remove('active'));
+                    for (let i=0; i<selectedRating; i++) stars[i].classList.add('active');
+                });
+            });
+            loadReviews();
+        });
+
+        function submitReview() {
+            const comment = document.getElementById('reviewComment').value.trim();
+            if (!selectedRating) { Swal.fire('Oops','Please select a star rating.','warning'); return; }
+            if (!comment) { Swal.fire('Oops','Please write a comment.','warning'); return; }
+            const reviews = JSON.parse(localStorage.getItem('blogReviews') || '[]');
+            reviews.push({
+                rating: selectedRating,
+                comment: comment,
+                user: user?.name || 'Guest',
+                date: new Date().toISOString().slice(0,10)
+            });
+            localStorage.setItem('blogReviews', JSON.stringify(reviews));
+            document.getElementById('reviewComment').value = '';
+            selectedRating = 0;
+            document.querySelectorAll('#starRating i').forEach(s => s.classList.remove('active'));
+            loadReviews();
+            Swal.fire('Thank you!','Your review has been posted.','success');
+        }
+
+        function loadReviews() {
+            const reviews = JSON.parse(localStorage.getItem('blogReviews') || '[]');
+            const list = document.getElementById('reviewList');
+            if (!reviews.length) { list.innerHTML = '<p style="color:var(--gray-400); font-size:13px;">No reviews yet. Be the first!</p>'; return; }
+            list.innerHTML = reviews.map(r => `
+                <div class="review-item">
+                    <div class="stars">${'<i class="fas fa-star"></i>'.repeat(r.rating)}${'<i class="far fa-star"></i>'.repeat(5-r.rating)}</div>
+                    <div class="comment">${r.comment}</div>
+                    <div class="meta">${r.user} · ${r.date}</div>
+                </div>
+            `).join('');
+        }
+
+        // ---- Init ----
+        function setAvatar() {
+            const av = document.getElementById('userInitial');
+            const sidebarAv = document.getElementById('sidebarAvatar');
+            const premiumBadge = document.getElementById('premiumBadge');
+            if (user) {
+                av.textContent = user.name?.charAt(0).toUpperCase() || 'S';
+                sidebarAv.textContent = av.textContent;
+                document.getElementById('sidebarUserName').textContent = user.name || 'Student';
+                if (user.isPremium || user.plan === 'premium') {
+                    premiumBadge.style.display = 'flex';
+                }
+            } else {
+                av.textContent = 'G';
+                sidebarAv.textContent = 'G';
+                document.getElementById('sidebarUserName').textContent = 'Guest';
+                premiumBadge.style.display = 'none';
+            }
+        }
+
+        window.onload = () => {
+            setAvatar();
+            loadBlogs();
+            initFAQ();
+        };
+
+        document.addEventListener('keydown', e => { if (e.key==='Escape' && document.getElementById('sidebarOverlay').classList.contains('active')) closeSidebarDirect(); });
+    </script>
+</body>
+</html>
