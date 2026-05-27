@@ -7,6 +7,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>TestMasterPro.space · Dashboard</title>
+
+    <!-- ===== PWA MANIFEST ===== -->
+    <link rel="manifest" href="./json/manifest.json">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -70,7 +74,6 @@
         }
         body.sidebar-open, body.sheet-open { overflow:hidden; position:fixed; width:100%; height:100%; }
 
-        /* --- Toast, Offline Banner, Sidebar, Navbar (unchanged) --- */
         .toast-container { position:fixed; top:calc(12px + var(--safe-top)); left:50%; transform:translateX(-50%) translateY(-120%); z-index:1000; display:flex; flex-direction:column; gap:8px; width:92%; max-width:400px; pointer-events:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
         .toast-container.show { transform:translateX(-50%) translateY(0); }
         .toast-item { background:var(--gray-800); color:#fff; padding:12px 16px; border-radius:var(--radius); font-size:13px; font-weight:600; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-lg); animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1); pointer-events:all; border-left:3px solid var(--blue); }
@@ -82,7 +85,6 @@
         .offline-banner { position:fixed; top:0; left:0; width:100%; background:var(--red); color:#fff; text-align:center; padding:6px; font-size:11px; font-weight:700; z-index:999; transform:translateY(-100%); transition:transform 0.3s ease; }
         .offline-banner.show { transform:translateY(0); }
 
-        /* ---- NETWORK TOAST (offline/online) ---- */
         .net-toast {
             position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-80px);
             z-index: 1001; padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 600;
@@ -94,7 +96,6 @@
         .net-toast.offline { background: var(--red); color: #fff; }
         .net-toast.online { background: var(--green); color: #fff; }
 
-        /* ---- Sidebar, Navbar (same as before) ---- */
         .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250; opacity:0; visibility:hidden; transition:opacity 0.35s ease,visibility 0.35s; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
         .sidebar-overlay.active { opacity:1; visibility:visible; }
         .sidebar { position:fixed; top:0; left:0; height:100%; height:100dvh; width:290px; max-width:82vw; background:#fff; z-index:251; transform:translateX(-110%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.18); border-radius:0 22px 22px 0; overflow:hidden; border-right:1px solid rgba(0,0,0,0.04); }
@@ -111,7 +112,6 @@
         .sidebar-user-info .name { font-weight:600; font-size:13px; color:var(--gray-800); }
         .sidebar-user-info .tag { font-size:10px; color:var(--primary); font-weight:600; background:var(--primary-light); padding:2px 8px; border-radius:12px; display:inline-block; margin-top:2px; }
 
-        /* Streak indicator */
         .sidebar-streak { display:flex; align-items:center; gap:8px; margin:8px 16px 4px; padding:10px 14px; background:linear-gradient(135deg,#fff7ed,#fed7aa); border-radius:14px; cursor:pointer; transition:var(--transition-fast); box-shadow:0 2px 8px rgba(245,158,11,0.12); border:1px solid rgba(249,115,22,0.15); }
         .sidebar-streak:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(245,158,11,0.2); }
         .sidebar-streak .streak-fire { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#f97316,#ea580c); display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; }
@@ -129,6 +129,11 @@
         .sidebar-nav-item.logout-item:hover { background:var(--red-light); color:var(--red); }
         .sidebar-version { text-align:center; font-size:10px; color:var(--gray-300); padding:10px; flex-shrink:0; }
 
+        /* Install button in sidebar */
+        .install-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--gray-600); transition: var(--transition-fast); border: none; background: transparent; width: 100%; text-align: left; font-family: var(--font); }
+        .install-sidebar-item i { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--primary-light); color: var(--primary); }
+        .install-sidebar-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(3px); }
+
         .navbar { background:#fff; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 1px 16px rgba(0,0,0,0.04); gap:8px; flex-wrap:nowrap; min-height:54px; border-bottom:1px solid #eee; }
         .nav-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
         .hamburger-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:15px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); flex-shrink:0; }
@@ -139,11 +144,7 @@
         .user-avatar { width:34px; height:34px; border-radius:10px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:var(--primary); cursor:pointer; flex-shrink:0; overflow:visible; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:var(--transition-fast); position:relative; }
         .user-avatar img { width:100%; height:100%; object-fit:cover; }
         .user-avatar:hover { transform:scale(1.08); }
-        .premium-badge {
-            position:absolute; top:-4px; right:-4px; background:linear-gradient(135deg,#f59e0b,#fbbf24);
-            width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-            font-size:9px; color:#1e293b; box-shadow:0 2px 6px rgba(0,0,0,0.2); border:1px solid #fff;
-        }
+        .premium-badge { position:absolute; top:-4px; right:-4px; background:linear-gradient(135deg,#f59e0b,#fbbf24); width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; color:#1e293b; box-shadow:0 2px 6px rgba(0,0,0,0.2); border:1px solid #fff; }
 
         .bell-icon-btn, .chat-icon-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:16px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); position:relative; flex-shrink:0; }
         .bell-icon-btn:hover, .chat-icon-btn:hover { background:var(--gray-200); color:var(--primary); }
@@ -151,7 +152,7 @@
 
         .container { max-width:var(--max-width); margin:0 auto; padding:14px 14px calc(20px + var(--bottom-nav-height)); position:relative; z-index:5; width:100%; flex:1; }
 
-        /* --- Hero Slider --- */
+        /* Hero Slider */
         .hero-slider-wrap { position:relative; width:100%; overflow:hidden; border-radius:0 0 24px 24px; margin-bottom:20px; }
         .hero-slider { display:flex; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform; }
         .hero-slide { min-width:100%; position:relative; cursor:pointer; }
@@ -227,18 +228,11 @@
         .mock-exam-item:hover { background:var(--primary-light); color:var(--primary); border-color:rgba(36,55,72,0.1); transform:translateX(3px); }
         .mock-exam-item:active { transform:scale(0.98); }
 
-        /* Popular slider – added for infinite loop & dots */
+        /* Popular slider */
         .popular-slider-wrap { position:relative; width:100%; overflow:hidden; border-radius:var(--radius-lg); margin-bottom:8px; }
         .popular-slider { display:flex; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform; }
         .popular-slide { min-width:100%; flex-shrink:0; cursor:pointer; }
-        .popular-slide .popular-card {
-            margin: 0 auto;
-            min-width: 270px; max-width: 320px;
-            background:#f0f9ff; border-radius:var(--radius-md); padding:24px 18px;
-            border:1px solid #b9d8f0; box-shadow:var(--shadow-sm);
-            transition:var(--transition); position:relative; overflow:hidden;
-            display:flex; flex-direction:column; gap:14px;
-        }
+        .popular-slide .popular-card { margin: 0 auto; min-width: 270px; max-width: 320px; background:#f0f9ff; border-radius:var(--radius-md); padding:24px 18px; border:1px solid #b9d8f0; box-shadow:var(--shadow-sm); transition:var(--transition); position:relative; overflow:hidden; display:flex; flex-direction:column; gap:14px; }
         .popular-slide .popular-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:#8ebce8; }
         .popular-slide .popular-card:active { transform:scale(0.97); transition:0.06s; }
         .popular-card .pop-badge { position:absolute; top:12px; right:12px; background:var(--red); color:#fff; padding:3px 10px; border-radius:12px; font-size:9px; font-weight:700; letter-spacing:0.5px; z-index:1; }
@@ -252,7 +246,6 @@
         .popular-card .pop-explore:hover { background:var(--primary-dark); }
         .popular-card .pop-explore:active { transform:scale(0.96); }
 
-        /* Dots for popular slider */
         .popular-dots { display:flex; justify-content:center; gap:8px; padding:8px 0 2px; }
         .popular-dot { width:8px; height:8px; border-radius:50%; background:var(--gray-300); cursor:pointer; transition:all 0.3s; border:none; padding:0; }
         .popular-dot.active { background:var(--primary); width:24px; border-radius:4px; }
@@ -269,47 +262,22 @@
         .social-card.youtube i { color:#ff0000; }
         .social-card span { font-size:11px; font-weight:600; color:var(--gray-600); }
         .social-card.coming-soon { opacity:0.6; cursor:default; }
-        .social-card.coming-soon::after {
-            content:'Coming Soon'; position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
-            font-size:8px; font-weight:700; background:#ff4d5a; color:#fff; padding:2px 6px;
-            border-radius:4px; white-space:nowrap;
-        }
+        .social-card.coming-soon::after { content:'Coming Soon'; position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:8px; font-weight:700; background:#ff4d5a; color:#fff; padding:2px 6px; border-radius:4px; white-space:nowrap; }
 
-        /* --- Feedback & Testimonials (vertical marquee) --- */
-        .feedback-section {
-            background:linear-gradient(135deg,#eef2ff,#f0f4ff);
-            border-radius:var(--radius-lg); padding:20px; margin:24px 0 20px;
-            box-shadow:var(--shadow-sm); border:1px solid #d0d7f0;
-        }
+        /* Feedback */
+        .feedback-section { background:linear-gradient(135deg,#eef2ff,#f0f4ff); border-radius:var(--radius-lg); padding:20px; margin:24px 0 20px; box-shadow:var(--shadow-sm); border:1px solid #d0d7f0; }
         .feedback-section h3 { font-size:17px; font-weight:800; color:var(--primary-dark); margin-bottom:6px; }
-        .feedback-marquee {
-            height:140px; overflow:hidden; position:relative; margin-bottom:16px;
-        }
-        .feedback-marquee-inner {
-            display:flex; flex-direction:column; animation:verticalScroll 15s linear infinite;
-        }
+        .feedback-marquee { height:140px; overflow:hidden; position:relative; margin-bottom:16px; }
+        .feedback-marquee-inner { display:flex; flex-direction:column; animation:verticalScroll 15s linear infinite; }
         .feedback-marquee-inner:hover { animation-play-state:paused; }
-        @keyframes verticalScroll {
-            0% { transform:translateY(0); }
-            100% { transform:translateY(-50%); }
-        }
-        .testimonial-card {
-            background:#fff; border-radius:var(--radius-sm); padding:14px;
-            margin-bottom:12px; border:1px solid #e2e8f0; box-shadow:var(--shadow-xs);
-        }
+        @keyframes verticalScroll { 0% { transform:translateY(0); } 100% { transform:translateY(-50%); } }
+        .testimonial-card { background:#fff; border-radius:var(--radius-sm); padding:14px; margin-bottom:12px; border:1px solid #e2e8f0; box-shadow:var(--shadow-xs); }
         .testimonial-card .t-name { font-weight:700; font-size:13px; }
         .testimonial-card .t-role { font-size:11px; color:var(--gray-400); margin-bottom:6px; }
         .testimonial-card .t-stars { color:#f59e0b; font-size:12px; margin-bottom:4px; }
         .testimonial-card .t-text { font-size:12px; color:var(--gray-600); font-style:italic; }
-
         .feedback-actions { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-        .feedback-btn {
-            background:var(--primary); color:#fff; border:none; padding:12px 20px;
-            border-radius:24px; font-weight:700; font-size:13px;
-            cursor:pointer; transition:var(--transition-smooth);
-            display:flex; align-items:center; gap:6px; font-family:var(--font);
-            box-shadow:0 4px 12px rgba(36,55,72,0.25);
-        }
+        .feedback-btn { background:var(--primary); color:#fff; border:none; padding:12px 20px; border-radius:24px; font-weight:700; font-size:13px; cursor:pointer; transition:var(--transition-smooth); display:flex; align-items:center; gap:6px; font-family:var(--font); box-shadow:0 4px 12px rgba(36,55,72,0.25); }
         .feedback-btn:hover { background:var(--primary-dark); transform:translateY(-2px); box-shadow:0 6px 18px rgba(36,55,72,0.35); }
 
         /* Footer */
@@ -335,6 +303,10 @@
         .footer-social a { width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:16px; transition:all 0.3s ease; border:1px solid var(--border-light); }
         .footer-social a:hover { background:rgba(255,255,255,0.1); color:var(--accent); transform:translateY(-3px); border-color:var(--accent); }
 
+        /* Footer install button */
+        .footer-install-btn { display: inline-flex; align-items: center; gap: 6px; margin: 0 auto; cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s; }
+        .footer-install-btn:hover { color: #fff; }
+
         .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:calc(var(--bottom-nav-height) + var(--safe-bottom)); background:#fff; border-top:1px solid #e8ecf0; z-index:95; display:flex; justify-content:space-around; align-items:flex-start; padding-top:8px; padding-bottom:var(--safe-bottom); box-shadow:0 -4px 20px rgba(0,0,0,0.05); }
         .bottom-nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px; border:none; background:transparent; cursor:pointer; color:var(--gray-400); transition:var(--transition-fast); font-family:var(--font); text-decoration:none; position:relative; }
         .bottom-nav-item.active { color:var(--primary); }
@@ -345,29 +317,6 @@
         .bottom-nav-item.active::before { content:''; position:absolute; top:-8px; width:20px; height:3px; background:var(--primary); border-radius:2px; }
 
         .hidden { display:none !important; }
-
-        /* PWA install mini banner */
-        .pwa-install-banner {
-            position: fixed; bottom: 80px; left: 20px; right: 20px; max-width: 500px; margin: 0 auto;
-            background: white; border-radius: 18px; padding: 16px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            display: flex; align-items: center; justify-content: space-between; gap: 12px;
-            z-index: 1100; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-            border: 1px solid #e2e8f0;
-        }
-        .pwa-install-banner.show { transform: translateY(0); }
-        .pwa-install-text { font-weight: 600; font-size: 14px; color: var(--gray-800); flex: 1; }
-        .pwa-install-btn {
-            background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 14px;
-            font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s;
-        }
-        .pwa-install-btn:hover { background: var(--primary-dark); }
-        .pwa-dismiss-btn {
-            width: 32px; height: 32px; border-radius: 8px; background: var(--gray-100); border: none;
-            cursor: pointer; color: var(--gray-400); font-size: 14px; display: flex; align-items: center; justify-content: center;
-        }
-
-        .footer-install-btn { display: inline-flex; align-items: center; gap: 6px; margin: 0 auto; cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s; }
-        .footer-install-btn:hover { color: #fff; }
 
         @media (min-width:600px) {
             .bottom-nav { display:none; }
@@ -389,16 +338,10 @@
         <i class="fas fa-wifi-slash"></i>
         <span id="netMsg">You're offline</span>
     </div>
-
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- PWA Install Banner -->
-    <div class="pwa-install-banner" id="pwaBanner">
-        <span class="pwa-install-text">📲 Install TestMasterPro for quick access</span>
-        <button class="pwa-install-btn" onclick="installPWA()">Install</button>
-        <button class="pwa-dismiss-btn" onclick="dismissPWA()"><i class="fas fa-times"></i></button>
-    </div>
+    <!-- NO floating PWA banner -->
 
     <!-- Sidebar -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
@@ -415,7 +358,6 @@
                     <span class="tag" id="sidebarUserTag">Learner</span>
                 </div>
             </div>
-            <!-- Streak Indicator -->
             <div class="sidebar-streak" id="sidebarStreak" style="display:none;" onclick="navigate('streak.html')">
                 <div class="streak-fire"><i class="fas fa-fire"></i></div>
                 <div class="streak-info"><span id="streakCount">0</span> day streak</div>
@@ -440,7 +382,9 @@
                 <div class="sidebar-nav-label">Premium</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
                 <div class="sidebar-nav-label">App</div>
-                <button class="sidebar-nav-item install-sidebar-item" id="sidebarInstallBtn" onclick="installPWA()" style="display:none;"><i class="fas fa-download"></i> Install App</button>
+                <button class="sidebar-nav-item install-sidebar-item" id="sidebarInstallBtn" onclick="installPWA()" style="display:none;">
+                    <i class="fas fa-download"></i> Install App
+                </button>
                 <div class="sidebar-nav-label">Account</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
@@ -474,24 +418,14 @@
             <div class="hero-dots" id="heroDots"></div>
         </div>
 
-        <!-- Quick Actions (now 5: Challenge, Refer, Coins, Use Coins, Results) -->
+        <!-- Quick Actions -->
         <div class="quick-actions" style="margin-bottom:20px;">
             <div class="qa-scroll">
-                <button class="qa-card qa-challenge" onclick="window.location.href='challenge.html'">
-                    <div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span>
-                </button>
-                <button class="qa-card qa-refer" onclick="window.location.href='referral.html'">
-                    <div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span>
-                </button>
-                <button class="qa-card qa-coins" onclick="window.location.href='coin-history.html'">
-                    <div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span>
-                </button>
-                <button class="qa-card qa-use-coins" onclick="window.location.href='usecoin.html'">
-                    <div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span>
-                </button>
-                <button class="qa-card qa-results" onclick="window.location.href='allresult.html'">
-                    <div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span>
-                </button>
+                <button class="qa-card qa-challenge" onclick="window.location.href='challenge.html'"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span></button>
+                <button class="qa-card qa-refer" onclick="window.location.href='referral.html'"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span></button>
+                <button class="qa-card qa-coins" onclick="window.location.href='coin-history.html'"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span></button>
+                <button class="qa-card qa-use-coins" onclick="window.location.href='usecoin.html'"><div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span></button>
+                <button class="qa-card qa-results" onclick="window.location.href='allresult.html'"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span></button>
             </div>
         </div>
 
@@ -519,7 +453,7 @@
             </div>
         </section>
 
-        <!-- Popular Mock Tests (Slider with dots & infinite loop) -->
+        <!-- Popular Mock Tests -->
         <section style="margin-bottom:20px;">
             <div class="section-header">
                 <div class="section-icon"><i class="fas fa-fire"></i></div>
@@ -541,22 +475,14 @@
                 <h2>Stay Connected With Mockers</h2>
             </div>
             <div class="social-grid">
-                <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp">
-                    <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
-                </a>
-                <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram">
-                    <i class="fab fa-telegram-plane"></i><span>Telegram</span>
-                </a>
-                <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram">
-                    <i class="fab fa-instagram"></i><span>Instagram</span>
-                </a>
-                <a href="#" class="social-card youtube coming-soon" onclick="return false;">
-                    <i class="fab fa-youtube"></i><span>YouTube</span>
-                </a>
+                <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+                <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span></a>
+                <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+                <a href="#" class="social-card youtube coming-soon" onclick="return false;"><i class="fab fa-youtube"></i><span>YouTube</span></a>
             </div>
         </section>
 
-        <!-- Feedback Section with vertical scrolling testimonials -->
+        <!-- Feedback -->
         <div class="feedback-section">
             <h3>🎓 What Our Students Say</h3>
             <div class="feedback-marquee">
@@ -570,14 +496,12 @@
                 </div>
             </div>
             <div class="feedback-actions">
-                <button class="feedback-btn" onclick="window.location.href='reviews.html'">
-                    <i class="fas fa-paper-plane"></i> Give Your Feedback
-                </button>
+                <button class="feedback-btn" onclick="window.location.href='reviews.html'"><i class="fas fa-paper-plane"></i> Give Your Feedback</button>
             </div>
         </div>
     </div>
 
-    <!-- Footer (now includes Books & PYQ, Chat, and Add to Home Screen button) -->
+    <!-- Footer -->
     <footer class="pro-footer">
         <div class="footer-grid">
             <div class="footer-col">
@@ -596,6 +520,7 @@
             <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
             <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
         </div>
+        <!-- Install button in footer -->
         <div style="text-align:center; margin-top: 20px;" id="footerInstallContainer">
             <a class="footer-install-btn" id="footerInstallBtn" onclick="installPWA()" style="display:none;">
                 <i class="fas fa-plus-square"></i> Add to Home Screen
@@ -629,9 +554,7 @@
         let isOffline = false;
         const user = JSON.parse(localStorage.getItem('user'));
 
-        // ============================================
-        // PWA INSTALL PROMPT & BUTTONS
-        // ============================================
+        // ========== PWA LOGIC ==========
         let deferredPrompt = null;
         const PWA_PROMPT_KEY = 'pwa_prompt_dismissed';
         const PWA_INSTALL_KEY = 'pwa_installed';
@@ -647,9 +570,6 @@
             document.querySelectorAll('.install-sidebar-item, #footerInstallBtn').forEach(el => {
                 el.style.display = show ? 'flex' : 'none';
             });
-            if (!installed && deferredPrompt) {
-                setTimeout(showPWAMiniBanner, 5000);
-            }
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -659,7 +579,6 @@
             if (isPromptDismissedRecently()) return;
             if (isAppInstalled()) return;
             updateInstallButtonsVisibility();
-            setTimeout(showPWAMiniBanner, 5000);
         });
 
         function isPromptDismissedRecently() {
@@ -675,27 +594,10 @@
         window.addEventListener('appinstalled', () => {
             deferredPrompt = null;
             localStorage.setItem(PWA_INSTALL_KEY, 'true');
-            hideAllPWA();
             claimPWAReward();
             updateInstallButtonsVisibility();
             showToast('🎉 App installed! +50 Coins added', 'success', 4000);
         });
-
-        function showPWAMiniBanner() {
-            if (isAppInstalled()) return;
-            const banner = document.getElementById('pwaBanner');
-            if (banner) banner.classList.add('show');
-        }
-
-        function hideAllPWA() {
-            const banner = document.getElementById('pwaBanner');
-            if (banner) banner.classList.remove('show');
-        }
-
-        function dismissPWA() {
-            hideAllPWA();
-            localStorage.setItem(PWA_PROMPT_KEY, JSON.stringify({ timestamp: Date.now() }));
-        }
 
         function installPWA() {
             if (isAppInstalled()) {
@@ -705,11 +607,8 @@
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted PWA install');
-                    }
+                    if (choiceResult.outcome === 'accepted') console.log('PWA install accepted');
                     deferredPrompt = null;
-                    hideAllPWA();
                 });
             } else {
                 showToast('Tap the browser menu (⋮) and select "Add to Home Screen"', 'info', 5000);
@@ -722,13 +621,10 @@
                 showToast('App Installed! Login to claim 50 coins', 'info', 4000);
                 return;
             }
-            if (localStorage.getItem(PWA_REWARD_KEY)) {
-                showToast('App Installed Successfully!', 'success', 3000);
-                return;
-            }
+            if (localStorage.getItem(PWA_REWARD_KEY)) return;
             const currentCoins = parseInt(localStorage.getItem('userCoins') || '0');
             localStorage.setItem('userCoins', currentCoins + 50);
-            localStorage.setItem('pwa_reward_claimed', 'true');
+            localStorage.setItem(PWA_REWARD_KEY, 'true');
             updateCoinDisplay(currentCoins + 50);
             showToast('🎉 +50 Coins Added for Installing App!', 'success', 4000);
             logPWAActivity(user.username);
@@ -737,24 +633,16 @@
         async function logPWAActivity(username) {
             try {
                 await fetch(`${API_URL}?action=submitResult&username=${encodeURIComponent(username)}&name=PWA&testCode=PWA_INSTALL&score=50&totalMarks=50&accuracy=100&correct=1&wrong=0&attempted=1&unanswered=0&timeTaken=0&date=${new Date().toISOString().split('T')[0]}&examType=PWA`);
-            } catch (e) {
-                console.log('Activity log failed (non-critical)');
-            }
+            } catch (e) { console.log('Activity log failed'); }
         }
 
         function updateCoinDisplay(coins) {
-            document.querySelectorAll('.coin-balance').forEach(el => {
-                el.textContent = coins;
-            });
+            document.querySelectorAll('.coin-balance').forEach(el => el.textContent = coins);
         }
 
-        // On load, hide install buttons if already installed
         updateInstallButtonsVisibility();
 
-        // ============================================
-        // REST OF DASHBOARD SCRIPTS (unchanged)
-        // ============================================
-
+        // ========== FALLBACK DATA ==========
         const FALLBACK_MOCKS = [
             { file:'sbi_po.html',exam:'SBI PO',subject:'QA',chapter:'Full',testName:'SBI PO Mock',testCode:'SBI-PO-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
             { file:'ibps_clerk.html',exam:'IBPS Clerk',subject:'Reasoning',chapter:'Full',testName:'IBPS Clerk Mock',testCode:'IBPS-CLK-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
@@ -763,32 +651,17 @@
             { file:'rrb_ntpc.html',exam:'RRB NTPC',subject:'GA',chapter:'Full',testName:'RRB NTPC Mock',testCode:'RRB-NTPC-01',duration:90,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.33,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Railway' },
             { file:'cuet_gat.html',exam:'CUET GAT',subject:'GT',chapter:'Full',testName:'CUET GAT Mock',testCode:'CUET-GAT-01',duration:60,totalQuestions:50,marksPerQuestion:5,negativeMarking:1,type:'free',requiredPlan:'none',difficulty:'Hard',language:'Eng & Hin',category:'CUET' }
         ];
-
         const FALLBACK_POPULAR = [
             { file:'cuet_pyp.html',exam:'CUET GAT',subject:'GT',chapter:'Full',testName:'CUET General Aptitude Test PYP',testCode:'CUET-GAT-PYP',duration:60,totalQuestions:50,marksPerQuestion:5,negativeMarking:1,type:'free',requiredPlan:'none',difficulty:'Hard',language:'Eng & Hin',category:'CUET',attempts:'2296 Attempts',badge:'NEW',date:'20 May 2025',imageurl:'' },
             { file:'ssc_cgl_full.html',exam:'SSC CGL',subject:'GI',chapter:'Full',testName:'SSC CGL Tier-I Full Mock 2026',testCode:'SSC-CGL-FULL',duration:60,totalQuestions:100,marksPerQuestion:2,negativeMarking:0.5,type:'free',requiredPlan:'none',difficulty:'Hard',language:'Eng & Hin',category:'SSC',attempts:'4512 Attempts',badge:'HOT',date:'10 June 2026',imageurl:'' },
             { file:'ibps_po.html',exam:'IBPS PO',subject:'QA',chapter:'Full',testName:'IBPS PO Prelims Mock Test',testCode:'IBPS-PO-PRE',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank',attempts:'3187 Attempts',badge:'TRENDING',date:'15 July 2026',imageurl:'' },
             { file:'rrb_ntpc_full.html',exam:'RRB NTPC',subject:'GA',chapter:'Full',testName:'RRB NTPC CBT-1 Complete Mock',testCode:'RRB-NTPC-FULL',duration:90,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.33,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Railway',attempts:'5621 Attempts',badge:'POPULAR',date:'25 July 2026',imageurl:'' }
         ];
-
         const FALLBACK_UPCOMING_FOOTER = [
-            { id:1,name:'ReNEET UG 2026',date:'15 May 2026' },
-            { id:2,name:'CUET UG 2026',date:'20 May 2026' },
-            { id:3,name:'UP Police Constable 2026',date:'10 June 2026' },
-            { id:4,name:'SSC Selection Post (Phase 14) 2026',date:'22 June 2026' },
-            { id:5,name:'SSC GD 2025-26',date:'5 July 2026' },
-            { id:6,name:'RRB NTPC 2026',date:'25 July 2026' },
-            { id:7,name:'SSC CGL Tier-I 2026',date:'12 June 2026' },
-            { id:8,name:'SSC JE 2026',date:'18 August 2026' },
-            { id:9,name:'UPSC (CSE) 2026',date:'28 May 2026' },
-            { id:10,name:'SBI PO Prelims 2026',date:'18 August 2026' },
-            { id:11,name:'SSC Steno Grade C & D 2026',date:'30 August 2026' },
-            { id:12,name:'SBI Clerk Prelims 2026',date:'22 September 2026' },
-            { id:13,name:'IBPS PO Prelims 2026',date:'18 August 2026' },
-            { id:14,name:'IBPS Clerk Prelims 2026',date:'22 September 2026' },
-            { id:15,name:'SSC CPO Tier I 2026',date:'10 July 2026' }
+            { id:1,name:'ReNEET UG 2026',date:'15 May 2026' },{ id:2,name:'CUET UG 2026',date:'20 May 2026' },{ id:3,name:'UP Police Constable 2026',date:'10 June 2026' },{ id:4,name:'SSC Selection Post (Phase 14) 2026',date:'22 June 2026' },{ id:5,name:'SSC GD 2025-26',date:'5 July 2026' },{ id:6,name:'RRB NTPC 2026',date:'25 July 2026' },{ id:7,name:'SSC CGL Tier-I 2026',date:'12 June 2026' },{ id:8,name:'SSC JE 2026',date:'18 August 2026' },{ id:9,name:'UPSC (CSE) 2026',date:'28 May 2026' },{ id:10,name:'SBI PO Prelims 2026',date:'18 August 2026' },{ id:11,name:'SSC Steno Grade C & D 2026',date:'30 August 2026' },{ id:12,name:'SBI Clerk Prelims 2026',date:'22 September 2026' },{ id:13,name:'IBPS PO Prelims 2026',date:'18 August 2026' },{ id:14,name:'IBPS Clerk Prelims 2026',date:'22 September 2026' },{ id:15,name:'SSC CPO Tier I 2026',date:'10 July 2026' }
         ];
 
+        // ========== HELPER FUNCTIONS ==========
         function showToast(m,t='info',d=3000){
             const c=document.getElementById('toastContainer'),o=document.createElement('div');
             o.className=`toast-item ${t}`;
@@ -815,117 +688,67 @@
         function sidebarNavigate(action){
             closeSidebarDirect();
             setTimeout(()=>{
-                const map = {
-                    dashboard: 'dashboard.html',
-                    mocks: 'exam.html',
-                    books: 'book.html',
-                    study: 'book.html',
-                    results: 'allresult.html',
-                    leaderboard: 'leaderboard.html',
-                    chat: 'chat.html',
-                    streak: 'streak.html',
-                    'daily-challenge': 'challenge.html',
-                    referral: 'referral.html',
-                    favorites: 'favorites.html',
-                    coins: 'coin-history.html',
-                    'coin-use': 'usecoin.html',
-                    reviews: 'reviews.html',
-                    premium: 'payment.html',
-                    profile: 'profile.html',
-                    instructions: 'instructions',
-                    logout: 'logout'
-                };
-                if(action === 'logout') logoutUser();
-                else if(action === 'instructions') openHowToUse();
-                else if(map[action]) window.location.href = map[action];
-            }, 300);
+                const map={dashboard:'dashboard.html',mocks:'exam.html',books:'book.html',study:'book.html',results:'allresult.html',leaderboard:'leaderboard.html',chat:'chat.html',streak:'streak.html','daily-challenge':'challenge.html',referral:'referral.html',favorites:'favorites.html',coins:'coin-history.html','coin-use':'usecoin.html',reviews:'reviews.html',premium:'payment.html',profile:'profile.html',instructions:'instructions',logout:'logout'};
+                if(action==='logout')logoutUser();
+                else if(action==='instructions')openHowToUse();
+                else if(map[action])window.location.href=map[action];
+            },300);
         }
 
         function logoutUser(){
-            Swal.fire({
-                title:'Logout?',text:'Are you sure you want to logout?',icon:'question',
-                showCancelButton:true,confirmButtonText:'Yes, Logout',cancelButtonText:'Stay',
-                confirmButtonColor:'#ff4d5a',cancelButtonColor:'#243748',background:'#fff'
-            }).then(r=>{
-                if(r.isConfirmed){
-                    localStorage.removeItem('user');
-                    showToast('Logged out successfully','success');
-                    setTimeout(()=>window.location.href='index.html',800);
-                }
-            });
+            Swal.fire({title:'Logout?',text:'Are you sure?',icon:'question',showCancelButton:true,confirmButtonText:'Yes',cancelButtonText:'No',confirmButtonColor:'#ff4d5a',cancelButtonColor:'#243748'})
+            .then(r=>{if(r.isConfirmed){localStorage.removeItem('user');showToast('Logged out','success');setTimeout(()=>window.location.href='index.html',800);}});
         }
-
         function openHowToUse(){
-            Swal.fire({
-                title: 'How to Use TestMaster Pro',
-                html: `<div style="text-align:left;font-size:13px;line-height:1.9;font-family:Inter,sans-serif;">
-                    <p><b>1.</b> Select a <b>Category</b> from the top button.</p>
-                    <p><b>2.</b> Use <b>Exam, Subject & Chapter</b> filters to narrow tests.</p>
-                    <p><b>3.</b> Click <b>Attempt Now</b> to start a test.</p>
-                    <p><b>4.</b> Premium tests require subscription — tap <b>Buy Premium</b>.</p>
-                    <p><b>5.</b> Check <b>Leaderboard</b> to see your rank.</p>
-                    <p><b>6.</b> View <b>My Results</b> for detailed analytics.</p>
-                    <p style="margin-top:12px;color:var(--primary);font-weight:700;"><b>Tip:</b> Tests available in Hindi + English.</p>
-                </div>`,
-                confirmButtonText: 'Got it!',
-                confirmButtonColor: '#5b4cf0',
-                icon: 'info'
-            });
+            Swal.fire({title:'How to Use',html:`<div style="text-align:left;font-size:13px;"><p><b>1.</b> Select a Category.</p><p><b>2.</b> Use filters.</p><p><b>3.</b> Click Attempt.</p></div>`,confirmButtonText:'Got it!',confirmButtonColor:'#243748',icon:'info'});
         }
 
         async function fetchJSON(p,fb){
             try{const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();if(!Array.isArray(d)||!d.length)throw new Error('Empty data');return d}
-            catch(e){if(fb){console.warn(`Could not load ${p}, using fallback.`,e.message);return fb}throw e}
+            catch(e){if(fb){console.warn(`Fallback for ${p}`,e);return fb}throw e}
         }
 
-        function setAvatar(eid,u,showPremiumBadge=false){
+        function setAvatar(eid,u,showPremium=false){
             const el=document.getElementById(eid);
             if(!el)return;
             if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`;
             else if(u?.profilePicUrl)el.innerHTML=`<img src="${u.profilePicUrl}" alt="Avatar">`;
             else el.textContent=(u?.name)?u.name.charAt(0).toUpperCase():'S';
-            if(showPremiumBadge && el){
-                const badge = document.getElementById('premiumBadge');
-                if(badge) badge.style.display = 'flex';
-            }
+            if(showPremium){const badge=document.getElementById('premiumBadge');if(badge)badge.style.display='flex';}
         }
 
         function groupByCategoryUniqueExams(arr){
             const map={};
-            arr.forEach(item=>{
-                const cat=item.category||'Other';
-                if(!map[cat])map[cat]={exams:[],seen:new Set()};
-                if(!map[cat].seen.has(item.exam)){
-                    map[cat].seen.add(item.exam);
-                    map[cat].exams.push(item);
-                }
-            });
+            arr.forEach(item=>{const cat=item.category||'Other';if(!map[cat])map[cat]={exams:[],seen:new Set()};if(!map[cat].seen.has(item.exam)){map[cat].seen.add(item.exam);map[cat].exams.push(item);}});
             return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams}));
         }
 
-        async function fetchAndDisplayServerStreak() {
-            const streakEl = document.getElementById('sidebarStreak');
-            const streakCount = document.getElementById('streakCount');
-            try {
-                const res = await fetch(`${STREAK_API_URL}?action=getAllUsers&_=${Date.now()}`);
-                const data = await res.json();
-                if (data.success && data.users) {
-                    const currentUser = data.users.find(u => u.username === user.username);
-                    const streak = currentUser ? (currentUser.streak || 0) : 0;
-                    if (streak > 0) { streakEl.style.display = 'flex'; streakCount.textContent = streak; }
-                    else streakEl.style.display = 'none';
-                } else streakEl.style.display = 'none';
-            } catch (e) { streakEl.style.display = 'none'; showToast('Could not load streak data', 'warning'); }
+        // ========== STREAK ==========
+        async function fetchAndDisplayServerStreak(){
+            const streakEl=document.getElementById('sidebarStreak'),streakCount=document.getElementById('streakCount');
+            try{
+                const res=await fetch(`${STREAK_API_URL}?action=getAllUsers&_=${Date.now()}`);
+                const data=await res.json();
+                if(data.success&&data.users){
+                    const currentUser=data.users.find(u=>u.username===user.username);
+                    const streak=currentUser?(currentUser.streak||0):0;
+                    if(streak>0){streakEl.style.display='flex';streakCount.textContent=streak;}
+                    else streakEl.style.display='none';
+                }else streakEl.style.display='none';
+            }catch(e){streakEl.style.display='none';showToast('Could not load streak data','warning');}
         }
 
+        // ========== UPCOMING EXAMS ==========
         async function renderUpcomingExams(){
             const c=document.getElementById('upcomingScroll');
-            try{const d=await fetchJSON(JSON_PATHS.upcoming,null);
-            if(!d||!d.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No upcoming exams available</div>';return;}
-            c.innerHTML=d.map(ex=>`<div class="upcoming-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">${ex.type==='free'?'<div class="uc-badge">FREE</div>':''}<div class="uc-top"><div class="uc-img">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-calendar-check"></i>'}</div><div class="uc-info"><h4>${ex.testName||ex.exam||'Untitled'}</h4><span><i class="fas fa-clock"></i> ${ex.date||'TBA'}</span></div></div><div class="uc-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-star"></i> +${ex.marksPerQuestion||'?'}</span><span><i class="fas fa-hourglass-half"></i> ${ex.duration||'?'}m</span></div></div>`).join('');}
-            catch(e){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--red);">Failed to load upcoming exams.</div>';showToast('Could not load upcoming exams','error');}
+            try{
+                const d=await fetchJSON(JSON_PATHS.upcoming,null);
+                if(!d||!d.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No upcoming exams available</div>';return;}
+                c.innerHTML=d.map(ex=>`<div class="upcoming-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">${ex.type==='free'?'<div class="uc-badge">FREE</div>':''}<div class="uc-top"><div class="uc-img">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-calendar-check"></i>'}</div><div class="uc-info"><h4>${ex.testName||ex.exam||'Untitled'}</h4><span><i class="fas fa-clock"></i> ${ex.date||'TBA'}</span></div></div><div class="uc-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-star"></i> +${ex.marksPerQuestion||'?'}</span><span><i class="fas fa-hourglass-half"></i> ${ex.duration||'?'}m</span></div></div>`).join('');
+            }catch(e){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--red);">Failed to load upcoming exams.</div>';showToast('Could not load upcoming exams','error');}
         }
 
+        // ========== MOCK ACCORDION ==========
         async function renderMockAccordion(){
             const c=document.getElementById('mockAccordion');
             const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS);
@@ -958,32 +781,21 @@
             if(!isOpen){item.classList.add('open');setTimeout(()=>item.scrollIntoView({behavior:'smooth',block:'nearest'}),150);}
         }
 
-        // --- Popular Slider Logic (infinite loop, dots, auto-play) ---
-        const popularSlider = document.getElementById('popularSlider');
-        const popularDots = document.getElementById('popularDots');
-        const popularWrap = document.getElementById('popularSliderWrap');
-        let popularSlidesData = [];
-        let popularCurrent = 0;
-        let popularAutoInterval;
-        let popularDragging = false, popularStartX = 0, popularSliderX = 0;
+        // ========== POPULAR SLIDER ==========
+        const popularSlider=document.getElementById('popularSlider'),popularDots=document.getElementById('popularDots'),popularWrap=document.getElementById('popularSliderWrap');
+        let popularSlidesData=[],popularCurrent=0,popularAutoInterval,popularDragging=false,popularStartX=0,popularSliderX=0;
 
-        async function renderPopularSlider() {
-            const data = await fetchJSON(JSON_PATHS.popular, FALLBACK_POPULAR);
-            const grouped = groupByCategoryUniqueExams(data);
-            const allExams = [];
-            grouped.forEach(cat => cat.exams.forEach(ex => allExams.push(ex)));
-            if (!allExams.length) {
-                popularSlider.innerHTML = '<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);">No popular tests</div>';
-                return;
-            }
-            popularSlidesData = allExams;
-            popularSlider.innerHTML = allExams.map(ex => `
+        async function renderPopularSlider(){
+            const data=await fetchJSON(JSON_PATHS.popular,FALLBACK_POPULAR);
+            const grouped=groupByCategoryUniqueExams(data);
+            const allExams=[];grouped.forEach(cat=>cat.exams.forEach(ex=>allExams.push(ex)));
+            if(!allExams.length){popularSlider.innerHTML='<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);">No popular tests</div>';return;}
+            popularSlidesData=allExams;
+            popularSlider.innerHTML=allExams.map(ex=>`
                 <div class="popular-slide" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
                     <div class="popular-card">
                         ${ex.badge?`<div class="pop-badge">${ex.badge}</div>`:''}
-                        <div class="pop-icon">
-                            ${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}
-                        </div>
+                        <div class="pop-icon">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}</div>
                         <h4>${ex.exam||'Untitled'}</h4>
                         ${ex.attempts?`<div class="pop-attempts"><i class="fas fa-users"></i> ${ex.attempts}</div>`:''}
                         <div class="pop-meta">
@@ -991,73 +803,36 @@
                             <span><i class="fas fa-trophy"></i> +${ex.marksPerQuestion||'?'} Marks</span>
                             <span><i class="fas fa-clock"></i> ${ex.duration||'?'}m</span>
                         </div>
-                        <button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
-                            <i class="fas fa-play"></i> Explore
-                        </button>
+                        <button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')"><i class="fas fa-play"></i> Explore</button>
                     </div>
                 </div>
             `).join('');
-            popularDots.innerHTML = allExams.map((_, i) => `<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join('');
+            popularDots.innerHTML=allExams.map((_,i)=>`<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join('');
             startPopularAutoSlide();
         }
 
-        function goToPopularSlide(idx) {
-            popularCurrent = idx;
-            popularSlider.style.transform = `translateX(${-idx * 100}%)`;
-            document.querySelectorAll('.popular-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
-        }
+        function goToPopularSlide(idx){popularCurrent=idx;popularSlider.style.transform=`translateX(${-idx*100}%)`;document.querySelectorAll('.popular-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
+        function nextPopularSlide(){if(!popularSlidesData.length)return;popularCurrent=(popularCurrent+1)%popularSlidesData.length;goToPopularSlide(popularCurrent);}
+        function startPopularAutoSlide(){if(popularSlidesData.length)popularAutoInterval=setInterval(nextPopularSlide,5000);}
+        function stopPopularAutoSlide(){clearInterval(popularAutoInterval);}
+        popularWrap.addEventListener('mousedown',popDragStart);popularWrap.addEventListener('touchstart',popDragStart,{passive:true});
+        popularWrap.addEventListener('mousemove',popDragMove);popularWrap.addEventListener('touchmove',popDragMove,{passive:true});
+        popularWrap.addEventListener('mouseup',popDragEnd);popularWrap.addEventListener('mouseleave',popDragEnd);popularWrap.addEventListener('touchend',popDragEnd);
 
-        function nextPopularSlide() {
-            if (!popularSlidesData.length) return;
-            popularCurrent = (popularCurrent + 1) % popularSlidesData.length;
-            goToPopularSlide(popularCurrent);
-        }
+        function popDragStart(e){popularDragging=true;popularWrap.classList.add('dragging');stopPopularAutoSlide();popularStartX=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;popularSliderX=-popularCurrent*popularWrap.offsetWidth;}
+        function popDragMove(e){if(!popularDragging)return;e.preventDefault();const x=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;popularSlider.style.transform=`translateX(${popularSliderX+(x-popularStartX)}px)`;}
+        function popDragEnd(e){if(!popularDragging)return;popularDragging=false;popularWrap.classList.remove('dragging');const x=e.type.includes('mouse')?e.pageX:(e.changedTouches?e.changedTouches[0].pageX:popularStartX);const walk=x-popularStartX;const threshold=popularWrap.offsetWidth*0.2;if(walk<-threshold&&popularCurrent<popularSlidesData.length-1)popularCurrent++;else if(walk>threshold&&popularCurrent>0)popularCurrent--;goToPopularSlide(popularCurrent);startPopularAutoSlide();}
 
-        function startPopularAutoSlide() {
-            if (popularSlidesData.length) popularAutoInterval = setInterval(nextPopularSlide, 5000);
-        }
-        function stopPopularAutoSlide() { clearInterval(popularAutoInterval); }
+        document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPopularAutoSlide();else startPopularAutoSlide();});
 
-        popularWrap.addEventListener('mousedown', popDragStart);
-        popularWrap.addEventListener('touchstart', popDragStart, { passive: true });
-        popularWrap.addEventListener('mousemove', popDragMove);
-        popularWrap.addEventListener('touchmove', popDragMove, { passive: true });
-        popularWrap.addEventListener('mouseup', popDragEnd);
-        popularWrap.addEventListener('mouseleave', popDragEnd);
-        popularWrap.addEventListener('touchend', popDragEnd);
-
-        function popDragStart(e) {
-            popularDragging = true; popularWrap.classList.add('dragging'); stopPopularAutoSlide();
-            popularStartX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
-            popularSliderX = -popularCurrent * popularWrap.offsetWidth;
-        }
-        function popDragMove(e) {
-            if(!popularDragging) return; e.preventDefault();
-            const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
-            popularSlider.style.transform = `translateX(${popularSliderX + (x - popularStartX)}px)`;
-        }
-        function popDragEnd(e) {
-            if(!popularDragging) return; popularDragging = false; popularWrap.classList.remove('dragging');
-            const x = e.type.includes('mouse') ? e.pageX : (e.changedTouches ? e.changedTouches[0].pageX : popularStartX);
-            const walk = x - popularStartX;
-            const threshold = popularWrap.offsetWidth * 0.2;
-            if (walk < -threshold && popularCurrent < popularSlidesData.length-1) popularCurrent++;
-            else if (walk > threshold && popularCurrent > 0) popularCurrent--;
-            goToPopularSlide(popularCurrent);
-            startPopularAutoSlide();
-        }
-
-        document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopPopularAutoSlide(); else startPopularAutoSlide(); });
-
+        // ========== FOOTER ==========
         async function renderFooterExamCategories(){
             const c=document.getElementById('footerExamCategories');
             const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS);
             const grouped=groupByCategoryUniqueExams(data);
             if(!grouped.length){c.innerHTML='<li><a>No exams</a></li>';return;}
             let html='';
-            grouped.forEach(cat=>{
-                html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
-            });
+            grouped.forEach(cat=>{html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;});
             html+=`<li><a onclick="navigate('book.html')"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
             html+=`<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Chat</a></li>`;
             html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
@@ -1072,6 +847,7 @@
             c.innerHTML=d.map(e=>`<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
         }
 
+        // ========== NOTIFICATION BELL ==========
         async function renderNotificationBell(){
             const bell=document.getElementById('bellBtn');
             try{
@@ -1080,151 +856,96 @@
                 const n=await r.json();
                 if(Array.isArray(n)&&n.length){
                     n.sort((a,b)=>new Date(b.date+' '+(b.time||'00:00'))-new Date(a.date+' '+(a.time||'00:00')));
-                    const latest=n[0];
-                    bell.title=latest.headline||'Latest Updates';
+                    bell.title=n[0]?.headline||'Latest Updates';
                 }
             }catch(e){bell.title='Tap to view notices';}
         }
 
-        // --- Hero Slider Logic ---
-        const heroSlider = document.getElementById('heroSlider');
-        const heroDots = document.getElementById('heroDots');
-        const heroWrap = document.getElementById('heroWrap');
-        let slidesData = [];
-        let currentSlide = 0;
-        let autoSlideInterval;
+        // ========== HERO SLIDER ==========
+        const heroSlider=document.getElementById('heroSlider'),heroDots=document.getElementById('heroDots'),heroWrap=document.getElementById('heroWrap');
+        let slidesData=[],currentSlide=0,autoSlideInterval;
 
-        async function loadHeroSlides() {
-            try {
-                const res = await fetch('./json/frontpage.json', { cache: 'no-store' });
-                if (!res.ok) throw new Error('Failed');
-                slidesData = await res.json();
+        async function loadHeroSlides(){
+            try{
+                const res=await fetch('./json/frontpage.json',{cache:'no-store'});
+                if(!res.ok)throw new Error('Failed');
+                slidesData=await res.json();
                 renderSlides();
                 startAutoSlide();
-            } catch (e) {
-                heroSlider.innerHTML = `
-                    <div class="hero-slide" onclick="location.href='exam.html?id=1'">
-                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default">
-                        <div class="hero-overlay">
-                            <div class="hero-title">SSC JE Tier-I 2026</div>
-                            <div class="hero-subtitle">15 Full Length Test • Bilingual</div>
-                        </div>
-                        <span class="hero-badge">NEW</span>
-                    </div>
-                `;
+            }catch(e){
+                heroSlider.innerHTML=`<div class="hero-slide" onclick="location.href='exam.html?id=1'"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default"><div class="hero-overlay"><div class="hero-title">SSC JE Tier-I 2026</div><div class="hero-subtitle">15 Full Length Test • Bilingual</div></div><span class="hero-badge">NEW</span></div>`;
             }
         }
 
-        function renderSlides() {
-            if (!slidesData.length) return;
-            heroSlider.innerHTML = slidesData.map(s => `
-                <div class="hero-slide" onclick="location.href='${s.link || '#'}'">
-                    <img src="${s.image}" alt="${s.title}" loading="lazy">
-                    <div class="hero-overlay">
-                        <div class="hero-title">${s.title}</div>
-                        <div class="hero-subtitle">${s.subtitle}</div>
-                    </div>
-                    ${s.badge ? `<span class="hero-badge">${s.badge}</span>` : ''}
-                </div>
-            `).join('');
-            heroDots.innerHTML = slidesData.map((_, i) => `<button class="hero-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></button>`).join('');
+        function renderSlides(){
+            if(!slidesData.length)return;
+            heroSlider.innerHTML=slidesData.map(s=>`<div class="hero-slide" onclick="location.href='${s.link||'#'}'"><img src="${s.image}" alt="${s.title}" loading="lazy"><div class="hero-overlay"><div class="hero-title">${s.title}</div><div class="hero-subtitle">${s.subtitle}</div></div>${s.badge?`<span class="hero-badge">${s.badge}</span>`:''}</div>`).join('');
+            heroDots.innerHTML=slidesData.map((_,i)=>`<button class="hero-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></button>`).join('');
         }
 
-        function goToSlide(idx) {
-            currentSlide = idx;
-            heroSlider.style.transform = `translateX(${-idx * 100}%)`;
-            document.querySelectorAll('.hero-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+        function goToSlide(idx){currentSlide=idx;heroSlider.style.transform=`translateX(${-idx*100}%)`;document.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
+        function nextSlide(){currentSlide=(currentSlide+1)%slidesData.length;goToSlide(currentSlide);}
+        function startAutoSlide(){if(slidesData.length)autoSlideInterval=setInterval(nextSlide,6000);}
+        function stopAutoSlide(){clearInterval(autoSlideInterval);}
+
+        heroWrap.addEventListener('mousedown',dragStart);heroWrap.addEventListener('touchstart',dragStart,{passive:true});
+        heroWrap.addEventListener('mousemove',dragMove);heroWrap.addEventListener('touchmove',dragMove,{passive:true});
+        heroWrap.addEventListener('mouseup',dragEnd);heroWrap.addEventListener('mouseleave',dragEnd);heroWrap.addEventListener('touchend',dragEnd);
+
+        function dragStart(e){isDragging=true;heroWrap.classList.add('dragging');stopAutoSlide();startX=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;sliderX=-currentSlide*heroWrap.offsetWidth;}
+        function dragMove(e){if(!isDragging)return;e.preventDefault();const x=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;heroSlider.style.transform=`translateX(${sliderX+(x-startX)}px)`;}
+        function dragEnd(e){if(!isDragging)return;isDragging=false;heroWrap.classList.remove('dragging');const x=e.type.includes('mouse')?e.pageX:(e.changedTouches?e.changedTouches[0].pageX:startX);const walk=x-startX;const threshold=heroWrap.offsetWidth*0.2;if(walk<-threshold&&currentSlide<slidesData.length-1)currentSlide++;else if(walk>threshold&&currentSlide>0)currentSlide--;goToSlide(currentSlide);startAutoSlide();}
+
+        document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAutoSlide();else startAutoSlide();});
+
+        // ========== NETWORK TOAST ==========
+        const netToast=document.getElementById('netToast'),netMsg=document.getElementById('netMsg');
+        let wasOffline=false,toastTimeout;
+
+        function showNetToast(type,msg){
+            netToast.className=`net-toast ${type} show`;netMsg.textContent=msg;
+            clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>netToast.classList.remove('show'),3000);
         }
-
-        function nextSlide() { currentSlide = (currentSlide + 1) % slidesData.length; goToSlide(currentSlide); }
-        function startAutoSlide() { if(slidesData.length) autoSlideInterval = setInterval(nextSlide, 6000); }
-        function stopAutoSlide() { clearInterval(autoSlideInterval); }
-
-        heroWrap.addEventListener('mousedown', dragStart);
-        heroWrap.addEventListener('touchstart', dragStart, { passive: true });
-        heroWrap.addEventListener('mousemove', dragMove);
-        heroWrap.addEventListener('touchmove', dragMove, { passive: true });
-        heroWrap.addEventListener('mouseup', dragEnd);
-        heroWrap.addEventListener('mouseleave', dragEnd);
-        heroWrap.addEventListener('touchend', dragEnd);
-
-        function dragStart(e) {
-            isDragging = true; heroWrap.classList.add('dragging'); stopAutoSlide();
-            startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
-            sliderX = -currentSlide * heroWrap.offsetWidth;
+        function updateNetStatus(){
+            if(!navigator.onLine){wasOffline=true;showNetToast('offline',"You're offline.");}
+            else{if(wasOffline){showNetToast('online',"You're back online!");wasOffline=false;loadHeroSlides();}}
         }
-        function dragMove(e) {
-            if(!isDragging) return; e.preventDefault();
-            const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
-            heroSlider.style.transform = `translateX(${sliderX + (x - startX)}px)`;
-        }
-        function dragEnd(e) {
-            if(!isDragging) return; isDragging = false; heroWrap.classList.remove('dragging');
-            const x = e.type.includes('mouse') ? e.pageX : (e.changedTouches ? e.changedTouches[0].pageX : startX);
-            const walk = x - startX;
-            const threshold = heroWrap.offsetWidth * 0.2;
-            if (walk < -threshold && currentSlide < slidesData.length-1) currentSlide++;
-            else if (walk > threshold && currentSlide > 0) currentSlide--;
-            goToSlide(currentSlide); startAutoSlide();
-        }
+        window.addEventListener('online',updateNetStatus);window.addEventListener('offline',updateNetStatus);
 
-        document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopAutoSlide(); else startAutoSlide(); });
-
-        // --- Network Toast ---
-        const netToast = document.getElementById('netToast');
-        const netMsg = document.getElementById('netMsg');
-        let wasOffline = false;
-        let toastTimeout;
-
-        function showNetToast(type, msg) {
-            netToast.className = `net-toast ${type} show`;
-            netMsg.textContent = msg;
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(()=> netToast.classList.remove('show'), 3000);
-        }
-
-        function updateNetStatus() {
-            if (!navigator.onLine) { wasOffline = true; showNetToast('offline', "You're offline. Check your connection."); }
-            else { if (wasOffline) { showNetToast('online', "You're back online!"); wasOffline = false; loadHeroSlides(); } }
-        }
-
-        window.addEventListener('online', updateNetStatus);
-        window.addEventListener('offline', updateNetStatus);
-
+        // ========== INIT ==========
         function init(){
-            updateOnlineStatus();
-            updateNetStatus();
-            const premiumBadge = document.getElementById('premiumBadge');
+            updateOnlineStatus();updateNetStatus();
+            const premiumBadge=document.getElementById('premiumBadge');
             if(user){
-                setAvatar('userInitial',user, user.isPremium || user.plan === 'premium');
+                setAvatar('userInitial',user,user.isPremium||user.plan==='premium');
                 setAvatar('sidebarAvatar',user);
                 document.getElementById('sidebarUserName').textContent=user.name||'Student';
                 document.getElementById('sidebarUserTag').textContent=user.preparingFor||'Learner';
-                if(user.isPremium || user.plan === 'premium') {
-                    premiumBadge.style.display = 'flex';
-                } else {
-                    premiumBadge.style.display = 'none';
-                }
-            } else {
-                document.getElementById('userInitial').textContent='G';
-                document.getElementById('sidebarAvatar').textContent='G';
-                document.getElementById('sidebarUserName').textContent='Guest';
-                document.getElementById('sidebarUserTag').textContent='Visitor';
-                premiumBadge.style.display = 'none';
+                if(user.isPremium||user.plan==='premium')premiumBadge.style.display='flex';else premiumBadge.style.display='none';
+            }else{
+                document.getElementById('userInitial').textContent='G';document.getElementById('sidebarAvatar').textContent='G';
+                document.getElementById('sidebarUserName').textContent='Guest';document.getElementById('sidebarUserTag').textContent='Visitor';
+                premiumBadge.style.display='none';
             }
-            fetchAndDisplayServerStreak();
-            renderNotificationBell();
-            loadHeroSlides();
-            renderUpcomingExams();
-            renderMockAccordion();
-            renderPopularSlider();
-            renderFooterExamCategories();
-            renderFooterUpcoming();
-            updateInstallButtonsVisibility(); // ensure install buttons reflect current state
+            fetchAndDisplayServerStreak();renderNotificationBell();loadHeroSlides();
+            renderUpcomingExams();renderMockAccordion();renderPopularSlider();
+            renderFooterExamCategories();renderFooterUpcoming();
+            updateInstallButtonsVisibility();
         }
 
         document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active'))closeSidebarDirect();});
         document.addEventListener('DOMContentLoaded',init);
+    </script>
+
+    <!-- ===== SERVICE WORKER REGISTRATION ===== -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('SW registration failed', err));
+            });
+        }
     </script>
 </body>
 </html>
