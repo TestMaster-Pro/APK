@@ -346,6 +346,26 @@
 
         .hidden { display:none !important; }
 
+        /* PWA install mini banner */
+        .pwa-install-banner {
+            position: fixed; bottom: 80px; left: 20px; right: 20px; max-width: 500px; margin: 0 auto;
+            background: white; border-radius: 18px; padding: 16px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            z-index: 1100; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            border: 1px solid #e2e8f0;
+        }
+        .pwa-install-banner.show { transform: translateY(0); }
+        .pwa-install-text { font-weight: 600; font-size: 14px; color: var(--gray-800); flex: 1; }
+        .pwa-install-btn {
+            background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 14px;
+            font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s;
+        }
+        .pwa-install-btn:hover { background: var(--primary-dark); }
+        .pwa-dismiss-btn {
+            width: 32px; height: 32px; border-radius: 8px; background: var(--gray-100); border: none;
+            cursor: pointer; color: var(--gray-400); font-size: 14px; display: flex; align-items: center; justify-content: center;
+        }
+
         @media (min-width:600px) {
             .bottom-nav { display:none; }
             body { padding-bottom:0; }
@@ -369,6 +389,13 @@
 
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
+
+    <!-- PWA Install Banner -->
+    <div class="pwa-install-banner" id="pwaBanner">
+        <span class="pwa-install-text">📲 Install TestMasterPro for quick access</span>
+        <button class="pwa-install-btn" onclick="installPWA()">Install</button>
+        <button class="pwa-dismiss-btn" onclick="dismissPWA()"><i class="fas fa-times"></i></button>
+    </div>
 
     <!-- Sidebar -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
@@ -526,13 +553,13 @@
 
         <!-- Feedback Section with vertical scrolling testimonials -->
         <div class="feedback-section">
-            <h3> What Our Students Say</h3>
+            <h3>🎓 What Our Students Say</h3>
             <div class="feedback-marquee">
                 <div class="feedback-marquee-inner">
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
+                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
                     <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
+                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
                     <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
                 </div>
@@ -545,7 +572,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer (now includes Books & PYQ and Chat links) -->
     <footer class="pro-footer">
         <div class="footer-grid">
             <div class="footer-col">
@@ -722,7 +749,6 @@
             if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`;
             else if(u?.profilePicUrl)el.innerHTML=`<img src="${u.profilePicUrl}" alt="Avatar">`;
             else el.textContent=(u?.name)?u.name.charAt(0).toUpperCase():'S';
-            // show premium badge if needed
             if(showPremiumBadge && el){
                 const badge = document.getElementById('premiumBadge');
                 if(badge) badge.style.display = 'flex';
@@ -773,7 +799,7 @@
             c.innerHTML=grouped.map((cat,idx)=>`
                 <div class="mock-accordion-item" id="mockItem${idx}">
                     <button class="mock-accordion-header" onclick="toggleMockAccordion(${idx})">
-                        <div class="ma-left"><span> ${cat.category}</span></div>
+                        <div class="ma-left"><span>📂 ${cat.category}</span></div>
                         <span class="ma-count">${cat.exams.length}</span>
                         <i class="fas fa-chevron-down ma-arrow" id="mockArrow${idx}"></i>
                     </button>
@@ -781,7 +807,7 @@
                         <div class="mock-exam-list">
                             ${cat.exams.map(ex=>`
                                 <div class="mock-exam-item" onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(ex.exam||'')}')">
-                                    <span> ${ex.exam||'Untitled'}</span>
+                                    <span>📝 ${ex.exam||'Untitled'}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -889,6 +915,7 @@
 
         document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopPopularAutoSlide(); else startPopularAutoSlide(); });
 
+        // --- Footer rendering with added Books & PYQ and Chat links ---
         async function renderFooterExamCategories(){
             const c=document.getElementById('footerExamCategories');
             const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS);
@@ -898,6 +925,9 @@
             grouped.forEach(cat=>{
                 html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
             });
+            // Added Books & PYQ and Chat
+            html+=`<li><a onclick="navigate('book.html')"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
+            html+=`<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Chat</a></li>`;
             html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html+=`<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             c.innerHTML=html;
@@ -975,7 +1005,7 @@
         }
 
         function nextSlide() { currentSlide = (currentSlide + 1) % slidesData.length; goToSlide(currentSlide); }
-        function startAutoSlide() { if(slidesData.length) autoSlideInterval = setInterval(nextSlide, 6000); } // slowed down to 6s
+        function startAutoSlide() { if(slidesData.length) autoSlideInterval = setInterval(nextSlide, 6000); }
         function stopAutoSlide() { clearInterval(autoSlideInterval); }
 
         heroWrap.addEventListener('mousedown', dragStart);
@@ -1029,6 +1059,114 @@
         window.addEventListener('online', updateNetStatus);
         window.addEventListener('offline', updateNetStatus);
 
+        // ============================================
+        // PWA INSTALL PROMPT - ZERO BACKEND CHANGES
+        // ============================================
+        let deferredPrompt = null;
+        const PWA_PROMPT_KEY = 'pwa_prompt_dismissed';
+        const PWA_INSTALL_KEY = 'pwa_installed';
+        const PWA_REWARD_KEY = 'pwa_reward_claimed';
+
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            if (localStorage.getItem(PWA_INSTALL_KEY)) return;
+            if (isPromptDismissedRecently()) return;
+            if (window.matchMedia('(display-mode: standalone)').matches) return;
+            
+            setTimeout(showPWAMiniBanner, 5000);
+        });
+
+        function isPromptDismissedRecently() {
+            const dismissed = localStorage.getItem(PWA_PROMPT_KEY);
+            if (!dismissed) return false;
+            try {
+                const data = JSON.parse(dismissed);
+                const daysSince = (Date.now() - data.timestamp) / (1000 * 60 * 60 * 24);
+                return daysSince < 7;
+            } catch (e) { return false; }
+        }
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            localStorage.setItem(PWA_INSTALL_KEY, 'true');
+            hideAllPWA();
+            claimPWAReward();
+            showToast('🎉 App installed! +50 Coins added', 'success', 4000);
+        });
+
+        function showPWAMiniBanner() {
+            const banner = document.getElementById('pwaBanner');
+            if (banner) banner.classList.add('show');
+        }
+
+        function hideAllPWA() {
+            const banner = document.getElementById('pwaBanner');
+            if (banner) banner.classList.remove('show');
+        }
+
+        function dismissPWA() {
+            hideAllPWA();
+            localStorage.setItem(PWA_PROMPT_KEY, JSON.stringify({ timestamp: Date.now() }));
+        }
+
+        function installPWA() {
+            if (!deferredPrompt) {
+                showToast('Install option not available right now. Try from browser menu.', 'info', 4000);
+                return;
+            }
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted PWA install');
+                }
+                deferredPrompt = null;
+                hideAllPWA();
+            });
+        }
+
+        // ============================================
+        // REWARD SYSTEM - USING EXISTING COIN SYSTEM
+        // ============================================
+        function claimPWAReward() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!user.username) {
+                showToast('App Installed! Login to claim 50 coins', 'info', 4000);
+                return;
+            }
+            
+            if (localStorage.getItem(PWA_REWARD_KEY)) {
+                showToast('App Installed Successfully!', 'success', 3000);
+                return;
+            }
+            
+            const currentCoins = parseInt(localStorage.getItem('userCoins') || '0');
+            localStorage.setItem('userCoins', currentCoins + 50);
+            localStorage.setItem('pwa_reward_claimed', 'true');
+            
+            updateCoinDisplay(currentCoins + 50);
+            showToast('🎉 +50 Coins Added for Installing App!', 'success', 4000);
+            
+            logPWAActivity(user.username);
+        }
+
+        async function logPWAActivity(username) {
+            try {
+                await fetch(`${API_URL}?action=submitResult&username=${encodeURIComponent(username)}&name=PWA&testCode=PWA_INSTALL&score=50&totalMarks=50&accuracy=100&correct=1&wrong=0&attempted=1&unanswered=0&timeTaken=0&date=${new Date().toISOString().split('T')[0]}&examType=PWA`);
+            } catch (e) {
+                console.log('Activity log failed (non-critical)');
+            }
+        }
+
+        function updateCoinDisplay(coins) {
+            // Placeholder - you can update any coin balance elements if present
+            document.querySelectorAll('.coin-balance').forEach(el => {
+                el.textContent = coins;
+            });
+        }
+
         function init(){
             updateOnlineStatus();
             updateNetStatus();
@@ -1038,7 +1176,6 @@
                 setAvatar('sidebarAvatar',user);
                 document.getElementById('sidebarUserName').textContent=user.name||'Student';
                 document.getElementById('sidebarUserTag').textContent=user.preparingFor||'Learner';
-                // Show premium badge on header avatar if user is premium
                 if(user.isPremium || user.plan === 'premium') {
                     premiumBadge.style.display = 'flex';
                 } else {
@@ -1056,7 +1193,7 @@
             loadHeroSlides();
             renderUpcomingExams();
             renderMockAccordion();
-            renderPopularSlider(); // renders the new slider with dots
+            renderPopularSlider();
             renderFooterExamCategories();
             renderFooterUpcoming();
         }
