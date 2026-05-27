@@ -232,8 +232,8 @@
         .popular-slider { display:flex; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform; }
         .popular-slide { min-width:100%; flex-shrink:0; cursor:pointer; }
         .popular-slide .popular-card {
-            margin: 0 auto; /* center card inside slide */
-            min-width: 270px; max-width: 320px; /* keep original sizing */
+            margin: 0 auto;
+            min-width: 270px; max-width: 320px;
             background:#f0f9ff; border-radius:var(--radius-md); padding:24px 18px;
             border:1px solid #b9d8f0; box-shadow:var(--shadow-sm);
             transition:var(--transition); position:relative; overflow:hidden;
@@ -366,6 +366,9 @@
             cursor: pointer; color: var(--gray-400); font-size: 14px; display: flex; align-items: center; justify-content: center;
         }
 
+        .footer-install-btn { display: inline-flex; align-items: center; gap: 6px; margin: 0 auto; cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s; }
+        .footer-install-btn:hover { color: #fff; }
+
         @media (min-width:600px) {
             .bottom-nav { display:none; }
             body { padding-bottom:0; }
@@ -436,6 +439,8 @@
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
                 <div class="sidebar-nav-label">Premium</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
+                <div class="sidebar-nav-label">App</div>
+                <button class="sidebar-nav-item install-sidebar-item" id="sidebarInstallBtn" onclick="installPWA()" style="display:none;"><i class="fas fa-download"></i> Install App</button>
                 <div class="sidebar-nav-label">Account</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
@@ -572,7 +577,7 @@
         </div>
     </div>
 
-    <!-- Footer (now includes Books & PYQ and Chat links) -->
+    <!-- Footer (now includes Books & PYQ, Chat, and Add to Home Screen button) -->
     <footer class="pro-footer">
         <div class="footer-grid">
             <div class="footer-col">
@@ -590,6 +595,11 @@
             <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
             <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
             <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div style="text-align:center; margin-top: 20px;" id="footerInstallContainer">
+            <a class="footer-install-btn" id="footerInstallBtn" onclick="installPWA()" style="display:none;">
+                <i class="fas fa-plus-square"></i> Add to Home Screen
+            </a>
         </div>
         <div class="footer-bottom">
             <p>© 2026 TestMasterPro.space</p>
@@ -617,6 +627,133 @@
         const STREAK_API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
 
         let isOffline = false;
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        // ============================================
+        // PWA INSTALL PROMPT & BUTTONS
+        // ============================================
+        let deferredPrompt = null;
+        const PWA_PROMPT_KEY = 'pwa_prompt_dismissed';
+        const PWA_INSTALL_KEY = 'pwa_installed';
+        const PWA_REWARD_KEY = 'pwa_reward_claimed';
+
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem(PWA_INSTALL_KEY);
+        }
+
+        function updateInstallButtonsVisibility() {
+            const installed = isAppInstalled();
+            const show = !installed;
+            document.querySelectorAll('.install-sidebar-item, #footerInstallBtn').forEach(el => {
+                el.style.display = show ? 'flex' : 'none';
+            });
+            if (!installed && deferredPrompt) {
+                setTimeout(showPWAMiniBanner, 5000);
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (localStorage.getItem(PWA_INSTALL_KEY)) return;
+            if (isPromptDismissedRecently()) return;
+            if (isAppInstalled()) return;
+            updateInstallButtonsVisibility();
+            setTimeout(showPWAMiniBanner, 5000);
+        });
+
+        function isPromptDismissedRecently() {
+            const dismissed = localStorage.getItem(PWA_PROMPT_KEY);
+            if (!dismissed) return false;
+            try {
+                const data = JSON.parse(dismissed);
+                const daysSince = (Date.now() - data.timestamp) / (1000 * 60 * 60 * 24);
+                return daysSince < 7;
+            } catch (e) { return false; }
+        }
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            localStorage.setItem(PWA_INSTALL_KEY, 'true');
+            hideAllPWA();
+            claimPWAReward();
+            updateInstallButtonsVisibility();
+            showToast('🎉 App installed! +50 Coins added', 'success', 4000);
+        });
+
+        function showPWAMiniBanner() {
+            if (isAppInstalled()) return;
+            const banner = document.getElementById('pwaBanner');
+            if (banner) banner.classList.add('show');
+        }
+
+        function hideAllPWA() {
+            const banner = document.getElementById('pwaBanner');
+            if (banner) banner.classList.remove('show');
+        }
+
+        function dismissPWA() {
+            hideAllPWA();
+            localStorage.setItem(PWA_PROMPT_KEY, JSON.stringify({ timestamp: Date.now() }));
+        }
+
+        function installPWA() {
+            if (isAppInstalled()) {
+                showToast('App already installed!', 'info');
+                return;
+            }
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted PWA install');
+                    }
+                    deferredPrompt = null;
+                    hideAllPWA();
+                });
+            } else {
+                showToast('Tap the browser menu (⋮) and select "Add to Home Screen"', 'info', 5000);
+            }
+        }
+
+        function claimPWAReward() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!user.username) {
+                showToast('App Installed! Login to claim 50 coins', 'info', 4000);
+                return;
+            }
+            if (localStorage.getItem(PWA_REWARD_KEY)) {
+                showToast('App Installed Successfully!', 'success', 3000);
+                return;
+            }
+            const currentCoins = parseInt(localStorage.getItem('userCoins') || '0');
+            localStorage.setItem('userCoins', currentCoins + 50);
+            localStorage.setItem('pwa_reward_claimed', 'true');
+            updateCoinDisplay(currentCoins + 50);
+            showToast('🎉 +50 Coins Added for Installing App!', 'success', 4000);
+            logPWAActivity(user.username);
+        }
+
+        async function logPWAActivity(username) {
+            try {
+                await fetch(`${API_URL}?action=submitResult&username=${encodeURIComponent(username)}&name=PWA&testCode=PWA_INSTALL&score=50&totalMarks=50&accuracy=100&correct=1&wrong=0&attempted=1&unanswered=0&timeTaken=0&date=${new Date().toISOString().split('T')[0]}&examType=PWA`);
+            } catch (e) {
+                console.log('Activity log failed (non-critical)');
+            }
+        }
+
+        function updateCoinDisplay(coins) {
+            document.querySelectorAll('.coin-balance').forEach(el => {
+                el.textContent = coins;
+            });
+        }
+
+        // On load, hide install buttons if already installed
+        updateInstallButtonsVisibility();
+
+        // ============================================
+        // REST OF DASHBOARD SCRIPTS (unchanged)
+        // ============================================
 
         const FALLBACK_MOCKS = [
             { file:'sbi_po.html',exam:'SBI PO',subject:'QA',chapter:'Full',testName:'SBI PO Mock',testCode:'SBI-PO-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
@@ -651,8 +788,6 @@
             { id:14,name:'IBPS Clerk Prelims 2026',date:'22 September 2026' },
             { id:15,name:'SSC CPO Tier I 2026',date:'10 July 2026' }
         ];
-
-        const user = JSON.parse(localStorage.getItem('user'));
 
         function showToast(m,t='info',d=3000){
             const c=document.getElementById('toastContainer'),o=document.createElement('div');
@@ -842,7 +977,6 @@
                 return;
             }
             popularSlidesData = allExams;
-            // Build slides
             popularSlider.innerHTML = allExams.map(ex => `
                 <div class="popular-slide" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
                     <div class="popular-card">
@@ -915,7 +1049,6 @@
 
         document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopPopularAutoSlide(); else startPopularAutoSlide(); });
 
-        // --- Footer rendering with added Books & PYQ and Chat links ---
         async function renderFooterExamCategories(){
             const c=document.getElementById('footerExamCategories');
             const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS);
@@ -925,7 +1058,6 @@
             grouped.forEach(cat=>{
                 html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
             });
-            // Added Books & PYQ and Chat
             html+=`<li><a onclick="navigate('book.html')"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
             html+=`<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Chat</a></li>`;
             html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
@@ -1059,114 +1191,6 @@
         window.addEventListener('online', updateNetStatus);
         window.addEventListener('offline', updateNetStatus);
 
-        // ============================================
-        // PWA INSTALL PROMPT - ZERO BACKEND CHANGES
-        // ============================================
-        let deferredPrompt = null;
-        const PWA_PROMPT_KEY = 'pwa_prompt_dismissed';
-        const PWA_INSTALL_KEY = 'pwa_installed';
-        const PWA_REWARD_KEY = 'pwa_reward_claimed';
-
-        // Listen for install prompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            if (localStorage.getItem(PWA_INSTALL_KEY)) return;
-            if (isPromptDismissedRecently()) return;
-            if (window.matchMedia('(display-mode: standalone)').matches) return;
-            
-            setTimeout(showPWAMiniBanner, 5000);
-        });
-
-        function isPromptDismissedRecently() {
-            const dismissed = localStorage.getItem(PWA_PROMPT_KEY);
-            if (!dismissed) return false;
-            try {
-                const data = JSON.parse(dismissed);
-                const daysSince = (Date.now() - data.timestamp) / (1000 * 60 * 60 * 24);
-                return daysSince < 7;
-            } catch (e) { return false; }
-        }
-
-        window.addEventListener('appinstalled', () => {
-            deferredPrompt = null;
-            localStorage.setItem(PWA_INSTALL_KEY, 'true');
-            hideAllPWA();
-            claimPWAReward();
-            showToast('🎉 App installed! +50 Coins added', 'success', 4000);
-        });
-
-        function showPWAMiniBanner() {
-            const banner = document.getElementById('pwaBanner');
-            if (banner) banner.classList.add('show');
-        }
-
-        function hideAllPWA() {
-            const banner = document.getElementById('pwaBanner');
-            if (banner) banner.classList.remove('show');
-        }
-
-        function dismissPWA() {
-            hideAllPWA();
-            localStorage.setItem(PWA_PROMPT_KEY, JSON.stringify({ timestamp: Date.now() }));
-        }
-
-        function installPWA() {
-            if (!deferredPrompt) {
-                showToast('Install option not available right now. Try from browser menu.', 'info', 4000);
-                return;
-            }
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted PWA install');
-                }
-                deferredPrompt = null;
-                hideAllPWA();
-            });
-        }
-
-        // ============================================
-        // REWARD SYSTEM - USING EXISTING COIN SYSTEM
-        // ============================================
-        function claimPWAReward() {
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!user.username) {
-                showToast('App Installed! Login to claim 50 coins', 'info', 4000);
-                return;
-            }
-            
-            if (localStorage.getItem(PWA_REWARD_KEY)) {
-                showToast('App Installed Successfully!', 'success', 3000);
-                return;
-            }
-            
-            const currentCoins = parseInt(localStorage.getItem('userCoins') || '0');
-            localStorage.setItem('userCoins', currentCoins + 50);
-            localStorage.setItem('pwa_reward_claimed', 'true');
-            
-            updateCoinDisplay(currentCoins + 50);
-            showToast('🎉 +50 Coins Added for Installing App!', 'success', 4000);
-            
-            logPWAActivity(user.username);
-        }
-
-        async function logPWAActivity(username) {
-            try {
-                await fetch(`${API_URL}?action=submitResult&username=${encodeURIComponent(username)}&name=PWA&testCode=PWA_INSTALL&score=50&totalMarks=50&accuracy=100&correct=1&wrong=0&attempted=1&unanswered=0&timeTaken=0&date=${new Date().toISOString().split('T')[0]}&examType=PWA`);
-            } catch (e) {
-                console.log('Activity log failed (non-critical)');
-            }
-        }
-
-        function updateCoinDisplay(coins) {
-            // Placeholder - you can update any coin balance elements if present
-            document.querySelectorAll('.coin-balance').forEach(el => {
-                el.textContent = coins;
-            });
-        }
-
         function init(){
             updateOnlineStatus();
             updateNetStatus();
@@ -1196,6 +1220,7 @@
             renderPopularSlider();
             renderFooterExamCategories();
             renderFooterUpcoming();
+            updateInstallButtonsVisibility(); // ensure install buttons reflect current state
         }
 
         document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active'))closeSidebarDirect();});
