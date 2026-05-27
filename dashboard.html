@@ -136,14 +136,17 @@
         .nav-brand { display:flex; align-items:center; gap:6px; font-weight:700; font-size:15px; color:var(--primary); cursor:pointer; white-space:nowrap; letter-spacing:-0.3px; }
         .nav-brand i { font-size:17px; color:var(--blue); }
         .nav-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-        .user-avatar { width:34px; height:34px; border-radius:10px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:var(--primary); cursor:pointer; flex-shrink:0; overflow:hidden; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:var(--transition-fast); }
+        .user-avatar { width:34px; height:34px; border-radius:10px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:var(--primary); cursor:pointer; flex-shrink:0; overflow:visible; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:var(--transition-fast); position:relative; }
         .user-avatar img { width:100%; height:100%; object-fit:cover; }
         .user-avatar:hover { transform:scale(1.08); }
-        .btn-premium-nav { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#1e293b; border:none; padding:7px 14px; border-radius:22px; font-weight:700; font-size:11px; cursor:pointer; white-space:nowrap; transition:var(--transition); display:flex; align-items:center; gap:5px; font-family:var(--font); text-decoration:none; box-shadow:0 2px 8px rgba(245,158,11,0.2); }
-        .btn-premium-nav:hover { transform:translateY(-1px); box-shadow:0 4px 14px rgba(245,158,11,0.3); }
+        .premium-badge {
+            position:absolute; top:-4px; right:-4px; background:linear-gradient(135deg,#f59e0b,#fbbf24);
+            width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:9px; color:#1e293b; box-shadow:0 2px 6px rgba(0,0,0,0.2); border:1px solid #fff;
+        }
 
-        .bell-icon-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:16px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); position:relative; flex-shrink:0; }
-        .bell-icon-btn:hover { background:var(--gray-200); color:var(--primary); }
+        .bell-icon-btn, .chat-icon-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:16px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); position:relative; flex-shrink:0; }
+        .bell-icon-btn:hover, .chat-icon-btn:hover { background:var(--gray-200); color:var(--primary); }
         .bell-icon-btn .badge { position:absolute; top:4px; right:6px; width:8px; height:8px; border-radius:50%; background:var(--red); display:none; }
 
         .container { max-width:var(--max-width); margin:0 auto; padding:14px 14px calc(20px + var(--bottom-nav-height)); position:relative; z-index:5; width:100%; flex:1; }
@@ -178,8 +181,9 @@
         .qa-refer { background:linear-gradient(135deg,#10b981,#047857); box-shadow:0 4px 14px rgba(16,185,129,0.25); }
         .qa-coins { background:linear-gradient(135deg,#f59e0b,#b45309); box-shadow:0 4px 14px rgba(245,158,11,0.25); }
         .qa-use-coins { background:linear-gradient(135deg,#8b5cf6,#6d28d9); box-shadow:0 4px 14px rgba(139,92,246,0.25); }
+        .qa-results { background:linear-gradient(135deg,#f43f5e,#be123c); box-shadow:0 4px 14px rgba(244,63,94,0.25); }
         @media (min-width:640px) {
-            .qa-scroll { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; max-width:500px; margin:0 auto; }
+            .qa-scroll { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; max-width:680px; margin:0 auto; }
             .qa-card { max-width:none; aspect-ratio:1/0.9; border-radius:20px; }
             .qa-card span { font-size:12px; }
             .qa-icon { width:38px; height:38px; font-size:18px; }
@@ -422,8 +426,10 @@
         </div>
         <div class="nav-right">
             <button class="bell-icon-btn" id="bellBtn" onclick="navigate('notices.html')" title="Latest Updates"><i class="fas fa-bell"></i><span class="badge" id="bellBadge"></span></button>
-            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">S</div>
-            <a href="payment.html" class="btn-premium-nav"><i class="fas fa-crown"></i> Premium</a>
+            <button class="chat-icon-btn" onclick="navigate('chat.html')" title="Chat"><i class="fas fa-comments"></i></button>
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">
+                <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
+            </div>
         </div>
     </nav>
 
@@ -436,7 +442,7 @@
             <div class="hero-dots" id="heroDots"></div>
         </div>
 
-        <!-- Quick Actions (now 4: Challenge, Refer, Coins, Use Coins) -->
+        <!-- Quick Actions (now 5: Challenge, Refer, Coins, Use Coins, Results) -->
         <div class="quick-actions" style="margin-bottom:20px;">
             <div class="qa-scroll">
                 <button class="qa-card qa-challenge" onclick="window.location.href='challenge.html'">
@@ -450,6 +456,9 @@
                 </button>
                 <button class="qa-card qa-use-coins" onclick="window.location.href='usecoin.html'">
                     <div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span>
+                </button>
+                <button class="qa-card qa-results" onclick="window.location.href='allresult.html'">
+                    <div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span>
                 </button>
             </div>
         </div>
@@ -517,13 +526,13 @@
 
         <!-- Feedback Section with vertical scrolling testimonials -->
         <div class="feedback-section">
-            <h3>💬 What Our Students Say</h3>
+            <h3> What Our Students Say</h3>
             <div class="feedback-marquee">
                 <div class="feedback-marquee-inner">
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a game‑changer!"</p></div>
+                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
                     <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a game‑changer!"</p></div>
+                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
                     <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
                 </div>
@@ -565,7 +574,7 @@
     <nav class="bottom-nav" id="bottomNav">
         <button class="bottom-nav-item active" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
         <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
-        <button class="bottom-nav-item" onclick="navigate('allresult.html')"><i class="fas fa-chart-bar"></i><span>Results</span></button>
+        <button class="bottom-nav-item" onclick="navigate('blogs.html')"><i class="fas fa-blog"></i><span>Blog</span></button>
         <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
     </nav>
 
@@ -573,9 +582,9 @@
         const JSON_PATHS = {
             upcoming: './json/upcoming.json',
             mocks: './mocks.json',
-            popular: './json/popular.json',
+            popular: '.json/popular.json',
             upcomingfooter: './json/upcomingfooter.json',
-            notices: './json/notices.json'
+            notices: './notices.json'
         };
         const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
         const STREAK_API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
@@ -707,7 +716,18 @@
             catch(e){if(fb){console.warn(`Could not load ${p}, using fallback.`,e.message);return fb}throw e}
         }
 
-        function setAvatar(eid,u){const el=document.getElementById(eid);if(!el)return;if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`;else if(u?.profilePicUrl)el.innerHTML=`<img src="${u.profilePicUrl}" alt="Avatar">`;else el.textContent=(u?.name)?u.name.charAt(0).toUpperCase():'S';}
+        function setAvatar(eid,u,showPremiumBadge=false){
+            const el=document.getElementById(eid);
+            if(!el)return;
+            if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`;
+            else if(u?.profilePicUrl)el.innerHTML=`<img src="${u.profilePicUrl}" alt="Avatar">`;
+            else el.textContent=(u?.name)?u.name.charAt(0).toUpperCase():'S';
+            // show premium badge if needed
+            if(showPremiumBadge && el){
+                const badge = document.getElementById('premiumBadge');
+                if(badge) badge.style.display = 'flex';
+            }
+        }
 
         function groupByCategoryUniqueExams(arr){
             const map={};
@@ -753,7 +773,7 @@
             c.innerHTML=grouped.map((cat,idx)=>`
                 <div class="mock-accordion-item" id="mockItem${idx}">
                     <button class="mock-accordion-header" onclick="toggleMockAccordion(${idx})">
-                        <div class="ma-left"><span>📁 ${cat.category}</span></div>
+                        <div class="ma-left"><span> ${cat.category}</span></div>
                         <span class="ma-count">${cat.exams.length}</span>
                         <i class="fas fa-chevron-down ma-arrow" id="mockArrow${idx}"></i>
                     </button>
@@ -761,7 +781,7 @@
                         <div class="mock-exam-list">
                             ${cat.exams.map(ex=>`
                                 <div class="mock-exam-item" onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(ex.exam||'')}')">
-                                    <span>📝 ${ex.exam||'Untitled'}</span>
+                                    <span> ${ex.exam||'Untitled'}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -1012,8 +1032,25 @@
         function init(){
             updateOnlineStatus();
             updateNetStatus();
-            if(user){setAvatar('userInitial',user);setAvatar('sidebarAvatar',user);document.getElementById('sidebarUserName').textContent=user.name||'Student';document.getElementById('sidebarUserTag').textContent=user.preparingFor||'Learner';}
-            else{document.getElementById('userInitial').textContent='G';document.getElementById('sidebarAvatar').textContent='G';document.getElementById('sidebarUserName').textContent='Guest';document.getElementById('sidebarUserTag').textContent='Visitor';}
+            const premiumBadge = document.getElementById('premiumBadge');
+            if(user){
+                setAvatar('userInitial',user, user.isPremium || user.plan === 'premium');
+                setAvatar('sidebarAvatar',user);
+                document.getElementById('sidebarUserName').textContent=user.name||'Student';
+                document.getElementById('sidebarUserTag').textContent=user.preparingFor||'Learner';
+                // Show premium badge on header avatar if user is premium
+                if(user.isPremium || user.plan === 'premium') {
+                    premiumBadge.style.display = 'flex';
+                } else {
+                    premiumBadge.style.display = 'none';
+                }
+            } else {
+                document.getElementById('userInitial').textContent='G';
+                document.getElementById('sidebarAvatar').textContent='G';
+                document.getElementById('sidebarUserName').textContent='Guest';
+                document.getElementById('sidebarUserTag').textContent='Visitor';
+                premiumBadge.style.display = 'none';
+            }
             fetchAndDisplayServerStreak();
             renderNotificationBell();
             loadHeroSlides();
