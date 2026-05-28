@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#243748">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>AI Mock Test · TestMasterPro.space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #243748;
+            --primary-dark: #1a2a36;
+            --primary-light: #e8edf2;
+            --secondary: #1f3140;
+            --blue: #0066ff;
+            --blue-light: #e6f0ff;
+            --green: #4cd38a;
+            --green-light: #edfaf3;
+            --red: #ff4d5a;
+            --red-light: #fff0f1;
+            --accent: #fbbf24;
+            --light: #f7f7f7;
+            --white: #ffffff;
+            --gray-100: #f5f5f5;
+            --gray-200: #e8e8e8;
+            --gray-300: #d4d4d4;
+            --gray-400: #a0a0a0;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --font: 'Poppins', sans-serif;
+            --radius: 14px;
+            --radius-lg: 22px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 6px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+            --bottom-nav-height: 68px;
+            --safe-bottom: env(safe-area-inset-bottom,0px);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior:smooth; height:100%; }
+        body {
+            font-family:var(--font); background:var(--light); min-height:100vh; min-height:100dvh;
+            color:var(--gray-800); display:flex; flex-direction:column; overflow-x:hidden; overflow-y:auto;
+            -webkit-font-smoothing:antialiased; -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain;
+            max-width:100vw; padding-bottom:calc(var(--bottom-nav-height) + var(--safe-bottom) + 20px);
+        }
+        .navbar {
+            background:#fff; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;
+            position:sticky; top:0; z-index:100; box-shadow:0 1px 16px rgba(0,0,0,0.04); gap:8px; min-height:54px;
+            border-bottom:1px solid #eee;
+        }
+        .nav-left { display:flex; align-items:center; gap:8px; }
+        .nav-brand { display:flex; align-items:center; gap:6px; font-weight:700; font-size:15px; color:var(--primary); cursor:pointer; }
+        .nav-brand i { font-size:17px; color:var(--blue); }
+        .back-btn {
+            width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none;
+            cursor:pointer; font-size:15px; color:var(--gray-600); display:flex; align-items:center;
+            justify-content:center; transition:var(--transition);
+        }
+        .back-btn:hover { background:var(--gray-200); }
+        .container { max-width:800px; margin:0 auto; padding:14px; width:100%; flex:1; }
+        .section-header {
+            display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;
+        }
+        .section-header .section-icon {
+            width:32px; height:32px; border-radius:8px; background:var(--primary); color:#fff;
+            display:flex; align-items:center; justify-content:center; font-size:13px;
+        }
+        .section-header h2 { font-size:clamp(15px,3vw,18px); font-weight:700; color:var(--gray-800); }
+        .tab-bar { display:flex; gap:6px; margin-bottom:16px; background:var(--white); border-radius:var(--radius); padding:4px; box-shadow:var(--shadow-sm); border:1px solid #e8ecf0; }
+        .tab-btn {
+            flex:1; padding:12px; border-radius:10px; border:none; background:transparent; cursor:pointer;
+            font-weight:600; font-size:13px; color:var(--gray-500); transition:var(--transition); font-family:var(--font);
+            display:flex; align-items:center; justify-content:center; gap:6px;
+        }
+        .tab-btn.active { background:var(--primary); color:#fff; box-shadow:0 4px 12px rgba(36,55,72,0.2); }
+        .tab-btn:hover:not(.active) { background:var(--gray-100); color:var(--gray-700); }
+        .panel { display:none; }
+        .panel.active { display:block; }
+
+        .card {
+            background:#fff; border-radius:var(--radius-lg); padding:20px; border:1px solid #e8ecf0;
+            box-shadow:var(--shadow-sm); margin-bottom:14px; transition:var(--transition);
+        }
+        .card:hover { box-shadow:var(--shadow-md); }
+        .form-group { margin-bottom:14px; }
+        .form-group label { display:block; font-weight:600; font-size:12px; color:var(--gray-500); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; }
+        .form-input {
+            width:100%; padding:12px 16px; border-radius:10px; border:2px solid var(--gray-200);
+            font-family:var(--font); font-size:14px; font-weight:500; color:var(--gray-700);
+            transition:var(--transition); background:var(--gray-50);
+        }
+        .form-input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 4px rgba(36,55,72,0.08); background:#fff; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        @media (max-width:480px) { .form-row { grid-template-columns:1fr; } }
+        .btn-primary {
+            width:100%; padding:14px; border-radius:12px; background:linear-gradient(135deg,#14293d,#1f4565);
+            color:#fff; font-weight:700; font-size:15px; border:none; cursor:pointer; font-family:var(--font);
+            display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 6px 18px rgba(20,41,61,0.3);
+            transition:var(--transition);
+        }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(20,41,61,0.4); }
+        .btn-primary:active { transform:scale(0.97); }
+        .btn-primary:disabled { background:var(--gray-300); cursor:not-allowed; box-shadow:none; }
+
+        .mock-library-card {
+            background:#fff; border-radius:var(--radius); padding:16px; border:1px solid #e8ecf0;
+            box-shadow:var(--shadow-sm); margin-bottom:10px; cursor:pointer; transition:var(--transition);
+            display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+        }
+        .mock-library-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:#c4d0dc; }
+        .mock-library-card .ml-left { flex:1; min-width:0; }
+        .mock-library-card .ml-title { font-weight:700; font-size:15px; margin-bottom:4px; }
+        .mock-library-card .ml-meta { display:flex; gap:10px; flex-wrap:wrap; font-size:11px; color:var(--gray-500); font-weight:600; }
+        .mock-library-card .ml-meta span { display:flex; align-items:center; gap:4px; background:var(--gray-100); padding:4px 10px; border-radius:8px; }
+        .mock-library-card .ml-badge {
+            background:var(--primary-light); color:var(--primary); padding:4px 10px; border-radius:8px;
+            font-size:11px; font-weight:700; white-space:nowrap;
+        }
+        .btn-small {
+            padding:8px 16px; border-radius:8px; border:none; font-weight:700; font-size:12px;
+            cursor:pointer; font-family:var(--font); transition:var(--transition);
+        }
+        .btn-small.attempt { background:var(--primary); color:#fff; }
+        .btn-small.attempt:hover { background:var(--primary-dark); }
+        .btn-small.attempt:active { transform:scale(0.95); }
+
+        .filter-bar { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+        .filter-input {
+            padding:8px 14px; border-radius:20px; border:2px solid var(--gray-200); font-family:var(--font);
+            font-size:12px; font-weight:600; color:var(--gray-600); background:var(--white); transition:var(--transition);
+            outline:none; min-width:120px;
+        }
+        .filter-input:focus { border-color:var(--primary); }
+
+        .question-card {
+            background:#fff; border-radius:var(--radius); padding:20px; border:1px solid #e8ecf0;
+            box-shadow:var(--shadow-sm); margin-bottom:14px; transition:var(--transition);
+        }
+        .question-card .q-number {
+            display:inline-block; background:var(--primary-light); color:var(--primary);
+            padding:4px 12px; border-radius:8px; font-size:12px; font-weight:700; margin-bottom:10px;
+        }
+        .question-card .q-text { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:14px; line-height:1.5; }
+        .option-item {
+            padding:12px 16px; border-radius:10px; border:2px solid var(--gray-200); cursor:pointer;
+            font-weight:500; font-size:14px; color:var(--gray-600); margin-bottom:8px; transition:var(--transition);
+            display:flex; align-items:center; gap:10px; background:var(--gray-50);
+        }
+        .option-item:hover { border-color:var(--primary); background:var(--primary-light); }
+        .option-item.selected { border-color:var(--primary); background:var(--primary-light); color:var(--primary); font-weight:700; }
+        .option-item.correct { border-color:var(--green); background:var(--green-light); color:#065f46; }
+        .option-item.wrong { border-color:var(--red); background:var(--red-light); color:#991b1b; }
+        .option-radio { width:22px; height:22px; border-radius:50%; border:2px solid var(--gray-300); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; }
+        .option-item.selected .option-radio { border-color:var(--primary); background:var(--primary); color:#fff; }
+
+        .test-progress { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; font-weight:600; font-size:13px; color:var(--gray-500); }
+        .test-timer { background:var(--gray-100); padding:8px 16px; border-radius:20px; display:flex; align-items:center; gap:6px; font-weight:700; }
+        .test-timer.warning { background:#fef3c7; color:#92400e; }
+        .test-timer.danger { background:var(--red-light); color:var(--red); animation:pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+        .empty-state { text-align:center; padding:40px 20px; }
+        .empty-state i { font-size:48px; color:var(--gray-300); margin-bottom:16px; }
+        .empty-state h3 { font-size:18px; font-weight:700; color:var(--gray-500); margin-bottom:8px; }
+        .empty-state p { font-size:13px; color:var(--gray-400); }
+
+        .bottom-nav {
+            position:fixed; bottom:0; left:0; right:0; height:calc(var(--bottom-nav-height) + var(--safe-bottom));
+            background:#fff; border-top:1px solid #e8ecf0; z-index:95; display:flex; justify-content:space-around;
+            align-items:flex-start; padding-top:8px; padding-bottom:var(--safe-bottom); box-shadow:0 -4px 20px rgba(0,0,0,0.05);
+        }
+        .bottom-nav-item {
+            flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px; border:none;
+            background:transparent; cursor:pointer; color:var(--gray-400); transition:var(--transition); font-family:var(--font);
+            text-decoration:none; position:relative;
+        }
+        .bottom-nav-item.active { color:var(--primary); }
+        .bottom-nav-item i { font-size:20px; }
+        .bottom-nav-item span { font-size:10px; font-weight:600; }
+        .bottom-nav-item.active::before { content:''; position:absolute; top:-8px; width:20px; height:3px; background:var(--primary); border-radius:2px; }
+
+        @media (min-width:600px) {
+            .bottom-nav { display:none; }
+            body { padding-bottom:0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="back-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-arrow-left"></i></button>
+            <div class="nav-brand" onclick="window.location.href='dashboard.html'"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
+        </div>
+        <span style="font-size:12px;font-weight:700;color:var(--gray-400);">AI Mock Test</span>
+    </nav>
+
+    <div class="container" id="mainContainer">
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('generate')"><i class="fas fa-wand-magic-sparkles"></i> Generate</button>
+            <button class="tab-btn" onclick="switchTab('library')"><i class="fas fa-folder-open"></i> Library</button>
+        </div>
+
+        <!-- Generate Panel -->
+        <div class="panel active" id="panelGenerate">
+            <div class="card">
+                <div class="section-header"><div class="section-icon"><i class="fas fa-robot"></i></div><h2>Generate AI Mock Test</h2></div>
+                <div class="form-group">
+                    <label>Exam Name *</label>
+                    <input type="text" class="form-input" id="genExamName" placeholder="e.g. SSC CGL, IBPS PO, NEET UG...">
+                </div>
+                <div class="form-group">
+                    <label>Test Name *</label>
+                    <input type="text" class="form-input" id="genTestName" placeholder="e.g. Full Mock Test 1, Chapter-wise Test...">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" class="form-input" id="genSubject" placeholder="e.g. Math, Reasoning, Biology...">
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Questions</label>
+                        <input type="number" class="form-input" id="genNumQuestions" value="10" min="1" max="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <textarea class="form-input" id="genDescription" rows="2" placeholder="Short description about the test..."></textarea>
+                </div>
+                <button class="btn-primary" id="btnGenerate" onclick="generateMock()">
+                    <i class="fas fa-wand-magic-sparkles"></i> Generate Mock Test
+                </button>
+            </div>
+        </div>
+
+        <!-- Library Panel -->
+        <div class="panel" id="panelLibrary">
+            <div class="filter-bar">
+                <input type="text" class="filter-input" id="filterExam" placeholder="Filter by Exam..." oninput="loadLibrary()">
+                <input type="text" class="filter-input" id="filterSubject" placeholder="Filter by Subject..." oninput="loadLibrary()">
+            </div>
+            <div id="libraryList"></div>
+        </div>
+
+        <!-- Test Taking Panel (hidden initially) -->
+        <div class="panel" id="panelTest" style="display:none;">
+            <div class="test-progress">
+                <span id="testMeta"></span>
+                <span class="test-timer" id="testTimer">⏱ 00:00</span>
+            </div>
+            <div id="questionsContainer"></div>
+            <button class="btn-primary" id="btnSubmit" onclick="submitTest()" style="margin-top:12px;">
+                <i class="fas fa-paper-plane"></i> Submit Test
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item" onclick="window.location.href='dashboard.html'"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="bottom-nav-item active"><i class="fas fa-file-alt"></i><span>Tests</span></button>
+        <button class="bottom-nav-item" onclick="window.location.href='blogs.html'"><i class="fas fa-blog"></i><span>Blog</span></button>
+        <button class="bottom-nav-item" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></button>
+    </nav>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycby8r1bxGZON3_OyZFuwO5I4w2qJd9sZmtuv42dFolzAHNlqwUOPbMwlSM2VXeOdVZmaCg/exec';
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) { window.location.href = 'index.html'; }
+
+        let currentTestData = null;       // { testId, questions: [...], examName, testName }
+        let userAnswers = [];            // array of selected option indices
+        let testStartTime = 0;
+        let timerInterval = null;
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            if (tab === 'generate') {
+                document.getElementById('panelGenerate').classList.add('active');
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+            } else if (tab === 'library') {
+                document.getElementById('panelLibrary').classList.add('active');
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                loadLibrary();
+            }
+        }
+
+        // ==================== GENERATE MOCK ====================
+        async function generateMock() {
+            const examName = document.getElementById('genExamName').value.trim();
+            const testName = document.getElementById('genTestName').value.trim();
+            const subject = document.getElementById('genSubject').value.trim();
+            const numQuestions = parseInt(document.getElementById('genNumQuestions').value) || 10;
+            const description = document.getElementById('genDescription').value.trim();
+
+            if (!examName || !testName) {
+                Swal.fire({ icon:'warning', title:'Missing Fields', text:'Please fill Exam Name and Test Name.' });
+                return;
+            }
+
+            const btn = document.getElementById('btnGenerate');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+            try {
+                const params = new URLSearchParams({
+                    action: 'generateAiMock',
+                    username: user.username,
+                    examName, testName, subject, description, numQuestions
+                });
+                const res = await fetch(API_URL, { method: 'POST', body: params });
+                const data = await res.json();
+
+                if (data.success) {
+                    Swal.fire({ icon:'success', title:'Mock Generated!', text:`${data.totalQuestions} questions ready. Starting test...`, timer:2000, showConfirmButton:false });
+                    startTest(data);
+                } else {
+                    Swal.fire({ icon:'error', title:'Error', text: data.error || 'Generation failed.' });
+                }
+            } catch (err) {
+                Swal.fire({ icon:'error', title:'Network Error', text:'Please check your connection.' });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Generate Mock Test';
+            }
+        }
+
+        function startTest(testData) {
+            currentTestData = testData;
+            userAnswers = new Array(testData.totalQuestions).fill(-1);
+
+            document.querySelectorAll('.tab-bar').forEach(b => b.style.display = 'none');
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('panelTest').style.display = 'block';
+            document.getElementById('testMeta').textContent = `${testData.examName} · ${testData.testName} · ${testData.totalQuestions} Qs`;
+
+            renderQuestions(testData.questions);
+            startTimer();
+        }
+
+        function renderQuestions(questions) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = questions.map((q, idx) => `
+                <div class="question-card" id="qCard${idx}">
+                    <div class="q-number">Question ${idx + 1}</div>
+                    <div class="q-text">${escapeHTML(q.question)}</div>
+                    ${q.options.map((opt, optIdx) => `
+                        <div class="option-item" id="opt${idx}_${optIdx}" onclick="selectOption(${idx}, ${optIdx})">
+                            <div class="option-radio">${optIdx === 0 ? 'A' : optIdx === 1 ? 'B' : optIdx === 2 ? 'C' : 'D'}</div>
+                            <span>${escapeHTML(opt)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function selectOption(questionIdx, optionIdx) {
+            if (currentTestData.submitted) return;
+            userAnswers[questionIdx] = optionIdx;
+            const card = document.getElementById(`qCard${questionIdx}`);
+            card.querySelectorAll('.option-item').forEach((el, i) => {
+                el.classList.toggle('selected', i === optionIdx);
+            });
+        }
+
+        function startTimer() {
+            testStartTime = Date.now();
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - testStartTime) / 1000);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            const el = document.getElementById('testTimer');
+            el.textContent = `⏱ ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+            if (elapsed > 1800) el.className = 'test-timer danger';
+            else if (elapsed > 1200) el.className = 'test-timer warning';
+        }
+
+        async function submitTest() {
+            if (!currentTestData || currentTestData.submitted) return;
+
+            const unanswered = userAnswers.filter(a => a === -1).length;
+            if (unanswered > 0) {
+                const result = await Swal.fire({
+                    icon:'warning', title:'Unanswered Questions',
+                    text:`You have ${unanswered} unanswered question(s). Submit anyway?`,
+                    showCancelButton:true, confirmButtonText:'Yes, Submit', cancelButtonText:'Go Back'
+                });
+                if (!result.isConfirmed) return;
+            }
+
+            clearInterval(timerInterval);
+            currentTestData.submitted = true;
+
+            // Calculate score
+            let correct = 0, wrong = 0;
+            const questions = currentTestData.questions;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === -1) continue;
+                if (userAnswers[i] === questions[i].correct) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+            const attempted = correct + wrong;
+            const score = correct * 1;  // 1 mark per correct
+            const totalMarks = questions.length;
+            const accuracy = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+            const timeTaken = Math.floor((Date.now() - testStartTime) / 1000);
+            const date = new Date().toISOString().split('T')[0];
+
+            // Show correct/wrong on UI
+            for (let i = 0; i < questions.length; i++) {
+                const card = document.getElementById(`qCard${i}`);
+                const correctAns = questions[i].correct;
+                const userAns = userAnswers[i];
+                card.querySelectorAll('.option-item').forEach((el, idx) => {
+                    el.style.pointerEvents = 'none';
+                    if (idx === correctAns) el.classList.add('correct');
+                    if (idx === userAns && userAns !== correctAns) el.classList.add('wrong');
+                });
+            }
+
+            // Submit to server
+            try {
+                const params = new URLSearchParams({
+                    action: 'submitAiMockResult',
+                    username: user.username,
+                    name: user.name || 'Student',
+                    testCode: currentTestData.testId,
+                    score,
+                    totalMarks,
+                    accuracy,
+                    correct,
+                    wrong,
+                    attempted,
+                    unanswered,
+                    timeTaken,
+                    date,
+                    examType: currentTestData.examName || 'AI_MOCK'
+                });
+                await fetch(API_URL, { method: 'POST', body: params });
+            } catch (e) {
+                console.error('Result submission failed', e);
+            }
+
+            Swal.fire({
+                icon:'success', title:'Test Submitted!',
+                html:`<b>Score:</b> ${score}/${totalMarks}<br><b>Accuracy:</b> ${accuracy}%<br><b>Correct:</b> ${correct} | <b>Wrong:</b> ${wrong}`,
+                confirmButtonText:'View Results'
+            }).then(() => {
+                window.location.href = 'allresult.html';
+            });
+        }
+
+        // ==================== LIBRARY ====================
+        async function loadLibrary() {
+            const container = document.getElementById('libraryList');
+            const examFilter = document.getElementById('filterExam').value.trim();
+            const subjectFilter = document.getElementById('filterSubject').value.trim();
+
+            container.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-pulse"></i> Loading...</div>';
+
+            try {
+                const params = new URLSearchParams({ action: 'getAiMockTests' });
+                if (examFilter) params.append('exam', examFilter);
+                if (subjectFilter) params.append('subject', subjectFilter);
+                const res = await fetch(API_URL + '?' + params.toString());
+                const data = await res.json();
+
+                if (!data.success || !data.tests.length) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No AI Mocks Found</h3><p>Generate your first mock test!</p></div>`;
+                    return;
+                }
+
+                container.innerHTML = data.tests.map(t => `
+                    <div class="mock-library-card">
+                        <div class="ml-left">
+                            <div class="ml-title">${escapeHTML(t.testName)}</div>
+                            <div class="ml-meta">
+                                <span><i class="fas fa-building"></i> ${escapeHTML(t.examName)}</span>
+                                ${t.subject ? `<span><i class="fas fa-book"></i> ${escapeHTML(t.subject)}</span>` : ''}
+                                <span><i class="fas fa-list-ol"></i> ${t.totalQuestions} Qs</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <span class="ml-badge">${escapeHTML(t.username)}</span>
+                            <button class="btn-small attempt" onclick="loadAndStartTest('${t.testId}')">
+                                <i class="fas fa-play"></i> Attempt
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Failed to load</h3></div>';
+            }
+        }
+
+        async function loadAndStartTest(testId) {
+            try {
+                const params = new URLSearchParams({ action: 'getAiMockTestById', testId });
+                const res = await fetch(API_URL + '?' + params.toString());
+                const data = await res.json();
+                if (data.success) {
+                    startTest(data.test);
+                } else {
+                    Swal.fire({ icon:'error', title:'Error', text: data.error || 'Test not found.' });
+                }
+            } catch (err) {
+                Swal.fire({ icon:'error', title:'Network Error' });
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        }
+    </script>
+</body>
+</html>
