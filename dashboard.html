@@ -7,10 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>TestMasterPro.space · Dashboard</title>
-
-    <!-- ===== PWA MANIFEST ===== -->
     <link rel="manifest" href="./json/manifest.json">
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -129,7 +126,6 @@
         .sidebar-nav-item.logout-item:hover { background:var(--red-light); color:var(--red); }
         .sidebar-version { text-align:center; font-size:10px; color:var(--gray-300); padding:10px; flex-shrink:0; }
 
-        /* Install button in sidebar */
         .install-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--gray-600); transition: var(--transition-fast); border: none; background: transparent; width: 100%; text-align: left; font-family: var(--font); }
         .install-sidebar-item i { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--primary-light); color: var(--primary); }
         .install-sidebar-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(3px); }
@@ -149,6 +145,37 @@
         .bell-icon-btn, .chat-icon-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:16px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); position:relative; flex-shrink:0; }
         .bell-icon-btn:hover, .chat-icon-btn:hover { background:var(--gray-200); color:var(--primary); }
         .bell-icon-btn .badge { position:absolute; top:4px; right:6px; width:8px; height:8px; border-radius:50%; background:var(--red); display:none; }
+
+        /* Floating AI Chat Button */
+        .floating-ai-btn {
+            position: fixed;
+            bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 20px);
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 90;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+            animation: pulseAI 2s infinite;
+        }
+        @keyframes pulseAI {
+            0%, 100% { box-shadow: 0 4px 20px rgba(99,102,241,0.4); }
+            50% { box-shadow: 0 4px 30px rgba(99,102,241,0.7), 0 0 0 10px rgba(99,102,241,0.1); }
+        }
+        .floating-ai-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 28px rgba(99,102,241,0.55);
+        }
+        .floating-ai-btn:active { transform: scale(0.9); }
 
         .container { max-width:var(--max-width); margin:0 auto; padding:14px 14px calc(20px + var(--bottom-nav-height)); position:relative; z-index:5; width:100%; flex:1; }
 
@@ -178,19 +205,23 @@
         .qa-icon { width:32px; height:32px; border-radius:10px; background:rgba(255,255,255,0.18); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:15px; position:relative; z-index:1; transition:transform 0.3s; }
         .qa-card:hover .qa-icon { transform:scale(1.2) rotate(-5deg); }
         .qa-card span { font-size:9px; font-weight:700; position:relative; z-index:1; letter-spacing:0.3px; line-height:1.25; text-align:center; text-shadow:0 1px 3px rgba(0,0,0,0.15); }
+
+        /* NEW: AI Mock button - gradient purple */
+        .qa-aimock { background:linear-gradient(135deg,#8b5cf6,#6d28d9); box-shadow:0 4px 14px rgba(139,92,246,0.35); }
+        .qa-aimock .qa-icon { background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.25); }
+
         .qa-challenge { background:linear-gradient(135deg,#0ea5e9,#0369a1); box-shadow:0 4px 14px rgba(14,165,233,0.25); }
         .qa-refer { background:linear-gradient(135deg,#10b981,#047857); box-shadow:0 4px 14px rgba(16,185,129,0.25); }
         .qa-coins { background:linear-gradient(135deg,#f59e0b,#b45309); box-shadow:0 4px 14px rgba(245,158,11,0.25); }
         .qa-use-coins { background:linear-gradient(135deg,#8b5cf6,#6d28d9); box-shadow:0 4px 14px rgba(139,92,246,0.25); }
         .qa-results { background:linear-gradient(135deg,#f43f5e,#be123c); box-shadow:0 4px 14px rgba(244,63,94,0.25); }
         @media (min-width:640px) {
-            .qa-scroll { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; max-width:680px; margin:0 auto; }
+            .qa-scroll { display:grid; grid-template-columns:repeat(6,1fr); gap:14px; max-width:780px; margin:0 auto; }
             .qa-card { max-width:none; aspect-ratio:1/0.9; border-radius:20px; }
             .qa-card span { font-size:12px; }
             .qa-icon { width:38px; height:38px; font-size:18px; }
         }
 
-        /* Sections */
         .section-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
         .section-header .section-icon { width:32px; height:32px; border-radius:8px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
         .section-header h2 { font-size:clamp(15px,3vw,18px); font-weight:700; color:var(--gray-800); letter-spacing:-0.3px; }
@@ -228,7 +259,6 @@
         .mock-exam-item:hover { background:var(--primary-light); color:var(--primary); border-color:rgba(36,55,72,0.1); transform:translateX(3px); }
         .mock-exam-item:active { transform:scale(0.98); }
 
-        /* Popular slider */
         .popular-slider-wrap { position:relative; width:100%; overflow:hidden; border-radius:var(--radius-lg); margin-bottom:8px; }
         .popular-slider { display:flex; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform; }
         .popular-slide { min-width:100%; flex-shrink:0; cursor:pointer; }
@@ -264,7 +294,6 @@
         .social-card.coming-soon { opacity:0.6; cursor:default; }
         .social-card.coming-soon::after { content:'Coming Soon'; position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:8px; font-weight:700; background:#ff4d5a; color:#fff; padding:2px 6px; border-radius:4px; white-space:nowrap; }
 
-        /* Feedback */
         .feedback-section { background:linear-gradient(135deg,#eef2ff,#f0f4ff); border-radius:var(--radius-lg); padding:20px; margin:24px 0 20px; box-shadow:var(--shadow-sm); border:1px solid #d0d7f0; }
         .feedback-section h3 { font-size:17px; font-weight:800; color:var(--primary-dark); margin-bottom:6px; }
         .feedback-marquee { height:140px; overflow:hidden; position:relative; margin-bottom:16px; }
@@ -280,7 +309,6 @@
         .feedback-btn { background:var(--primary); color:#fff; border:none; padding:12px 20px; border-radius:24px; font-weight:700; font-size:13px; cursor:pointer; transition:var(--transition-smooth); display:flex; align-items:center; gap:6px; font-family:var(--font); box-shadow:0 4px 12px rgba(36,55,72,0.25); }
         .feedback-btn:hover { background:var(--primary-dark); transform:translateY(-2px); box-shadow:0 6px 18px rgba(36,55,72,0.35); }
 
-        /* Footer */
         .pro-footer { background:var(--secondary); color:var(--text-light); padding:40px 20px 100px; position:relative; margin-top:24px; border-radius:0; }
         .pro-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),#f59e0b,#fbbf24); }
         .footer-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; max-width:600px; margin:0 auto 30px; }
@@ -302,8 +330,6 @@
         .footer-social { display:flex; justify-content:center; gap:16px; margin:20px 0; }
         .footer-social a { width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:16px; transition:all 0.3s ease; border:1px solid var(--border-light); }
         .footer-social a:hover { background:rgba(255,255,255,0.1); color:var(--accent); transform:translateY(-3px); border-color:var(--accent); }
-
-        /* Footer install button */
         .footer-install-btn { display: inline-flex; align-items: center; gap: 6px; margin: 0 auto; cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s; }
         .footer-install-btn:hover { color: #fff; }
 
@@ -324,6 +350,7 @@
             .container { padding:18px 18px calc(24px + var(--safe-bottom)); }
             .upcoming-scroll { gap:14px; }
             .pro-footer { padding-bottom:30px; }
+            .floating-ai-btn { bottom: 24px; right: 24px; }
         }
         @media (max-width:480px) {
             .footer-grid { gap:24px; }
@@ -333,17 +360,14 @@
     </style>
 </head>
 <body>
-    <!-- Network Toast -->
-    <div class="net-toast offline" id="netToast">
-        <i class="fas fa-wifi-slash"></i>
-        <span id="netMsg">You're offline</span>
-    </div>
+    <div class="net-toast offline" id="netToast"><i class="fas fa-wifi-slash"></i><span id="netMsg">You're offline</span></div>
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- NO floating PWA banner -->
+    <button class="floating-ai-btn" onclick="navigate('aichat.html')" title="AI Study Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
 
-    <!-- Sidebar -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
         <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
             <div class="sidebar-brand">
@@ -366,11 +390,13 @@
                 <div class="sidebar-nav-label">Main Menu</div>
                 <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
                 <div class="sidebar-nav-label">Features</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
@@ -382,9 +408,7 @@
                 <div class="sidebar-nav-label">Premium</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
                 <div class="sidebar-nav-label">App</div>
-                <button class="sidebar-nav-item install-sidebar-item" id="sidebarInstallBtn" onclick="installPWA()" style="display:none;">
-                    <i class="fas fa-download"></i> Install App
-                </button>
+                <button class="sidebar-nav-item install-sidebar-item" id="sidebarInstallBtn" onclick="installPWA()" style="display:none;"><i class="fas fa-download"></i> Install App</button>
                 <div class="sidebar-nav-label">Account</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
@@ -394,7 +418,6 @@
         </aside>
     </div>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-left">
             <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
@@ -402,7 +425,7 @@
         </div>
         <div class="nav-right">
             <button class="bell-icon-btn" id="bellBtn" onclick="navigate('notices.html')" title="Latest Updates"><i class="fas fa-bell"></i><span class="badge" id="bellBadge"></span></button>
-            <button class="chat-icon-btn" onclick="navigate('chat.html')" title="Chat"><i class="fas fa-comments"></i></button>
+            <button class="chat-icon-btn" onclick="navigate('chat.html')" title="Support Chat"><i class="fas fa-comments"></i></button>
             <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">
                 <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
             </div>
@@ -410,7 +433,6 @@
     </nav>
 
     <div class="container">
-        <!-- Hero Slider -->
         <div class="hero-slider-wrap" id="heroWrap">
             <div class="hero-slider" id="heroSlider">
                 <div style="min-width:100%;height:220px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse" style="margin-right:8px;"></i> Loading banners...</div>
@@ -418,62 +440,37 @@
             <div class="hero-dots" id="heroDots"></div>
         </div>
 
-        <!-- Quick Actions -->
         <div class="quick-actions" style="margin-bottom:20px;">
             <div class="qa-scroll">
-                <button class="qa-card qa-challenge" onclick="window.location.href='challenge.html'"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span></button>
-                <button class="qa-card qa-refer" onclick="window.location.href='referral.html'"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span></button>
-                <button class="qa-card qa-coins" onclick="window.location.href='coin-history.html'"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span></button>
-                <button class="qa-card qa-use-coins" onclick="window.location.href='usecoin.html'"><div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span></button>
-                <button class="qa-card qa-results" onclick="window.location.href='allresult.html'"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span></button>
+                <button class="qa-card qa-aimock" onclick="navigate('aimock.html')"><div class="qa-icon"><i class="fas fa-robot"></i></div><span>AI Mock<br>Test</span></button>
+                <button class="qa-card qa-challenge" onclick="navigate('challenge.html')"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span></button>
+                <button class="qa-card qa-refer" onclick="navigate('referral.html')"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span></button>
+                <button class="qa-card qa-coins" onclick="navigate('coin-history.html')"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span></button>
+                <button class="qa-card qa-use-coins" onclick="navigate('usecoin.html')"><div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span></button>
+                <button class="qa-card qa-results" onclick="navigate('allresult.html')"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span></button>
             </div>
         </div>
 
-        <!-- Upcoming Exams -->
         <section style="margin-bottom:20px;">
-            <div class="section-header">
-                <div class="section-icon"><i class="fas fa-calendar-alt"></i></div>
-                <h2>Upcoming Exams</h2>
-                <span class="badge-tag">NEW</span>
-            </div>
-            <div class="upcoming-scroll" id="upcomingScroll">
-                <div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;width:100%;"><i class="fas fa-spinner fa-pulse"></i> Loading upcoming exams...</div>
-            </div>
+            <div class="section-header"><div class="section-icon"><i class="fas fa-calendar-alt"></i></div><h2>Upcoming Exams</h2><span class="badge-tag">NEW</span></div>
+            <div class="upcoming-scroll" id="upcomingScroll"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;width:100%;"><i class="fas fa-spinner fa-pulse"></i> Loading upcoming exams...</div></div>
         </section>
 
-        <!-- Free Mock Test -->
         <section style="margin-bottom:20px;">
-            <div class="section-header">
-                <div class="section-icon"><i class="fas fa-file-alt"></i></div>
-                <h2>Free Mock Test</h2>
-                <span class="badge-tag">EXAMS</span>
-            </div>
-            <div class="mock-accordion" id="mockAccordion">
-                <div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;"><i class="fas fa-spinner fa-pulse"></i> Loading mock tests...</div>
-            </div>
+            <div class="section-header"><div class="section-icon"><i class="fas fa-file-alt"></i></div><h2>Free Mock Test</h2><span class="badge-tag">EXAMS</span></div>
+            <div class="mock-accordion" id="mockAccordion"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;"><i class="fas fa-spinner fa-pulse"></i> Loading mock tests...</div></div>
         </section>
 
-        <!-- Popular Mock Tests -->
         <section style="margin-bottom:20px;">
-            <div class="section-header">
-                <div class="section-icon"><i class="fas fa-fire"></i></div>
-                <h2>Popular Mock Tests</h2>
-                <span class="badge-tag">TRENDING</span>
-            </div>
+            <div class="section-header"><div class="section-icon"><i class="fas fa-fire"></i></div><h2>Popular Mock Tests</h2><span class="badge-tag">TRENDING</span></div>
             <div class="popular-slider-wrap" id="popularSliderWrap">
-                <div class="popular-slider" id="popularSlider">
-                    <div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);font-size:13px;display:flex;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div>
-                </div>
+                <div class="popular-slider" id="popularSlider"><div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);font-size:13px;display:flex;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div></div>
                 <div class="popular-dots" id="popularDots"></div>
             </div>
         </section>
 
-        <!-- Stay Connected -->
         <section style="margin-bottom:20px;">
-            <div class="section-header">
-                <div class="section-icon"><i class="fas fa-users"></i></div>
-                <h2>Stay Connected With Mockers</h2>
-            </div>
+            <div class="section-header"><div class="section-icon"><i class="fas fa-users"></i></div><h2>Stay Connected With Mockers</h2></div>
             <div class="social-grid">
                 <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
                 <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span></a>
@@ -482,9 +479,8 @@
             </div>
         </section>
 
-        <!-- Feedback -->
         <div class="feedback-section">
-            <h3>🎓 What Our Students Say</h3>
+            <h3>⭐ What Our Students Say</h3>
             <div class="feedback-marquee">
                 <div class="feedback-marquee-inner">
                     <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
@@ -495,23 +491,14 @@
                     <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
                 </div>
             </div>
-            <div class="feedback-actions">
-                <button class="feedback-btn" onclick="window.location.href='reviews.html'"><i class="fas fa-paper-plane"></i> Give Your Feedback</button>
-            </div>
+            <div class="feedback-actions"><button class="feedback-btn" onclick="window.location.href='reviews.html'"><i class="fas fa-paper-plane"></i> Give Your Feedback</button></div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="pro-footer">
         <div class="footer-grid">
-            <div class="footer-col">
-                <h3>Exams</h3>
-                <ul id="footerExamCategories"></ul>
-            </div>
-            <div class="footer-col">
-                <h3>Upcoming Exam</h3>
-                <ul id="footerUpcomingExams"></ul>
-            </div>
+            <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
+            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
         </div>
         <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
         <div class="footer-social">
@@ -520,19 +507,12 @@
             <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
             <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
         </div>
-        <!-- Install button in footer -->
         <div style="text-align:center; margin-top: 20px;" id="footerInstallContainer">
-            <a class="footer-install-btn" id="footerInstallBtn" onclick="installPWA()" style="display:none;">
-                <i class="fas fa-plus-square"></i> Add to Home Screen
-            </a>
+            <a class="footer-install-btn" id="footerInstallBtn" onclick="installPWA()" style="display:none;"><i class="fas fa-plus-square"></i> Add to Home Screen</a>
         </div>
-        <div class="footer-bottom">
-            <p>© 2026 TestMasterPro.space</p>
-            <a href="mailto:testmasterpro.space">testmasterpro.space</a>
-        </div>
+        <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
     </footer>
 
-    <!-- Bottom Nav -->
     <nav class="bottom-nav" id="bottomNav">
         <button class="bottom-nav-item active" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
         <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
@@ -548,30 +528,25 @@
             upcomingfooter: './json/upcomingfooter.json',
             notices: './notices.json'
         };
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
-        const STREAK_API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
+        // UPDATED API URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycby8r1bxGZON3_OyZFuwO5I4w2qJd9sZmtuv42dFolzAHNlqwUOPbMwlSM2VXeOdVZmaCg/exec';
+        const STREAK_API_URL = API_URL; // using same new script
 
         let isOffline = false;
         const user = JSON.parse(localStorage.getItem('user'));
 
-        // ========== PWA LOGIC ==========
+        // PWA logic (unchanged)
         let deferredPrompt = null;
         const PWA_PROMPT_KEY = 'pwa_prompt_dismissed';
         const PWA_INSTALL_KEY = 'pwa_installed';
         const PWA_REWARD_KEY = 'pwa_reward_claimed';
 
-        function isAppInstalled() {
-            return window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem(PWA_INSTALL_KEY);
-        }
-
+        function isAppInstalled() { return window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem(PWA_INSTALL_KEY); }
         function updateInstallButtonsVisibility() {
             const installed = isAppInstalled();
             const show = !installed;
-            document.querySelectorAll('.install-sidebar-item, #footerInstallBtn').forEach(el => {
-                el.style.display = show ? 'flex' : 'none';
-            });
+            document.querySelectorAll('.install-sidebar-item, #footerInstallBtn').forEach(el => { el.style.display = show ? 'flex' : 'none'; });
         }
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -580,17 +555,11 @@
             if (isAppInstalled()) return;
             updateInstallButtonsVisibility();
         });
-
         function isPromptDismissedRecently() {
             const dismissed = localStorage.getItem(PWA_PROMPT_KEY);
             if (!dismissed) return false;
-            try {
-                const data = JSON.parse(dismissed);
-                const daysSince = (Date.now() - data.timestamp) / (1000 * 60 * 60 * 24);
-                return daysSince < 7;
-            } catch (e) { return false; }
+            try { const data = JSON.parse(dismissed); const daysSince = (Date.now() - data.timestamp) / (1000 * 60 * 60 * 24); return daysSince < 7; } catch (e) { return false; }
         }
-
         window.addEventListener('appinstalled', () => {
             deferredPrompt = null;
             localStorage.setItem(PWA_INSTALL_KEY, 'true');
@@ -598,29 +567,16 @@
             updateInstallButtonsVisibility();
             showToast('🎉 App installed! +50 Coins added', 'success', 4000);
         });
-
         function installPWA() {
-            if (isAppInstalled()) {
-                showToast('App already installed!', 'info');
-                return;
-            }
+            if (isAppInstalled()) { showToast('App already installed!', 'info'); return; }
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') console.log('PWA install accepted');
-                    deferredPrompt = null;
-                });
-            } else {
-                showToast('Tap the browser menu (⋮) and select "Add to Home Screen"', 'info', 5000);
-            }
+                deferredPrompt.userChoice.then((choiceResult) => { if (choiceResult.outcome === 'accepted') console.log('PWA install accepted'); deferredPrompt = null; });
+            } else { showToast('Tap the browser menu (⋮) and select "Add to Home Screen"', 'info', 5000); }
         }
-
         function claimPWAReward() {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!user.username) {
-                showToast('App Installed! Login to claim 50 coins', 'info', 4000);
-                return;
-            }
+            if (!user.username) { showToast('App Installed! Login to claim 50 coins', 'info', 4000); return; }
             if (localStorage.getItem(PWA_REWARD_KEY)) return;
             const currentCoins = parseInt(localStorage.getItem('userCoins') || '0');
             localStorage.setItem('userCoins', currentCoins + 50);
@@ -629,20 +585,11 @@
             showToast('🎉 +50 Coins Added for Installing App!', 'success', 4000);
             logPWAActivity(user.username);
         }
-
-        async function logPWAActivity(username) {
-            try {
-                await fetch(`${API_URL}?action=submitResult&username=${encodeURIComponent(username)}&name=PWA&testCode=PWA_INSTALL&score=50&totalMarks=50&accuracy=100&correct=1&wrong=0&attempted=1&unanswered=0&timeTaken=0&date=${new Date().toISOString().split('T')[0]}&examType=PWA`);
-            } catch (e) { console.log('Activity log failed'); }
-        }
-
-        function updateCoinDisplay(coins) {
-            document.querySelectorAll('.coin-balance').forEach(el => el.textContent = coins);
-        }
-
+        async function logPWAActivity(username) { try { await fetch(`${API_URL}?action=submitResult&username=${encodeURIComponent(username)}&name=PWA&testCode=PWA_INSTALL&score=50&totalMarks=50&accuracy=100&correct=1&wrong=0&attempted=1&unanswered=0&timeTaken=0&date=${new Date().toISOString().split('T')[0]}&examType=PWA`); } catch (e) {} }
+        function updateCoinDisplay(coins) { document.querySelectorAll('.coin-balance').forEach(el => el.textContent = coins); }
         updateInstallButtonsVisibility();
 
-        // ========== FALLBACK DATA ==========
+        // Fallback data (unchanged)
         const FALLBACK_MOCKS = [
             { file:'sbi_po.html',exam:'SBI PO',subject:'QA',chapter:'Full',testName:'SBI PO Mock',testCode:'SBI-PO-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
             { file:'ibps_clerk.html',exam:'IBPS Clerk',subject:'Reasoning',chapter:'Full',testName:'IBPS Clerk Mock',testCode:'IBPS-CLK-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
@@ -661,171 +608,46 @@
             { id:1,name:'ReNEET UG 2026',date:'15 May 2026' },{ id:2,name:'CUET UG 2026',date:'20 May 2026' },{ id:3,name:'UP Police Constable 2026',date:'10 June 2026' },{ id:4,name:'SSC Selection Post (Phase 14) 2026',date:'22 June 2026' },{ id:5,name:'SSC GD 2025-26',date:'5 July 2026' },{ id:6,name:'RRB NTPC 2026',date:'25 July 2026' },{ id:7,name:'SSC CGL Tier-I 2026',date:'12 June 2026' },{ id:8,name:'SSC JE 2026',date:'18 August 2026' },{ id:9,name:'UPSC (CSE) 2026',date:'28 May 2026' },{ id:10,name:'SBI PO Prelims 2026',date:'18 August 2026' },{ id:11,name:'SSC Steno Grade C & D 2026',date:'30 August 2026' },{ id:12,name:'SBI Clerk Prelims 2026',date:'22 September 2026' },{ id:13,name:'IBPS PO Prelims 2026',date:'18 August 2026' },{ id:14,name:'IBPS Clerk Prelims 2026',date:'22 September 2026' },{ id:15,name:'SSC CPO Tier I 2026',date:'10 July 2026' }
         ];
 
-        // ========== HELPER FUNCTIONS ==========
-        function showToast(m,t='info',d=3000){
-            const c=document.getElementById('toastContainer'),o=document.createElement('div');
-            o.className=`toast-item ${t}`;
-            const i={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'};
-            o.innerHTML=`<i class="fas ${i[t]}"></i> ${m}`;
-            c.appendChild(o);c.classList.add('show');
-            setTimeout(()=>{o.style.opacity='0';o.style.transform='translateY(-10px)';o.style.transition='0.3s';setTimeout(()=>{o.remove();if(!c.children.length)c.classList.remove('show')},300)},d);
-        }
-
-        function updateOnlineStatus(){
-            isOffline=!navigator.onLine;
-            const b=document.getElementById('offlineBanner');
-            if(isOffline){b.classList.add('show');showToast("You're offline. Using cached data.",'warning',4000);}
-            else{b.classList.remove('show');}
-        }
-        window.addEventListener('online',updateOnlineStatus);
-        window.addEventListener('offline',updateOnlineStatus);
-
+        function showToast(m,t='info',d=3000){ const c=document.getElementById('toastContainer'),o=document.createElement('div'); o.className=`toast-item ${t}`; const i={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'}; o.innerHTML=`<i class="fas ${i[t]}"></i> ${m}`; c.appendChild(o);c.classList.add('show'); setTimeout(()=>{o.style.opacity='0';o.style.transform='translateY(-10px)';o.style.transition='0.3s';setTimeout(()=>{o.remove();if(!c.children.length)c.classList.remove('show')},300)},d); }
+        function updateOnlineStatus(){ isOffline=!navigator.onLine; const b=document.getElementById('offlineBanner'); if(isOffline){b.classList.add('show');showToast("You're offline. Using cached data.",'warning',4000);} else{b.classList.remove('show');} }
+        window.addEventListener('online',updateOnlineStatus); window.addEventListener('offline',updateOnlineStatus);
         function navigate(u){window.location.href=u;}
         function openSidebar(){const o=document.getElementById('sidebarOverlay');o.classList.remove('hidden');requestAnimationFrame(()=>o.classList.add('active'));document.body.classList.add('sidebar-open');}
         function closeSidebar(e){if(e.target===document.getElementById('sidebarOverlay'))closeSidebarDirect();}
         function closeSidebarDirect(){const o=document.getElementById('sidebarOverlay');o.classList.remove('active');document.body.classList.remove('sidebar-open');setTimeout(()=>{if(!o.classList.contains('active'))o.classList.add('hidden')},400);}
-
         function sidebarNavigate(action){
             closeSidebarDirect();
             setTimeout(()=>{
-                const map={dashboard:'dashboard.html',mocks:'exam.html',books:'book.html',study:'book.html',results:'allresult.html',leaderboard:'leaderboard.html',chat:'chat.html',streak:'streak.html','daily-challenge':'challenge.html',referral:'referral.html',favorites:'favorites.html',coins:'coin-history.html','coin-use':'usecoin.html',reviews:'reviews.html',premium:'payment.html',profile:'profile.html',instructions:'instructions',logout:'logout'};
+                const map={dashboard:'dashboard.html',mocks:'exam.html',aimock:'aimock.html',books:'book.html',study:'book.html',results:'allresult.html',leaderboard:'leaderboard.html',chat:'chat.html',aichat:'aichat.html',streak:'streak.html','daily-challenge':'challenge.html',referral:'referral.html',favorites:'favorites.html',coins:'coin-history.html','coin-use':'usecoin.html',reviews:'reviews.html',premium:'payment.html',profile:'profile.html',instructions:'instructions',logout:'logout'};
                 if(action==='logout')logoutUser();
                 else if(action==='instructions')openHowToUse();
                 else if(map[action])window.location.href=map[action];
             },300);
         }
+        function logoutUser(){ Swal.fire({title:'Logout?',text:'Are you sure?',icon:'question',showCancelButton:true,confirmButtonText:'Yes',cancelButtonText:'No',confirmButtonColor:'#ff4d5a',cancelButtonColor:'#243748'}).then(r=>{if(r.isConfirmed){localStorage.removeItem('user');showToast('Logged out','success');setTimeout(()=>window.location.href='index.html',800);}}); }
+        function openHowToUse(){ Swal.fire({title:'How to Use',html:`<div style="text-align:left;font-size:13px;"><p><b>1.</b> Select a Category.</p><p><b>2.</b> Use filters.</p><p><b>3.</b> Click Attempt.</p></div>`,confirmButtonText:'Got it!',confirmButtonColor:'#243748',icon:'info'}); }
+        async function fetchJSON(p,fb){ try{const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();if(!Array.isArray(d)||!d.length)throw new Error('Empty data');return d} catch(e){if(fb){console.warn(`Fallback for ${p}`,e);return fb}throw e} }
+        function setAvatar(eid,u,showPremium=false){ const el=document.getElementById(eid); if(!el)return; if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`; else if(u?.profilePicUrl)el.innerHTML=`<img src="${u.profilePicUrl}" alt="Avatar">`; else el.textContent=(u?.name)?u.name.charAt(0).toUpperCase():'S'; if(showPremium){const badge=document.getElementById('premiumBadge');if(badge)badge.style.display='flex';} }
+        function groupByCategoryUniqueExams(arr){ const map={}; arr.forEach(item=>{const cat=item.category||'Other';if(!map[cat])map[cat]={exams:[],seen:new Set()};if(!map[cat].seen.has(item.exam)){map[cat].seen.add(item.exam);map[cat].exams.push(item);}}); return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams})); }
 
-        function logoutUser(){
-            Swal.fire({title:'Logout?',text:'Are you sure?',icon:'question',showCancelButton:true,confirmButtonText:'Yes',cancelButtonText:'No',confirmButtonColor:'#ff4d5a',cancelButtonColor:'#243748'})
-            .then(r=>{if(r.isConfirmed){localStorage.removeItem('user');showToast('Logged out','success');setTimeout(()=>window.location.href='index.html',800);}});
-        }
-        function openHowToUse(){
-            Swal.fire({title:'How to Use',html:`<div style="text-align:left;font-size:13px;"><p><b>1.</b> Select a Category.</p><p><b>2.</b> Use filters.</p><p><b>3.</b> Click Attempt.</p></div>`,confirmButtonText:'Got it!',confirmButtonColor:'#243748',icon:'info'});
-        }
+        async function fetchAndDisplayServerStreak(){ const streakEl=document.getElementById('sidebarStreak'),streakCount=document.getElementById('streakCount'); try{ const res=await fetch(`${STREAK_API_URL}?action=getAllUsers&_=${Date.now()}`); const data=await res.json(); if(data.success&&data.users){ const currentUser=data.users.find(u=>u.username===user.username); const streak=currentUser?(currentUser.streak||0):0; if(streak>0){streakEl.style.display='flex';streakCount.textContent=streak;} else streakEl.style.display='none'; }else streakEl.style.display='none'; }catch(e){streakEl.style.display='none';showToast('Could not load streak data','warning');} }
+        async function renderUpcomingExams(){ const c=document.getElementById('upcomingScroll'); try{ const d=await fetchJSON(JSON_PATHS.upcoming,null); if(!d||!d.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No upcoming exams available</div>';return;} c.innerHTML=d.map(ex=>`<div class="upcoming-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">${ex.type==='free'?'<div class="uc-badge">FREE</div>':''}<div class="uc-top"><div class="uc-img">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-calendar-check"></i>'}</div><div class="uc-info"><h4>${ex.testName||ex.exam||'Untitled'}</h4><span><i class="fas fa-clock"></i> ${ex.date||'TBA'}</span></div></div><div class="uc-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-star"></i> +${ex.marksPerQuestion||'?'}</span><span><i class="fas fa-hourglass-half"></i> ${ex.duration||'?'}m</span></div></div>`).join(''); }catch(e){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--red);">Failed to load upcoming exams.</div>';showToast('Could not load upcoming exams','error');} }
+        async function renderMockAccordion(){ const c=document.getElementById('mockAccordion'); const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS); const grouped=groupByCategoryUniqueExams(data); if(!grouped.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No mock tests available</div>';return;} c.innerHTML=grouped.map((cat,idx)=>`<div class="mock-accordion-item" id="mockItem${idx}"><button class="mock-accordion-header" onclick="toggleMockAccordion(${idx})"><div class="ma-left"><span>📂 ${cat.category}</span></div><span class="ma-count">${cat.exams.length}</span><i class="fas fa-chevron-down ma-arrow" id="mockArrow${idx}"></i></button><div class="mock-accordion-body" id="mockBody${idx}"><div class="mock-exam-list">${cat.exams.map(ex=>`<div class="mock-exam-item" onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(ex.exam||'')}')"><span>📋 ${ex.exam||'Untitled'}</span></div>`).join('')}</div></div></div>`).join(''); }
+        function toggleMockAccordion(idx){ const item=document.getElementById('mockItem'+idx); const isOpen=item.classList.contains('open'); document.querySelectorAll('.mock-accordion-item.open').forEach(el=>el.classList.remove('open')); if(!isOpen){item.classList.add('open');setTimeout(()=>item.scrollIntoView({behavior:'smooth',block:'nearest'}),150);} }
 
-        async function fetchJSON(p,fb){
-            try{const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();if(!Array.isArray(d)||!d.length)throw new Error('Empty data');return d}
-            catch(e){if(fb){console.warn(`Fallback for ${p}`,e);return fb}throw e}
-        }
-
-        function setAvatar(eid,u,showPremium=false){
-            const el=document.getElementById(eid);
-            if(!el)return;
-            if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`;
-            else if(u?.profilePicUrl)el.innerHTML=`<img src="${u.profilePicUrl}" alt="Avatar">`;
-            else el.textContent=(u?.name)?u.name.charAt(0).toUpperCase():'S';
-            if(showPremium){const badge=document.getElementById('premiumBadge');if(badge)badge.style.display='flex';}
-        }
-
-        function groupByCategoryUniqueExams(arr){
-            const map={};
-            arr.forEach(item=>{const cat=item.category||'Other';if(!map[cat])map[cat]={exams:[],seen:new Set()};if(!map[cat].seen.has(item.exam)){map[cat].seen.add(item.exam);map[cat].exams.push(item);}});
-            return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams}));
-        }
-
-        // ========== STREAK ==========
-        async function fetchAndDisplayServerStreak(){
-            const streakEl=document.getElementById('sidebarStreak'),streakCount=document.getElementById('streakCount');
-            try{
-                const res=await fetch(`${STREAK_API_URL}?action=getAllUsers&_=${Date.now()}`);
-                const data=await res.json();
-                if(data.success&&data.users){
-                    const currentUser=data.users.find(u=>u.username===user.username);
-                    const streak=currentUser?(currentUser.streak||0):0;
-                    if(streak>0){streakEl.style.display='flex';streakCount.textContent=streak;}
-                    else streakEl.style.display='none';
-                }else streakEl.style.display='none';
-            }catch(e){streakEl.style.display='none';showToast('Could not load streak data','warning');}
-        }
-
-        // ========== UPCOMING EXAMS ==========
-        async function renderUpcomingExams(){
-            const c=document.getElementById('upcomingScroll');
-            try{
-                const d=await fetchJSON(JSON_PATHS.upcoming,null);
-                if(!d||!d.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No upcoming exams available</div>';return;}
-                c.innerHTML=d.map(ex=>`<div class="upcoming-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">${ex.type==='free'?'<div class="uc-badge">FREE</div>':''}<div class="uc-top"><div class="uc-img">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-calendar-check"></i>'}</div><div class="uc-info"><h4>${ex.testName||ex.exam||'Untitled'}</h4><span><i class="fas fa-clock"></i> ${ex.date||'TBA'}</span></div></div><div class="uc-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-star"></i> +${ex.marksPerQuestion||'?'}</span><span><i class="fas fa-hourglass-half"></i> ${ex.duration||'?'}m</span></div></div>`).join('');
-            }catch(e){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--red);">Failed to load upcoming exams.</div>';showToast('Could not load upcoming exams','error');}
-        }
-
-        // ========== MOCK ACCORDION ==========
-        async function renderMockAccordion(){
-            const c=document.getElementById('mockAccordion');
-            const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS);
-            const grouped=groupByCategoryUniqueExams(data);
-            if(!grouped.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400);">No mock tests available</div>';return;}
-            c.innerHTML=grouped.map((cat,idx)=>`
-                <div class="mock-accordion-item" id="mockItem${idx}">
-                    <button class="mock-accordion-header" onclick="toggleMockAccordion(${idx})">
-                        <div class="ma-left"><span>📂 ${cat.category}</span></div>
-                        <span class="ma-count">${cat.exams.length}</span>
-                        <i class="fas fa-chevron-down ma-arrow" id="mockArrow${idx}"></i>
-                    </button>
-                    <div class="mock-accordion-body" id="mockBody${idx}">
-                        <div class="mock-exam-list">
-                            ${cat.exams.map(ex=>`
-                                <div class="mock-exam-item" onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(ex.exam||'')}')">
-                                    <span>📝 ${ex.exam||'Untitled'}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function toggleMockAccordion(idx){
-            const item=document.getElementById('mockItem'+idx);
-            const isOpen=item.classList.contains('open');
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el=>el.classList.remove('open'));
-            if(!isOpen){item.classList.add('open');setTimeout(()=>item.scrollIntoView({behavior:'smooth',block:'nearest'}),150);}
-        }
-
-        // ========== POPULAR SLIDER ==========
         const popularSlider=document.getElementById('popularSlider'),popularDots=document.getElementById('popularDots'),popularWrap=document.getElementById('popularSliderWrap');
         let popularSlidesData=[],popularCurrent=0,popularAutoInterval,popularDragging=false,popularStartX=0,popularSliderX=0;
-
-        async function renderPopularSlider(){
-            const data=await fetchJSON(JSON_PATHS.popular,FALLBACK_POPULAR);
-            const grouped=groupByCategoryUniqueExams(data);
-            const allExams=[];grouped.forEach(cat=>cat.exams.forEach(ex=>allExams.push(ex)));
-            if(!allExams.length){popularSlider.innerHTML='<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);">No popular tests</div>';return;}
-            popularSlidesData=allExams;
-            popularSlider.innerHTML=allExams.map(ex=>`
-                <div class="popular-slide" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">
-                    <div class="popular-card">
-                        ${ex.badge?`<div class="pop-badge">${ex.badge}</div>`:''}
-                        <div class="pop-icon">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}</div>
-                        <h4>${ex.exam||'Untitled'}</h4>
-                        ${ex.attempts?`<div class="pop-attempts"><i class="fas fa-users"></i> ${ex.attempts}</div>`:''}
-                        <div class="pop-meta">
-                            <span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span>
-                            <span><i class="fas fa-trophy"></i> +${ex.marksPerQuestion||'?'} Marks</span>
-                            <span><i class="fas fa-clock"></i> ${ex.duration||'?'}m</span>
-                        </div>
-                        <button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')"><i class="fas fa-play"></i> Explore</button>
-                    </div>
-                </div>
-            `).join('');
-            popularDots.innerHTML=allExams.map((_,i)=>`<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join('');
-            startPopularAutoSlide();
-        }
-
+        async function renderPopularSlider(){ const data=await fetchJSON(JSON_PATHS.popular,FALLBACK_POPULAR); const grouped=groupByCategoryUniqueExams(data); const allExams=[];grouped.forEach(cat=>cat.exams.forEach(ex=>allExams.push(ex))); if(!allExams.length){popularSlider.innerHTML='<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);">No popular tests</div>';return;} popularSlidesData=allExams; popularSlider.innerHTML=allExams.map(ex=>`<div class="popular-slide" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')"><div class="popular-card">${ex.badge?`<div class="pop-badge">${ex.badge}</div>`:''}<div class="pop-icon">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}</div><h4>${ex.exam||'Untitled'}</h4>${ex.attempts?`<div class="pop-attempts"><i class="fas fa-users"></i> ${ex.attempts}</div>`:''}<div class="pop-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-trophy"></i> +${ex.marksPerQuestion||'?'} Marks</span><span><i class="fas fa-clock"></i> ${ex.duration||'?'}m</span></div><button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')"><i class="fas fa-play"></i> Explore</button></div></div>`).join(''); popularDots.innerHTML=allExams.map((_,i)=>`<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join(''); startPopularAutoSlide(); }
         function goToPopularSlide(idx){popularCurrent=idx;popularSlider.style.transform=`translateX(${-idx*100}%)`;document.querySelectorAll('.popular-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
         function nextPopularSlide(){if(!popularSlidesData.length)return;popularCurrent=(popularCurrent+1)%popularSlidesData.length;goToPopularSlide(popularCurrent);}
         function startPopularAutoSlide(){if(popularSlidesData.length)popularAutoInterval=setInterval(nextPopularSlide,5000);}
         function stopPopularAutoSlide(){clearInterval(popularAutoInterval);}
-        popularWrap.addEventListener('mousedown',popDragStart);popularWrap.addEventListener('touchstart',popDragStart,{passive:true});
-        popularWrap.addEventListener('mousemove',popDragMove);popularWrap.addEventListener('touchmove',popDragMove,{passive:true});
-        popularWrap.addEventListener('mouseup',popDragEnd);popularWrap.addEventListener('mouseleave',popDragEnd);popularWrap.addEventListener('touchend',popDragEnd);
-
+        popularWrap.addEventListener('mousedown',popDragStart);popularWrap.addEventListener('touchstart',popDragStart,{passive:true});popularWrap.addEventListener('mousemove',popDragMove);popularWrap.addEventListener('touchmove',popDragMove,{passive:true});popularWrap.addEventListener('mouseup',popDragEnd);popularWrap.addEventListener('mouseleave',popDragEnd);popularWrap.addEventListener('touchend',popDragEnd);
         function popDragStart(e){popularDragging=true;popularWrap.classList.add('dragging');stopPopularAutoSlide();popularStartX=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;popularSliderX=-popularCurrent*popularWrap.offsetWidth;}
         function popDragMove(e){if(!popularDragging)return;e.preventDefault();const x=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;popularSlider.style.transform=`translateX(${popularSliderX+(x-popularStartX)}px)`;}
         function popDragEnd(e){if(!popularDragging)return;popularDragging=false;popularWrap.classList.remove('dragging');const x=e.type.includes('mouse')?e.pageX:(e.changedTouches?e.changedTouches[0].pageX:popularStartX);const walk=x-popularStartX;const threshold=popularWrap.offsetWidth*0.2;if(walk<-threshold&&popularCurrent<popularSlidesData.length-1)popularCurrent++;else if(walk>threshold&&popularCurrent>0)popularCurrent--;goToPopularSlide(popularCurrent);startPopularAutoSlide();}
-
         document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPopularAutoSlide();else startPopularAutoSlide();});
 
-        // ========== FOOTER ==========
         async function renderFooterExamCategories(){
             const c=document.getElementById('footerExamCategories');
             const data=await fetchJSON(JSON_PATHS.mocks,FALLBACK_MOCKS);
@@ -833,86 +655,37 @@
             if(!grouped.length){c.innerHTML='<li><a>No exams</a></li>';return;}
             let html='';
             grouped.forEach(cat=>{html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;});
+            html+=`<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Mock Test</a></li>`;
             html+=`<li><a onclick="navigate('book.html')"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
-            html+=`<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Chat</a></li>`;
+            html+=`<li><a onclick="navigate('aichat.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Chat</a></li>`;
+            html+=`<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Support Chat</a></li>`;
             html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html+=`<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             c.innerHTML=html;
         }
+        async function renderFooterUpcoming(){ const c=document.getElementById('footerUpcomingExams'); const d=await fetchJSON(JSON_PATHS.upcomingfooter,FALLBACK_UPCOMING_FOOTER); if(!d.length){c.innerHTML='<li><a>No upcoming exams</a></li>';return;} c.innerHTML=d.map(e=>`<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join(''); }
+        async function renderNotificationBell(){ const bell=document.getElementById('bellBtn'); try{ const r=await fetch(JSON_PATHS.notices,{cache:'no-store'}); if(!r.ok)throw new Error('No notices'); const n=await r.json(); if(Array.isArray(n)&&n.length){ n.sort((a,b)=>new Date(b.date+' '+(b.time||'00:00'))-new Date(a.date+' '+(a.time||'00:00'))); bell.title=n[0]?.headline||'Latest Updates'; } }catch(e){bell.title='Tap to view notices';} }
 
-        async function renderFooterUpcoming(){
-            const c=document.getElementById('footerUpcomingExams');
-            const d=await fetchJSON(JSON_PATHS.upcomingfooter,FALLBACK_UPCOMING_FOOTER);
-            if(!d.length){c.innerHTML='<li><a>No upcoming exams</a></li>';return;}
-            c.innerHTML=d.map(e=>`<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
-        }
-
-        // ========== NOTIFICATION BELL ==========
-        async function renderNotificationBell(){
-            const bell=document.getElementById('bellBtn');
-            try{
-                const r=await fetch(JSON_PATHS.notices,{cache:'no-store'});
-                if(!r.ok)throw new Error('No notices');
-                const n=await r.json();
-                if(Array.isArray(n)&&n.length){
-                    n.sort((a,b)=>new Date(b.date+' '+(b.time||'00:00'))-new Date(a.date+' '+(a.time||'00:00')));
-                    bell.title=n[0]?.headline||'Latest Updates';
-                }
-            }catch(e){bell.title='Tap to view notices';}
-        }
-
-        // ========== HERO SLIDER ==========
         const heroSlider=document.getElementById('heroSlider'),heroDots=document.getElementById('heroDots'),heroWrap=document.getElementById('heroWrap');
         let slidesData=[],currentSlide=0,autoSlideInterval;
-
-        async function loadHeroSlides(){
-            try{
-                const res=await fetch('./json/frontpage.json',{cache:'no-store'});
-                if(!res.ok)throw new Error('Failed');
-                slidesData=await res.json();
-                renderSlides();
-                startAutoSlide();
-            }catch(e){
-                heroSlider.innerHTML=`<div class="hero-slide" onclick="location.href='exam.html?id=1'"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default"><div class="hero-overlay"><div class="hero-title">SSC JE Tier-I 2026</div><div class="hero-subtitle">15 Full Length Test • Bilingual</div></div><span class="hero-badge">NEW</span></div>`;
-            }
-        }
-
-        function renderSlides(){
-            if(!slidesData.length)return;
-            heroSlider.innerHTML=slidesData.map(s=>`<div class="hero-slide" onclick="location.href='${s.link||'#'}'"><img src="${s.image}" alt="${s.title}" loading="lazy"><div class="hero-overlay"><div class="hero-title">${s.title}</div><div class="hero-subtitle">${s.subtitle}</div></div>${s.badge?`<span class="hero-badge">${s.badge}</span>`:''}</div>`).join('');
-            heroDots.innerHTML=slidesData.map((_,i)=>`<button class="hero-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></button>`).join('');
-        }
-
+        async function loadHeroSlides(){ try{ const res=await fetch('./json/frontpage.json',{cache:'no-store'}); if(!res.ok)throw new Error('Failed'); slidesData=await res.json(); renderSlides(); startAutoSlide(); }catch(e){ heroSlider.innerHTML=`<div class="hero-slide" onclick="location.href='exam.html?id=1'"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default"><div class="hero-overlay"><div class="hero-title">SSC JE Tier-I 2026</div><div class="hero-subtitle">15 Full Length Test • Bilingual</div></div><span class="hero-badge">NEW</span></div>`; } }
+        function renderSlides(){ if(!slidesData.length)return; heroSlider.innerHTML=slidesData.map(s=>`<div class="hero-slide" onclick="location.href='${s.link||'#'}'"><img src="${s.image}" alt="${s.title}" loading="lazy"><div class="hero-overlay"><div class="hero-title">${s.title}</div><div class="hero-subtitle">${s.subtitle}</div></div>${s.badge?`<span class="hero-badge">${s.badge}</span>`:''}</div>`).join(''); heroDots.innerHTML=slidesData.map((_,i)=>`<button class="hero-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></button>`).join(''); }
         function goToSlide(idx){currentSlide=idx;heroSlider.style.transform=`translateX(${-idx*100}%)`;document.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
         function nextSlide(){currentSlide=(currentSlide+1)%slidesData.length;goToSlide(currentSlide);}
         function startAutoSlide(){if(slidesData.length)autoSlideInterval=setInterval(nextSlide,6000);}
         function stopAutoSlide(){clearInterval(autoSlideInterval);}
-
-        heroWrap.addEventListener('mousedown',dragStart);heroWrap.addEventListener('touchstart',dragStart,{passive:true});
-        heroWrap.addEventListener('mousemove',dragMove);heroWrap.addEventListener('touchmove',dragMove,{passive:true});
-        heroWrap.addEventListener('mouseup',dragEnd);heroWrap.addEventListener('mouseleave',dragEnd);heroWrap.addEventListener('touchend',dragEnd);
-
+        heroWrap.addEventListener('mousedown',dragStart);heroWrap.addEventListener('touchstart',dragStart,{passive:true});heroWrap.addEventListener('mousemove',dragMove);heroWrap.addEventListener('touchmove',dragMove,{passive:true});heroWrap.addEventListener('mouseup',dragEnd);heroWrap.addEventListener('mouseleave',dragEnd);heroWrap.addEventListener('touchend',dragEnd);
         function dragStart(e){isDragging=true;heroWrap.classList.add('dragging');stopAutoSlide();startX=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;sliderX=-currentSlide*heroWrap.offsetWidth;}
         function dragMove(e){if(!isDragging)return;e.preventDefault();const x=e.type.includes('mouse')?e.pageX:e.touches[0].pageX;heroSlider.style.transform=`translateX(${sliderX+(x-startX)}px)`;}
         function dragEnd(e){if(!isDragging)return;isDragging=false;heroWrap.classList.remove('dragging');const x=e.type.includes('mouse')?e.pageX:(e.changedTouches?e.changedTouches[0].pageX:startX);const walk=x-startX;const threshold=heroWrap.offsetWidth*0.2;if(walk<-threshold&&currentSlide<slidesData.length-1)currentSlide++;else if(walk>threshold&&currentSlide>0)currentSlide--;goToSlide(currentSlide);startAutoSlide();}
-
         document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAutoSlide();else startAutoSlide();});
 
-        // ========== NETWORK TOAST ==========
         const netToast=document.getElementById('netToast'),netMsg=document.getElementById('netMsg');
         let wasOffline=false,toastTimeout;
-
-        function showNetToast(type,msg){
-            netToast.className=`net-toast ${type} show`;netMsg.textContent=msg;
-            clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>netToast.classList.remove('show'),3000);
-        }
-        function updateNetStatus(){
-            if(!navigator.onLine){wasOffline=true;showNetToast('offline',"You're offline.");}
-            else{if(wasOffline){showNetToast('online',"You're back online!");wasOffline=false;loadHeroSlides();}}
-        }
+        function showNetToast(type,msg){ netToast.className=`net-toast ${type} show`;netMsg.textContent=msg; clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>netToast.classList.remove('show'),3000); }
+        function updateNetStatus(){ if(!navigator.onLine){wasOffline=true;showNetToast('offline',"You're offline.");} else{if(wasOffline){showNetToast('online',"You're back online!");wasOffline=false;loadHeroSlides();}} }
         window.addEventListener('online',updateNetStatus);window.addEventListener('offline',updateNetStatus);
 
-        // ========== INIT ==========
         function init(){
             updateOnlineStatus();updateNetStatus();
             const premiumBadge=document.getElementById('premiumBadge');
@@ -932,19 +705,12 @@
             renderFooterExamCategories();renderFooterUpcoming();
             updateInstallButtonsVisibility();
         }
-
         document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active'))closeSidebarDirect();});
         document.addEventListener('DOMContentLoaded',init);
     </script>
-
-    <!-- ===== SERVICE WORKER REGISTRATION ===== -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker registered'))
-                    .catch(err => console.log('SW registration failed', err));
-            });
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').then(reg => console.log('SW registered')).catch(err => console.log('SW registration failed', err)); });
         }
     </script>
 </body>
