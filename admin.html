@@ -155,6 +155,7 @@
         }
         .msg-bubble.user-msg { align-self: flex-start; background: #334155; border-left: 3px solid #6366f1; }
         .msg-bubble.admin-msg { align-self: flex-end; background: #1e3a5f; border-right: 3px solid #fbbf24; }
+        .msg-bubble.ai-msg { align-self: flex-start; background: #1e293b; border-left: 3px solid #10b981; color: #d1d5db; }
         .msg-bubble .msg-sender { font-weight: 700; font-size: 11px; margin-bottom: 3px; }
         .msg-bubble .msg-text { font-size: 13px; }
         .msg-bubble .msg-time { font-size: 9px; color: #94a3b8; margin-top: 4px; }
@@ -177,6 +178,50 @@
             padding: 10px 18px; background: #6366f1; color: white; border: none;
             border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif;
         }
+
+        .ai-chat-container {
+            background: #1e293b; border-radius: 16px; border: 1px solid #334155;
+            height: 70vh; display: flex; flex-direction: column;
+        }
+        .ai-chat-header {
+            display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+            border-bottom: 1px solid #334155;
+        }
+        .ai-chat-header h3 { font-size: 16px; }
+        .ai-chat-header input {
+            margin-left: auto; padding: 8px 12px; border-radius: 8px;
+            background: #334155; color: white; border: 1px solid #475569;
+            font-size: 12px; width: 180px; font-family: 'Poppins', sans-serif;
+        }
+        .ai-chat-messages {
+            flex: 1; overflow-y: auto; padding: 16px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .ai-chat-input-area {
+            display: flex; padding: 12px; gap: 10px; border-top: 1px solid #334155;
+        }
+        .ai-chat-input-area input {
+            flex: 1; padding: 12px; border-radius: 8px;
+            background: #334155; color: white; border: 1px solid #475569;
+            font-family: 'Poppins', sans-serif; font-size: 14px;
+        }
+        .ai-chat-input-area button {
+            padding: 12px 20px; background: #6366f1; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif;
+        }
+
+        .typing-indicator {
+            align-self: flex-start; background: #334155;
+            border-radius: 12px; padding: 10px 14px; display: flex; gap: 4px;
+            color: #94a3b8; font-size: 12px;
+        }
+        .typing-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #6366f1;
+            animation: typingBounce 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
 
         .modal-overlay {
             position: fixed; top:0; left:0; right:0; bottom:0;
@@ -254,7 +299,8 @@
             <h2><i class="fas fa-shield-halved"></i> Admin Panel</h2>
             <button class="active" onclick="switchAdminTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
             <button onclick="switchAdminTab('payments')"><i class="fas fa-credit-card"></i> Payments <span class="badge-count" id="pendingBadge" style="display:none;">0</span></button>
-            <button onclick="switchAdminTab('chats')"><i class="fas fa-comments"></i> Chats</button>
+            <button onclick="switchAdminTab('chats')"><i class="fas fa-comments"></i> Support Chats</button>
+            <button onclick="switchAdminTab('aiAssistant')"><i class="fas fa-robot"></i> AI Assistant</button>
             <button onclick="switchAdminTab('users')"><i class="fas fa-users"></i> Users</button>
             <button onclick="switchAdminTab('results')"><i class="fas fa-clipboard-list"></i> Results</button>
             <button onclick="switchAdminTab('coinRequests')"><i class="fas fa-coins"></i> Coin Requests</button>
@@ -310,10 +356,10 @@
                 </div>
             </div>
 
-            <!-- Chats -->
+            <!-- Support Chats -->
             <div class="tab-content" id="chatsTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-                    <h2 style="margin:0;">💬 Live Chat Management</h2>
+                    <h2 style="margin:0;">💬 Support Chat</h2>
                     <button class="refresh-btn" onclick="loadAllChatsForAdmin()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
                 <div class="chat-panel">
@@ -322,6 +368,27 @@
                         <select id="replyToSelect"><option value="">Reply to all</option></select>
                         <input type="text" id="adminReplyInput" placeholder="Type reply...">
                         <button onclick="sendAdminReply()"><i class="fas fa-reply"></i> Reply</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant (new) -->
+            <div class="tab-content" id="aiAssistantTab">
+                <h2 style="margin-bottom:14px;">🤖 AI Assistant</h2>
+                <div class="ai-chat-container">
+                    <div class="ai-chat-header">
+                        <h3><i class="fas fa-robot" style="color:#10b981;"></i> AI Chat</h3>
+                        <input type="text" id="aiTargetUser" placeholder="Target student (optional)" style="margin-left:auto;">
+                    </div>
+                    <div class="ai-chat-messages" id="aiChatMessages">
+                        <div class="msg-bubble ai-msg">
+                            <div class="msg-sender">AI Assistant</div>
+                            <div class="msg-text">Hello! I can answer questions about any student's data. Type a message below. You can optionally enter a student username above to focus the query.</div>
+                        </div>
+                    </div>
+                    <div class="ai-chat-input-area">
+                        <input type="text" id="aiChatInput" placeholder="Ask about student data..." onkeypress="if(event.key==='Enter')sendAiMessage()">
+                        <button onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i> Send</button>
                     </div>
                 </div>
             </div>
@@ -357,7 +424,7 @@
                 </div>
             </div>
 
-            <!-- Coin Requests – UPDATED -->
+            <!-- Coin Requests -->
             <div class="tab-content" id="coinRequestsTab">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
                     <h2 style="margin:0;">🪙 Coin Redemption Requests</h2>
@@ -434,7 +501,7 @@
         </div>
     </div>
 
-    <!-- Modals (unchanged except we removed the old coin modals; we use Swal instead) -->
+    <!-- Modals (unchanged) -->
     <div class="modal-overlay" id="verifyPaymentModal">
         <div class="modal">
             <h3>Verify Payment</h3>
@@ -494,8 +561,8 @@
     </div>
 
     <script>
-        // Use the new API URL you provided
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
+        // Updated API URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycby8r1bxGZON3_OyZFuwO5I4w2qJd9sZmtuv42dFolzAHNlqwUOPbMwlSM2VXeOdVZmaCg/exec';
         let pendingDelete = { type: '', id: '' };
 
         // ==================== LOGIN ====================
@@ -528,7 +595,8 @@
         function switchAdminTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-            const idx = ['dashboard','payments','chats','users','results','coinRequests','dailyChallenges','reviews','settings'].indexOf(tab);
+            const tabs = ['dashboard','payments','chats','aiAssistant','users','results','coinRequests','dailyChallenges','reviews','settings'];
+            const idx = tabs.indexOf(tab);
             const btns = document.querySelectorAll('.sidebar button');
             if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
             document.getElementById(tab + 'Tab').classList.add('active');
@@ -537,6 +605,7 @@
                 dashboard: loadDashboardStats,
                 payments: loadAllPayments,
                 chats: loadAllChatsForAdmin,
+                aiAssistant: null,  // no auto load
                 users: loadAllUsers,
                 results: loadAllResults,
                 coinRequests: loadCoinRequests,
@@ -646,7 +715,7 @@
             else Swal.fire('Error', data.error, 'error');
         }
 
-        // ==================== CHATS ====================
+        // ==================== SUPPORT CHATS ====================
         async function loadAllChatsForAdmin() {
             const res = await fetch(`${API_URL}?action=getAllChats`);
             const data = await res.json();
@@ -679,6 +748,65 @@
             await fetch(`${API_URL}?action=adminReply&replyTo=${encodeURIComponent(replyTo || 'all')}&message=${encodeURIComponent(message)}&replyToUsername=${encodeURIComponent(replyTo)}`);
             document.getElementById('adminReplyInput').value = '';
             loadAllChatsForAdmin();
+        }
+
+        // ==================== AI ASSISTANT (new) ====================
+        function addAiMessage(text, sender) {
+            const container = document.getElementById('aiChatMessages');
+            const div = document.createElement('div');
+            div.className = `msg-bubble ${sender === 'user' ? 'admin-msg' : 'ai-msg'}`;
+            div.innerHTML = `<div class="msg-sender">${sender === 'user' ? 'You' : 'AI Assistant'}</div><div class="msg-text">${text}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showAiTyping() {
+            const container = document.getElementById('aiChatMessages');
+            const div = document.createElement('div');
+            div.className = 'typing-indicator';
+            div.innerHTML = '<span>AI is thinking</span><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            div.id = 'aiTyping';
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeAiTyping() {
+            const indicator = document.getElementById('aiTyping');
+            if (indicator) indicator.remove();
+        }
+
+        async function sendAiMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addAiMessage(message, 'user');
+            input.value = '';
+            showAiTyping();
+
+            const targetUser = document.getElementById('aiTargetUser').value.trim();
+
+            const params = new URLSearchParams();
+            params.append('action', 'adminAiChat');
+            params.append('adminUser', 'admin');
+            params.append('message', message);
+            if (targetUser) params.append('targetUsername', targetUser);
+
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: params });
+                const data = await res.json();
+                removeAiTyping();
+                if (data.reply) {
+                    addAiMessage(data.reply, 'ai');
+                } else if (data.error) {
+                    addAiMessage('⚠️ ' + data.error, 'ai');
+                } else {
+                    addAiMessage('Sorry, I could not process that.', 'ai');
+                }
+            } catch (e) {
+                removeAiTyping();
+                addAiMessage('⚠️ Network error.', 'ai');
+            }
         }
 
         // ==================== USERS ====================
@@ -743,7 +871,7 @@
             }
         }
 
-        // ==================== COIN REQUESTS (UPDATED) ====================
+        // ==================== COIN REQUESTS ====================
         async function loadCoinRequests() {
             const res = await fetch(`${API_URL}?action=getAllCoinRequests`);
             const data = await res.json();
@@ -773,7 +901,6 @@
             }
         }
 
-        // New function to handle approve/reject with note and message
         async function processCoinRequest(requestId, action) {
             const { value: formValues } = await Swal.fire({
                 title: action === 'approve' ? 'Approve Request' : 'Reject Request',
@@ -794,7 +921,7 @@
                 }
             });
 
-            if (!formValues) return; // cancelled
+            if (!formValues) return;
 
             const params = new URLSearchParams({
                 action: action === 'approve' ? 'approveCoinRequest' : 'rejectCoinRequest',
@@ -965,7 +1092,7 @@
             if (type === 'result') loadAllResults();
         }
 
-        // Auto refresh
+        // Auto refresh for support chats
         setInterval(() => {
             if (document.getElementById('chatsTab')?.classList.contains('active')) loadAllChatsForAdmin();
         }, 8000);
@@ -973,6 +1100,7 @@
             if (document.getElementById('dashboardTab')?.classList.contains('active')) loadDashboardStats();
         }, 30000);
 
+        // Auto-login if session exists
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainPanel').style.display = 'flex';
