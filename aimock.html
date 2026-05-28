@@ -113,7 +113,7 @@
         .questions-badge {
             display: inline-flex; align-items: center; gap: 8px; background: var(--primary-light);
             padding: 10px 18px; border-radius: 30px; font-weight: 600; font-size: 14px;
-            color: var(--primary); margin-bottom: 20px; cursor: pointer; user-select: none;
+            color: var(--primary); margin-bottom: 20px;
         }
         .questions-badge i { font-size: 16px; }
 
@@ -151,19 +151,13 @@
         .btn-small.attempt:hover { background: var(--primary-dark); }
         .btn-small.attempt:active { transform: scale(0.95); }
 
-        .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+        .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
         .filter-input {
             padding: 8px 14px; border-radius: 20px; border: 2px solid var(--gray-200); font-family: var(--font);
             font-size: 12px; font-weight: 600; color: var(--gray-600); background: var(--white); transition: var(--transition);
             outline: none; min-width: 120px;
         }
         .filter-input:focus { border-color: var(--primary); }
-        .filter-own-btn {
-            padding: 8px 16px; border-radius: 20px; border: 2px solid var(--gray-200); background: white;
-            font-weight: 600; font-size: 12px; cursor: pointer; color: var(--gray-600); font-family: var(--font);
-            transition: var(--transition); white-space: nowrap;
-        }
-        .filter-own-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         .question-card {
             background: #fff; border-radius: var(--radius); padding: 20px; border: 1px solid #e8ecf0;
@@ -220,6 +214,7 @@
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-left">
             <button class="back-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-arrow-left"></i></button>
@@ -249,8 +244,8 @@
                     <input type="text" class="form-input" id="genExamName" placeholder="e.g. SSC CGL, IBPS PO, NEET UG...">
                 </div>
                 <div class="form-group">
-                    <label>Test Name (auto‑generated if empty)</label>
-                    <input type="text" class="form-input" id="genTestName" placeholder="Leave blank for auto name">
+                    <label>Test Name *</label>
+                    <input type="text" class="form-input" id="genTestName" placeholder="e.g. Full Mock Test 1, Chapter-wise Test...">
                 </div>
                 <div class="form-group">
                     <label>Subject</label>
@@ -260,15 +255,8 @@
                     <label>Description (Optional)</label>
                     <textarea class="form-input" id="genDescription" rows="2" placeholder="Short description about the test..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Number of Questions</label>
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <input type="range" id="genNumQuestions" min="1" max="25" value="10" oninput="document.getElementById('qCountDisplay').textContent = this.value" style="flex:1;">
-                        <span id="qCountDisplay" style="font-weight:700; min-width:30px; text-align:center;">10</span>
-                    </div>
-                </div>
-                <div class="questions-badge" id="questionsBadge">
-                    <i class="fas fa-list-ol"></i> <span id="badgeCount">10</span> Questions will be generated
+                <div class="questions-badge">
+                    <i class="fas fa-list-ol"></i> 10 Questions will be generated
                 </div>
                 <button class="btn-primary" id="btnGenerate" onclick="generateMock()">
                     <i class="fas fa-wand-magic-sparkles"></i> Generate Mock Test
@@ -281,13 +269,11 @@
             <div class="filter-bar">
                 <input type="text" class="filter-input" id="filterExam" placeholder="Filter by Exam..." oninput="loadLibrary()">
                 <input type="text" class="filter-input" id="filterSubject" placeholder="Filter by Subject..." oninput="loadLibrary()">
-                <button class="filter-own-btn" id="btnShowAll" onclick="setLibraryMode('all')">All Tests</button>
-                <button class="filter-own-btn active" id="btnShowMine" onclick="setLibraryMode('mine')">My Tests</button>
             </div>
             <div id="libraryList"></div>
         </div>
 
-        <!-- Test Taking Panel -->
+        <!-- Test Taking Panel (hidden initially) -->
         <div class="panel" id="panelTest" style="display:none;">
             <div class="test-progress">
                 <span id="testMeta"></span>
@@ -300,6 +286,7 @@
         </div>
     </div>
 
+    <!-- Bottom Nav -->
     <nav class="bottom-nav">
         <button class="bottom-nav-item" onclick="window.location.href='dashboard.html'"><i class="fas fa-home"></i><span>Home</span></button>
         <button class="bottom-nav-item active"><i class="fas fa-file-alt"></i><span>Tests</span></button>
@@ -308,21 +295,14 @@
     </nav>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycby8r1bxGZON3_OyZFuwO5I4w2qJd9sZmtuv42dFolzAHNlqwUOPbMwlSM2VXeOdVZmaCg/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzv0VFDQPKvv46GDvpZxZ7-uJo9_l_KN_CR5P9o3yVDLqQSpeFE8VaKtHIhBkeHqSylrQ/exec';
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) { window.location.href = 'index.html'; }
 
-        let currentTestData = null;
-        let userAnswers = [];
+        let currentTestData = null;       // { testId, questions: [...], examName, testName }
+        let userAnswers = [];            // array of selected option indices
         let testStartTime = 0;
         let timerInterval = null;
-        let libraryMode = 'mine'; // 'all' or 'mine'
-
-        // Update question badge when slider changes
-        document.getElementById('genNumQuestions').addEventListener('input', function() {
-            document.getElementById('qCountDisplay').textContent = this.value;
-            document.getElementById('badgeCount').textContent = this.value;
-        });
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -337,23 +317,16 @@
             }
         }
 
-        function setLibraryMode(mode) {
-            libraryMode = mode;
-            document.getElementById('btnShowAll').classList.toggle('active', mode === 'all');
-            document.getElementById('btnShowMine').classList.toggle('active', mode === 'mine');
-            loadLibrary();
-        }
-
         // ==================== GENERATE MOCK ====================
         async function generateMock() {
             const examName = document.getElementById('genExamName').value.trim();
             const testName = document.getElementById('genTestName').value.trim();
             const subject = document.getElementById('genSubject').value.trim();
             const description = document.getElementById('genDescription').value.trim();
-            const numQuestions = parseInt(document.getElementById('genNumQuestions').value) || 10;
+            const numQuestions = 10;  // FIXED TO 10
 
-            if (!examName) {
-                Swal.fire({ icon:'warning', title:'Missing Fields', text:'Please enter at least the Exam Name.' });
+            if (!examName || !testName) {
+                Swal.fire({ icon:'warning', title:'Missing Fields', text:'Please fill Exam Name and Test Name.' });
                 return;
             }
 
@@ -365,23 +338,13 @@
                 const params = new URLSearchParams({
                     action: 'generateAiMock',
                     username: user.username,
-                    examName,
-                    testName,   // can be empty → auto‑generated by backend
-                    subject,
-                    description,
-                    numQuestions
+                    examName, testName, subject, description, numQuestions
                 });
                 const res = await fetch(API_URL, { method: 'POST', body: params });
                 const data = await res.json();
 
                 if (data.success) {
-                    Swal.fire({
-                        icon:'success',
-                        title:'Mock Generated!',
-                        text:`${data.totalQuestions} questions ready. Starting test...`,
-                        timer:2000,
-                        showConfirmButton:false
-                    });
+                    Swal.fire({ icon:'success', title:'Mock Generated!', text:`10 questions ready. Starting test...`, timer:2000, showConfirmButton:false });
                     startTest(data);
                 } else {
                     Swal.fire({ icon:'error', title:'Error', text: data.error || 'Generation failed.' });
@@ -468,8 +431,11 @@
             const questions = currentTestData.questions;
             for (let i = 0; i < questions.length; i++) {
                 if (userAnswers[i] === -1) continue;
-                if (userAnswers[i] === questions[i].correct) correct++;
-                else wrong++;
+                if (userAnswers[i] === questions[i].correct) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
             }
             const attempted = correct + wrong;
             const score = correct * 1;
@@ -512,12 +478,12 @@
             }
 
             Swal.fire({
-                icon:'success',
-                title:'Test Submitted!',
+                icon:'success', title:'Test Submitted!',
                 html:`<b>Score:</b> ${score}/${totalMarks}<br><b>Accuracy:</b> ${accuracy}%<br><b>Correct:</b> ${correct} | <b>Wrong:</b> ${wrong}`,
-                confirmButtonText:'OK'
+                confirmButtonText:'View Results'
+            }).then(() => {
+                window.location.href = 'allresult.html';
             });
-            // No redirect – stay on page
         }
 
         // ==================== LIBRARY ====================
@@ -532,14 +498,11 @@
                 const params = new URLSearchParams({ action: 'getAiMockTests' });
                 if (examFilter) params.append('exam', examFilter);
                 if (subjectFilter) params.append('subject', subjectFilter);
-                if (libraryMode === 'mine') {
-                    params.append('username', user.username);
-                }
                 const res = await fetch(API_URL + '?' + params.toString());
                 const data = await res.json();
 
                 if (!data.success || !data.tests.length) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No AI Mocks Found</h3><p>${libraryMode === 'mine' ? "You haven't generated any tests yet." : "No tests available."}</p></div>`;
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No AI Mocks Found</h3><p>Generate your first mock test!</p></div>`;
                     return;
                 }
 
