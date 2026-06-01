@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,8 @@
     <title>Mock Library · TestMasterPro.space</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
     <style>
         :root {
             --primary: #243748;
@@ -24,6 +26,7 @@
             --red-light: #fff0f1;
             --light: #f7f7f7;
             --white: #ffffff;
+            --gray-50: #f8f9fa;
             --gray-100: #f5f5f5;
             --gray-200: #e8e8e8;
             --gray-300: #d4d4d4;
@@ -65,15 +68,13 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-
         html {
             scroll-behavior: smooth;
             height: 100%;
         }
-
         body {
             font-family: var(--font);
-            background: var(--light);
+            background: var(--gray-50);
             min-height: 100vh;
             min-height: 100dvh;
             color: var(--gray-800);
@@ -88,7 +89,6 @@
             max-width: 100vw;
             padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
         }
-
         body.sidebar-open,
         body.sheet-open {
             overflow: hidden;
@@ -97,6 +97,7 @@
             height: 100%;
         }
 
+        /* Toast */
         .toast-container {
             position: fixed;
             top: calc(12px + var(--safe-top));
@@ -111,11 +112,9 @@
             pointer-events: none;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         .toast-container.show {
             transform: translateX(-50%) translateY(0);
         }
-
         .toast-item {
             background: var(--gray-800);
             color: #fff;
@@ -131,16 +130,25 @@
             pointer-events: all;
             border-left: 3px solid var(--blue);
         }
-
-        .toast-item.success { border-left-color: var(--green); }
-        .toast-item.error { border-left-color: var(--red); }
-        .toast-item.warning { border-left-color: #f59e0b; }
-
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(-16px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .toast-item.success {
+            border-left-color: var(--green);
         }
-
+        .toast-item.error {
+            border-left-color: var(--red);
+        }
+        .toast-item.warning {
+            border-left-color: #f59e0b;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(-16px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
         .offline-banner {
             position: fixed;
             top: 0;
@@ -156,9 +164,11 @@
             transform: translateY(-100%);
             transition: transform 0.3s ease;
         }
+        .offline-banner.show {
+            transform: translateY(0);
+        }
 
-        .offline-banner.show { transform: translateY(0); }
-
+        /* Sidebar */
         .sidebar-overlay {
             position: fixed;
             inset: 0;
@@ -170,9 +180,10 @@
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
         }
-
-        .sidebar-overlay.active { opacity: 1; visibility: visible; }
-
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
         .sidebar {
             position: fixed;
             top: 0;
@@ -192,9 +203,9 @@
             overflow: hidden;
             border-right: 1px solid rgba(0, 0, 0, 0.04);
         }
-
-        .sidebar-overlay.active .sidebar { transform: translateX(0); }
-
+        .sidebar-overlay.active .sidebar {
+            transform: translateX(0);
+        }
         .sidebar-brand {
             background: linear-gradient(135deg, #243748, #1f3140);
             padding: 20px 16px 16px;
@@ -204,7 +215,6 @@
             flex-shrink: 0;
             position: relative;
         }
-
         .sidebar-logo {
             width: 40px;
             height: 40px;
@@ -217,21 +227,18 @@
             color: #fff;
             flex-shrink: 0;
         }
-
         .sidebar-brand-text {
             color: #fff;
             font-weight: 700;
             font-size: 14px;
             letter-spacing: -0.3px;
         }
-
         .sidebar-brand-text small {
             display: block;
             font-weight: 400;
             font-size: 9px;
             opacity: 0.8;
         }
-
         .sidebar-close-btn {
             position: absolute;
             top: 14px;
@@ -249,12 +256,10 @@
             justify-content: center;
             transition: var(--transition-fast);
         }
-
         .sidebar-close-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: rotate(90deg) scale(1.1);
         }
-
         .sidebar-user-card {
             padding: 14px 16px;
             background: #fafbfc;
@@ -264,7 +269,6 @@
             gap: 10px;
             flex-shrink: 0;
         }
-
         .sidebar-avatar {
             width: 44px;
             height: 44px;
@@ -281,15 +285,16 @@
             border: 2px solid #fff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
-
-        .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .sidebar-user-info .name {
             font-weight: 600;
             font-size: 13px;
             color: var(--gray-800);
         }
-
         .sidebar-user-info .tag {
             font-size: 10px;
             color: var(--primary);
@@ -300,51 +305,6 @@
             display: inline-block;
             margin-top: 2px;
         }
-
-        .sidebar-streak {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 8px 16px 4px;
-            padding: 10px 14px;
-            background: linear-gradient(135deg, #fff7ed, #fed7aa);
-            border-radius: 14px;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(249, 115, 22, 0.15);
-        }
-
-        .sidebar-streak:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
-        }
-
-        .sidebar-streak .streak-fire {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #f97316, #ea580c);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 18px;
-        }
-
-        .sidebar-streak .streak-info {
-            font-weight: 700;
-            font-size: 14px;
-            color: #9a3412;
-        }
-
-        .sidebar-streak .streak-info span {
-            display: block;
-            font-size: 11px;
-            font-weight: 500;
-            color: #c2410c;
-        }
-
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -354,7 +314,6 @@
             gap: 2px;
             -webkit-overflow-scrolling: touch;
         }
-
         .sidebar-nav-label {
             font-size: 10px;
             text-transform: uppercase;
@@ -364,7 +323,6 @@
             padding: 14px 8px 6px;
             font-family: var(--font);
         }
-
         .sidebar-nav-item {
             display: flex;
             align-items: center;
@@ -383,21 +341,19 @@
             text-align: left;
             font-family: var(--font);
         }
-
         .sidebar-nav-item:hover {
             background: var(--gray-100);
             color: var(--gray-800);
             transform: translateX(3px);
         }
-
-        .sidebar-nav-item:active { transform: scale(0.97); }
-
+        .sidebar-nav-item:active {
+            transform: scale(0.97);
+        }
         .sidebar-nav-item.active-nav {
             background: var(--primary-light);
             color: var(--primary);
             font-weight: 700;
         }
-
         .sidebar-nav-item i {
             width: 32px;
             height: 32px;
@@ -410,17 +366,14 @@
             background: var(--gray-100);
             color: var(--gray-500);
         }
-
         .sidebar-nav-item.active-nav i {
             background: var(--primary);
             color: #fff;
         }
-
         .sidebar-nav-item.logout-item:hover {
             background: var(--red-light);
             color: var(--red);
         }
-
         .sidebar-version {
             text-align: center;
             font-size: 10px;
@@ -429,6 +382,7 @@
             flex-shrink: 0;
         }
 
+        /* Navbar */
         .navbar {
             background: #fff;
             padding: 10px 14px;
@@ -444,9 +398,12 @@
             min-height: 54px;
             border-bottom: 1px solid #eee;
         }
-
-        .nav-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
         .hamburger-btn {
             width: 36px;
             height: 36px;
@@ -462,9 +419,9 @@
             transition: var(--transition-fast);
             flex-shrink: 0;
         }
-
-        .hamburger-btn:hover { background: var(--gray-200); }
-
+        .hamburger-btn:hover {
+            background: var(--gray-200);
+        }
         .nav-brand {
             display: flex;
             align-items: center;
@@ -476,11 +433,16 @@
             white-space: nowrap;
             letter-spacing: -0.3px;
         }
-
-        .nav-brand i { font-size: 17px; color: var(--blue); }
-
-        .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-
+        .nav-brand i {
+            font-size: 17px;
+            color: var(--blue);
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
         .user-avatar {
             width: 34px;
             height: 34px;
@@ -499,10 +461,14 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             transition: var(--transition-fast);
         }
-
-        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .user-avatar:hover { transform: scale(1.08); }
-
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-avatar:hover {
+            transform: scale(1.08);
+        }
         .btn-chat-nav {
             background: var(--primary-light);
             color: var(--primary);
@@ -519,14 +485,12 @@
             transition: 0.2s;
             text-decoration: none;
         }
-
         .btn-chat-nav:hover {
             background: var(--primary);
             color: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(36,55,72,0.2);
+            box-shadow: 0 4px 12px rgba(36, 55, 72, 0.2);
         }
-
         .btn-logout-nav {
             background: var(--red-light);
             color: var(--red);
@@ -552,76 +516,212 @@
             flex: 1;
         }
 
-        /* Category Selector */
-        .category-selector-area { margin-bottom: 18px; }
+        /* ========== CATEGORY VIEW ========== */
+        #categoryView {
+            display: block;
+        }
+        #categoryView.hidden {
+            display: none !important;
+        }
 
-        .select-category-btn {
-            width: 100%;
-            padding: 16px 20px;
-            border-radius: var(--radius-lg);
-            background: linear-gradient(135deg, #fff, #f0f3f6);
-            border: 2px dashed var(--primary-light);
-            cursor: pointer;
+        .category-hero {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+        }
+        .category-hero h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-800);
+            letter-spacing: -0.4px;
+            margin-bottom: 4px;
+        }
+        .category-hero p {
+            font-size: 12px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .search-bar-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border-radius: 28px;
+            padding: 12px 18px;
+            border: 2px solid var(--gray-200);
+            box-shadow: var(--shadow-xs);
+            transition: var(--transition);
+            margin-bottom: 18px;
+        }
+        .search-bar-top:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.06), var(--shadow-sm);
+        }
+        .search-bar-top i {
+            color: var(--gray-400);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .search-bar-top input {
+            border: none;
+            outline: none;
             font-family: var(--font);
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--primary);
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--gray-700);
+            width: 100%;
+            background: transparent;
+            min-width: 0;
+        }
+        .search-bar-top input::placeholder {
+            color: var(--gray-400);
+        }
+
+        /* Category Cards - Gradient Style */
+        .category-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (min-width: 500px) {
+            .category-card-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 14px;
+            }
+        }
+        @media (min-width: 768px) {
+            .category-card-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .category-card-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 18px;
+            }
+        }
+
+        .category-card {
+            border-radius: 18px;
+            padding: 22px 14px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            aspect-ratio: 1 / 1;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            color: #fff;
+        }
+        .category-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 120% 0%, rgba(255, 255, 255, 0.2), transparent 55%);
+            z-index: 0;
+        }
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+        }
+        .category-card:active {
+            transform: scale(0.93);
+            transition: 0.08s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .category-card .cat-icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .select-category-btn:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-            background: #fff;
-        }
-
-        .select-category-btn:active {
-            transform: scale(0.97);
-            transition: 0.06s;
-            background: var(--primary-light);
-        }
-
-        .select-category-btn i {
             font-size: 20px;
-            animation: bounceIcon 2s ease-in-out infinite;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s;
         }
-
-        @keyframes bounceIcon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .category-card:hover .cat-icon-circle {
+            transform: scale(1.15) rotate(-5deg);
         }
-
-        .category-selected-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-        .category-selected-pill {
-            background: linear-gradient(135deg, var(--primary), #1a2a36);
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 30px;
+        .category-card .cat-name {
             font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .category-card .cat-count-badge {
+            font-size: 10px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .no-category-found {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-500);
+            font-weight: 600;
             font-size: 14px;
+        }
+
+        /* ========== TEST VIEW ========== */
+        #testView {
+            display: none;
+        }
+        #testView.active {
+            display: block;
+        }
+
+        .test-view-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 18px rgba(36, 55, 72, 0.3);
-            animation: chipPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            font-family: var(--font);
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
-
-        @keyframes chipPopIn {
-            0% { transform: scale(0.85); opacity: 0; }
-            60% { transform: scale(1.04); }
-            100% { transform: scale(1); opacity: 1; }
+        .test-view-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-500);
         }
-
+        .test-view-breadcrumb i {
+            color: var(--primary);
+        }
+        .test-view-breadcrumb span {
+            color: var(--primary);
+            font-weight: 700;
+        }
         .change-category-btn {
             padding: 10px 16px;
             border-radius: 24px;
@@ -635,20 +735,25 @@
             font-family: var(--font);
             white-space: nowrap;
             box-shadow: var(--shadow-xs);
+            flex-shrink: 0;
         }
-
         .change-category-btn:hover {
             border-color: var(--primary);
             color: var(--primary);
             background: var(--primary-light);
             transform: translateY(-1px);
         }
+        .change-category-btn:active {
+            transform: scale(0.95);
+            transition: 0.06s;
+        }
 
-        .change-category-btn:active { transform: scale(0.95); transition: 0.06s; }
-
-        /* Filter Accordion */
-        .filter-accordion { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
-
+        .filter-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
         .mock-accordion-item {
             background: #fff;
             border-radius: var(--radius);
@@ -657,9 +762,10 @@
             transition: var(--transition);
             box-shadow: var(--shadow-xs);
         }
-
-        .mock-accordion-item.open { border-color: #c4d0dc; box-shadow: var(--shadow-sm); }
-
+        .mock-accordion-item.open {
+            border-color: #c4d0dc;
+            box-shadow: var(--shadow-sm);
+        }
         .mock-accordion-header {
             width: 100%;
             padding: 14px 16px;
@@ -678,11 +784,16 @@
             text-align: left;
             user-select: none;
         }
-
-        .mock-accordion-header:active { background: #f9fafb; }
-
-        .mock-accordion-header .ma-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-
+        .mock-accordion-header:active {
+            background: #f9fafb;
+        }
+        .mock-accordion-header .ma-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
         .mock-accordion-header .ma-count {
             font-size: 11px;
             color: var(--gray-400);
@@ -692,30 +803,37 @@
             border-radius: 12px;
             flex-shrink: 0;
         }
-
         .mock-accordion-header .ma-arrow {
             font-size: 12px;
             color: var(--gray-400);
             transition: transform 0.3s ease;
             flex-shrink: 0;
         }
-
-        .mock-accordion-item.open .ma-arrow { transform: rotate(180deg); color: var(--primary); }
-
+        .mock-accordion-item.open .ma-arrow {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
         .mock-accordion-body {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .mock-accordion-item.open .mock-accordion-body { max-height: 500px; }
-
-        .vertical-chip-list { padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 3px; }
-
-        @media (min-width:640px) {
-            .vertical-chip-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .mock-accordion-item.open .mock-accordion-body {
+            max-height: 600px;
         }
-
+        .vertical-chip-list {
+            padding: 4px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        @media (min-width: 640px) {
+            .vertical-chip-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
         .vertical-chip {
             width: 100%;
             padding: 12px 16px;
@@ -735,10 +853,16 @@
             position: relative;
             overflow: hidden;
         }
-
-        .vertical-chip:hover { background: var(--gray-100); color: var(--gray-800); transform: translateX(4px); }
-        .vertical-chip:active { transform: scale(0.97); transition: 0.06s; background: var(--primary-light); }
-
+        .vertical-chip:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+            transform: translateX(4px);
+        }
+        .vertical-chip:active {
+            transform: scale(0.97);
+            transition: 0.06s;
+            background: var(--primary-light);
+        }
         .vertical-chip.active {
             background: var(--primary-light);
             border-color: var(--primary);
@@ -746,12 +870,24 @@
             font-weight: 700;
             box-shadow: 0 2px 12px rgba(36, 55, 72, 0.12);
         }
+        .vertical-chip .vc-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-300);
+            flex-shrink: 0;
+        }
+        .vertical-chip.active .vc-dot {
+            background: var(--primary);
+            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.12);
+        }
 
-        .vertical-chip .vc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
-        .vertical-chip.active .vc-dot { background: var(--primary); box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.12); }
-
-        .search-row-vertical { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-
+        .search-row-vertical {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
         .search-chip-vertical {
             padding: 12px 16px;
             border-radius: var(--radius-lg);
@@ -769,7 +905,6 @@
             font-family: var(--font);
             box-shadow: var(--shadow-xs);
         }
-
         .search-chip-vertical input {
             border: none;
             outline: none;
@@ -781,10 +916,13 @@
             background: transparent;
             min-width: 0;
         }
-
-        .search-chip-vertical input::placeholder { color: var(--gray-400); }
-        .search-chip-vertical:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.08), var(--shadow-sm); }
-
+        .search-chip-vertical input::placeholder {
+            color: var(--gray-400);
+        }
+        .search-chip-vertical:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.08), var(--shadow-sm);
+        }
         .clear-chip-vertical {
             padding: 12px 18px;
             border-radius: var(--radius-lg);
@@ -803,95 +941,158 @@
             align-items: center;
             gap: 6px;
         }
-
-        .clear-chip-vertical:hover { background: #fee2e2; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-        .clear-chip-vertical:active { transform: scale(0.94); transition: 0.06s; }
-
-        /* PREMIUM TEST CARDS */
-        .test-list { display: flex; flex-direction: column; gap: 14px; }
-
-        .premium-test-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(245,248,255,0.96), rgba(250,250,255,0.94));
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-radius: 24px;
-            box-shadow: 0 8px 24px rgba(31,41,55,0.08), 0 2px 8px rgba(31,41,55,0.04);
-            border: 1px solid rgba(255,255,255,0.6);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.25s cubic-bezier(0.2,0.9,0.4,1), box-shadow 0.25s ease;
-            animation: cardFadeIn 0.4s cubic-bezier(0.2,0.9,0.4,1) both;
+        .clear-chip-vertical:hover {
+            background: #fee2e2;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        .clear-chip-vertical:active {
+            transform: scale(0.94);
+            transition: 0.06s;
         }
 
-        @keyframes cardFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-        .premium-test-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(31,41,55,0.12), 0 4px 12px rgba(31,41,55,0.06); }
-        .premium-test-card:active { transform: scale(0.98); transition: 0.1s; }
-
+        /* Test Cards */
+        .test-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .premium-test-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e8ecf0;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.25s ease;
+            animation: cardFadeIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1) both;
+        }
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .premium-test-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: #d0d7e0;
+        }
+        .premium-test-card:active {
+            transform: scale(0.98);
+            transition: 0.1s;
+        }
         .premium-top-glow {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, #4f46e5, #06b6d4, #8b5cf6);
-            border-radius: 24px 24px 0 0;
+            border-radius: 20px 20px 0 0;
         }
-
-        .premium-card-body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
-        .premium-card-top-row { display: flex; align-items: flex-start; gap: 14px; }
-
+        .premium-card-body {
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+        .premium-card-top-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
         .premium-exam-logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
-            background: #f0f3f6;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #f9fafb, #eef1f5);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255,255,255,0.9);
-            background: linear-gradient(135deg, #f9fafb, #eef1f5);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            font-size: 18px;
+            color: var(--primary);
         }
-
-        .premium-exam-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .premium-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-        .premium-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-
+        .premium-exam-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .premium-card-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .premium-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
         .premium-badge-exam {
-            background: rgba(36,55,72,0.08);
+            background: rgba(36, 55, 72, 0.07);
             color: #1e293b;
-            padding: 4px 10px;
-            border-radius: 16px;
-            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 14px;
+            font-size: 10px;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            border: 1px solid rgba(36,55,72,0.1);
+            gap: 3px;
+            border: 1px solid rgba(36, 55, 72, 0.08);
         }
-
+        .premium-badge-year {
+            background: #fefce8;
+            color: #a16207;
+            padding: 3px 9px;
+            border-radius: 14px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            border: 1px solid rgba(161, 98, 7, 0.12);
+        }
         .premium-badge-diff {
-            padding: 4px 10px;
-            border-radius: 16px;
-            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 14px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.3px;
         }
-
-        .diff-easy { background: #ecfdf5; color: #059669; }
-        .diff-moderate { background: #fefce8; color: #a16207; }
-        .diff-hard { background: #fef2f2; color: #dc2626; }
-        .diff-prev-year { background: #f0f9ff; color: #0369a1; }
-
+        .diff-easy {
+            background: #ecfdf5;
+            color: #059669;
+        }
+        .diff-moderate {
+            background: #fefce8;
+            color: #a16207;
+        }
+        .diff-hard {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .diff-prev-year {
+            background: #f0f9ff;
+            color: #0369a1;
+        }
         .premium-test-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             line-height: 1.3;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.2px;
             color: #0f172a;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -899,284 +1100,216 @@
             overflow: hidden;
             word-break: break-word;
         }
-
         .premium-bookmark-btn {
             position: absolute;
-            top: 14px;
+            top: 10px;
             right: 14px;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.06);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #94a3b8;
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.2s ease;
             z-index: 5;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
         }
-
         .premium-bookmark-btn:hover {
-            background: rgba(255,255,255,0.95);
+            background: #fff;
             color: #f59e0b;
-            transform: scale(1.08);
-            box-shadow: 0 4px 14px rgba(245,158,11,0.2);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.18);
         }
-
         .premium-bookmark-btn.bookmarked {
             color: #f59e0b;
-            background: rgba(245,158,11,0.15);
-            border-color: rgba(245,158,11,0.4);
-            box-shadow: 0 0 0 4px rgba(245,158,11,0.1);
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
         }
-
         .premium-info-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
-            font-size: 13px;
+            gap: 14px;
+            font-size: 12px;
             font-weight: 600;
             color: #64748b;
             align-items: center;
+        }
+        .premium-info-row span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .premium-info-row i {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .premium-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
             margin-top: 2px;
         }
-
-        .premium-info-row span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-        .premium-info-row i { font-size: 14px; color: #94a3b8; }
-
-        .premium-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-
         .premium-tag {
-            background: rgba(241,245,249,0.8);
-            backdrop-filter: blur(4px);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            background: #f8fafc;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 10px;
             font-weight: 600;
             color: #475569;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            border: 1px solid rgba(0,0,0,0.04);
+            gap: 3px;
+            border: 1px solid #e8ecf0;
             white-space: nowrap;
         }
-
         .premium-score-preview {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            background: rgba(16,185,129,0.1);
+            background: rgba(16, 185, 129, 0.08);
             color: #065f46;
-            padding: 5px 12px;
-            border-radius: 16px;
+            padding: 4px 10px;
+            border-radius: 14px;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            border: 1px solid rgba(16,185,129,0.15);
+            gap: 5px;
+            border: 1px solid rgba(16, 185, 129, 0.12);
         }
-
-        .premium-action-buttons { display: flex; gap: 8px; margin-top: 4px; }
-
+        .premium-action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 2px;
+        }
         .btn-attempt {
             flex: 2;
             background: linear-gradient(135deg, #14293d, #1f4565);
             color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 14px;
+            padding: 10px 14px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 14px rgba(20,41,61,0.25);
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(20, 41, 61, 0.2);
             transition: all 0.2s ease;
             font-family: var(--font);
         }
-
-        .btn-attempt:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(20,41,61,0.35); }
-        .btn-attempt:active { transform: scale(0.96); }
-
+        .btn-attempt:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(20, 41, 61, 0.3);
+        }
+        .btn-attempt:active {
+            transform: scale(0.96);
+        }
         .btn-rank {
             flex: 1;
             background: linear-gradient(135deg, #f59e0b, #fbbf24);
             color: #1e293b;
             border: none;
-            padding: 10px 14px;
-            border-radius: 14px;
+            padding: 10px 12px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            box-shadow: 0 4px 14px rgba(245,158,11,0.25);
+            gap: 5px;
+            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2);
             transition: all 0.2s ease;
             font-family: var(--font);
         }
-
-        .btn-rank:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(245,158,11,0.35); }
-        .btn-rank:active { transform: scale(0.96); }
-
+        .btn-rank:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+        }
+        .btn-rank:active {
+            transform: scale(0.96);
+        }
         .btn-details {
-            flex: 0.9;
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.08);
+            flex: 0.8;
+            background: #f8fafc;
+            border: 1px solid #e8ecf0;
             color: #475569;
-            padding: 10px 14px;
-            border-radius: 14px;
+            padding: 10px 12px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
             transition: all 0.2s ease;
             font-family: var(--font);
-            background: rgba(248,250,252,0.8);
         }
-
-        .btn-details:hover { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.15); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .btn-details:active { transform: scale(0.96); }
-
-        /* DETAILS OVERLAY SHEET */
-        .details-sheet-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(8px);
-            z-index: 300;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .details-sheet-overlay.active { opacity: 1; pointer-events: all; }
-
-        .details-bottom-sheet {
+        .btn-details:hover {
             background: #fff;
-            border-radius: 28px 28px 0 0;
-            width: 100%;
-            max-width: 600px;
-            max-height: 85vh;
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 -12px 48px rgba(0,0,0,0.15);
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+        }
+        .btn-details:active {
+            transform: scale(0.96);
         }
 
-        .details-sheet-overlay.active .details-bottom-sheet { transform: translateY(0); }
-
-        .details-sheet-handle { width: 40px; height: 5px; background: #d4d4d4; border-radius: 3px; margin: 12px auto 0; flex-shrink: 0; }
-        .details-scroll-area { overflow-y: auto; padding: 20px; flex: 1; -webkit-overflow-scrolling: touch; }
-
-        .details-header-image {
-            width: 100%;
-            height: 120px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #1e293b, #334155);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 36px;
-            margin-bottom: 16px;
-            object-fit: cover;
-            overflow: hidden;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        .empty-selection {
+            text-align: center;
+            padding: 50px 20px;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            border: 1px solid #e8ecf0;
+            box-shadow: var(--shadow-sm);
+            margin-top: 8px;
         }
-
-        .details-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-        .details-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; color: #475569; font-weight: 600; font-size: 13px; }
-
-        .details-stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
-        .details-stat-item { background: #f8fafc; border-radius: 14px; padding: 14px 8px; text-align: center; border: 1px solid #e2e8f0; }
-        .details-stat-item i { font-size: 18px; color: #64748b; margin-bottom: 6px; }
-        .details-stat-value { font-weight: 800; font-size: 16px; color: #1e293b; }
-        .details-stat-label { font-size: 11px; color: #94a3b8; font-weight: 600; }
-
-        .details-section-title { font-weight: 700; font-size: 15px; color: #334155; margin: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
-        .details-performance-empty { color: #94a3b8; font-size: 13px; font-style: italic; }
-
-        .details-star-rating { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #f59e0b; }
-
-        .sticky-cta { padding: 16px; border-top: 1px solid #e2e8f0; background: white; flex-shrink: 0; }
-
-        .btn-sticky-attempt {
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #14293d, #1f4565);
-            color: white;
-            font-weight: 800;
-            font-size: 15px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 6px 18px rgba(20,41,61,0.3);
-            transition: 0.2s;
-            font-family: var(--font);
-        }
-
-        .btn-sticky-attempt:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(20,41,61,0.4); }
-        .btn-sticky-attempt:active { transform: scale(0.97); }
-
-        .empty-selection { text-align: center; padding: 60px 20px; background: var(--white); border-radius: var(--radius-xl); border: 1px solid #e8ecf0; box-shadow: var(--shadow-sm); margin-top: 8px; }
-
         .icon-pulse {
-            width: 64px; height: 64px; border-radius: 50%; background: var(--primary-light);
-            display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
-            font-size: 26px; color: var(--primary); animation: softPulse 2.5s infinite;
-            box-shadow: 0 6px 18px rgba(36,55,72,0.12);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 24px;
+            color: var(--primary);
+            animation: softPulse 2.5s infinite;
+            box-shadow: 0 4px 16px rgba(36, 55, 72, 0.1);
         }
-
         @keyframes softPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(36,55,72,0.25); transform: scale(1); }
-            50% { box-shadow: 0 0 0 18px rgba(36,55,72,0); transform: scale(1.04); }
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(36, 55, 72, 0.22);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 16px rgba(36, 55, 72, 0);
+                transform: scale(1.03);
+            }
+        }
+        .empty-selection h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 6px;
+        }
+        .empty-selection p {
+            font-size: 12px;
+            color: var(--gray-500);
+            line-height: 1.5;
         }
 
-        .empty-selection h2 { font-size: 17px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
-        .empty-selection p { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
-
-        .category-grid { display: flex; flex-direction: column; gap: 8px; }
-        .category-option {
-            padding: 16px 18px; border-radius: var(--radius); background: var(--gray-50);
-            border: 2px solid transparent; cursor: pointer; font-weight: 600; font-size: 14px;
-            color: var(--gray-700); transition: var(--transition-fast); display: flex; align-items: center; gap: 12px;
-        }
-        .category-option:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); transform: translateX(4px); }
-        .category-option:active { transform: scale(0.97); transition: 0.06s; background: #e0e7ff; }
-        .category-option.selected-option { background: var(--primary-light); border-color: var(--primary); color: var(--primary); box-shadow: 0 4px 16px rgba(36,55,72,0.15); }
-        .category-option i { width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--primary); flex-shrink: 0; }
-        .category-option.selected-option i { background: var(--primary); color: white; }
-        .category-option .cat-count { margin-left: auto; font-size: 12px; color: var(--gray-400); background: var(--gray-100); padding: 4px 12px; border-radius: 16px; font-weight: 700; }
-        .category-option.selected-option .cat-count { background: rgba(36,55,72,0.1); color: var(--primary); }
-
-        .sheet-close-btn {
-            width: 100%; padding: 14px; border-radius: var(--radius); background: var(--gray-100);
-            border: none; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--gray-500);
-            margin-top: 12px; flex-shrink: 0;
-        }
-        .sheet-close-btn:hover { background: var(--gray-200); color: var(--gray-700); }
-
-        /* ===== RESTORED SHEET OVERLAY STYLES ===== */
+        /* Sheet */
         .sheet-overlay {
             position: fixed;
             inset: 0;
@@ -1194,7 +1327,6 @@
             opacity: 1;
             pointer-events: all;
         }
-        .bottom-sheet,
         .instruction-sheet {
             background: #fff;
             border-radius: 28px 28px 0 0;
@@ -1211,7 +1343,6 @@
             display: flex;
             flex-direction: column;
         }
-        .sheet-overlay.active .bottom-sheet,
         .sheet-overlay.active .instruction-sheet {
             transform: translateY(0);
         }
@@ -1245,34 +1376,90 @@
             border: 1px solid var(--gray-100);
             transition: var(--transition-fast);
         }
-        .inst-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--gray-200); }
-        .inst-card i { font-size: 22px; color: var(--primary); margin-bottom: 8px; display: block; }
-        .inst-card p { font-size: 20px; font-weight: 800; margin-bottom: 3px; color: var(--gray-800); }
-        .inst-card span { font-size: 11px; color: var(--gray-400); font-weight: 600; }
-        .rules-list { list-style: none; margin-bottom: 20px; }
+        .inst-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--gray-200);
+        }
+        .inst-card i {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .inst-card p {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 3px;
+            color: var(--gray-800);
+        }
+        .inst-card span {
+            font-size: 11px;
+            color: var(--gray-400);
+            font-weight: 600;
+        }
+        .rules-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
         .rules-list li {
-            padding: 10px 0; font-size: 13px; border-bottom: 1px solid var(--gray-100);
-            display: flex; align-items: center; gap: 10px; color: var(--gray-600); font-weight: 500;
+            padding: 10px 0;
+            font-size: 13px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--gray-600);
+            font-weight: 500;
         }
-        .rules-list li:last-child { border-bottom: none; }
-        .rules-list li i { color: var(--primary); font-size: 14px; flex-shrink: 0; }
-        .sheet-footer { display: flex; gap: 12px; padding-top: 4px; }
+        .rules-list li:last-child {
+            border-bottom: none;
+        }
+        .rules-list li i {
+            color: var(--primary);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .sheet-footer {
+            display: flex;
+            gap: 12px;
+            padding-top: 4px;
+        }
         .cancel-sheet {
-            flex: 1; padding: 14px; border-radius: 14px; border: 2px solid var(--gray-200);
-            background: white; font-weight: 700; cursor: pointer; font-size: 14px;
-            color: var(--gray-600); transition: var(--transition-fast);
-        }
-        .cancel-sheet:hover { background: var(--gray-50); border-color: var(--gray-300); }
-        .confirm-start {
-            flex: 2; padding: 14px; border-radius: 14px;
-            background: linear-gradient(135deg, var(--green), #059669);
-            color: white; border: none; font-weight: 800; cursor: pointer;
-            font-size: 14px; box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--gray-600);
             transition: var(--transition-fast);
         }
-        .confirm-start:hover { box-shadow: 0 6px 24px rgba(16,185,129,0.4); transform: translateY(-1px); }
+        .cancel-sheet:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+        .confirm-start {
+            flex: 2;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--green), #059669);
+            color: white;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+            transition: var(--transition-fast);
+        }
+        .confirm-start:hover {
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
 
-        /* ===== NEW FOOTER STYLES (from dashboard) ===== */
+        /* Footer */
         .pro-footer {
             background: var(--secondary);
             color: var(--text-light);
@@ -1316,8 +1503,13 @@
             background: var(--accent);
             border-radius: 2px;
         }
-        .footer-col ul { list-style: none; }
-        .footer-col li { margin-bottom: 11px; line-height: 1.4; }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 11px;
+            line-height: 1.4;
+        }
         .footer-col a {
             color: var(--accent);
             font-size: 13px;
@@ -1342,7 +1534,39 @@
             color: #ffffff;
             transform: translateX(3px);
         }
-        .footer-col a:hover::after { width: 100%; }
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+        .footer-install-section {
+            text-align: center;
+            margin: 16px 0 20px;
+        }
+        .footer-install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+            text-decoration: none;
+        }
+        .footer-install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(79, 70, 229, 0.55);
+            color: #fff;
+        }
+        .footer-install-btn:active {
+            transform: scale(0.94);
+            transition: 0.06s;
+        }
         .footer-email {
             text-align: center;
             margin-bottom: 24px;
@@ -1354,7 +1578,9 @@
             text-decoration: none;
             transition: color 0.2s;
         }
-        .footer-email a:hover { color: var(--accent); }
+        .footer-email a:hover {
+            color: var(--accent);
+        }
         .footer-bottom {
             text-align: center;
             border-top: 1px solid var(--border-light);
@@ -1375,7 +1601,9 @@
             text-decoration: none;
             transition: color 0.2s;
         }
-        .footer-bottom a:hover { color: var(--accent); }
+        .footer-bottom a:hover {
+            color: var(--accent);
+        }
         .footer-social {
             display: flex;
             justify-content: center;
@@ -1401,41 +1629,131 @@
             transform: translateY(-3px);
             border-color: var(--accent);
         }
-
-        .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:calc(var(--bottom-nav-height) + var(--safe-bottom)); background:#fff; border-top:1px solid #e8ecf0; z-index:95; display:flex; justify-content:space-around; align-items:flex-start; padding-top:8px; padding-bottom:var(--safe-bottom); box-shadow:0 -4px 20px rgba(0,0,0,0.05); }
-        .bottom-nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px; border:none; background:transparent; cursor:pointer; color:var(--gray-400); transition:var(--transition-fast); font-family:var(--font); text-decoration:none; position:relative; }
-        .bottom-nav-item.active { color:var(--primary); }
-        .bottom-nav-item:active { transform:scale(0.9); }
-        .bottom-nav-item i { font-size:20px; transition:transform 0.2s; }
-        .bottom-nav-item:hover i { transform:translateY(-2px); }
-        .bottom-nav-item span { font-size:10px; font-weight:600; }
-        .bottom-nav-item.active::before { content:''; position:absolute; top:-8px; width:20px; height:3px; background:var(--primary); border-radius:2px; }
-
-        .hidden { display:none !important; }
-
-        @media (min-width:600px) {
-            .bottom-nav { display:none; }
-            body { padding-bottom:0; }
-            .container { padding:18px 18px calc(24px + var(--safe-bottom)); }
-            .pro-footer { padding-bottom:30px; }
+        .footer-yt-channel {
+            text-align: center;
+            margin: 10px 0 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fbbf24;
         }
-        @media (max-width:480px) {
-            .footer-grid { gap: 24px; }
-            .footer-col h3 { font-size: 15px; }
-            .footer-col a { font-size: 12px; }
+        .footer-yt-channel i {
+            margin-right: 6px;
+            color: #ff0000;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--bottom-nav-height) + var(--safe-bottom));
+            background: #fff;
+            border-top: 1px solid #e8ecf0;
+            z-index: 95;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 8px;
+            padding-bottom: var(--safe-bottom);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: var(--transition-fast);
+            font-family: var(--font);
+            text-decoration: none;
+            position: relative;
+        }
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+        .bottom-nav-item:active {
+            transform: scale(0.9);
+        }
+        .bottom-nav-item i {
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+        .bottom-nav-item:hover i {
+            transform: translateY(-2px);
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .bottom-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (min-width: 600px) {
+            .bottom-nav {
+                display: none;
+            }
+            body {
+                padding-bottom: 0;
+            }
+            .container {
+                padding: 18px 18px calc(24px + var(--safe-bottom));
+            }
+            .pro-footer {
+                padding-bottom: 30px;
+            }
+            .category-card-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-grid {
+                gap: 24px;
+            }
+            .footer-col h3 {
+                font-size: 15px;
+            }
+            .footer-col a {
+                font-size: 12px;
+            }
+            .category-card {
+                padding: 16px 10px 14px;
+                border-radius: 16px;
+                gap: 8px;
+            }
+            .category-card .cat-icon-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 17px;
+            }
+            .category-card .cat-name {
+                font-size: 11px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="net-toast offline" id="netToast" style="position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:1001;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.15);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;opacity:0;background:var(--red);color:#fff;">
-        <i class="fas fa-wifi-slash"></i> <span id="netMsg">You're offline</span>
-    </div>
-    <div class="net-toast online" id="netToastOnline" style="position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:1001;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.15);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;opacity:0;background:var(--green);color:#fff;">
-        <i class="fas fa-wifi"></i> <span>You're back online!</span>
-    </div>
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- Sidebar -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
         <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
             <div class="sidebar-brand">
@@ -1454,11 +1772,13 @@
                 <div class="sidebar-nav-label">Main Menu</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
                 <button class="sidebar-nav-item active-nav"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
                 <div class="sidebar-nav-label">Features</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
@@ -1478,61 +1798,83 @@
         </aside>
     </div>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-left">
             <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
             <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
         </div>
         <div class="nav-right">
-            <span class="category-badge-nav empty" id="navCategoryBadge" onclick="openCategorySheet()" style="background:var(--gray-100);color:var(--gray-500);padding:6px 12px;border-radius:22px;font-size:11px;font-weight:700;cursor:pointer;">📂 Category</span>
-            <div class="user-avatar" id="userInitial" onclick="openSidebar()">S</div>
             <button class="btn-chat-nav" onclick="navigate('chat.html')"><i class="fas fa-comments"></i> Chat</button>
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()">S</div>
             <button class="btn-logout-nav" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
     <div class="container">
-        <div class="category-selector-area" id="categorySelectorArea"></div>
-        <div class="filter-accordion" id="filterAccordion" style="display:none;">
-            <div class="mock-accordion-item" id="examAccordionItem">
-                <button class="mock-accordion-header" onclick="toggleAccordion('examAccordionBody','examArrow','examAccordionItem')">
-                    <div class="ma-left"><span><i class="fas fa-file-alt" style="margin-right:8px;"></i> Exam</span></div>
-                    <span class="ma-count" id="examBadge">All</span>
-                    <i class="fas fa-chevron-down ma-arrow" id="examArrow"></i>
-                </button>
-                <div class="mock-accordion-body" id="examAccordionBody"><div class="vertical-chip-list" id="examChips"></div></div>
+        <!-- CATEGORY VIEW -->
+        <div id="categoryView">
+            <div class="category-hero">
+                <h2>📂 Select Exam Category</h2>
+                <p>Choose a category to explore mock tests</p>
             </div>
-            <div class="mock-accordion-item" id="subjectAccordionItem">
-                <button class="mock-accordion-header" onclick="toggleAccordion('subjectAccordionBody','subjectArrow','subjectAccordionItem')">
-                    <div class="ma-left"><span><i class="fas fa-book" style="margin-right:8px;"></i> Subject</span></div>
-                    <span class="ma-count" id="subjectBadge">All</span>
-                    <i class="fas fa-chevron-down ma-arrow" id="subjectArrow"></i>
-                </button>
-                <div class="mock-accordion-body" id="subjectAccordionBody"><div class="vertical-chip-list" id="subjectChips"></div></div>
+            <div class="search-bar-top">
+                <i class="fas fa-search"></i>
+                <input type="text" id="categorySearchInput" placeholder="Search categories..." oninput="filterCategoryCards()">
             </div>
-            <div class="mock-accordion-item" id="chapterAccordionItem">
-                <button class="mock-accordion-header" onclick="toggleAccordion('chapterAccordionBody','chapterArrow','chapterAccordionItem')">
-                    <div class="ma-left"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> Chapter</span></div>
-                    <span class="ma-count" id="chapterBadge">All</span>
-                    <i class="fas fa-chevron-down ma-arrow" id="chapterArrow"></i>
-                </button>
-                <div class="mock-accordion-body" id="chapterAccordionBody"><div class="vertical-chip-list" id="chapterChips"></div></div>
-            </div>
-            <div class="search-row-vertical">
-                <div class="search-chip-vertical"><i class="fas fa-search" style="color:var(--primary);"></i><input type="text" id="searchInput" placeholder="Search tests..."></div>
-                <button class="clear-chip-vertical" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
-            </div>
+            <div class="category-card-grid" id="categoryCardGrid"></div>
         </div>
-        <div class="test-list" id="testList"></div>
-    </div>
 
-    <!-- Category Sheet -->
-    <div class="sheet-overlay" id="categorySheetOverlay">
-        <div class="bottom-sheet" id="categoryBottomSheet">
-            <div class="sheet-handle"></div>
-            <div class="sheet-title">📂 Select Category</div>
-            <div class="category-grid" id="categoryGrid"></div>
-            <button class="sheet-close-btn" onclick="closeCategorySheet()">Cancel</button>
+        <!-- TEST VIEW -->
+        <div id="testView">
+            <div class="test-view-header">
+                <div class="test-view-breadcrumb">
+                    <i class="fas fa-folder"></i> <span id="testViewCategoryName"></span>
+                    <span style="font-size:10px;opacity:0.7;" id="testViewCategoryCount"></span>
+                </div>
+                <button class="change-category-btn" onclick="goBackToCategories()">
+                    <i class="fas fa-arrow-left"></i> Change Category
+                </button>
+            </div>
+            <div class="filter-accordion" id="filterAccordion">
+                <div class="mock-accordion-item" id="yearAccordionItem">
+                    <button class="mock-accordion-header" onclick="toggleAccordion('yearAccordionBody','yearArrow','yearAccordionItem')">
+                        <div class="ma-left"><span><i class="fas fa-calendar-alt" style="margin-right:8px;"></i> Year</span></div>
+                        <span class="ma-count" id="yearBadge">All</span>
+                        <i class="fas fa-chevron-down ma-arrow" id="yearArrow"></i>
+                    </button>
+                    <div class="mock-accordion-body" id="yearAccordionBody"><div class="vertical-chip-list" id="yearChips"></div></div>
+                </div>
+                <div class="mock-accordion-item" id="examAccordionItem">
+                    <button class="mock-accordion-header" onclick="toggleAccordion('examAccordionBody','examArrow','examAccordionItem')">
+                        <div class="ma-left"><span><i class="fas fa-file-alt" style="margin-right:8px;"></i> Exam</span></div>
+                        <span class="ma-count" id="examBadge">All</span>
+                        <i class="fas fa-chevron-down ma-arrow" id="examArrow"></i>
+                    </button>
+                    <div class="mock-accordion-body" id="examAccordionBody"><div class="vertical-chip-list" id="examChips"></div></div>
+                </div>
+                <div class="mock-accordion-item" id="subjectAccordionItem">
+                    <button class="mock-accordion-header" onclick="toggleAccordion('subjectAccordionBody','subjectArrow','subjectAccordionItem')">
+                        <div class="ma-left"><span><i class="fas fa-book" style="margin-right:8px;"></i> Subject</span></div>
+                        <span class="ma-count" id="subjectBadge">All</span>
+                        <i class="fas fa-chevron-down ma-arrow" id="subjectArrow"></i>
+                    </button>
+                    <div class="mock-accordion-body" id="subjectAccordionBody"><div class="vertical-chip-list" id="subjectChips"></div></div>
+                </div>
+                <div class="mock-accordion-item" id="chapterAccordionItem">
+                    <button class="mock-accordion-header" onclick="toggleAccordion('chapterAccordionBody','chapterArrow','chapterAccordionItem')">
+                        <div class="ma-left"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> Chapter</span></div>
+                        <span class="ma-count" id="chapterBadge">All</span>
+                        <i class="fas fa-chevron-down ma-arrow" id="chapterArrow"></i>
+                    </button>
+                    <div class="mock-accordion-body" id="chapterAccordionBody"><div class="vertical-chip-list" id="chapterChips"></div></div>
+                </div>
+                <div class="search-row-vertical">
+                    <div class="search-chip-vertical"><i class="fas fa-search" style="color:var(--primary);"></i><input type="text" id="searchInput" placeholder="Search tests..."></div>
+                    <button class="clear-chip-vertical" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
+                </div>
+            </div>
+            <div class="test-list" id="testList"></div>
         </div>
     </div>
 
@@ -1561,16 +1903,16 @@
         </div>
     </div>
 
-    <div class="details-sheet-overlay" id="detailsSheetOverlay">
-        <div class="details-bottom-sheet">
-            <div class="details-sheet-handle"></div>
-            <div class="details-scroll-area" id="detailsContent"></div>
-            <div class="sticky-cta" id="detailsStickyCta"></div>
-        </div>
-    </div>
-
-    <!-- ========== NEW FOOTER (exact copy from dashboard) ========== -->
+    <!-- Footer -->
     <footer class="pro-footer">
+        <div class="footer-yt-channel">
+            <i class="fab fa-youtube"></i> YT Channel: <strong>@testmasterpro</strong>
+        </div>
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()">
+                <i class="fas fa-download"></i> Add to Home Screen · Download APK
+            </button>
+        </div>
         <div class="footer-grid">
             <div class="footer-col">
                 <h3>Exams</h3>
@@ -1586,7 +1928,7 @@
             <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
             <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
             <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
+            <a href="https://youtube.com/@testmasterpro" target="_blank" title="YouTube @testmasterpro"><i class="fab fa-youtube"></i></a>
         </div>
         <div class="footer-bottom">
             <p>© 2026 TestMasterPro.space</p>
@@ -1594,6 +1936,7 @@
         </div>
     </footer>
 
+    <!-- Bottom Nav -->
     <nav class="bottom-nav" id="bottomNav">
         <button class="bottom-nav-item" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
         <button class="bottom-nav-item active"><i class="fas fa-file-alt"></i><span>Tests</span></button>
@@ -1602,40 +1945,84 @@
     </nav>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
+        const API_URL =
+            'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
         const JSON_PATHS = {
             mocks: './mocks.json',
             upcomingfooter: './json/upcomingfooter.json'
         };
         const FALLBACK_MOCKS = [
-            { file:'sbi_po.html',exam:'SBI PO',subject:'QA',chapter:'Full',testName:'SBI PO Mock',testCode:'SBI-PO-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
-            { file:'ibps_clerk.html',exam:'IBPS Clerk',subject:'Reasoning',chapter:'Full',testName:'IBPS Clerk Mock',testCode:'IBPS-CLK-01',duration:60,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.25,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Bank' },
-            { file:'ssc_cgl.html',exam:'SSC CGL',subject:'GI',chapter:'Full',testName:'SSC CGL Mock',testCode:'SSC-CGL-01',duration:60,totalQuestions:100,marksPerQuestion:2,negativeMarking:0.5,type:'free',requiredPlan:'none',difficulty:'Hard',language:'Eng & Hin',category:'SSC' },
-            { file:'ssc_chsl.html',exam:'SSC CHSL',subject:'English',chapter:'Full',testName:'SSC CHSL Mock',testCode:'SSC-CHSL-01',duration:60,totalQuestions:100,marksPerQuestion:2,negativeMarking:0.5,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'SSC' },
-            { file:'rrb_ntpc.html',exam:'RRB NTPC',subject:'GA',chapter:'Full',testName:'RRB NTPC Mock',testCode:'RRB-NTPC-01',duration:90,totalQuestions:100,marksPerQuestion:1,negativeMarking:0.33,type:'free',requiredPlan:'none',difficulty:'Moderate',language:'Eng & Hin',category:'Railway' },
-            { file:'cuet_gat.html',exam:'CUET GAT',subject:'GT',chapter:'Full',testName:'CUET GAT Mock',testCode:'CUET-GAT-01',duration:60,totalQuestions:50,marksPerQuestion:5,negativeMarking:1,type:'free',requiredPlan:'none',difficulty:'Hard',language:'Eng & Hin',category:'CUET' }
+            { file: 'sbi_po.html', exam: 'SBI PO', subject: 'QA', chapter: 'Full', testName: 'SBI PO Mock',
+                testCode: 'SBI-PO-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.25,
+                type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Bank',
+                year: '2026' },
+            { file: 'ibps_clerk.html', exam: 'IBPS Clerk', subject: 'Reasoning', chapter: 'Full',
+                testName: 'IBPS Clerk Mock', testCode: 'IBPS-CLK-01', duration: 60, totalQuestions: 100,
+                marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
+                language: 'Eng & Hin', category: 'Bank', year: '2026' },
+            { file: 'ssc_cgl.html', exam: 'SSC CGL', subject: 'GI', chapter: 'Full', testName: 'SSC CGL Mock',
+                testCode: 'SSC-CGL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5,
+                type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'Eng & Hin', category: 'SSC',
+                year: '2026' },
+            { file: 'ssc_chsl.html', exam: 'SSC CHSL', subject: 'English', chapter: 'Full', testName: 'SSC CHSL Mock',
+                testCode: 'SSC-CHSL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5,
+                type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'SSC',
+                year: '2026' },
+            { file: 'rrb_ntpc.html', exam: 'RRB NTPC', subject: 'GA', chapter: 'Full', testName: 'RRB NTPC Mock',
+                testCode: 'RRB-NTPC-01', duration: 90, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.33,
+                type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Railway',
+                year: '2026' },
+            { file: 'cuet_gat.html', exam: 'CUET GAT', subject: 'GT', chapter: 'Full', testName: 'CUET GAT Mock',
+                testCode: 'CUET-GAT-01', duration: 60, totalQuestions: 50, marksPerQuestion: 5, negativeMarking: 1,
+                type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'Eng & Hin', category: 'CUET',
+                year: '2026' }
         ];
         const FALLBACK_UPCOMING_FOOTER = [
-            { id:1,name:'ReNEET UG 2026',date:'15 May 2026' },
-            { id:2,name:'CUET UG 2026',date:'20 May 2026' },
-            { id:3,name:'UP Police Constable 2026',date:'10 June 2026' },
-            { id:4,name:'SSC Selection Post (Phase 14) 2026',date:'22 June 2026' },
-            { id:5,name:'SSC GD 2025-26',date:'5 July 2026' },
-            { id:6,name:'RRB NTPC 2026',date:'25 July 2026' },
-            { id:7,name:'SSC CGL Tier-I 2026',date:'12 June 2026' },
-            { id:8,name:'SSC JE 2026',date:'18 August 2026' },
-            { id:9,name:'UPSC (CSE) 2026',date:'28 May 2026' },
-            { id:10,name:'SBI PO Prelims 2026',date:'18 August 2026' },
-            { id:11,name:'SSC Steno Grade C & D 2026',date:'30 August 2026' },
-            { id:12,name:'SBI Clerk Prelims 2026',date:'22 September 2026' },
-            { id:13,name:'IBPS PO Prelims 2026',date:'18 August 2026' },
-            { id:14,name:'IBPS Clerk Prelims 2026',date:'22 September 2026' },
-            { id:15,name:'SSC CPO Tier I 2026',date:'10 July 2026' }
+            { id: 1, name: 'ReNEET UG 2026', date: '15 May 2026' }, { id: 2, name: 'CUET UG 2026', date: '20 May 2026' },
+            { id: 3, name: 'UP Police Constable 2026', date: '10 June 2026' },
+            { id: 4, name: 'SSC Selection Post (Phase 14) 2026', date: '22 June 2026' },
+            { id: 5, name: 'SSC GD 2025-26', date: '5 July 2026' },
+            { id: 6, name: 'RRB NTPC 2026', date: '25 July 2026' },
+            { id: 7, name: 'SSC CGL Tier-I 2026', date: '12 June 2026' },
+            { id: 8, name: 'SSC JE 2026', date: '18 August 2026' },
+            { id: 9, name: 'UPSC (CSE) 2026', date: '28 May 2026' },
+            { id: 10, name: 'SBI PO Prelims 2026', date: '18 August 2026' },
+            { id: 11, name: 'SSC Steno Grade C & D 2026', date: '30 August 2026' },
+            { id: 12, name: 'SBI Clerk Prelims 2026', date: '22 September 2026' },
+            { id: 13, name: 'IBPS PO Prelims 2026', date: '18 August 2026' },
+            { id: 14, name: 'IBPS Clerk Prelims 2026', date: '22 September 2026' },
+            { id: 15, name: 'SSC CPO Tier I 2026', date: '10 July 2026' }
+        ];
+
+        // Category gradient backgrounds
+        const catGradients = [
+            'linear-gradient(135deg, #4f46e5, #6366f1)',
+            'linear-gradient(135deg, #059669, #10b981)',
+            'linear-gradient(135deg, #ea580c, #f97316)',
+            'linear-gradient(135deg, #7c3aed, #8b5cf6)',
+            'linear-gradient(135deg, #db2777, #ec4899)',
+            'linear-gradient(135deg, #0d9488, #14b8a6)',
+            'linear-gradient(135deg, #dc2626, #ef4444)',
+            'linear-gradient(135deg, #d97706, #f59e0b)',
+            'linear-gradient(135deg, #2563eb, #3b82f6)',
+            'linear-gradient(135deg, #0891b2, #06b6d4)',
+            'linear-gradient(135deg, #9333ea, #a855f7)',
+            'linear-gradient(135deg, #be123c, #e11d48)',
+            'linear-gradient(135deg, #1d4ed8, #2563eb)',
+            'linear-gradient(135deg, #047857, #059669)',
+            'linear-gradient(135deg, #9d174d, #be185d)',
+            'linear-gradient(135deg, #1e40af, #3730a3)',
+        ];
+        const catIcons = [
+            'fa-graduation-cap', 'fa-university', 'fa-flask', 'fa-calculator', 'fa-globe', 'fa-book',
+            'fa-atom', 'fa-laptop-code', 'fa-brain', 'fa-chart-line', 'fa-building', 'fa-briefcase',
+            'fa-landmark', 'fa-scale-balanced', 'fa-microscope', 'fa-shield-alt'
         ];
 
         let allMocks = [];
         let userResults = [];
         let selectedCategory = '';
+        let selectedYear = '';
         let selectedExam = '';
         let selectedSubject = '';
         let selectedChapter = '';
@@ -1651,25 +2038,30 @@
         if (!user) window.location.href = 'index.html';
         const savedCategory = localStorage.getItem('selectedCategory') || user?.targetExam || '';
 
-        function getISTDate() { const now = new Date(); const istOffset = 5.5 * 60 * 60 * 1000; const utc = now.getTime() + (now.getTimezoneOffset() * 60 * 1000); return new Date(utc + istOffset); }
-        function getISTDateString() { const d = getISTDate(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-
         function showToast(message, type = 'info', duration = 3000) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast-item ${type}`;
-            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle' };
             toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
             container.appendChild(toast);
             container.classList.add('show');
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(-8px)'; toast.style.transition = '0.3s'; setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.remove('show'); }, 300); }, duration);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-8px)';
+                toast.style.transition = '0.3s';
+                setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.remove(
+                        'show'); }, 300);
+            }, duration);
         }
 
         function updateOnlineStatus() {
             isOffline = !navigator.onLine;
             const banner = document.getElementById('offlineBanner');
-            if (isOffline) { banner.classList.add('show'); showToast("You're offline. Using cached data.", 'warning', 4000); }
-            else { banner.classList.remove('show'); }
+            if (isOffline) { banner.classList.add('show');
+                showToast("You're offline. Using cached data.", 'warning', 4000); } else { banner.classList.remove(
+                'show'); }
         }
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
@@ -1686,20 +2078,48 @@
         document.getElementById('sidebarUserName').textContent = user?.name || 'Student';
         document.getElementById('sidebarUserTag').textContent = user?.preparingFor || 'Learner';
 
-        function openSidebar() { const overlay = document.getElementById('sidebarOverlay'); overlay.classList.remove('hidden'); requestAnimationFrame(() => overlay.classList.add('active')); document.body.classList.add('sidebar-open'); }
+        function openSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('hidden');
+            requestAnimationFrame(() => overlay.classList.add('active'));
+            document.body.classList.add('sidebar-open');
+        }
+
         function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
-        function closeSidebarDirect() { const overlay = document.getElementById('sidebarOverlay'); overlay.classList.remove('active'); document.body.classList.remove('sidebar-open'); setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400); }
+
+        function closeSidebarDirect() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400);
+        }
+
         function navigate(url) { window.location.href = url; }
 
         function sidebarNavigate(action) {
             closeSidebarDirect();
             setTimeout(() => {
                 const map = {
-                    dashboard: 'dashboard.html', mocks: 'exam.html', books: 'book.html', study: 'book.html',
-                    results: 'allresult.html', leaderboard: 'leaderboard.html', chat: 'chat.html', streak: 'streak.html',
-                    'daily-challenge': 'challenge.html', referral: 'referral.html', favorites: 'favorites.html',
-                    coins: 'coin-history.html', 'coin-use': 'usecoin.html', reviews: 'reviews.html',
-                    premium: 'payment.html', profile: 'profile.html', instructions: 'instructions', logout: 'logout'
+                    dashboard: 'dashboard.html',
+                    mocks: 'exam.html',
+                    aimock: 'aimock.html',
+                    books: 'book.html',
+                    study: 'book.html',
+                    results: 'allresult.html',
+                    leaderboard: 'leaderboard.html',
+                    chat: 'chat.html',
+                    aichat: 'aichat.html',
+                    streak: 'streak.html',
+                    'daily-challenge': 'challenge.html',
+                    referral: 'referral.html',
+                    favorites: 'favorites.html',
+                    coins: 'coin-history.html',
+                    'coin-use': 'usecoin.html',
+                    reviews: 'reviews.html',
+                    premium: 'payment.html',
+                    profile: 'profile.html',
+                    instructions: 'instructions',
+                    logout: 'logout'
                 };
                 if (action === 'logout') logout();
                 else if (action === 'instructions') openHowToUse();
@@ -1709,25 +2129,75 @@
 
         function openHowToUse() {
             Swal.fire({
-                title: 'How to Use', html: `<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a <b>Category</b>.</p><p><b>2.</b> Use <b>Exam, Subject & Chapter</b> filters.</p><p><b>3.</b> Click <b>Attempt</b> to start.</p></div>`,
-                confirmButtonText: 'Got it!', confirmButtonColor: '#243748', icon: 'info'
+                title: 'How to Use',
+                html: `<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a <b>Category</b>.</p><p><b>2.</b> Use <b>Year, Exam, Subject & Chapter</b> filters.</p><p><b>3.</b> Click <b>Attempt</b> to start.</p></div>`,
+                confirmButtonText: 'Got it!',
+                confirmButtonColor: '#243748',
+                icon: 'info'
             });
         }
 
         function logout() {
-            Swal.fire({ title:'Logout?', text:'Are you sure?', icon:'question', showCancelButton:true, confirmButtonText:'Yes', cancelButtonText:'No', confirmButtonColor:'#ff4d5a', cancelButtonColor:'#243748' })
-            .then(r => { if (r.isConfirmed) { localStorage.removeItem('user'); localStorage.removeItem('selectedCategory'); showToast('Logged out','success'); setTimeout(()=>window.location.href='index.html',800); } });
+            Swal.fire({
+                title: 'Logout?',
+                text: 'Are you sure?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonColor: '#ff4d5a',
+                cancelButtonColor: '#243748'
+            }).then(r => {
+                if (r.isConfirmed) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('selectedCategory');
+                    showToast('Logged out', 'success');
+                    setTimeout(() => window.location.href = 'index.html', 800);
+                }
+            });
         }
-
-        function showPrivacy() { Swal.fire({ title:'Privacy', html:'<p>We collect only essential data.</p>', confirmButtonColor:'#243748' }); }
-        function showTerms() { Swal.fire({ title:'Terms', html:'<p>Educational use only.</p>', confirmButtonColor:'#243748' }); }
-        function showSupport() { Swal.fire({ title:'Support', html:'<p>testmaster.helpdesk@gmail.com</p>', confirmButtonColor:'#243748' }); }
 
         function toggleAccordion(bodyId, arrowId, itemId) {
             const item = document.getElementById(itemId);
             const isOpen = item.classList.contains('open');
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            if (!isOpen) { item.classList.add('open'); setTimeout(() => item.scrollIntoView({behavior:'smooth',block:'nearest'}), 150); }
+            if (!isOpen) {
+                item.classList.add('open');
+                setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
+            }
+        }
+
+        function openInstallPopup() {
+            Swal.fire({
+                title: '📲 Install TestMaster Pro',
+                html: `
+                <div style="text-align:center;">
+                    <p style="font-size:14px;font-weight:600;color:#243748;margin-bottom:8px;">Get the App Experience!</p>
+                    <p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file and install it on your Android device.</p>
+                    <div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;">
+                        <i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i>
+                        <p style="font-weight:700;color:#1e293b;margin:4px 0;">TestMasterPro.apk</p>
+                        <p style="font-size:10px;color:#94a3b8;">Latest Version · Safe & Secure</p>
+                    </div>
+                </div>`,
+                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
+                confirmButtonColor: '#4f46e5',
+                showCancelButton: true,
+                cancelButtonText: 'Maybe Later',
+                cancelButtonColor: '#94a3b8',
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions →</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const link = document.createElement('a');
+                    link.href = 'TestMasterPro.apk';
+                    link.download = 'TestMasterPro.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Downloading TestMasterPro.apk...', 'success', 4000);
+                    setTimeout(() => { window.location.href = 'apk.html'; }, 1500);
+                }
+            });
         }
 
         async function loadMocks() {
@@ -1739,22 +2209,27 @@
                 extractCategories();
                 if (savedCategory && allCategories.includes(savedCategory)) {
                     selectedCategory = savedCategory;
-                    updateNavBadge();
-                    renderCategorySelected();
-                    renderFilterAccordions();
-                    applyFilters();
+                    showTestView();
                 } else {
-                    renderCategoryPrompt();
+                    showCategoryView();
                 }
             } catch (e) {
-                document.getElementById('testList').innerHTML = `<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-exclamation-triangle"></i></div><h2>Failed to Load Tests</h2><p>Could not load mock library.</p></div>`;
-                showToast('Failed to load tests.','error');
+                allMocks = FALLBACK_MOCKS;
+                extractCategories();
+                if (savedCategory && allCategories.includes(savedCategory)) {
+                    selectedCategory = savedCategory;
+                    showTestView();
+                } else {
+                    showCategoryView();
+                }
+                showToast('Using offline data. Some tests may not be available.', 'warning');
             }
         }
 
         function extractCategories() {
             const catMap = {};
-            allMocks.forEach(m => { const cat = m?.category || 'Uncategorized'; catMap[cat] = (catMap[cat] || 0) + 1; });
+            allMocks.forEach(m => { const cat = m?.category || 'Uncategorized';
+                catMap[cat] = (catMap[cat] || 0) + 1; });
             allCategories = Object.keys(catMap).sort();
             categoryTestCounts = catMap;
         }
@@ -1764,10 +2239,8 @@
             arr.forEach(item => {
                 const cat = item.category || 'Other';
                 if (!map[cat]) map[cat] = { exams: [], seen: new Set() };
-                if (!map[cat].seen.has(item.exam)) {
-                    map[cat].seen.add(item.exam);
-                    map[cat].exams.push(item);
-                }
+                if (!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam);
+                    map[cat].exams.push(item); }
             });
             return Object.keys(map).sort().map(cat => ({ category: cat, exams: map[cat].exams }));
         }
@@ -1787,7 +2260,8 @@
 
         async function loadUserResults() {
             try {
-                const r = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user?.username||'')}`);
+                const r = await fetch(
+                    `${API_URL}?action=getUserResults&username=${encodeURIComponent(user?.username||'')}`);
                 const d = await r.json();
                 if (d?.success && Array.isArray(d.results)) userResults = d.results;
             } catch (e) {}
@@ -1796,7 +2270,8 @@
         async function loadPremium() {
             try {
                 if (user?.premiumPlans) userPremiumPlans = user.premiumPlans;
-                const r = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user?.username||'')}`);
+                const r = await fetch(
+                    `${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user?.username||'')}`);
                 const d = await r.json();
                 if (d?.success && Array.isArray(d.premiumPlans)) {
                     userPremiumPlans = d.premiumPlans;
@@ -1813,237 +2288,263 @@
             return true;
         }
 
-        function updateNavBadge() {
-            const badge = document.getElementById('navCategoryBadge');
-            if (selectedCategory) {
-                badge.textContent = selectedCategory.length > 12 ? selectedCategory.substring(0, 11) + '…' : selectedCategory;
-                badge.classList.remove('empty');
+        function showCategoryView() {
+            document.getElementById('categoryView').classList.remove('hidden');
+            document.getElementById('testView').classList.remove('active');
+            document.getElementById('categorySearchInput').value = '';
+            renderCategoryCards(allCategories);
+        }
+
+        function showTestView() {
+            document.getElementById('categoryView').classList.add('hidden');
+            document.getElementById('testView').classList.add('active');
+            selectedYear = '';
+            selectedExam = '';
+            selectedSubject = '';
+            selectedChapter = '';
+            document.getElementById('searchInput').value = '';
+            updateTestViewHeader();
+            renderFilterAccordions();
+            applyFilters();
+        }
+
+        function goBackToCategories() {
+            selectedCategory = '';
+            localStorage.removeItem('selectedCategory');
+            if (user) { user.targetExam = '';
+                localStorage.setItem('user', JSON.stringify(user)); }
+            showCategoryView();
+            showToast('Select a category to continue', 'info');
+        }
+
+        function updateTestViewHeader() {
+            document.getElementById('testViewCategoryName').textContent = selectedCategory;
+            document.getElementById('testViewCategoryCount').textContent =
+                `(${categoryTestCounts[selectedCategory]||0} tests)`;
+        }
+
+        function renderCategoryCards(categories) {
+            const grid = document.getElementById('categoryCardGrid');
+            if (!categories.length) {
+                grid.innerHTML =
+                    '<div class="no-category-found"><i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:8px;"></i>No categories found</div>';
+                return;
+            }
+            grid.innerHTML = categories.map((cat, idx) => {
+                const gradient = catGradients[idx % catGradients.length];
+                const iconClass = catIcons[idx % catIcons.length];
+                const count = categoryTestCounts[cat] || 0;
+                return `
+                <div class="category-card" style="background:${gradient};" onclick="selectCategory('${cat.replace(/'/g,"\\'")}')" data-category="${cat.replace(/"/g,'&quot;')}">
+                    <div class="cat-icon-circle">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="cat-name">${cat}</div>
+                    <div class="cat-count-badge">${count} test${count !== 1 ? 's' : ''}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function filterCategoryCards() {
+            const query = document.getElementById('categorySearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#categoryCardGrid .category-card');
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const catName = (card.getAttribute('data-category') || '').toLowerCase();
+                if (!query || catName.includes(query)) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            const noFoundEl = document.getElementById('categoryCardGrid').querySelector('.no-category-found');
+            if (visibleCount === 0 && cards.length > 0) {
+                if (!noFoundEl) {
+                    const el = document.createElement('div');
+                    el.className = 'no-category-found';
+                    el.innerHTML =
+                        '<i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:8px;"></i>No matching categories';
+                    document.getElementById('categoryCardGrid').appendChild(el);
+                }
             } else {
-                badge.textContent = '📂 Category';
-                badge.classList.add('empty');
+                if (noFoundEl) noFoundEl.remove();
             }
         }
 
-        function renderCategoryPrompt() {
-            document.getElementById('categorySelectorArea').innerHTML = `<button class="select-category-btn" onclick="openCategorySheet()"><i class="fas fa-layer-group"></i> Select Category</button>`;
-            document.getElementById('filterAccordion').style.display = 'none';
-            document.getElementById('testList').innerHTML = `<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-folder-open"></i></div><h2>Select a Category First</h2><p>Tap the button above to browse mock tests</p></div>`;
-            updateNavBadge();
-        }
-
-        function renderCategorySelected() {
-            document.getElementById('categorySelectorArea').innerHTML = `
-                <div class="category-selected-row">
-                    <div class="category-selected-pill"><i class="fas fa-folder"></i> ${selectedCategory} <span style="font-size:11px;opacity:0.85;">(${categoryTestCounts[selectedCategory]||0})</span></div>
-                    <button class="change-category-btn" onclick="openCategorySheet()"><i class="fas fa-exchange-alt"></i> Change</button>
-                </div>`;
-            document.getElementById('filterAccordion').style.display = 'flex';
-            updateNavBadge();
-        }
-
-        function openCategorySheet() {
-            const grid = document.getElementById('categoryGrid');
-            const icons = ['fa-graduation-cap','fa-university','fa-flask','fa-calculator','fa-globe','fa-book','fa-atom','fa-laptop-code','fa-brain','fa-chart-line'];
-            grid.innerHTML = allCategories.map((cat, idx) => `
-                <div class="category-option ${cat === selectedCategory ? 'selected-option' : ''}" onclick="selectCategory('${cat.replace(/'/g,"\\'")}')">
-                    <i class="fas ${icons[idx % icons.length]}"></i>
-                    <span>${cat}</span>
-                    <span class="cat-count">${categoryTestCounts[cat] || 0}</span>
-                </div>`).join('');
-            document.getElementById('categorySheetOverlay').classList.add('active');
-            document.body.classList.add('sheet-open');
-        }
-
-        function closeCategorySheet() { document.getElementById('categorySheetOverlay').classList.remove('active'); document.body.classList.remove('sheet-open'); }
-
         async function selectCategory(category) {
             if (!category || !allCategories.includes(category)) return;
-            selectedCategory = category; selectedExam = ''; selectedSubject = ''; selectedChapter = '';
-            document.getElementById('searchInput').value = '';
+            selectedCategory = category;
             localStorage.setItem('selectedCategory', category);
-            if (user) { user.targetExam = category; localStorage.setItem('user', JSON.stringify(user)); }
-            closeCategorySheet();
-            renderCategorySelected();
-            renderFilterAccordions();
-            applyFilters();
-            updateNavBadge();
-            showToast(`Switched to ${category}`, 'success');
+            if (user) { user.targetExam = category;
+                localStorage.setItem('user', JSON.stringify(user)); }
+            showTestView();
+            showToast(`📂 ${category} selected`, 'success');
         }
 
         function renderFilterAccordions() {
             let filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
+
+            const years = [...new Set(filtered.map(m => m.year).filter(Boolean))].sort();
+            document.getElementById('yearChips').innerHTML =
+                `<button class="vertical-chip ${selectedYear === '' ? 'active' : ''}" onclick="selectYearFilter('')"><span class="vc-dot"></span> 📅 All Years</button>` +
+                years.map(y =>
+                    `<button class="vertical-chip ${selectedYear === y ? 'active' : ''}" onclick="selectYearFilter('${y.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${y}</button>`
+                    ).join('');
+            document.getElementById('yearBadge').textContent = selectedYear || 'All';
+
+            if (selectedYear) filtered = filtered.filter(m => m.year === selectedYear);
             const exams = [...new Set(filtered.map(m => m.exam).filter(Boolean))].sort();
-            document.getElementById('examChips').innerHTML = `<button class="vertical-chip ${selectedExam === '' ? 'active' : ''}" onclick="selectExamFilter('')"><span class="vc-dot"></span> 📋 All Exams</button>` + exams.map(ex => `<button class="vertical-chip ${selectedExam === ex ? 'active' : ''}" onclick="selectExamFilter('${ex.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${ex}</button>`).join('');
+            document.getElementById('examChips').innerHTML =
+                `<button class="vertical-chip ${selectedExam === '' ? 'active' : ''}" onclick="selectExamFilter('')"><span class="vc-dot"></span> 📋 All Exams</button>` +
+                exams.map(ex =>
+                    `<button class="vertical-chip ${selectedExam === ex ? 'active' : ''}" onclick="selectExamFilter('${ex.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${ex}</button>`
+                    ).join('');
             document.getElementById('examBadge').textContent = selectedExam || 'All';
-            let examFiltered = filtered; if (selectedExam) examFiltered = examFiltered.filter(m => m.exam === selectedExam);
+
+            let examFiltered = filtered;
+            if (selectedExam) examFiltered = examFiltered.filter(m => m.exam === selectedExam);
             const subjects = [...new Set(examFiltered.map(m => m.subject).filter(Boolean))].sort();
-            document.getElementById('subjectChips').innerHTML = `<button class="vertical-chip ${selectedSubject === '' ? 'active' : ''}" onclick="selectSubjectFilter('')"><span class="vc-dot"></span> 📖 All Subjects</button>` + subjects.map(s => `<button class="vertical-chip ${selectedSubject === s ? 'active' : ''}" onclick="selectSubjectFilter('${s.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${s}</button>`).join('');
+            document.getElementById('subjectChips').innerHTML =
+                `<button class="vertical-chip ${selectedSubject === '' ? 'active' : ''}" onclick="selectSubjectFilter('')"><span class="vc-dot"></span> 📖 All Subjects</button>` +
+                subjects.map(s =>
+                    `<button class="vertical-chip ${selectedSubject === s ? 'active' : ''}" onclick="selectSubjectFilter('${s.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${s}</button>`
+                    ).join('');
             document.getElementById('subjectBadge').textContent = selectedSubject || 'All';
-            let subjFiltered = examFiltered; if (selectedSubject) subjFiltered = subjFiltered.filter(m => m.subject === selectedSubject);
+
+            let subjFiltered = examFiltered;
+            if (selectedSubject) subjFiltered = subjFiltered.filter(m => m.subject === selectedSubject);
             const chapters = [...new Set(subjFiltered.map(m => m.chapter).filter(Boolean))].sort();
             const chapterContainer = document.getElementById('chapterChips');
             if (chapters.length > 0) {
-                chapterContainer.innerHTML = `<button class="vertical-chip ${selectedChapter === '' ? 'active' : ''}" onclick="selectChapterFilter('')"><span class="vc-dot"></span> 📑 All Chapters</button>` + chapters.map(ch => `<button class="vertical-chip ${selectedChapter === ch ? 'active' : ''}" onclick="selectChapterFilter('${ch.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${ch}</button>`).join('');
+                chapterContainer.innerHTML =
+                    `<button class="vertical-chip ${selectedChapter === '' ? 'active' : ''}" onclick="selectChapterFilter('')"><span class="vc-dot"></span> 📑 All Chapters</button>` +
+                    chapters.map(ch =>
+                        `<button class="vertical-chip ${selectedChapter === ch ? 'active' : ''}" onclick="selectChapterFilter('${ch.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${ch}</button>`
+                        ).join('');
             } else {
-                chapterContainer.innerHTML = '<div style="padding:12px;color:var(--gray-400);font-size:12px;text-align:center;">No chapters available</div>';
+                chapterContainer.innerHTML =
+                    '<div style="padding:12px;color:var(--gray-400);font-size:12px;text-align:center;">No chapters available</div>';
             }
             document.getElementById('chapterBadge').textContent = selectedChapter || 'All';
         }
 
+        function selectYearFilter(year) {
+            selectedYear = (selectedYear === year) ? '' : year;
+            selectedExam = '';
+            selectedSubject = '';
+            selectedChapter = '';
+            renderFilterAccordions();
+            applyFilters();
+            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+            document.getElementById('yearAccordionItem').classList.add('open');
+        }
+
         function selectExamFilter(exam) {
             selectedExam = (selectedExam === exam) ? '' : exam;
-            renderFilterAccordions(); applyFilters();
+            selectedSubject = '';
+            selectedChapter = '';
+            renderFilterAccordions();
+            applyFilters();
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+            document.getElementById('examAccordionItem').classList.add('open');
         }
+
         function selectSubjectFilter(subject) {
             selectedSubject = (selectedSubject === subject) ? '' : subject;
-            renderFilterAccordions(); applyFilters();
+            selectedChapter = '';
+            renderFilterAccordions();
+            applyFilters();
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+            document.getElementById('subjectAccordionItem').classList.add('open');
         }
+
         function selectChapterFilter(chapter) {
             selectedChapter = (selectedChapter === chapter) ? '' : chapter;
-            renderFilterAccordions(); applyFilters();
+            renderFilterAccordions();
+            applyFilters();
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+            document.getElementById('chapterAccordionItem').classList.add('open');
         }
 
         function clearAllFilters() {
-            selectedExam = ''; selectedSubject = ''; selectedChapter = '';
+            selectedYear = '';
+            selectedExam = '';
+            selectedSubject = '';
+            selectedChapter = '';
             document.getElementById('searchInput').value = '';
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            renderFilterAccordions(); applyFilters();
-            showToast('All filters cleared','info');
+            renderFilterAccordions();
+            applyFilters();
+            showToast('All filters cleared', 'info');
         }
 
         document.getElementById('searchInput').addEventListener('input', function() {
-            clearTimeout(searchDebounceTimer); searchDebounceTimer = setTimeout(() => applyFilters(), 300);
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => applyFilters(), 300);
         });
 
         function getDifficultyInfo(difficulty) {
             if (!difficulty) return null;
             const d = difficulty.trim().toLowerCase();
-            const map = { 'easy': {cls:'diff-easy',label:'Easy'}, 'moderate': {cls:'diff-moderate',label:'Moderate'}, 'hard': {cls:'diff-hard',label:'Hard'}, 'medium': {cls:'diff-moderate',label:'Medium'}, 'previous year': {cls:'diff-prev-year',label:'Prev Year'} };
-            return map[d] || {cls:'diff-moderate',label:d.charAt(0).toUpperCase()+d.slice(1)};
+            const map = {
+                'easy': { cls: 'diff-easy', label: 'Easy' },
+                'moderate': { cls: 'diff-moderate', label: 'Moderate' },
+                'hard': { cls: 'diff-hard', label: 'Hard' },
+                'medium': { cls: 'diff-moderate', label: 'Medium' },
+                'previous year': { cls: 'diff-prev-year', label: 'Prev Year' }
+            };
+            return map[d] || { cls: 'diff-moderate', label: d.charAt(0).toUpperCase() + d.slice(1) };
         }
 
         function toggleBookmark(testCode) {
             const idx = bookmarkedTests.indexOf(testCode);
             if (idx > -1) {
                 bookmarkedTests.splice(idx, 1);
-                if (user?.username) fetch(`${API_URL}?action=removeFavorite&username=${user.username}&type=test&itemId=${testCode}`).catch(()=>{});
+                if (user?.username) fetch(
+                        `${API_URL}?action=removeFavorite&username=${user.username}&type=test&itemId=${testCode}`).catch(
+                    () => {});
                 showToast('Bookmark removed', 'info');
             } else {
                 bookmarkedTests.push(testCode);
-                if (user?.username) fetch(`${API_URL}?action=addFavorite&username=${user.username}&type=test&itemId=${testCode}`).catch(()=>{});
+                if (user?.username) fetch(
+                        `${API_URL}?action=addFavorite&username=${user.username}&type=test&itemId=${testCode}`).catch(
+                    () => {});
                 showToast('Test bookmarked!', 'success');
             }
             localStorage.setItem('bookmarkedTests', JSON.stringify(bookmarkedTests));
             applyFilters();
         }
 
-        function openDetails(testCode) {
-            const test = allMocks.find(m => m.testCode === testCode);
-            if (!test) return showToast('Test not found','error');
-            const overlay = document.getElementById('detailsSheetOverlay');
-            const content = document.getElementById('detailsContent');
-            const stickyCta = document.getElementById('detailsStickyCta');
-            const accessible = hasAccess(test);
-            const bestResult = userResults.find(r => r.testCode === test.testCode);
-            const diffInfo = getDifficultyInfo(test.difficulty);
-            const imageHtml = test.imageurl ? `<img src="${test.imageurl}" class="details-header-image" alt="${test.exam}">` : `<div class="details-header-image"><i class="fas fa-graduation-cap"></i></div>`;
-
-            let performanceHtml = '';
-            if (bestResult) {
-                performanceHtml = `
-                <div class="details-section-title"><i class="fas fa-chart-line"></i> Your Performance</div>
-                <div class="details-stat-grid">
-                    <div class="details-stat-item"><i class="fas fa-star"></i><div class="details-stat-value">${bestResult.score}/${bestResult.totalMarks}</div><div class="details-stat-label">Best Score</div></div>
-                    <div class="details-stat-item"><i class="fas fa-bullseye"></i><div class="details-stat-value">${bestResult.accuracy}%</div><div class="details-stat-label">Accuracy</div></div>
-                    <div class="details-stat-item"><i class="fas fa-redo"></i><div class="details-stat-value">${userResults.filter(r=>r.testCode===test.testCode).length}</div><div class="details-stat-label">Attempts</div></div>
-                </div>`;
-            } else {
-                performanceHtml = '<div class="details-performance-empty"><i class="far fa-clock"></i> No attempts yet</div>';
-            }
-
-            content.innerHTML = `
-                ${imageHtml}
-                <div class="details-title">${test.testName || 'Untitled'}</div>
-                <div class="details-meta">
-                    <span><i class="fas fa-building"></i> ${test.exam || 'N/A'}</span>
-                    ${diffInfo ? `<span class="premium-badge-diff ${diffInfo.cls}">${diffInfo.label}</span>` : ''}
-                    <span><i class="fas fa-book"></i> ${test.subject || 'General'}</span>
-                </div>
-                <div class="details-stat-grid">
-                    <div class="details-stat-item"><i class="fas fa-clock"></i><div class="details-stat-value">${test.duration||30}m</div><div class="details-stat-label">Duration</div></div>
-                    <div class="details-stat-item"><i class="fas fa-list-ol"></i><div class="details-stat-value">${test.totalQuestions||0}</div><div class="details-stat-label">Questions</div></div>
-                    <div class="details-stat-item"><i class="fas fa-check-circle"></i><div class="details-stat-value">+${test.marksPerQuestion||1}</div><div class="details-stat-label">Marks</div></div>
-                    <div class="details-stat-item"><i class="fas fa-minus-circle"></i><div class="details-stat-value">-${test.negativeMarking||0}</div><div class="details-stat-label">Negative</div></div>
-                    <div class="details-stat-item"><i class="fas fa-globe"></i><div class="details-stat-value">${test.language||'--'}</div><div class="details-stat-label">Language</div></div>
-                    <div class="details-stat-item"><i class="fas fa-tag"></i><div class="details-stat-value">${test.chapter||'Full'}</div><div class="details-stat-label">Chapter</div></div>
-                </div>
-                ${performanceHtml}
-                <div class="rating-placeholder"></div>
-            `;
-
-            fetchTestRating(testCode).then(ratingData => {
-                const ratingHtml = ratingData ? `
-                <div class="details-section-title"><i class="fas fa-star"></i> Rating</div>
-                <div class="details-star-rating">
-                    ${'<i class="fas fa-star"></i>'.repeat(Math.round(ratingData.avg))}${'<i class="far fa-star"></i>'.repeat(5-Math.round(ratingData.avg))}
-                    <span>${ratingData.avg.toFixed(1)} (${ratingData.count} reviews)</span>
-                    <button class="btn-details" style="margin-left:auto;" onclick="window.location.href='reviews.html?testCode=${testCode}'">Read Reviews</button>
-                </div>` : '';
-                const placeholder = content.querySelector('.rating-placeholder');
-                if (placeholder) placeholder.innerHTML = ratingHtml;
-            });
-
-            stickyCta.innerHTML = accessible ?
-                `<button class="btn-sticky-attempt" onclick="openInstructions('${test.file||''}','${test.testCode}','${test.exam}','${test.testName}',${test.duration||30},${test.totalQuestions||0},${test.marksPerQuestion||1},${test.negativeMarking||0}); closeDetailsSheet();"><i class="fas fa-play"></i> Attempt Test Now</button>` :
-                `<button class="btn-sticky-attempt" style="background:gray;" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock Premium</button>`;
-
-            overlay.classList.add('active');
-            document.body.classList.add('sheet-open');
-        }
-
-        function closeDetailsSheet() {
-            document.getElementById('detailsSheetOverlay').classList.remove('active');
-            document.body.classList.remove('sheet-open');
-        }
-
-        async function fetchTestRating(testCode) {
-            try {
-                const r = await fetch(`${API_URL}?action=getReviews&testCode=${encodeURIComponent(testCode)}`);
-                const d = await r.json();
-                if (d?.success && d.reviews.length) {
-                    const avg = d.reviews.reduce((s, rev) => s + parseFloat(rev.rating), 0) / d.reviews.length;
-                    return { avg, count: d.reviews.length };
-                }
-            } catch (e) {}
-            return null;
-        }
-
-        document.getElementById('detailsSheetOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeDetailsSheet();
-        });
-
         function applyFilters() {
-            if (!selectedCategory) { displayTests([]); return; }
+            if (!selectedCategory) {
+                document.getElementById('testList').innerHTML =
+                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-folder-open"></i></div><h2>Select a Category First</h2></div>';
+                return;
+            }
             let filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
+            if (selectedYear) filtered = filtered.filter(m => m.year === selectedYear);
             if (selectedExam) filtered = filtered.filter(m => m.exam === selectedExam);
             if (selectedSubject) filtered = filtered.filter(m => m.subject === selectedSubject);
             if (selectedChapter) filtered = filtered.filter(m => m.chapter === selectedChapter);
             const search = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (search) filtered = filtered.filter(m => (m.testName && m.testName.toLowerCase().includes(search)) || (m.testCode && m.testCode.toLowerCase().includes(search)));
+            if (search) filtered = filtered.filter(m =>
+                (m.testName && m.testName.toLowerCase().includes(search)) ||
+                (m.testCode && m.testCode.toLowerCase().includes(search))
+            );
             displayTests(filtered);
         }
 
         function displayTests(tests) {
             const list = document.getElementById('testList');
             if (!selectedCategory) {
-                list.innerHTML = `<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-folder-open"></i></div><h2>Select a Category First</h2></div>`;
+                list.innerHTML =
+                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-folder-open"></i></div><h2>Select a Category First</h2></div>';
                 return;
             }
             if (!tests.length) {
-                list.innerHTML = `<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-search"></i></div><h2>No Tests Found</h2></div>`;
+                list.innerHTML =
+                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-search"></i></div><h2>No Tests Found</h2><p>Try adjusting your filters or change the category.</p></div>';
                 return;
             }
             list.innerHTML = tests.map((test, idx) => {
@@ -2052,14 +2553,17 @@
                 const bestResult = userResults.find(r => r.testCode === test.testCode);
                 const accessible = hasAccess(test);
                 const diffInfo = getDifficultyInfo(test.difficulty);
-                const diffTagHTML = diffInfo ? `<span class="premium-badge-diff ${diffInfo.cls}">${diffInfo.label}</span>` : '';
+                const diffTagHTML = diffInfo ?
+                    `<span class="premium-badge-diff ${diffInfo.cls}">${diffInfo.label}</span>` : '';
                 const tags = [];
                 if (test.chapter) tags.push(test.chapter);
                 if (test.language) tags.push(test.language);
-                const testTypeTag = (test.type === 'paid') ? (test.requiredPlan === 'premium_plus' ? 'Plus' : (test.requiredPlan === 'ultimate' ? 'Ultimate' : 'Pro')) : null;
+                const testTypeTag = (test.type === 'paid') ? (test.requiredPlan === 'premium_plus' ? 'Plus' : (test
+                    .requiredPlan === 'ultimate' ? 'Ultimate' : 'Pro')) : null;
                 if (testTypeTag) tags.push(testTypeTag);
-                const fileParam = test.file ? test.file.replace(/'/g,"\\'") : '';
-                if (!test.file) console.warn(`Test ${test.testCode} missing "file" property`);
+                const fileParam = test.file ? test.file.replace(/'/g, "\\'") : '';
+                const yearBadgeHTML = test.year ?
+                    `<span class="premium-badge-year"><i class="fas fa-calendar-alt"></i> ${test.year}</span>` : '';
 
                 return `
                 <div class="premium-test-card" style="animation-delay:${idx*0.05}s">
@@ -2072,6 +2576,7 @@
                             <div class="premium-card-info">
                                 <div class="premium-badges">
                                     <span class="premium-badge-exam"><i class="fas fa-building"></i> ${test.exam || 'General'}</span>
+                                    ${yearBadgeHTML}
                                     ${diffTagHTML}
                                 </div>
                                 <div class="premium-test-title">${test.testName || 'Untitled Test'}</div>
@@ -2101,7 +2606,14 @@
         }
 
         function handleLockedTest(plan) {
-            Swal.fire({ title:'🔒 Premium', text:`Requires ${plan} plan.`, icon:'info', confirmButtonText:'View Plans', confirmButtonColor:'#f59e0b', showCancelButton:true }).then(r => { if (r.isConfirmed) window.location.href='payment.html'; });
+            Swal.fire({
+                title: '🔒 Premium',
+                text: `Requires ${plan} plan.`,
+                icon: 'info',
+                confirmButtonText: 'View Plans',
+                confirmButtonColor: '#f59e0b',
+                showCancelButton: true
+            }).then(r => { if (r.isConfirmed) window.location.href = 'payment.html'; });
         }
 
         function openInstructions(file, code, exam, name, duration, totalQs, marks, negative) {
@@ -2116,32 +2628,92 @@
             document.body.classList.add('sheet-open');
         }
 
-        function closeInstructionSheet() { document.getElementById('instructionSheetOverlay').classList.remove('active'); document.body.classList.remove('sheet-open'); }
+        function closeInstructionSheet() {
+            document.getElementById('instructionSheetOverlay').classList.remove('active');
+            document.body.classList.remove('sheet-open');
+        }
 
         document.getElementById('finalStartBtn').addEventListener('click', () => {
             if (!currentTestData.file) {
-                showToast('Test file not configured properly. Please contact support.','error');
+                showToast('Test file not configured properly. Please contact support.', 'error');
                 return;
             }
             localStorage.setItem('last_mock_file', currentTestData.file);
             localStorage.setItem('current_exam', currentTestData.exam || '');
-            window.location.href = `test.html?file=${encodeURIComponent(currentTestData.file)}&testCode=${encodeURIComponent(currentTestData.code)}`;
+            window.location.href =
+                `test.html?file=${encodeURIComponent(currentTestData.file)}&testCode=${encodeURIComponent(currentTestData.code)}`;
         });
 
-        function viewLeaderboard(code, exam) { localStorage.setItem('current_exam', exam || ''); window.location.href = `leaderboard.html?testCode=${encodeURIComponent(code)}&exam=${encodeURIComponent(exam||'')}`; }
+        function viewLeaderboard(code, exam) {
+            localStorage.setItem('current_exam', exam || '');
+            window.location.href =
+                `leaderboard.html?testCode=${encodeURIComponent(code)}&exam=${encodeURIComponent(exam||'')}`;
+        }
+
+        function openDetails(testCode) {
+            const test = allMocks.find(m => m.testCode === testCode);
+            if (!test) return showToast('Test not found', 'error');
+            const accessible = hasAccess(test);
+            const bestResult = userResults.find(r => r.testCode === test.testCode);
+            const diffInfo = getDifficultyInfo(test.difficulty);
+            const yearInfo = test.year ?
+                `<span class="premium-badge-year"><i class="fas fa-calendar-alt"></i> ${test.year}</span>` : '';
+            let detailsHtml = `
+            <div style="padding:20px;">
+                <div style="width:100%;height:100px;border-radius:16px;background:linear-gradient(135deg,#1e293b,#334155);display:flex;align-items:center;justify-content:center;color:white;font-size:36px;margin-bottom:16px;">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div style="font-size:20px;font-weight:800;color:#0f172a;margin-bottom:4px;">${test.testName||'Untitled'}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;color:#475569;font-weight:600;font-size:13px;">
+                    <span><i class="fas fa-building"></i> ${test.exam||'N/A'}</span>
+                    ${yearInfo}
+                    ${diffInfo ? `<span class="premium-badge-diff ${diffInfo.cls}">${diffInfo.label}</span>` : ''}
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+                    <div style="background:#f8fafc;border-radius:14px;padding:14px 8px;text-align:center;border:1px solid #e2e8f0;"><i class="fas fa-clock" style="color:#64748b;"></i><div style="font-weight:800;font-size:16px;color:#1e293b;">${test.duration||30}m</div><div style="font-size:11px;color:#94a3b8;">Duration</div></div>
+                    <div style="background:#f8fafc;border-radius:14px;padding:14px 8px;text-align:center;border:1px solid #e2e8f0;"><i class="fas fa-list-ol" style="color:#64748b;"></i><div style="font-weight:800;font-size:16px;color:#1e293b;">${test.totalQuestions||0}</div><div style="font-size:11px;color:#94a3b8;">Questions</div></div>
+                    <div style="background:#f8fafc;border-radius:14px;padding:14px 8px;text-align:center;border:1px solid #e2e8f0;"><i class="fas fa-check-circle" style="color:#64748b;"></i><div style="font-weight:800;font-size:16px;color:#1e293b;">+${test.marksPerQuestion||1}</div><div style="font-size:11px;color:#94a3b8;">Marks</div></div>
+                    <div style="background:#f8fafc;border-radius:14px;padding:14px 8px;text-align:center;border:1px solid #e2e8f0;"><i class="fas fa-minus-circle" style="color:#64748b;"></i><div style="font-weight:800;font-size:16px;color:#1e293b;">-${test.negativeMarking||0}</div><div style="font-size:11px;color:#94a3b8;">Negative</div></div>
+                    <div style="background:#f8fafc;border-radius:14px;padding:14px 8px;text-align:center;border:1px solid #e2e8f0;"><i class="fas fa-globe" style="color:#64748b;"></i><div style="font-weight:800;font-size:14px;color:#1e293b;">${test.language||'--'}</div><div style="font-size:11px;color:#94a3b8;">Language</div></div>
+                    <div style="background:#f8fafc;border-radius:14px;padding:14px 8px;text-align:center;border:1px solid #e2e8f0;"><i class="fas fa-tag" style="color:#64748b;"></i><div style="font-weight:800;font-size:14px;color:#1e293b;">${test.chapter||'Full'}</div><div style="font-size:11px;color:#94a3b8;">Chapter</div></div>
+                </div>
+                ${bestResult ? `<div style="background:#ecfdf5;border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid #a7f3d0;"><i class="fas fa-trophy" style="color:#059669;"></i> <strong>Best:</strong> ${bestResult.score}/${bestResult.totalMarks} (${bestResult.accuracy}%)</div>` : '<p style="color:#94a3b8;font-size:13px;"><i class="far fa-clock"></i> No attempts yet</p>'}
+            </div>`;
+            Swal.fire({
+                title: 'Test Details',
+                html: detailsHtml,
+                confirmButtonText: accessible ? '<i class="fas fa-play"></i> Attempt Test' :
+                    '<i class="fas fa-lock"></i> Unlock Premium',
+                confirmButtonColor: accessible ? '#243748' : '#f59e0b',
+                showCancelButton: true,
+                cancelButtonText: 'Close',
+                cancelButtonColor: '#94a3b8',
+                width: '90%',
+                maxWidth: '550px',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (accessible) {
+                        openInstructions(test.file || '', test.testCode, test.exam, test.testName, test
+                            .duration || 30, test.totalQuestions || 0, test.marksPerQuestion || 1, test
+                            .negativeMarking || 0);
+                    } else {
+                        handleLockedTest(test.requiredPlan || 'premium');
+                    }
+                }
+            });
+        }
 
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
             const data = await fetchJSON(JSON_PATHS.mocks, FALLBACK_MOCKS);
             const grouped = groupByCategoryUniqueExams(data);
-            if (!grouped.length) {
-                c.innerHTML = '<li><a>No exams</a></li>';
-                return;
-            }
+            if (!grouped.length) { c.innerHTML = '<li><a>No exams</a></li>'; return; }
             let html = '';
             grouped.forEach(cat => {
-                html += `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
+                html +=
+                    `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
             });
+            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Mock Test</a></li>`;
             html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             c.innerHTML = html;
@@ -2150,31 +2722,29 @@
         async function renderFooterUpcoming() {
             const c = document.getElementById('footerUpcomingExams');
             const d = await fetchJSON(JSON_PATHS.upcomingfooter, FALLBACK_UPCOMING_FOOTER);
-            if (!d.length) {
-                c.innerHTML = '<li><a>No upcoming exams</a></li>';
-                return;
-            }
-            c.innerHTML = d.map(e => `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
+            if (!d.length) { c.innerHTML = '<li><a>No upcoming exams</a></li>'; return; }
+            c.innerHTML = d.map(e =>
+                `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join(
+                '');
         }
 
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
                 if (document.getElementById('sidebarOverlay').classList.contains('active')) closeSidebarDirect();
-                if (document.getElementById('categorySheetOverlay').classList.contains('active')) closeCategorySheet();
-                if (document.getElementById('instructionSheetOverlay').classList.contains('active')) closeInstructionSheet();
-                if (document.getElementById('detailsSheetOverlay').classList.contains('active')) closeDetailsSheet();
+                if (document.getElementById('instructionSheetOverlay').classList.contains('active'))
+                    closeInstructionSheet();
                 document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
             }
         });
-        document.getElementById('categorySheetOverlay').addEventListener('click', e => { if (e.target === document.getElementById('categorySheetOverlay')) closeCategorySheet(); });
-        document.getElementById('instructionSheetOverlay').addEventListener('click', e => { if (e.target === document.getElementById('instructionSheetOverlay')) closeInstructionSheet(); });
+        document.getElementById('instructionSheetOverlay').addEventListener('click', e => {
+            if (e.target === document.getElementById('instructionSheetOverlay')) closeInstructionSheet();
+        });
 
         (function init() {
             updateOnlineStatus();
             loadMocks();
             loadUserResults();
             loadPremium();
-            updateNavBadge();
             renderFooterExamCategories();
             renderFooterUpcoming();
         })();
