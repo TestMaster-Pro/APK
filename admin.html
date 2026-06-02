@@ -234,6 +234,7 @@
             width: 90%; max-width: 520px; border: 1px solid #334155;
             max-height: 85vh; overflow-y: auto;
         }
+        .modal.wide { max-width: 750px; }
         .modal h3 { margin-bottom: 18px; font-size: 18px; }
         .modal .form-group { margin-bottom: 12px; }
         .modal .form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; }
@@ -306,6 +307,7 @@
             <button onclick="switchAdminTab('coinRequests')"><i class="fas fa-coins"></i> Coin Requests</button>
             <button onclick="switchAdminTab('dailyChallenges')"><i class="fas fa-bolt"></i> Daily Challenges</button>
             <button onclick="switchAdminTab('reviews')"><i class="fas fa-star"></i> Reviews</button>
+            <button onclick="switchAdminTab('mockTests')"><i class="fas fa-vial"></i> Mock Tests</button>
             <button onclick="switchAdminTab('settings')"><i class="fas fa-cog"></i> Settings</button>
             <button onclick="logout()" style="background:#dc2626;margin-top:auto;"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
@@ -372,7 +374,7 @@
                 </div>
             </div>
 
-            <!-- AI Assistant (new) -->
+            <!-- AI Assistant -->
             <div class="tab-content" id="aiAssistantTab">
                 <h2 style="margin-bottom:14px;">🤖 AI Assistant</h2>
                 <div class="ai-chat-container">
@@ -430,29 +432,14 @@
                     <h2 style="margin:0;">🪙 Coin Redemption Requests</h2>
                     <button class="refresh-btn" onclick="loadCoinRequests()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
-
                 <div class="coin-policy-note">
                     <i class="fas fa-info-circle"></i>
-                    <strong>Policy:</strong> Coins are deducted when the user submits. Approval keeps them deducted, rejection returns them. 
-                    Provide an internal note and a user-visible message.
+                    <strong>Policy:</strong> Coins are deducted when the user submits. Approval keeps them deducted, rejection returns them. Provide an internal note and a user-visible message.
                 </div>
-
                 <div class="table-wrapper">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Request ID</th>
-                                <th>User</th>
-                                <th>Amount</th>
-                                <th>Reason</th>
-                                <th>UPI Name</th>
-                                <th>UPI ID</th>
-                                <th>Status</th>
-                                <th>Admin Note</th>
-                                <th>User Message</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
+                            <tr><th>Request ID</th><th>User</th><th>Amount</th><th>Reason</th><th>UPI Name</th><th>UPI ID</th><th>Status</th><th>Admin Note</th><th>User Message</th><th>Date</th><th>Actions</th></tr>
                         </thead>
                         <tbody id="coinRequestsBody"></tbody>
                     </table>
@@ -488,6 +475,25 @@
                 </div>
             </div>
 
+            <!-- Mock Tests -->
+            <div class="tab-content" id="mockTestsTab">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                    <h2 style="margin:0;">🧪 Mock Tests (Dynamic)</h2>
+                    <button class="action-btn btn-edit" onclick="openMockTestModal()" style="font-size:12px;padding:8px 14px;"><i class="fas fa-plus"></i> New Mock Test</button>
+                    <button class="refresh-btn" onclick="loadMockTests()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Test Code</th><th>Exam</th><th>Test Name</th><th>Subject</th><th>Dur (min)</th><th>Qs</th><th>+M/-M</th><th>Lang</th><th>Type</th><th>Category</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mockTestsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Settings -->
             <div class="tab-content" id="settingsTab">
                 <h2 style="margin-bottom:18px;">⚙️ Coin & Reward Settings</h2>
@@ -501,7 +507,7 @@
         </div>
     </div>
 
-    <!-- Modals (unchanged) -->
+    <!-- Modals -->
     <div class="modal-overlay" id="verifyPaymentModal">
         <div class="modal">
             <h3>Verify Payment</h3>
@@ -560,9 +566,35 @@
         </div>
     </div>
 
+    <!-- Mock Test Modal -->
+    <div class="modal-overlay" id="mockTestModal">
+        <div class="modal wide">
+            <h3 id="mockTestModalTitle">Add Mock Test</h3>
+            <input type="hidden" id="mockTestId">
+            <div class="form-group"><label>Test Code *</label><input id="mockTestCode" placeholder="e.g., CUET-GAT-MIX-02"></div>
+            <div class="form-group"><label>File (optional)</label><input id="mockFile" placeholder="e.g., Cuet_GAT2.html"></div>
+            <div class="form-group"><label>Exam *</label><input id="mockExam" placeholder="CUET GAT"></div>
+            <div class="form-group"><label>Subject</label><input id="mockSubject" placeholder="General Test"></div>
+            <div class="form-group"><label>Chapter</label><input id="mockChapter" placeholder="Full Syllabus"></div>
+            <div class="form-group"><label>Test Name *</label><input id="mockTestName" placeholder="CUET General Test • Mock 02"></div>
+            <div class="form-group"><label>Duration (min) *</label><input type="number" id="mockDuration" value="30"></div>
+            <div class="form-group"><label>Total Questions *</label><input type="number" id="mockTotalQuestions" value="25"></div>
+            <div class="form-group"><label>Marks per Q *</label><input type="number" id="mockMarksPerQ" value="5"></div>
+            <div class="form-group"><label>Negative Marking</label><input type="number" id="mockNegative" value="1"></div>
+            <div class="form-group"><label>Type</label><select id="mockType"><option value="free">Free</option><option value="paid">Paid</option></select></div>
+            <div class="form-group"><label>Required Plan (if paid)</label><input id="mockRequiredPlan" placeholder="premium_plus"></div>
+            <div class="form-group"><label>Difficulty</label><select id="mockDifficulty"><option value="Easy">Easy</option><option value="Moderate" selected>Moderate</option><option value="Hard">Hard</option></select></div>
+            <div class="form-group"><label>Language</label><input id="mockLanguage" value="English & Hindi"></div>
+            <div class="form-group"><label>Category</label><input id="mockCategory" placeholder="CUET"></div>
+            <div class="form-group"><label>Image URL</label><input id="mockImageUrl" placeholder="image/nta.jpg"></div>
+            <div class="form-group"><label>Questions JSON *</label><textarea id="mockQuestionsJSON" placeholder='[{"en":"Question?","hi":"प्रश्न?","oEn":["A","B","C","D"],"oHi":["A","B","C","D"],"c":1,"exp":"Explanation"}]' style="min-height:120px;"></textarea></div>
+            <div class="modal-btns"><button class="btn-cancel" onclick="closeMockTestModal()">Cancel</button><button class="btn-save" onclick="saveMockTest()">Save</button></div>
+        </div>
+    </div>
+
     <script>
         // Updated API URL
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzv0VFDQPKvv46GDvpZxZ7-uJo9_l_KN_CR5P9o3yVDLqQSpeFE8VaKtHIhBkeHqSylrQ/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
         let pendingDelete = { type: '', id: '' };
 
         // ==================== LOGIN ====================
@@ -595,7 +627,7 @@
         function switchAdminTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-            const tabs = ['dashboard','payments','chats','aiAssistant','users','results','coinRequests','dailyChallenges','reviews','settings'];
+            const tabs = ['dashboard','payments','chats','aiAssistant','users','results','coinRequests','dailyChallenges','reviews','mockTests','settings'];
             const idx = tabs.indexOf(tab);
             const btns = document.querySelectorAll('.sidebar button');
             if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
@@ -605,12 +637,13 @@
                 dashboard: loadDashboardStats,
                 payments: loadAllPayments,
                 chats: loadAllChatsForAdmin,
-                aiAssistant: null,  // no auto load
+                aiAssistant: null,
                 users: loadAllUsers,
                 results: loadAllResults,
                 coinRequests: loadCoinRequests,
                 dailyChallenges: loadDailyChallenges,
                 reviews: loadAllReviews,
+                mockTests: loadMockTests,
                 settings: loadSettings
             };
             if (loaders[tab]) loaders[tab]();
@@ -750,7 +783,7 @@
             loadAllChatsForAdmin();
         }
 
-        // ==================== AI ASSISTANT (new) ====================
+        // ==================== AI ASSISTANT ====================
         function addAiMessage(text, sender) {
             const container = document.getElementById('aiChatMessages');
             const div = document.createElement('div');
@@ -1059,6 +1092,149 @@
             loadAllReviews();
         }
 
+        // ==================== MOCK TESTS ====================
+        async function loadMockTests() {
+            try {
+                const res = await fetch(`${API_URL}?action=getAllMockTests`);
+                const data = await res.json();
+                if (data.success) {
+                    const tests = data.tests || [];
+                    document.getElementById('mockTestsBody').innerHTML = tests.map(test => `<tr>
+                        <td style="font-weight:600;">${test.testCode}</td>
+                        <td>${test.exam || '--'}</td>
+                        <td>${test.testName || '--'}</td>
+                        <td>${test.subject || '--'}</td>
+                        <td>${test.duration}</td>
+                        <td>${test.totalQuestions}</td>
+                        <td>+${test.marksPerQuestion} / -${test.negativeMarking}</td>
+                        <td>${test.language || '--'}</td>
+                        <td><span class="badge ${test.type==='free'?'badge-success':'badge-plus'}">${test.type}</span></td>
+                        <td>${test.category || '--'}</td>
+                        <td>
+                            <button class="action-btn btn-edit" onclick="editMockTest('${test.testCode}')">Edit</button>
+                            <button class="action-btn btn-delete" onclick="deleteMockTest('${test.testCode}')">Del</button>
+                        </td>
+                    </tr>`).join('');
+                    if (tests.length === 0) {
+                        document.getElementById('mockTestsBody').innerHTML = '<tr><td colspan="11" style="text-align:center;">No mock tests yet.</td></tr>';
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function openMockTestModal() {
+            document.getElementById('mockTestModalTitle').textContent = 'Add Mock Test';
+            document.getElementById('mockTestId').value = '';
+            document.getElementById('mockTestCode').value = '';
+            document.getElementById('mockFile').value = '';
+            document.getElementById('mockExam').value = '';
+            document.getElementById('mockSubject').value = '';
+            document.getElementById('mockChapter').value = '';
+            document.getElementById('mockTestName').value = '';
+            document.getElementById('mockDuration').value = 30;
+            document.getElementById('mockTotalQuestions').value = 25;
+            document.getElementById('mockMarksPerQ').value = 5;
+            document.getElementById('mockNegative').value = 1;
+            document.getElementById('mockType').value = 'free';
+            document.getElementById('mockRequiredPlan').value = '';
+            document.getElementById('mockDifficulty').value = 'Moderate';
+            document.getElementById('mockLanguage').value = 'English & Hindi';
+            document.getElementById('mockCategory').value = '';
+            document.getElementById('mockImageUrl').value = '';
+            document.getElementById('mockQuestionsJSON').value = '';
+            document.getElementById('mockTestModal').classList.add('active');
+        }
+
+        function editMockTest(testCode) {
+            fetch(`${API_URL}?action=getAllMockTests`).then(r => r.json()).then(data => {
+                const test = data.tests.find(t => t.testCode === testCode);
+                if (!test) return;
+                document.getElementById('mockTestModalTitle').textContent = 'Edit Mock Test';
+                document.getElementById('mockTestId').value = testCode;
+                document.getElementById('mockTestCode').value = test.testCode;
+                document.getElementById('mockFile').value = test.file || '';
+                document.getElementById('mockExam').value = test.exam || '';
+                document.getElementById('mockSubject').value = test.subject || '';
+                document.getElementById('mockChapter').value = test.chapter || '';
+                document.getElementById('mockTestName').value = test.testName || '';
+                document.getElementById('mockDuration').value = test.duration || 30;
+                document.getElementById('mockTotalQuestions').value = test.totalQuestions || 25;
+                document.getElementById('mockMarksPerQ').value = test.marksPerQuestion || 5;
+                document.getElementById('mockNegative').value = test.negativeMarking || 1;
+                document.getElementById('mockType').value = test.type || 'free';
+                document.getElementById('mockRequiredPlan').value = test.requiredPlan || '';
+                document.getElementById('mockDifficulty').value = test.difficulty || 'Moderate';
+                document.getElementById('mockLanguage').value = test.language || 'English & Hindi';
+                document.getElementById('mockCategory').value = test.category || '';
+                document.getElementById('mockImageUrl').value = test.imageurl || '';
+                document.getElementById('mockQuestionsJSON').value = '';
+                document.getElementById('mockTestModal').classList.add('active');
+            });
+        }
+
+        function closeMockTestModal() { document.getElementById('mockTestModal').classList.remove('active'); }
+
+        async function saveMockTest() {
+            const id = document.getElementById('mockTestId').value;
+            const action = id ? 'updateMockTest' : 'addMockTest';
+
+            const testCode = document.getElementById('mockTestCode').value.trim();
+            const exam = document.getElementById('mockExam').value.trim();
+            const testName = document.getElementById('mockTestName').value.trim();
+            const questionsJSON = document.getElementById('mockQuestionsJSON').value.trim();
+
+            if (!testCode || !exam || !testName || !questionsJSON) {
+                return Swal.fire('Required fields', 'Test Code, Exam, Test Name, and Questions JSON are required.', 'warning');
+            }
+
+            try { JSON.parse(questionsJSON); } catch (e) { return Swal.fire('Invalid JSON', 'Questions JSON is not valid.', 'error'); }
+
+            const params = new URLSearchParams({ action });
+            if (id) params.append('testCode', id);
+            params.append('newTestCode', testCode);
+            params.append('file', document.getElementById('mockFile').value.trim());
+            params.append('exam', exam);
+            params.append('subject', document.getElementById('mockSubject').value.trim());
+            params.append('chapter', document.getElementById('mockChapter').value.trim());
+            params.append('testName', testName);
+            params.append('duration', document.getElementById('mockDuration').value);
+            params.append('totalQuestions', document.getElementById('mockTotalQuestions').value);
+            params.append('marksPerQuestion', document.getElementById('mockMarksPerQ').value);
+            params.append('negativeMarking', document.getElementById('mockNegative').value);
+            params.append('type', document.getElementById('mockType').value);
+            params.append('requiredPlan', document.getElementById('mockRequiredPlan').value.trim());
+            params.append('difficulty', document.getElementById('mockDifficulty').value);
+            params.append('language', document.getElementById('mockLanguage').value.trim());
+            params.append('category', document.getElementById('mockCategory').value.trim());
+            params.append('imageurl', document.getElementById('mockImageUrl').value.trim());
+            params.append('questionsJSON', questionsJSON);
+
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: params });
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire('Saved!', data.message || 'Mock test saved.', 'success');
+                    closeMockTestModal();
+                    loadMockTests();
+                } else {
+                    Swal.fire('Error', data.error, 'error');
+                }
+            } catch (e) { Swal.fire('Error', 'Network error', 'error'); }
+        }
+
+        async function deleteMockTest(testCode) {
+            if (confirm(`Delete mock test ${testCode}?`)) {
+                const res = await fetch(`${API_URL}?action=deleteMockTest&testCode=${encodeURIComponent(testCode)}`);
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire('Deleted', '', 'success');
+                    loadMockTests();
+                } else {
+                    Swal.fire('Error', data.error, 'error');
+                }
+            }
+        }
+
         // ==================== SETTINGS ====================
         async function loadSettings() {
             const res = await fetch(`${API_URL}?action=getCoinSettings`);
@@ -1092,7 +1268,7 @@
             if (type === 'result') loadAllResults();
         }
 
-        // Auto refresh for support chats
+        // Auto refresh
         setInterval(() => {
             if (document.getElementById('chatsTab')?.classList.contains('active')) loadAllChatsForAdmin();
         }, 8000);
@@ -1100,7 +1276,6 @@
             if (document.getElementById('dashboardTab')?.classList.contains('active')) loadDashboardStats();
         }, 30000);
 
-        // Auto-login if session exists
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainPanel').style.display = 'flex';
