@@ -9,8 +9,7 @@
     <title>Mock Tests · TestMasterPro.space</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #1E3A5F;
@@ -945,15 +944,40 @@
             animation: softPulse 2.5s infinite;
         }
         @keyframes softPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(30, 58, 95, 0.3);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 20px rgba(30, 58, 95, 0);
-                transform: scale(1.04);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(30, 58, 95, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 0 20px rgba(30, 58, 95, 0); transform: scale(1.04); }
+        }
+
+        /* Footer APK Button */
+        .footer-install-section {
+            text-align: center;
+            margin: 20px 0 24px;
+        }
+        .footer-install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 32px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.45);
+            text-decoration: none;
+        }
+        .footer-install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.6);
+            color: #fff;
+        }
+        .footer-install-btn:active {
+            transform: scale(0.95);
+            transition: 0.06s;
         }
 
         .pro-footer {
@@ -1155,39 +1179,20 @@
             border-radius: 2px;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         @media (min-width:600px) {
-            .bottom-nav {
-                display: none;
-            }
-            body {
-                padding-bottom: 0;
-            }
-            .container {
-                padding: 18px 18px calc(24px + var(--safe-bottom));
-            }
-            .pro-footer {
-                padding-bottom: 30px;
-            }
+            .bottom-nav { display: none; }
+            body { padding-bottom: 0; }
+            .container { padding: 18px 18px calc(24px + var(--safe-bottom)); }
+            .pro-footer { padding-bottom: 30px; }
         }
         @media (max-width:480px) {
-            .footer-grid {
-                gap: 24px;
-            }
-            .footer-col h3 {
-                font-size: 15px;
-            }
-            .footer-col a {
-                font-size: 12px;
-            }
-            .card-logo,
-            .card-logo-placeholder {
-                width: 40px;
-                height: 40px;
-            }
+            .footer-grid { gap: 24px; }
+            .footer-col h3 { font-size: 15px; }
+            .footer-col a { font-size: 12px; }
+            .card-logo, .card-logo-placeholder { width: 40px; height: 40px; }
+            .footer-install-btn { padding: 14px 22px; font-size: 14px; border-radius: 28px; }
         }
     </style>
 </head>
@@ -1273,6 +1278,11 @@
     </div>
 
     <footer class="pro-footer">
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()">
+                <i class="fas fa-download"></i> Download APK
+            </button>
+        </div>
         <div class="footer-grid">
             <div class="footer-col">
                 <h3>Exams</h3>
@@ -1304,8 +1314,9 @@
     </nav>
 
     <script>
-        const API_URL =
-            'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
+        const TEST_API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
+
         const JSON_PATHS = {
             mocks: './mocks.json',
             popular: './json/popular.json',
@@ -1313,71 +1324,15 @@
             upcomingfooter: './json/upcomingfooter.json'
         };
 
+        // Fallback local tests (these will be used if mocks.json fails)
         const FALLBACK_MOCKS = [
-            { file: 'sbi_po.html', exam: 'SBI PO', subject: 'Quantitative Aptitude', chapter: 'Full Syllabus',
-                testName: 'SBI PO Mock 1', testCode: 'SBI-PO-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1,
-                negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'Bank', imageurl: '' },
-            { file: 'ibps_clerk.html', exam: 'IBPS Clerk', subject: 'Reasoning', chapter: 'Full Syllabus',
-                testName: 'IBPS Clerk Mock 1', testCode: 'IBPS-CLK-01', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'Bank', imageurl: '' },
-            { file: 'rbi_grade_b.html', exam: 'RBI Grade B', subject: 'General Awareness', chapter: 'Full Syllabus',
-                testName: 'RBI Grade B Mock 1', testCode: 'RBI-GB-01', duration: 120, totalQuestions: 200,
-                marksPerQuestion: 1, negativeMarking: 0.25, type: 'premium', requiredPlan: 'premium', difficulty: 'Hard',
-                language: 'English & Hindi', category: 'Bank', imageurl: '' },
-            { file: 'ssc_cgl.html', exam: 'SSC CGL', subject: 'General Intelligence', chapter: 'Full Syllabus',
-                testName: 'SSC CGL Tier-I Mock 1', testCode: 'SSC-CGL-T1-01', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Hard',
-                language: 'English & Hindi', category: 'SSC', imageurl: '' },
-            { file: 'ssc_chsl.html', exam: 'SSC CHSL', subject: 'English Language', chapter: 'Full Syllabus',
-                testName: 'SSC CHSL Mock 1', testCode: 'SSC-CHSL-01', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'SSC', imageurl: '' },
-            { file: 'rrb_ntpc.html', exam: 'RRB NTPC', subject: 'General Awareness', chapter: 'Full Syllabus',
-                testName: 'RRB NTPC CBT-1 Mock 1', testCode: 'RRB-NTPC-01', duration: 90, totalQuestions: 100,
-                marksPerQuestion: 1, negativeMarking: 0.33, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'Railway', imageurl: '' },
-            { file: 'cuet_gat.html', exam: 'CUET GAT', subject: 'General Test', chapter: 'Full Syllabus',
-                testName: 'CUET General Test Mock 1', testCode: 'CUET-GAT-01', duration: 60, totalQuestions: 50,
-                marksPerQuestion: 5, negativeMarking: 1, type: 'premium', requiredPlan: 'premium', difficulty: 'Hard',
-                language: 'English & Hindi', category: 'CUET', imageurl: '' }
-        ];
-        const FALLBACK_POPULAR = [
-            { file: 'cuet_pyp.html', exam: 'CUET GAT', subject: 'General Test', chapter: 'Full Syllabus',
-                testName: 'CUET General Aptitude Test PYP', testCode: 'CUET-GAT-PYP', duration: 60, totalQuestions: 50,
-                marksPerQuestion: 5, negativeMarking: 1, type: 'free', requiredPlan: 'none', difficulty: 'Hard',
-                language: 'English & Hindi', category: 'CUET', attempts: '2296 Attempts', badge: 'NEW', imageurl: '' },
-            { file: 'ssc_cgl_full.html', exam: 'SSC CGL', subject: 'General Intelligence', chapter: 'Full Syllabus',
-                testName: 'SSC CGL Tier-I Full Mock 2026', testCode: 'SSC-CGL-FULL', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Hard',
-                language: 'English & Hindi', category: 'SSC', attempts: '4512 Attempts', badge: 'HOT', imageurl: '' },
-            { file: 'ibps_po.html', exam: 'IBPS PO', subject: 'Quantitative Aptitude', chapter: 'Full Syllabus',
-                testName: 'IBPS PO Prelims Mock', testCode: 'IBPS-PO-PRE', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'Bank', attempts: '3187 Attempts', badge: 'TRENDING',
-            imageurl: '' }
-        ];
-        const FALLBACK_UPCOMING = [
-            { file: 'ssc_cgl_2026.html', exam: 'SSC CGL', subject: 'General Intelligence', chapter: 'Full Syllabus',
-                testName: 'SSC CGL 2026 Reasoning Mock', testCode: 'SSC-CGL-2026-01', duration: 60, totalQuestions: 50,
-                marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Hard',
-                language: 'English & Hindi', category: 'SSC 2026', date: '12 June 2026', imageurl: '' },
-            { file: '', exam: 'IBPS PO', subject: 'Quantitative Aptitude', chapter: 'Full Syllabus',
-                testName: 'IBPS PO 2026 Mock', testCode: 'IBPS-PO-2026', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'Bank', date: '18 Aug 2026', imageurl: '' },
-            { file: 'rrb_ntpc_2026.html', exam: 'RRB NTPC', subject: 'General Awareness', chapter: 'Full Syllabus',
-                testName: 'RRB NTPC 2026 Mock', testCode: 'RRB-NTPC-2026', duration: 90, totalQuestions: 100,
-                marksPerQuestion: 1, negativeMarking: 0.33, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'English & Hindi', category: 'Railway', date: '25 July 2026', imageurl: '' }
-        ];
-        const FALLBACK_UPCOMING_FOOTER = [
-            { id: 1, name: 'ReNEET UG 2026', date: '15 May 2026' },
-            { id: 2, name: 'CUET UG 2026', date: '20 May 2026' },
-            { id: 3, name: 'UP Police Constable 2026', date: '10 June 2026' },
-            { id: 4, name: 'SSC Selection Post (Phase 14) 2026', date: '22 June 2026' },
-            { id: 5, name: 'SSC GD 2025-26', date: '5 July 2026' }
+            { file: 'sbi_po.html', exam: 'SBI PO', subject: 'Quantitative Aptitude', chapter: 'Full Syllabus', testName: 'SBI PO Mock 1', testCode: 'SBI-PO-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'English & Hindi', category: 'Bank', imageurl: '' },
+            { file: 'ibps_clerk.html', exam: 'IBPS Clerk', subject: 'Reasoning', chapter: 'Full Syllabus', testName: 'IBPS Clerk Mock 1', testCode: 'IBPS-CLK-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'English & Hindi', category: 'Bank', imageurl: '' },
+            { file: 'rbi_grade_b.html', exam: 'RBI Grade B', subject: 'General Awareness', chapter: 'Full Syllabus', testName: 'RBI Grade B Mock 1', testCode: 'RBI-GB-01', duration: 120, totalQuestions: 200, marksPerQuestion: 1, negativeMarking: 0.25, type: 'premium', requiredPlan: 'premium', difficulty: 'Hard', language: 'English & Hindi', category: 'Bank', imageurl: '' },
+            { file: 'ssc_cgl.html', exam: 'SSC CGL', subject: 'General Intelligence', chapter: 'Full Syllabus', testName: 'SSC CGL Tier-I Mock 1', testCode: 'SSC-CGL-T1-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'English & Hindi', category: 'SSC', imageurl: '' },
+            { file: 'ssc_chsl.html', exam: 'SSC CHSL', subject: 'English Language', chapter: 'Full Syllabus', testName: 'SSC CHSL Mock 1', testCode: 'SSC-CHSL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'English & Hindi', category: 'SSC', imageurl: '' },
+            { file: 'rrb_ntpc.html', exam: 'RRB NTPC', subject: 'General Awareness', chapter: 'Full Syllabus', testName: 'RRB NTPC CBT-1 Mock 1', testCode: 'RRB-NTPC-01', duration: 90, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.33, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'English & Hindi', category: 'Railway', imageurl: '' },
+            { file: 'cuet_gat.html', exam: 'CUET GAT', subject: 'General Test', chapter: 'Full Syllabus', testName: 'CUET General Test Mock 1', testCode: 'CUET-GAT-01', duration: 60, totalQuestions: 50, marksPerQuestion: 5, negativeMarking: 1, type: 'premium', requiredPlan: 'premium', difficulty: 'Hard', language: 'English & Hindi', category: 'CUET', imageurl: '' }
         ];
 
         const user = JSON.parse(localStorage.getItem('user'));
@@ -1390,18 +1345,12 @@
         let isOffline = false;
 
         function showToast(m, t = 'info', d = 3000) {
-            const c = document.getElementById('toastContainer'),
-                o = document.createElement('div');
+            const c = document.getElementById('toastContainer'), o = document.createElement('div');
             o.className = `toast-item ${t}`;
-            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle',
-                info: 'fa-info-circle' };
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
             o.innerHTML = `<i class="fas ${icons[t]}"></i> ${m}`;
-            c.appendChild(o);
-            c.classList.add('show');
-            setTimeout(() => { o.style.opacity = '0';
-                o.style.transform = 'translateY(-10px)';
-                o.style.transition = '0.3s';
-                setTimeout(() => { o.remove(); if (!c.children.length) c.classList.remove('show') }, 300) }, d);
+            c.appendChild(o); c.classList.add('show');
+            setTimeout(() => { o.style.opacity = '0'; o.style.transform = 'translateY(-10px)'; o.style.transition = '0.3s'; setTimeout(() => { o.remove(); if (!c.children.length) c.classList.remove('show') }, 300) }, d);
         }
 
         function updateOnlineStatus() {
@@ -1413,32 +1362,45 @@
         window.addEventListener('offline', updateOnlineStatus);
 
         function navigate(u) { window.location.href = u; }
-
-        function openSidebar() { const o = document.getElementById('sidebarOverlay');
-            o.classList.remove('hidden');
-            requestAnimationFrame(() => o.classList.add('active'));
-            document.body.classList.add('sidebar-open'); }
-
+        function openSidebar() { const o = document.getElementById('sidebarOverlay'); o.classList.remove('hidden'); requestAnimationFrame(() => o.classList.add('active')); document.body.classList.add('sidebar-open'); }
         function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
-
-        function closeSidebarDirect() { const o = document.getElementById('sidebarOverlay');
-            o.classList.remove('active');
-            document.body.classList.remove('sidebar-open');
-            setTimeout(() => { if (!o.classList.contains('active')) o.classList.add('hidden') }, 400); }
-
+        function closeSidebarDirect() { const o = document.getElementById('sidebarOverlay'); o.classList.remove('active'); document.body.classList.remove('sidebar-open'); setTimeout(() => { if (!o.classList.contains('active')) o.classList.add('hidden') }, 400); }
         function logout() {
+            Swal.fire({ title: 'Logout?', text: 'Are you sure you want to logout?', icon: 'question', showCancelButton: true, confirmButtonText: 'Yes, Logout', cancelButtonText: 'Stay', confirmButtonColor: '#ff4d5a', cancelButtonColor: '#1E3A5F' })
+            .then(r => { if (r.isConfirmed) { localStorage.removeItem('user'); showToast('Logged out', 'success'); setTimeout(() => window.location.href = 'index.html', 800) } });
+        }
+
+        // ---------- APK Download Popup ----------
+        function openInstallPopup() {
             Swal.fire({
-                title: 'Logout?',
-                text: 'Are you sure you want to logout?',
-                icon: 'question',
+                title: '📲 Install TestMaster Pro',
+                html: `
+                <div style="text-align:center;">
+                    <p style="font-size:14px;font-weight:600;color:#243748;margin-bottom:8px;">Get the App Experience!</p>
+                    <p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file and install it on your Android device.</p>
+                    <div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;">
+                        <i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i>
+                        <p style="font-weight:700;color:#1e293b;margin:4px 0;">TestMasterPro.apk</p>
+                        <p style="font-size:10px;color:#94a3b8;">Latest Version · Safe & Secure</p>
+                    </div>
+                </div>`,
+                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
+                confirmButtonColor: '#4f46e5',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, Logout',
-                cancelButtonText: 'Stay',
-                confirmButtonColor: '#ff4d5a',
-                cancelButtonColor: '#1E3A5F'
-            }).then(r => { if (r.isConfirmed) { localStorage.removeItem('user');
-                    showToast('Logged out', 'success');
-                    setTimeout(() => window.location.href = 'index.html', 800) } });
+                cancelButtonText: 'Maybe Later',
+                cancelButtonColor: '#94a3b8',
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions →</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const link = document.createElement('a');
+                    link.href = 'TestMasterPro.apk';
+                    link.download = 'TestMasterPro.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Downloading TestMasterPro.apk...', 'success', 4000);
+                }
+            });
         }
 
         function setAvatar(eid, u) {
@@ -1449,17 +1411,50 @@
         }
 
         async function fetchJSON(p, fb) {
-            try { const r = await fetch(p, { cache: 'no-store' }); if (!r.ok) throw new Error(
-                `HTTP ${r.status}`); const d = await r.json(); if (!Array.isArray(d) || !d.length) throw new Error(
-                    'Empty data');
-                return d } catch (e) { console.warn(`Could not load ${p}, using fallback.`, e.message); return fb || [] }
+            try { const r = await fetch(p, { cache: 'no-store' }); if (!r.ok) throw new Error(`HTTP ${r.status}`); const d = await r.json(); if (!Array.isArray(d) || !d.length) throw new Error('Empty data'); return d; }
+            catch (e) { console.warn(`Could not load ${p}, using fallback.`, e.message); return fb || [] }
+        }
+
+        // Load merged data from Google Sheets + local JSONs
+        async function loadAllData() {
+            let sheetTests = [];
+            let localTests = [];
+
+            // Fetch from Google Sheet
+            try {
+                const sheetResp = await fetch(`${TEST_API_URL}?action=getAllMockTests`, { cache: 'no-store' });
+                if (sheetResp.ok) {
+                    const sheetData = await sheetResp.json();
+                    if (sheetData.success && Array.isArray(sheetData.tests)) {
+                        sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
+                    }
+                }
+            } catch (e) { console.warn('Sheet fetch failed', e); }
+
+            // Fetch from local JSONs (mocks, popular, upcoming)
+            const [localMocks, popular, upcoming] = await Promise.all([
+                fetchJSON(JSON_PATHS.mocks, FALLBACK_MOCKS),
+                fetchJSON(JSON_PATHS.popular, []),
+                fetchJSON(JSON_PATHS.upcoming, [])
+            ]);
+            localTests = [...localMocks, ...popular, ...upcoming].map(t => ({ ...t, fromSheet: false }));
+
+            // Merge: sheet tests take priority
+            if (sheetTests.length === 0 && localTests.length === 0) {
+                allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
+                showToast('Using offline data.', 'warning');
+            } else {
+                const merged = [...sheetTests];
+                const existingCodes = new Set(sheetTests.map(t => t.testCode));
+                localTests.forEach(t => { if (!existingCodes.has(t.testCode)) merged.push(t); });
+                allMocks = merged;
+            }
         }
 
         async function loadPremium() {
             try {
                 if (user?.premiumPlans) userPremiumPlans = user.premiumPlans;
-                const r = await fetch(
-                    `${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user?.username||'')}`);
+                const r = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user?.username||'')}`);
                 const d = await r.json();
                 if (d?.success && Array.isArray(d.premiumPlans)) {
                     userPremiumPlans = d.premiumPlans;
@@ -1476,19 +1471,9 @@
             return true;
         }
 
-        async function loadAllData() {
-            const [mocks, popular, upcoming] = await Promise.all([
-                fetchJSON(JSON_PATHS.mocks, FALLBACK_MOCKS),
-                fetchJSON(JSON_PATHS.popular, FALLBACK_POPULAR),
-                fetchJSON(JSON_PATHS.upcoming, FALLBACK_UPCOMING)
-            ]);
-            return [...mocks, ...popular, ...upcoming];
-        }
-
         function parseURLParams() {
             const p = new URLSearchParams(window.location.search);
-            return { testCode: p.get('testCode')?.trim(), exam: p.get('exam')?.trim(), category: p.get('category')
-                ?.trim() };
+            return { testCode: p.get('testCode')?.trim(), exam: p.get('exam')?.trim(), category: p.get('category')?.trim() };
         }
 
         function renderFilters(baseData) {
@@ -1497,14 +1482,10 @@
             if (fixedExam) filtered = filtered.filter(t => t.exam === fixedExam);
 
             const subjects = [...new Set(filtered.map(t => t.subject).filter(Boolean))].sort();
-            const subjContainer = document.getElementById('subjectChips');
-            subjContainer.innerHTML =
+            document.getElementById('subjectChips').innerHTML =
                 `<button class="vertical-chip ${selectedSubject===''?'active':''}" onclick="selectSubjectFilter('')">📖 All Subjects</button>` +
-                subjects.map(s =>
-                    `<button class="vertical-chip ${selectedSubject===s?'active':''}" onclick="selectSubjectFilter('${s.replace(/'/g,"\\'")}')">${s}</button>`
-                    ).join('');
+                subjects.map(s => `<button class="vertical-chip ${selectedSubject===s?'active':''}" onclick="selectSubjectFilter('${s.replace(/'/g,"\\'")}')">${s}</button>`).join('');
             document.getElementById('subjectBadge').textContent = selectedSubject || 'All';
-            document.getElementById('subjectBadge').className = selectedSubject ? 'fa-count active-badge' : 'fa-count';
 
             let subFiltered = filtered;
             if (selectedSubject) subFiltered = subFiltered.filter(t => t.subject === selectedSubject);
@@ -1513,41 +1494,27 @@
             if (chapters.length) {
                 chapterContainer.innerHTML =
                     `<button class="vertical-chip ${selectedChapter===''?'active':''}" onclick="selectChapterFilter('')">📑 All Chapters</button>` +
-                    chapters.map(ch =>
-                        `<button class="vertical-chip ${selectedChapter===ch?'active':''}" onclick="selectChapterFilter('${ch.replace(/'/g,"\\'")}')">${ch}</button>`
-                        ).join('');
+                    chapters.map(ch => `<button class="vertical-chip ${selectedChapter===ch?'active':''}" onclick="selectChapterFilter('${ch.replace(/'/g,"\\'")}')">${ch}</button>`).join('');
                 document.getElementById('chapterAccordionItem').style.display = '';
             } else {
-                chapterContainer.innerHTML =
-                    '<div style="padding:12px;color:var(--gray-400);font-size:12px;text-align:center;">No chapters available</div>';
+                chapterContainer.innerHTML = '<div style="padding:12px;color:var(--gray-400);font-size:12px;text-align:center;">No chapters available</div>';
                 document.getElementById('chapterAccordionItem').style.display = '';
             }
             document.getElementById('chapterBadge').textContent = selectedChapter || 'All';
-            document.getElementById('chapterBadge').className = selectedChapter ? 'fa-count active-badge' : 'fa-count';
         }
 
         function selectSubjectFilter(subject) {
             selectedSubject = (selectedSubject === subject) ? '' : subject;
             if (selectedSubject && selectedChapter) {
-                const valid = allMocks.some(m => m.subject === selectedSubject && m.chapter === selectedChapter);
-                if (!valid) selectedChapter = '';
+                if (!allMocks.some(m => m.subject === selectedSubject && m.chapter === selectedChapter)) selectedChapter = '';
             }
             renderFilters(allMocks);
             applyFilters();
-            if (selectedSubject) {
-                const chapterItem = document.getElementById('chapterAccordionItem');
-                chapterItem.classList.add('open');
-                setTimeout(() => chapterItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
-            }
+            if (selectedSubject) document.getElementById('chapterAccordionItem').classList.add('open');
         }
-
-        function selectChapterFilter(chapter) { selectedChapter = (selectedChapter === chapter) ? '' : chapter;
-            renderFilters(allMocks);
-            applyFilters(); }
-
+        function selectChapterFilter(chapter) { selectedChapter = (selectedChapter === chapter) ? '' : chapter; renderFilters(allMocks); applyFilters(); }
         function clearAllFilters() {
-            selectedSubject = '';
-            selectedChapter = '';
+            selectedSubject = ''; selectedChapter = '';
             document.getElementById('searchInput').value = '';
             document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
             renderFilters(allMocks);
@@ -1562,33 +1529,28 @@
             if (selectedSubject) filtered = filtered.filter(t => t.subject === selectedSubject);
             if (selectedChapter) filtered = filtered.filter(t => t.chapter === selectedChapter);
             const search = document.getElementById('searchInput')?.value.toLowerCase().trim();
-            if (search) filtered = filtered.filter(t => (t.testName || '').toLowerCase().includes(search) || (t
-                .testCode || '').toLowerCase().includes(search));
+            if (search) filtered = filtered.filter(t => (t.testName || '').toLowerCase().includes(search) || (t.testCode || '').toLowerCase().includes(search));
             const seen = new Set();
-            const unique = filtered.filter(t => { const k = t.testCode; if (seen.has(k)) return false;
-                seen.add(k); return true });
+            const unique = filtered.filter(t => { const k = t.testCode; if (seen.has(k)) return false; seen.add(k); return true; });
             displayTests(unique);
         }
 
         function displayTests(tests) {
             const list = document.getElementById('testList');
             if (!tests.length) {
-                list.innerHTML =
-                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-search"></i></div><h2>No Tests Found</h2><p>Try adjusting filters or search.</p></div>';
+                list.innerHTML = '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-search"></i></div><h2>No Tests Found</h2><p>Try adjusting filters or search.</p></div>';
                 return;
             }
             list.innerHTML = tests.map((test, idx) => {
                 const hasFile = test.file && test.file.trim() !== '';
                 const accessible = hasAccess(test);
                 const isFree = test.type === 'free';
-                const badgeHTML = isFree ? '<span class="badge-free"><i class="fas fa-unlock"></i> Free</span>' :
-                    '<span class="badge-premium"><i class="fas fa-crown"></i> Premium</span>';
-                const attemptBtn = hasFile ?
+                const badgeHTML = isFree ? '<span class="badge-free"><i class="fas fa-unlock"></i> Free</span>' : '<span class="badge-premium"><i class="fas fa-crown"></i> Premium</span>';
+                const attemptBtn = (hasFile || test.fromSheet) ?
                     (accessible ?
-                        `<button class="attempt-btn" onclick="startTest('${test.file.replace(/'/g,"\\'")}','${(test.testCode||'').replace(/'/g,"\\'")}')"><i class="fas fa-play-circle"></i> Attempt Now</button>` :
+                        `<button class="attempt-btn" onclick="startTest('${(test.file||'').replace(/'/g,"\\'")}','${(test.testCode||'').replace(/'/g,"\\'")}','${test.fromSheet?'true':'false'}')"><i class="fas fa-play-circle"></i> Attempt Now</button>` :
                         `<button class="attempt-btn locked" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock</button>`
-                        ) :
-                    `<button class="attempt-btn locked" disabled><i class="fas fa-hourglass-half"></i> Coming Soon</button>`;
+                    ) : `<button class="attempt-btn locked" disabled><i class="fas fa-hourglass-half"></i> Coming Soon</button>`;
 
                 const imageHTML = test.imageurl ?
                     `<img src="${test.imageurl}" alt="${test.exam||'Exam'}" class="card-logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` +
@@ -1596,41 +1558,39 @@
                     `<div class="card-logo-placeholder"><i class="fas fa-file-alt"></i></div>`;
 
                 return `
-                    <div class="test-card" style="animation-delay:${idx*0.04}s">
-                        <div class="card-header-row">
-                            ${imageHTML}
-                            <div class="card-header-info">
-                                <div class="badge-row">
-                                    <span class="badge-exam">${test.exam||'General'}</span>
-                                    ${badgeHTML}
-                                </div>
+                <div class="test-card" style="animation-delay:${idx*0.04}s">
+                    <div class="card-header-row">
+                        ${imageHTML}
+                        <div class="card-header-info">
+                            <div class="badge-row">
+                                <span class="badge-exam">${test.exam||'General'}</span>
+                                ${badgeHTML}
                             </div>
                         </div>
-                        <h4>${test.testName||'Untitled Test'}</h4>
-                        <div class="meta-grid">
-                            <div class="meta-item"><i class="fas fa-clock"></i><span>${test.duration||'?'}m</span></div>
-                            <div class="meta-item"><i class="fas fa-list-ol"></i><span>${test.totalQuestions||'?'} Qs</span></div>
-                            <div class="meta-item"><i class="fas fa-star"></i><span>+${test.marksPerQuestion||'?'} Marks</span></div>
-                        </div>
-                        <div class="card-tags-row">
-                            <span class="tag-chip"><i class="fas fa-bookmark"></i> ${test.subject||'General'}</span>
-                            ${test.chapter?`<span class="tag-chip"><i class="fas fa-layer-group"></i> ${test.chapter}</span>`:''}
-                            ${test.language?`<span class="tag-chip"><i class="fas fa-globe"></i> ${test.language}</span>`:''}
-                        </div>
-                        <div class="action-buttons">
-                            ${attemptBtn}
-                            <button class="leaderboard-btn" onclick="viewLeaderboard('${(test.testCode||'').replace(/'/g,"\\'")}','${(test.exam||'').replace(/'/g,"\\'")}')"><i class="fas fa-trophy"></i> Rank</button>
-                        </div>
                     </div>
-                `;
+                    <h4>${test.testName||'Untitled Test'}</h4>
+                    <div class="meta-grid">
+                        <div class="meta-item"><i class="fas fa-clock"></i><span>${test.duration||'?'}m</span></div>
+                        <div class="meta-item"><i class="fas fa-list-ol"></i><span>${test.totalQuestions||'?'} Qs</span></div>
+                        <div class="meta-item"><i class="fas fa-star"></i><span>+${test.marksPerQuestion||'?'} Marks</span></div>
+                    </div>
+                    <div class="card-tags-row">
+                        <span class="tag-chip"><i class="fas fa-bookmark"></i> ${test.subject||'General'}</span>
+                        ${test.chapter?`<span class="tag-chip"><i class="fas fa-layer-group"></i> ${test.chapter}</span>`:''}
+                        ${test.language?`<span class="tag-chip"><i class="fas fa-globe"></i> ${test.language}</span>`:''}
+                    </div>
+                    <div class="action-buttons">
+                        ${attemptBtn}
+                        <button class="leaderboard-btn" onclick="viewLeaderboard('${(test.testCode||'').replace(/'/g,"\\'")}','${(test.exam||'').replace(/'/g,"\\'")}')"><i class="fas fa-trophy"></i> Rank</button>
+                    </div>
+                </div>`;
             }).join('');
         }
 
         function handleLockedTest(plan) {
-            const planName = plan.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             Swal.fire({
                 title: '🔒 Premium Content',
-                html: `<p>This test requires <b>${planName}</b> plan.</p>`,
+                html: `<p>This test requires <b>${plan.replace(/_/g,' ')}</b> plan.</p>`,
                 icon: 'info',
                 confirmButtonText: 'View Plans',
                 confirmButtonColor: '#FBBF24',
@@ -1642,72 +1602,65 @@
 
         function viewLeaderboard(code, exam) {
             localStorage.setItem('current_exam', exam || '');
-            window.location.href =
-                `leaderboard.html?testCode=${encodeURIComponent(code)}&exam=${encodeURIComponent(exam||'')}`;
+            window.location.href = `leaderboard.html?testCode=${encodeURIComponent(code)}&exam=${encodeURIComponent(exam||'')}`;
         }
 
-        function startTest(file, code) {
-            if (!file) return showToast('Test file not available yet.', 'warning');
-            localStorage.setItem('last_mock_file', file);
-            window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(code)}`;
+        function startTest(file, code, fromSheet) {
+            if (!file && fromSheet !== 'true') return showToast('Test file not available yet.', 'warning');
+            if (fromSheet === 'true') {
+                window.location.href = `test2.html?testCode=${encodeURIComponent(code)}`;
+            } else {
+                localStorage.setItem('last_mock_file', file);
+                window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(code)}`;
+            }
         }
 
         function toggleAccordion(bodyId, arrowId, itemId) {
             const item = document.getElementById(itemId);
             const isOpen = item.classList.contains('open');
             document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
-            if (!isOpen) { item.classList.add('open');
-                setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150); }
+            if (!isOpen) { item.classList.add('open'); setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150); }
         }
-        document.addEventListener('click', function(e) { if (!e.target.closest('.filter-accordion-item') && !e.target
-                .closest('.filter-accordion-header')) { document.querySelectorAll('.filter-accordion-item.open')
-                    .forEach(el => el.classList.remove('open')); } });
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.filter-accordion-item') && !e.target.closest('.filter-accordion-header'))
+                document.querySelectorAll('.filter-accordion-item.open').forEach(el => el.classList.remove('open'));
+        });
 
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
             const data = await fetchJSON(JSON_PATHS.mocks, FALLBACK_MOCKS);
             const cats = new Map();
-            data.forEach(item => { const cat = item.category || 'Other'; if (!cats.has(cat)) cats.set(cat,
-                new Set());
-                cats.get(cat).add(item.exam); });
+            data.forEach(item => { const cat = item.category || 'Other'; if (!cats.has(cat)) cats.set(cat, new Set()); cats.get(cat).add(item.exam); });
             let html = '';
-            cats.forEach((exams, cat) => html +=
-                `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}&exam=${encodeURIComponent([...exams][0]||'')}')">${cat}</a></li>`
-                );
-            html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
-            html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
+            cats.forEach((exams, cat) => html += `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}&exam=${encodeURIComponent([...exams][0]||'')}')">${cat}</a></li>`);
+            html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li><li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             c.innerHTML = html;
         }
 
         async function renderFooterUpcoming() {
             const c = document.getElementById('footerUpcomingExams');
-            const d = await fetchJSON(JSON_PATHS.upcomingfooter, FALLBACK_UPCOMING_FOOTER);
+            const d = await fetchJSON(JSON_PATHS.upcomingfooter, []);
             if (!d.length) { c.innerHTML = '<li><a>No upcoming exams</a></li>'; return; }
-            c.innerHTML = d.map(e =>
-                `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join(
-                '');
+            c.innerHTML = d.map(e => `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
         }
 
         async function init() {
             updateOnlineStatus();
-            if (user) { setAvatar('userInitial', user);
-                setAvatar('sidebarAvatar', user);
-                document.getElementById('sidebarUserName').textContent = user.name || 'Student';
-                document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner'; } else { document
-                    .getElementById('userInitial').textContent = 'G';
-                document.getElementById('sidebarAvatar').textContent = 'G';
-                document.getElementById('sidebarUserName').textContent = 'Guest';
-                document.getElementById('sidebarUserTag').textContent = 'Visitor'; }
+            if (user) { setAvatar('userInitial', user); setAvatar('sidebarAvatar', user); document.getElementById('sidebarUserName').textContent = user.name || 'Student'; document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner'; }
+            else { document.getElementById('userInitial').textContent = 'G'; document.getElementById('sidebarAvatar').textContent = 'G'; document.getElementById('sidebarUserName').textContent = 'Guest'; document.getElementById('sidebarUserTag').textContent = 'Visitor'; }
 
             const params = parseURLParams();
-            allMocks = await loadAllData();
+            await loadAllData();
             await loadPremium();
 
             if (params.testCode) {
                 const test = allMocks.find(t => t.testCode === params.testCode);
-                if (test) { document.getElementById('filterAccordion').style.display = 'none';
-                    displayTests([test]); } else { document.getElementById('testList').innerHTML =
-                        '<div class="empty-selection"><h2>Test not found</h2></div>'; }
+                if (test) {
+                    document.getElementById('filterAccordion').style.display = 'none';
+                    displayTests([test]);
+                } else {
+                    document.getElementById('testList').innerHTML = '<div class="empty-selection"><h2>Test not found</h2></div>';
+                }
                 return;
             }
 
@@ -1720,8 +1673,7 @@
             renderFooterUpcoming();
         }
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('sidebarOverlay')
-                .classList.contains('active')) closeSidebarDirect(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('sidebarOverlay').classList.contains('active')) closeSidebarDirect(); });
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
