@@ -316,7 +316,7 @@
         .feedback-btn { background:var(--primary); color:#fff; border:none; padding:12px 20px; border-radius:24px; font-weight:700; font-size:13px; cursor:pointer; transition:var(--transition-smooth); display:flex; align-items:center; gap:6px; font-family:var(--font); box-shadow:0 4px 12px rgba(36,55,72,0.25); }
         .feedback-btn:hover { background:var(--primary-dark); transform:translateY(-2px); box-shadow:0 6px 18px rgba(36,55,72,0.35); }
 
-        /* Footer APK Button - Big like exam.html */
+        /* Footer APK Button */
         .footer-install-section {
             text-align: center;
             margin: 20px 0 24px;
@@ -576,7 +576,7 @@
         let isOffline = false;
         const user = JSON.parse(localStorage.getItem('user'));
 
-        // ---------- APK Download Popup (Same as exam.html) ----------
+        // ---------- APK Download Popup ----------
         function openInstallPopup() {
             Swal.fire({
                 title: '📲 Install TestMaster Pro',
@@ -654,40 +654,46 @@
         // ---------- Global merged mock data ----------
         let allMocks = [];
 
+        // Load local mocks.json immediately and render, then fetch sheet and merge/update
         async function loadAllMocks() {
-            let sheetTests = [];
-            let localTests = [];
-            try {
-                const sheetResp = await fetch(`${TEST_API_URL}?action=getAllMockTests`, { cache: 'no-store' });
-                if (sheetResp.ok) {
-                    const sheetData = await sheetResp.json();
-                    if (sheetData.success && Array.isArray(sheetData.tests)) {
-                        sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
-                    }
-                }
-            } catch (e) { console.warn('Sheet fetch failed', e); }
+            // Step 1: Load local mocks instantly
             try {
                 const localResp = await fetch(JSON_PATHS.mocks, { cache: 'no-store' });
                 if (localResp.ok) {
                     const localData = await localResp.json();
                     if (Array.isArray(localData) && localData.length) {
-                        localTests = localData.map(t => ({ ...t, fromSheet: false }));
+                        allMocks = localData.map(t => ({ ...t, fromSheet: false }));
+                    } else {
+                        allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
                     }
+                } else {
+                    allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
                 }
-            } catch (e) { console.warn('mocks.json fetch failed', e); }
-            if (sheetTests.length === 0 && localTests.length === 0) {
+            } catch (e) {
                 allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
-                showToast('Using offline data. Some tests may be unavailable.', 'warning');
-            } else {
-                const merged = [...sheetTests];
-                const existingCodes = new Set(sheetTests.map(t => t.testCode));
-                localTests.forEach(test => {
-                    if (!existingCodes.has(test.testCode)) merged.push(test);
-                });
-                allMocks = merged;
             }
+
+            // Render immediately with local data
             renderMockAccordion();
             renderFooterExamCategories();
+
+            // Step 2: Fetch sheet data in background and update
+            try {
+                const sheetResp = await fetch(`${TEST_API_URL}?action=getAllMockTests`, { cache: 'no-store' });
+                if (sheetResp.ok) {
+                    const sheetData = await sheetResp.json();
+                    if (sheetData.success && Array.isArray(sheetData.tests)) {
+                        const sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
+                        // Merge: sheet tests take priority over local
+                        const existingCodes = new Set(sheetTests.map(t => t.testCode));
+                        const localOnly = allMocks.filter(t => !existingCodes.has(t.testCode));
+                        allMocks = [...sheetTests, ...localOnly];
+                        // Re-render with updated data
+                        renderMockAccordion();
+                        renderFooterExamCategories();
+                    }
+                }
+            } catch (e) { console.warn('Sheet fetch failed, using local data only.', e); }
         }
 
         // ---------- Upcoming Exams ----------
@@ -803,7 +809,7 @@
             }
             fetchAndDisplayServerStreak();renderNotificationBell();loadHeroSlides();
             renderUpcomingExams();
-            loadAllMocks();
+            loadAllMocks();          // Instantly loads local, then updates from sheet
             renderPopularSlider();
             renderFooterUpcoming();
         }
