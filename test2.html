@@ -488,13 +488,12 @@
             border: 1px solid var(--card-border);
             box-shadow: var(--shadow);
             transition: var(--transition);
-            /* REMOVED position: sticky; so it scrolls away normally */
         }
 
         @media (max-width: 768px) {
             .top-bar {
                 border-radius: var(--radius);
-                margin: 0 0 16px 0;  /* normal margin */
+                margin: 0 0 16px 0;
             }
         }
 
@@ -854,6 +853,16 @@
                 padding: 24px;
                 line-height: 1.9;
             }
+        }
+
+        /* image inside question text */
+        .question-text img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 18px auto 0;
+            box-shadow: var(--shadow);
         }
 
         /* ========== OPTIONS ========== */
@@ -1699,14 +1708,23 @@
             renderQuestion();
         }
 
-        // ==================== RENDER QUESTION ====================
+        // ==================== RENDER QUESTION (with image support) ====================
         function renderQuestion() {
             if (state.testSubmitted) return;
             const q = questions[state.currentIndex];
             document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${questions.length}`;
             const useHindi = state.lang === 'hi' && q.hi;
-            document.getElementById('questionText').innerHTML = 
-                `<div style="font-weight:600;">${useHindi ? q.hi : q.en}</div>`;
+
+            // Build question HTML: text + optional image
+            let questionHTML = `<div style="font-weight:600;">${useHindi ? q.hi : q.en}</div>`;
+            if (q.image_url) {
+                const imgUrl = `https://testmaster-pro.github.io/Questions-image/${q.image_url}`;
+                questionHTML += `<div style="margin-top:18px; text-align:center;">
+                    <img src="${imgUrl}" alt="Question image" style="max-width:100%; height:auto; border-radius:12px; box-shadow: var(--shadow);" />
+                </div>`;
+            }
+            document.getElementById('questionText').innerHTML = questionHTML;
+
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = '';
             const opts = useHindi ? q.oHi : q.oEn;
