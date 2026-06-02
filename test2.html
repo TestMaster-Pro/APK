@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mock Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg: #f1f5f9;
+            --bg2: #ffffff;
+            --card: rgba(255, 255, 255, 0.7);
+            --card-solid: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text: #1e293b;
+            --text-heading: #0f172a;
+            --text-secondary: #64748b;
+            --border: rgba(0, 0, 0, 0.1);
+            --option-bg: rgba(0, 0, 0, 0.03);
+            --option-bg-solid: #f8fafc;
+            --hover-bg: rgba(124, 58, 237, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-bg-solid: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --overlay-bg: rgba(0, 0, 0, 0.7);
+            --sidebar-bg: rgba(255, 255, 255, 0.97);
+            --sidebar-border: rgba(0, 0, 0, 0.1);
+            --badge-bg: rgba(124, 58, 237, 0.1);
+            --badge-text: #5b21b6;
+            --welcome-glow: rgba(124, 58, 237, 0.35);
+            --countdown-color: #1e293b;
+            --palette-answered-text: #ffffff;
+            --palette-marked-text: #0f172a;
+            --toast-bg: rgba(255, 255, 255, 0.9);
+            --btn-glass-bg: rgba(0, 0, 0, 0.04);
+            --btn-glass-border: rgba(0, 0, 0, 0.12);
+            --btn-glass-text: #1e293b;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --bg2: #1e293b;
+            --card: rgba(255, 255, 255, 0.05);
+            --card-solid: #1e293b;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-heading: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(255, 255, 255, 0.05);
+            --option-bg-solid: #1e293b;
+            --hover-bg: rgba(124, 58, 237, 0.15);
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-bg-solid: rgba(15, 23, 42, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+            --overlay-bg: rgba(0, 0, 0, 0.85);
+            --sidebar-bg: rgba(15, 23, 42, 0.97);
+            --sidebar-border: rgba(255, 255, 255, 0.12);
+            --badge-bg: rgba(124, 58, 237, 0.2);
+            --badge-text: #c4b5fd;
+            --welcome-glow: rgba(124, 58, 237, 0.5);
+            --countdown-color: #ffffff;
+            --palette-answered-text: #ffffff;
+            --palette-marked-text: #0f172a;
+            --toast-bg: rgba(15, 23, 42, 0.9);
+            --btn-glass-bg: rgba(255, 255, 255, 0.06);
+            --btn-glass-border: rgba(255, 255, 255, 0.15);
+            --btn-glass-text: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 10px;
+            animation: fadeIn 0.6s ease-in-out;
+            transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 20px var(--welcome-glow), 0 0 60px var(--welcome-glow);
+            }
+            50% {
+                box-shadow: 0 0 35px var(--welcome-glow), 0 0 90px var(--welcome-glow);
+            }
+        }
+        @keyframes countPop {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes countPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Welcome Overlay */
+        .welcome-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--overlay-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: opacity 0.5s ease;
+            opacity: 1;
+        }
+        .welcome-overlay.fading-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .welcome-card {
+            background: var(--glass-bg);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 36px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: pulseGlow 2.5s ease-in-out infinite;
+            max-width: 90vw;
+            width: 400px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.4s ease;
+        }
+        .welcome-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            margin: 0 auto 14px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            animation: countPulse 1.5s ease-in-out infinite;
+        }
+        .welcome-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .welcome-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+        .welcome-candidate {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .welcome-exam-name {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .welcome-test-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+            line-height: 1.4;
+            padding: 0 8px;
+        }
+        .countdown-number {
+            font-size: 70px;
+            font-weight: 900;
+            color: var(--countdown-color);
+            line-height: 1;
+            animation: countPop 0.6s ease-out;
+            transition: color 0.3s ease;
+        }
+        .countdown-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Sidebar */
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .sidebar-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sidebar-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            max-width: 88vw;
+            height: 100%;
+            height: 100dvh;
+            z-index: 9001;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-left: 1px solid var(--sidebar-border);
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.35);
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 24px 20px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .sidebar-panel.active {
+            transform: translateX(0);
+        }
+        .sidebar-close {
+            align-self: flex-end;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid var(--glass-border);
+            background: var(--btn-glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .sidebar-close:hover {
+            background: var(--danger);
+            color: white;
+            border-color: transparent;
+            transform: rotate(90deg);
+        }
+        .sidebar-section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+        .sidebar-section h3 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sidebar-section h3 i {
+            font-size: 14px;
+        }
+        .sidebar-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text);
+            gap: 8px;
+        }
+        .sidebar-info-row:last-child {
+            border-bottom: none;
+        }
+        .sidebar-info-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+        .sidebar-info-value {
+            font-weight: 700;
+            text-align: right;
+            color: var(--text-heading);
+            word-break: break-word;
+        }
+        .sidebar-info-value.highlight {
+            color: var(--primary-light);
+        }
+        .sidebar-steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .sidebar-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .sidebar-steps li .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .sidebar-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .sidebar-legend span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-dot-sidebar {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        /* Main Container */
+        .mock-container {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding-bottom: 16px;
+        }
+        @media (min-width: 1400px) {
+            .mock-container {
+                max-width: 1200px;
+            }
+        }
+        @media (max-width: 768px) {
+            .mock-container {
+                max-width: 100%;
+            }
+        }
+
+        /* Top bar - Two Row Layout */
+        .top-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .top-bar-row1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: nowrap;
+        }
+        .top-bar-row2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .top-actions-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .top-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .test-title-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+        .exam-icon-top {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+        .exam-icon-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .test-title {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            line-height: 1.3;
+        }
+        .test-title .exam-name-line {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .test-title .test-name-line {
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-heading);
+        }
+
+        /* Candidate badge - right side of row 1 */
+        .candidate-badge-top {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+            background: var(--btn-glass-bg);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 4px 9px 4px 4px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            max-width: 130px;
+        }
+        .candidate-badge-top .avatar-mini {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .candidate-badge-top .avatar-mini img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .candidate-badge-top .candidate-name-mini {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70px;
+        }
+
+        /* Buttons in row 2 */
+        .exit-btn-header {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .exit-btn-header:hover {
+            background: var(--danger);
+            color: #fff;
+            border-color: transparent;
+            transform: scale(1.08);
+        }
+        .info-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-light);
+            background: var(--badge-bg);
+            color: var(--primary-light);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .info-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            transform: scale(1.08);
+            box-shadow: 0 0 16px rgba(124, 58, 237, 0.4);
+        }
+        .lang-btn {
+            padding: 5px 10px;
+            border-radius: 16px;
+            border: 2px solid var(--accent);
+            background: var(--card);
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .lang-btn.active {
+            background: var(--accent);
+            color: #0f172a;
+            border-color: transparent;
+        }
+        .theme-toggle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid var(--glass-border);
+            background: var(--btn-glass-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: rotate(20deg);
+        }
+        .timer-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-heading);
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .timer-pill.warning {
+            background: rgba(239, 68, 68, 0.18);
+            border-color: rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
+            animation: pulse 0.8s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        /* Progress */
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 10px 16px;
+            margin-bottom: 10px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-bar {
+            height: 5px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Question card */
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            margin-bottom: 10px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            animation: slideIn 0.35s ease;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        @media (min-width: 1024px) {
+            .question-card {
+                padding: 28px 32px;
+                min-height: 400px;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .q-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 11px;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+        }
+        .q-marks {
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.15);
+            padding: 5px 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+        .question-text {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.7;
+            color: var(--text-heading);
+            background: var(--option-bg);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 16px;
+            word-wrap: break-word;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        @media (min-width: 1024px) {
+            .question-text {
+                font-size: 15px;
+                padding: 20px;
+                line-height: 1.8;
+            }
+        }
+
+        /* Options grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            flex: 1;
+        }
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (min-width: 1024px) {
+            .options-grid {
+                gap: 12px;
+            }
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 16px;
+            background: var(--option-bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text);
+            backdrop-filter: blur(4px);
+            min-height: 46px;
+        }
+        @media (min-width: 1024px) {
+            .option-card {
+                padding: 16px 20px;
+                font-size: 13px;
+                min-height: 54px;
+                gap: 12px;
+            }
+        }
+        .option-card:hover {
+            border-color: var(--primary-light);
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+        }
+        .option-card.selected {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--primary-light);
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .option-card.selected .option-letter {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        /* Action row */
+        .action-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        .btn {
+            padding: 9px 12px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--btn-glass-bg);
+            backdrop-filter: blur(8px);
+            color: var(--btn-glass-text);
+            flex: 1;
+            justify-content: center;
+            min-width: 55px;
+            white-space: nowrap;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .btn-mark {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: var(--accent);
+        }
+        .btn-clear {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: var(--success);
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-light);
+        }
+
+        /* Submit button above palette */
+        .submit-above-palette {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .submit-above-palette:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        /* Palette */
+        .palette-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--glass-border);
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        .palette-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-heading);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 500px) {
+            .palette-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .palette-grid {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 7px;
+            }
+        }
+        .palette-num {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--option-bg);
+            border-radius: 7px;
+            font-weight: 700;
+            font-size: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+            color: var(--text);
+            min-width: 24px;
+            min-height: 24px;
+        }
+        .palette-num:hover {
+            background: var(--hover-bg);
+            transform: scale(1.05);
+        }
+        .palette-num.answered {
+            background: var(--primary);
+            color: var(--palette-answered-text);
+        }
+        .palette-num.marked {
+            background: var(--accent);
+            color: var(--palette-marked-text);
+        }
+        .palette-num.current {
+            border-color: var(--primary-light);
+            background: rgba(124, 58, 237, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 8px rgba(124, 58, 237, 0.3);
+        }
+        .legend {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .swipe-hint {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            opacity: 0.7;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .swipe-hint {
+                display: block;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            background: var(--toast-bg);
+            backdrop-filter: blur(20px);
+            padding: 10px 16px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 12px;
+            display: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            animation: toastIn 0.3s ease;
+        }
+
+        /* Scrollbar */
+        .sidebar-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar-panel::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        /* Extra small screens */
+        @media (max-width: 380px) {
+            .candidate-badge-top {
+                max-width: 100px;
+            }
+            .candidate-badge-top .candidate-name-mini {
+                max-width: 50px;
+                font-size: 10px;
+            }
+            .test-title .test-name-line {
+                font-size: 11px;
+            }
+            .test-title .exam-name-line {
+                font-size: 9px;
+            }
+            .timer-pill {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+            .top-bar {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- Welcome Overlay -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-card">
+            <div class="welcome-icon" id="welcomeExamIcon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="welcome-title">Best of Luck!</div>
+            <div class="welcome-candidate" id="welcomeCandidateLine">Welcome!</div>
+            <div class="welcome-exam-name" id="welcomeExamName">Loading...</div>
+            <div class="welcome-test-name" id="welcomeTestName"></div>
+            <div class="countdown-number" id="countdownNumber">3</div>
+            <div class="countdown-label">GET READY</div>
+        </div>
+    </div>
+
+    <!-- Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar Panel -->
+    <div class="sidebar-panel" id="sidebarPanel">
+        <button class="sidebar-close" onclick="closeSidebar()" title="Close"><i class="fas fa-times"></i></button>
+        <div class="sidebar-section">
+            <h3><i class="fas fa-info-circle"></i> Test Information</h3>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">📝 Test Name</span><span class="sidebar-info-value highlight" id="siTestName">--</span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">🏛️ Exam</span><span class="sidebar-info-value" id="siExam">--</span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">📚 Subject</span><span class="sidebar-info-value" id="siSubject">--</span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">📋 Total Questions</span><span class="sidebar-info-value" id="siTotalQ">--</span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">⭐ Marks per Question</span><span class="sidebar-info-value highlight">+<span id="siMarks">5</span></span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">❌ Negative Marking</span><span class="sidebar-info-value" style="color:#ef4444;">-<span id="siNeg">1</span></span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">⏱️ Duration</span><span class="sidebar-info-value" id="siDuration">--</span></div>
+            <div class="sidebar-info-row"><span class="sidebar-info-label">👤 Candidate</span><span class="sidebar-info-value" id="siCandidate">--</span></div>
+        </div>
+        <div class="sidebar-section">
+            <h3><i class="fas fa-question-circle"></i> How to Use</h3>
+            <ul class="sidebar-steps">
+                <li><span class="step-num">1</span> Read each question and click an option to answer.</li>
+                <li><span class="step-num">2</span> Use <strong>Prev / Next</strong> or <strong>swipe</strong> to navigate.</li>
+                <li><span class="step-num">3</span> Click <strong>Mark</strong> 🚩 to flag for review.</li>
+                <li><span class="step-num">4</span> Use <strong>Clear</strong> 🧹 to remove your answer.</li>
+                <li><span class="step-num">5</span> Track progress via the palette below.</li>
+                <li><span class="step-num">6</span> <strong>Submit</strong> when done or timer auto-submits.</li>
+                <li><span class="step-num">7</span> <strong>Keys:</strong> Arrows=nav, A/B/C/D=select, M=mark, Backspace=clear.</li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3><i class="fas fa-palette"></i> Palette Legend</h3>
+            <div class="sidebar-legend">
+                <span><span class="legend-dot-sidebar" style="background:var(--primary);"></span> Answered</span>
+                <span><span class="legend-dot-sidebar" style="background:var(--accent);"></span> Marked</span>
+                <span><span class="legend-dot-sidebar" style="border:2px solid var(--primary-light);background:transparent;"></span> Current</span>
+                <span><span class="legend-dot-sidebar" style="background:var(--option-bg);border:1px solid var(--border);"></span> Unvisited</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="mock-container" id="mainContainer">
+        <!-- Top bar - Two Row Layout -->
+        <div class="top-bar">
+            <!-- Row 1: Exam details (left) + Candidate name (right) -->
+            <div class="top-bar-row1">
+                <div class="test-title-group">
+                    <div class="exam-icon-top" id="examIconTop"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="test-title">
+                        <span class="exam-name-line" id="examNameLine">Loading...</span>
+                        <span class="test-name-line" id="testNameLine">Loading...</span>
+                    </div>
+                </div>
+                <div class="candidate-badge-top" id="candidateBadgeTop">
+                    <div class="avatar-mini" id="avatarMini">U</div>
+                    <span class="candidate-name-mini" id="candidateNameMini">User</span>
+                </div>
+            </div>
+            <!-- Row 2: Actions (left) + Timer (right) -->
+            <div class="top-bar-row2">
+                <div class="top-actions-left">
+                    <button class="exit-btn-header" onclick="confirmExit()" title="Exit Test"><i class="fas fa-sign-out-alt"></i></button>
+                    <button class="info-btn" onclick="openSidebar()" title="Info & Help"><i class="fas fa-circle-info"></i></button>
+                    <button class="lang-btn" id="langBtn" onclick="toggleLanguage()" style="display:none;"><span>🇮🇳</span> <span id="langText">हिंदी</span></button>
+                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Mode"><i class="fas fa-sun" id="themeIcon"></i></button>
+                </div>
+                <div class="top-actions-right">
+                    <div class="timer-pill" id="timerPill"><i class="fas fa-hourglass-half"></i> <span id="timerText">--:--</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-card">
+            <div class="progress-header"><span>📊 Progress</span><span id="progressText">0/0 answered</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/0</span>
+                <span class="q-marks" id="qMarks">+5 / -1</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div class="action-row">
+                <button class="btn" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-mark" onclick="toggleMark()" id="markBtn"><i class="fas fa-flag"></i> Mark</button>
+                <button class="btn btn-clear" onclick="clearAnswer()" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+        </div>
+
+        <!-- Submit above palette -->
+        <button class="submit-above-palette" onclick="submitTest()"><i class="fas fa-check-double"></i> Submit Test</button>
+
+        <!-- Palette -->
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-title">📋 Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:var(--primary);"></span> Answered</span>
+                <span><span class="legend-dot" style="background:var(--accent);"></span> Marked</span>
+                <span><span class="legend-dot" style="border:2px solid var(--primary-light);background:transparent;"></span> Current</span>
+            </div>
+        </div>
+
+        <div class="swipe-hint" id="swipeHint"><i class="fas fa-arrow-left"></i> Swipe to navigate <i class="fas fa-arrow-right"></i></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const API_URL =
+            'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
+        const urlParams = new URLSearchParams(window.location.search);
+        const testCode = urlParams.get('testCode');
+        if (!testCode) { Swal.fire({ icon: 'error', title: 'Test code missing', confirmButtonColor: '#6366f1' }).then(() =>
+                window.location.href = 'dashboard.html'); }
+
+        let testConfig = null;
+        let questions = [];
+        const state = {
+            currentIndex: 0,
+            answers: {},
+            markedQuestions: new Set(),
+            timeLeft: 0,
+            timerInterval: null,
+            testSubmitted: false,
+            lang: 'en',
+            theme: 'light',
+            welcomeDone: false,
+            candidateName: 'Candidate'
+        };
+
+        // ==================== WELCOME SEQUENCE ====================
+        async function runWelcomeSequence() {
+            const overlay = document.getElementById('welcomeOverlay');
+            const countdownEl = document.getElementById('countdownNumber');
+            const countdownLabel = document.querySelector('.countdown-label');
+
+            if (testConfig) {
+                const examIcon = document.getElementById('welcomeExamIcon');
+                if (testConfig.imageurl) examIcon.innerHTML =
+                    `<img src="${testConfig.imageurl}" alt="${testConfig.exam || 'Exam'}">`;
+                else examIcon.innerHTML = `<i class="fas fa-graduation-cap"></i>`;
+                document.getElementById('welcomeExamName').textContent = testConfig.exam || 'Exam';
+                document.getElementById('welcomeTestName').textContent = testConfig.testName || '';
+            }
+            document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + (state.candidateName ||
+                'Candidate') + '!';
+
+            const seq = ['3', '2', '1', 'Go!'];
+            let step = 0;
+
+            function showCountdown() {
+                if (step >= seq.length) {
+                    overlay.classList.add('fading-out');
+                    state.welcomeDone = true;
+                    if (testConfig && !state.timerInterval && !state.testSubmitted) startTimer();
+                    setTimeout(() => { overlay.style.display = 'none'; }, 500);
+                    return;
+                }
+                countdownEl.textContent = seq[step];
+                countdownEl.style.animation = 'none';
+                void countdownEl.offsetWidth;
+                countdownEl.style.animation = 'countPop 0.6s ease-out';
+                if (step === seq.length - 1) { countdownLabel.textContent = "🎉 LET'S GO!"; countdownEl.style.color =
+                        'var(--success)'; }
+                step++;
+                setTimeout(showCountdown, step === seq.length ? 600 : 850);
+            }
+            setTimeout(showCountdown, 400);
+        }
+
+        // ==================== SIDEBAR ====================
+        function openSidebar() { document.getElementById('sidebarPanel').classList.add('active'); document.getElementById(
+                'sidebarBackdrop').classList.add('active');
+            document.body.style.overflow = 'hidden'; }
+
+        function closeSidebar() { document.getElementById('sidebarPanel').classList.remove('active'); document.getElementById(
+                'sidebarBackdrop').classList.remove('active');
+            document.body.style.overflow = ''; }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+        // ==================== THEME (system + manual) ====================
+        function applyTheme(theme) {
+            state.theme = theme;
+            document.body.setAttribute('data-theme', theme);
+            document.getElementById('themeIcon').className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            document.getElementById('themeToggle').title = theme === 'dark' ? 'Switch to Light Mode' :
+                'Switch to Dark Mode';
+            localStorage.setItem('mock_theme', theme);
+        }
+
+        function toggleTheme() {
+            const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('mock_theme');
+            if (saved) {
+                applyTheme(saved);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(prefersDark ? 'dark' : 'light');
+            }
+        }
+
+        // ==================== LOAD TEST DATA ====================
+        async function loadTestData() {
+            try {
+                const res = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
+                const data = await res.json();
+                if (!data.success) { Swal.fire({ icon: 'error', title: 'Test not found', text: data.error,
+                        confirmButtonColor: '#6366f1' }).then(() => window.location.href =
+                    'dashboard.html'); return; }
+                testConfig = data.test;
+                questions = testConfig.questions;
+                if (!Array.isArray(questions) || questions.length === 0) { Swal.fire({ icon: 'error',
+                        title: 'No questions', confirmButtonColor: '#6366f1' }).then(() => window.location
+                        .href = 'dashboard.html'); return; }
+                state.timeLeft = testConfig.duration * 60;
+
+                // Top bar exam info
+                const examIconTop = document.getElementById('examIconTop');
+                if (testConfig.imageurl) examIconTop.innerHTML =
+                    `<img src="${testConfig.imageurl}" alt="${testConfig.exam || 'Exam'}">`;
+                else examIconTop.innerHTML = `<i class="fas fa-graduation-cap"></i>`;
+                document.getElementById('examNameLine').textContent = testConfig.exam || 'Exam';
+                document.getElementById('testNameLine').textContent = testConfig.testName || 'Untitled';
+                document.getElementById('qMarks').textContent =
+                    `+${testConfig.marksPerQuestion || 1} / -${testConfig.negativeMarking || 0}`;
+
+                // Sidebar info
+                document.getElementById('siTestName').textContent = testConfig.testName || 'Untitled';
+                document.getElementById('siExam').textContent = testConfig.exam || 'N/A';
+                document.getElementById('siSubject').textContent = testConfig.subject || 'N/A';
+                document.getElementById('siTotalQ').textContent = questions.length;
+                document.getElementById('siMarks').textContent = testConfig.marksPerQuestion || 1;
+                document.getElementById('siNeg').textContent = testConfig.negativeMarking || 0;
+                document.getElementById('siDuration').textContent = testConfig.duration + ' min';
+
+                // Candidate name
+                const storedUser = JSON.parse(localStorage.getItem('user'));
+                if (storedUser && storedUser.name) { state.candidateName = storedUser.name; }
+                updateCandidateBadge();
+
+                // Language
+                if (testConfig.language && testConfig.language.toLowerCase().includes('hindi')) {
+                    document.getElementById('langBtn').style.display = 'flex';
+                    if (localStorage.getItem('mock_lang') === 'hi') { state.lang = 'hi';
+                        document.getElementById('langBtn').classList.add('active');
+                        document.getElementById('langText').textContent = 'English'; }
+                }
+
+                // Welcome screen
+                const examIcon = document.getElementById('welcomeExamIcon');
+                if (testConfig.imageurl) examIcon.innerHTML =
+                    `<img src="${testConfig.imageurl}" alt="${testConfig.exam || 'Exam'}">`;
+                else examIcon.innerHTML = `<i class="fas fa-graduation-cap"></i>`;
+                document.getElementById('welcomeExamName').textContent = testConfig.exam || 'Exam';
+                document.getElementById('welcomeTestName').textContent = testConfig.testName || '';
+                document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + (state.candidateName ||
+                    'Candidate') + '!';
+
+                if (state.welcomeDone && !state.timerInterval && !state.testSubmitted) startTimer();
+
+                renderQuestion();
+                renderPalette();
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Connection error', text: 'Could not load test data.',
+                    confirmButtonColor: '#6366f1' }).then(() => window.location.href = 'dashboard.html');
+            }
+        }
+
+        function updateCandidateBadge() {
+            const name = state.candidateName || 'Candidate';
+            const initial = name.charAt(0).toUpperCase();
+            document.getElementById('avatarMini').textContent = initial;
+            document.getElementById('candidateNameMini').textContent = name;
+            document.getElementById('siCandidate').textContent = name;
+            document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + name + '!';
+        }
+
+        // ==================== LANGUAGE ====================
+        function toggleLanguage() {
+            if (!testConfig || !testConfig.language || !testConfig.language.toLowerCase().includes('hindi')) return;
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
+            document.getElementById('langBtn').classList.toggle('active', state.lang === 'hi');
+            localStorage.setItem('mock_lang', state.lang);
+            renderQuestion();
+        }
+
+        // ==================== RENDER QUESTION ====================
+        function renderQuestion() {
+            if (state.testSubmitted) return;
+            const q = questions[state.currentIndex];
+            document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${questions.length}`;
+            const useHindi = state.lang === 'hi' && q.hi;
+            document.getElementById('questionText').innerHTML =
+                `<div style="font-weight:600;white-space:pre-line;">${useHindi ? q.hi : q.en}</div>`;
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const opts = useHindi ? q.oHi : q.oEn;
+            const letters = ['A', 'B', 'C', 'D'];
+            opts.forEach((opt, i) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                if (state.answers[state.currentIndex] === i) card.classList.add('selected');
+                card.onclick = () => selectOption(i);
+                card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                grid.appendChild(card);
+            });
+            document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+            document.getElementById('nextBtn').disabled = state.currentIndex === questions.length - 1;
+            updateProgress();
+            renderPaletteHighlight();
+        }
+
+        function selectOption(index) { if (state.testSubmitted) return;
+            state.answers[state.currentIndex] = index;
+            state.markedQuestions.delete(state.currentIndex);
+            renderQuestion();
+            showToast('✅ Answer saved!'); }
+
+        function navigate(dir) { const idx = state.currentIndex + dir; if (idx >= 0 && idx < questions.length) { state
+                    .currentIndex = idx;
+                renderQuestion();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+
+        function toggleMark() { if (state.testSubmitted) return; const idx = state.currentIndex; if (state.markedQuestions
+                .has(idx)) { state.markedQuestions.delete(idx);
+                showToast('🏷️ Unmarked'); } else { state.markedQuestions.add(idx);
+                showToast('🚩 Marked for review'); }
+            renderPalette();
+            renderQuestion(); }
+
+        function clearAnswer() { if (state.testSubmitted) return; if (state.answers[state.currentIndex] !== undefined) { delete state
+                    .answers[state.currentIndex];
+                renderQuestion();
+                showToast('🧹 Answer cleared'); } }
+
+        // ==================== PALETTE ====================
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < questions.length; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.textContent = i + 1;
+                if (state.answers[i] !== undefined) num.classList.add('answered');
+                if (state.markedQuestions.has(i)) num.classList.add('marked');
+                if (i === state.currentIndex) num.classList.add('current');
+                num.onclick = () => { state.currentIndex = i;
+                    renderQuestion();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+                grid.appendChild(num);
+            }
+        }
+
+        function renderPaletteHighlight() {
+            document.querySelectorAll('.palette-num').forEach((num, i) => {
+                num.classList.remove('current');
+                if (state.answers[i] !== undefined) num.classList.add('answered');
+                else num.classList.remove('answered');
+                if (state.markedQuestions.has(i)) num.classList.add('marked');
+                else num.classList.remove('marked');
+                if (i === state.currentIndex) num.classList.add('current');
+            });
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(state.answers).length;
+            document.getElementById('progressFill').style.width = ((answered / questions.length) * 100) + '%';
+            document.getElementById('progressText').textContent = `${answered}/${questions.length} answered`;
+        }
+
+        // ==================== TIMER ====================
+        function startTimer() {
+            updateTimerDisplay();
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                if (state.testSubmitted) { clearInterval(state.timerInterval);
+                    state.timerInterval = null; return; }
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) { clearInterval(state.timerInterval);
+                    state.timerInterval = null;
+                    autoSubmit(); }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timeLeft / 60),
+                s = state.timeLeft % 60;
+            document.getElementById('timerText').textContent =
+                `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            if (state.timeLeft < 300) document.getElementById('timerPill').classList.add('warning');
+            else document.getElementById('timerPill').classList.remove('warning');
+            document.title = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} - Mock Test`;
+        }
+
+        function autoSubmit() { showToast('⏰ Time\'s up! Submitting...');
+            setTimeout(() => submitTest(true), 1500); }
+
+        // ==================== SUBMISSION ====================
+        function submitTest(skipConfirm = false) {
+            if (state.testSubmitted) return;
+            const answered = Object.keys(state.answers).length;
+            const unanswered = questions.length - answered;
+            if (!skipConfirm && unanswered > 0) { if (!confirm(`${unanswered} question(s) unanswered. Submit anyway?`)) return; }
+            state.testSubmitted = true;
+            clearInterval(state.timerInterval);
+            state.timerInterval = null;
+            const result = calculateScore();
+            const results = JSON.parse(localStorage.getItem('test_results') || '[]');
+            results.push({ testCode, score: result.score, total: result.total, accuracy: result.accuracy, date: new Date()
+                    .toISOString().split('T')[0], timeTaken: testConfig.duration * 60 - state.timeLeft,
+                correct: result.correct, wrong: result.wrong, attempted: result.attempted, unanswered: result
+                .unanswered, examType: testConfig.exam });
+            if (results.length > 50) results.shift();
+            localStorage.setItem('test_results', JSON.stringify(results));
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                const params = new URLSearchParams({ action: 'submitResult', username: user.username, name: user.name,
+                    testCode, score: result.score, totalMarks: result.total, accuracy: result.accuracy,
+                    correct: result.correct, wrong: result.wrong, attempted: result.attempted, unanswered: result
+                        .unanswered, timeTaken: testConfig.duration * 60 - state.timeLeft, date: new Date()
+                        .toISOString().split('T')[0], examType: testConfig.exam });
+                fetch(API_URL + '?' + params.toString()).catch(() => {});
+            }
+            setTimeout(() => { window.location.href =
+                    `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${testConfig.duration * 60 - state.timeLeft}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam)}`; },
+                800);
+        }
+
+        function calculateScore() {
+            let correct = 0,
+                wrong = 0;
+            questions.forEach((q, idx) => { if (state.answers[idx] === q.c) correct++;
+                else if (state.answers[idx] !== undefined) wrong++; });
+            const pos = testConfig.marksPerQuestion || 1,
+                neg = testConfig.negativeMarking || 0;
+            const raw = (correct * pos) - (wrong * neg);
+            return { score: Math.max(0, raw), total: questions.length * pos, correct, wrong, attempted: correct + wrong,
+                unanswered: questions.length - (correct + wrong), accuracy: ((correct / Math.max(1, correct + wrong)) *
+                    100).toFixed(2) };
+        }
+
+        function confirmExit() { if (state.testSubmitted) { window.location.href = 'dashboard.html'; return; } if (confirm(
+                'Exit test? All progress will be lost.')) window.location.href = 'dashboard.html'; }
+
+        // Swipe
+        let touchStartX = 0;
+        document.getElementById('questionCard').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+        document.getElementById('questionCard').addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX -
+                touchStartX; if (Math.abs(dx) > 60) { if (dx > 0) navigate(-1);
+                else navigate(1); } });
+
+        // Keyboard
+        document.addEventListener('keydown', e => {
+            if (state.testSubmitted || document.getElementById('sidebarPanel').classList.contains('active') || !state
+                .welcomeDone) return;
+            switch (e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    navigate(-1);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    navigate(1);
+                    break;
+                case 'a':
+                case 'A':
+                case '1':
+                    selectOption(0);
+                    break;
+                case 'b':
+                case 'B':
+                case '2':
+                    selectOption(1);
+                    break;
+                case 'c':
+                case 'C':
+                case '3':
+                    selectOption(2);
+                    break;
+                case 'd':
+                case 'D':
+                case '4':
+                    selectOption(3);
+                    break;
+                case 'm':
+                case 'M':
+                    toggleMark();
+                    break;
+                case 'Backspace':
+                    e.preventDefault();
+                    clearAnswer();
+                    break;
+            }
+        });
+
+        window.addEventListener('beforeunload', e => { if (!state.testSubmitted && Object.keys(state.answers).length > 0) { e
+                .preventDefault();
+            e.returnValue = ''; } });
+
+        function showToast(msg) { const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'flex';
+            clearTimeout(t._t);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2000); }
+
+        // Init
+        async function init() {
+            loadTheme();
+            const storedUser = JSON.parse(localStorage.getItem('user'));
+            if (storedUser && storedUser.name) {
+                state.candidateName = storedUser.name;
+                document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + state.candidateName + '!';
+            }
+            await loadTestData();
+            updateCandidateBadge();
+            runWelcomeSequence();
+        }
+        init();
+    </script>
+</body>
+</html>
