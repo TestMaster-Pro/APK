@@ -176,8 +176,7 @@
         }
 
         @keyframes gentlePulse {
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1);
                 box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35);
             }
@@ -672,6 +671,12 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
         }
 
+        .lang-selector {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
         .lang-btn {
             padding: 6px 12px;
             border-radius: 20px;
@@ -726,8 +731,7 @@
         }
 
         @keyframes timerPulse {
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1);
                 box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2);
             }
@@ -1514,9 +1518,8 @@
                 <div class="top-actions-left">
                     <button class="icon-btn danger" onclick="confirmExit()" title="Exit Test" aria-label="Exit test"><i class="fas fa-sign-out-alt"></i></button>
                     <button class="icon-btn" onclick="openSidebar()" title="Info & Help" aria-label="Open info"><i class="fas fa-circle-info"></i></button>
-                    <button class="lang-btn" id="langBtn" onclick="toggleLanguage()" style="display:none;" aria-label="Toggle language">
-                        <span>🇮🇳</span> <span id="langText">हिंदी</span>
-                    </button>
+                    <!-- Language container (single toggle or multiple buttons) -->
+                    <div class="lang-selector" id="langSelector" style="display:none;"></div>
                     <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Mode" aria-label="Toggle theme">
                         <i class="fas fa-sun" id="themeIcon"></i>
                     </button>
@@ -1614,6 +1617,18 @@
             });
         }
 
+        // ---------- Language map ----------
+        const LANG_MAP = {
+            'hindi':      { code: 'hi', native: 'हिन्दी', english: 'English' },
+            'marathi':    { code: 'mr', native: 'मराठी', english: 'English' },
+            'gujarati':   { code: 'gu', native: 'ગુજરાતી', english: 'English' },
+            'bengali':    { code: 'bn', native: 'বাংলা', english: 'English' },
+            'tamil':      { code: 'ta', native: 'தமிழ்', english: 'English' },
+            'telugu':     { code: 'te', native: 'తెలుగు', english: 'English' },
+        };
+
+        const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
         let testConfig = null;
         let questions = [];
         const state = {
@@ -1623,7 +1638,8 @@
             timeLeft: 0,
             timerInterval: null,
             testSubmitted: false,
-            lang: 'en',
+            lang: 'en',          // current active language code
+            altLanguages: [],    // array of { code, native, english } for available alternate languages
             theme: 'light',
             welcomeDone: false,
             candidateName: 'Candidate'
@@ -1781,17 +1797,48 @@
                 }
                 updateCandidateBadge();
 
-                // Language
-                if (testConfig.language && testConfig.language.toLowerCase().includes('hindi')) {
-                    document.getElementById('langBtn').style.display = 'flex';
-                    if (localStorage.getItem('mock_lang') === 'hi') {
-                        state.lang = 'hi';
-                        document.getElementById('langBtn').classList.add('active');
-                        document.getElementById('langText').textContent = 'English';
+                // ----- MULTI-LANGUAGE DETECTION -----
+                const langSelector = document.getElementById('langSelector');
+                if (testConfig.language && testConfig.language.trim()) {
+                    const langNames = testConfig.language.split(/[&,]+/).map(s => s.trim().toLowerCase());
+                    const availableLangs = [];
+                    langNames.forEach(name => {
+                        const info = LANG_MAP[name];
+                        if (info) availableLangs.push(info);
+                    });
+                    if (availableLangs.length > 0) {
+                        state.altLanguages = availableLangs;
+                        langSelector.style.display = 'flex';
+
+                        // Determine initial language
+                        const savedLang = localStorage.getItem('mock_lang');
+                        if (savedLang && availableLangs.some(l => l.code === savedLang)) {
+                            state.lang = savedLang;
+                        } else {
+                            state.lang = 'en'; // default to English
+                        }
+
+                        // Build UI based on number of alternates
+                        if (availableLangs.length === 1) {
+                            // Single toggle button (like original)
+                            langSelector.innerHTML = '';
+                            const toggleBtn = document.createElement('button');
+                            toggleBtn.className = 'lang-btn' + (state.lang === availableLangs[0].code ? ' active' : '');
+                            toggleBtn.textContent = state.lang === 'en' ? availableLangs[0].native : 'English';
+                            toggleBtn.onclick = () => toggleSingleLanguage(availableLangs[0]);
+                            langSelector.appendChild(toggleBtn);
+                        } else {
+                            // Multiple buttons: English + each alternate
+                            buildMultiLanguageSelector();
+                        }
+                    } else {
+                        langSelector.style.display = 'none';
                     }
+                } else {
+                    langSelector.style.display = 'none';
                 }
 
-                // Update welcome screen exam icon
+                // Update welcome screen
                 const examIcon = document.getElementById('welcomeExamIcon');
                 if (testConfig.imageurl) {
                     examIcon.innerHTML =
@@ -1829,17 +1876,66 @@
             document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + name + '!';
         }
 
-        // ==================== LANGUAGE ====================
-        function toggleLanguage() {
-            if (!testConfig || !testConfig.language || !testConfig.language.toLowerCase().includes('hindi')) return;
-            state.lang = state.lang === 'en' ? 'hi' : 'en';
-            document.getElementById('langText').textContent = state.lang === 'hi' ? 'English' : 'हिंदी';
-            document.getElementById('langBtn').classList.toggle('active', state.lang === 'hi');
+        // ==================== LANGUAGE SWITCHING ====================
+
+        // Single toggle (1 alternate)
+        function toggleSingleLanguage(altLang) {
+            if (state.lang === 'en') {
+                state.lang = altLang.code;
+            } else {
+                state.lang = 'en';
+            }
             localStorage.setItem('mock_lang', state.lang);
+
+            // Update button text
+            const btn = document.querySelector('#langSelector .lang-btn');
+            if (btn) {
+                btn.textContent = state.lang === 'en' ? altLang.native : 'English';
+                btn.classList.toggle('active', state.lang !== 'en');
+            }
             renderQuestion();
         }
 
-        // ==================== RENDER QUESTION ====================
+        // Multiple languages (2+ alternates) – show buttons for English and each alternate
+        function buildMultiLanguageSelector() {
+            const selector = document.getElementById('langSelector');
+            selector.innerHTML = '';
+
+            // English button
+            const enBtn = document.createElement('button');
+            enBtn.className = 'lang-btn' + (state.lang === 'en' ? ' active' : '');
+            enBtn.textContent = 'English';
+            enBtn.onclick = () => setLanguage('en');
+            selector.appendChild(enBtn);
+
+            // Alternate language buttons
+            state.altLanguages.forEach(lang => {
+                const btn = document.createElement('button');
+                btn.className = 'lang-btn' + (state.lang === lang.code ? ' active' : '');
+                btn.textContent = lang.native;
+                btn.onclick = () => setLanguage(lang.code);
+                selector.appendChild(btn);
+            });
+        }
+
+        function setLanguage(langCode) {
+            state.lang = langCode;
+            localStorage.setItem('mock_lang', langCode);
+
+            // Update button active states
+            const selector = document.getElementById('langSelector');
+            selector.querySelectorAll('.lang-btn').forEach(btn => {
+                const btnText = btn.textContent;
+                const isEnglishBtn = (btnText === 'English');
+                const isActive = (langCode === 'en') ? isEnglishBtn :
+                    (state.altLanguages.some(l => l.native === btnText && l.code === langCode));
+                btn.classList.toggle('active', isActive);
+            });
+
+            renderQuestion();
+        }
+
+        // ==================== RENDER QUESTION (multi-lang) ====================
         function renderQuestion() {
             if (state.testSubmitted) return;
             if (!questions.length || !questions[state.currentIndex]) {
@@ -1852,10 +1948,17 @@
 
             const q = questions[state.currentIndex];
             document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${questions.length}`;
-            const useHindi = state.lang === 'hi' && q.hi;
 
-            let questionHTML =
-                `<div style="font-weight:600;">${useHindi ? (q.hi || q.en) : (q.en || 'Question text unavailable')}</div>`;
+            const useLang = state.lang;
+            const isEnglish = (useLang === 'en');
+
+            let questionHTML;
+            if (!isEnglish && q[useLang]) {
+                questionHTML = `<div style="font-weight:600;">${q[useLang]}</div>`;
+            } else {
+                questionHTML = `<div style="font-weight:600;">${q.en || 'Question text unavailable'}</div>`;
+            }
+
             if (q.image_url) {
                 const imgUrl = `https://testmaster-pro.github.io/Questions-image/${q.image_url}`;
                 questionHTML += `<div style="margin-top:18px; text-align:center;">
@@ -1864,9 +1967,16 @@
             }
             document.getElementById('questionText').innerHTML = questionHTML;
 
+            const optsField = !isEnglish ? ('o' + capitalize(useLang)) : null;
+            let opts;
+            if (!isEnglish && optsField && Array.isArray(q[optsField])) {
+                opts = q[optsField];
+            } else {
+                opts = q.oEn || [];
+            }
+
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = '';
-            const opts = useHindi ? (q.oHi || q.oEn) : (q.oEn || []);
             const letters = ['A', 'B', 'C', 'D'];
             if (Array.isArray(opts)) {
                 opts.forEach((opt, i) => {
@@ -1889,7 +1999,6 @@
                 });
             }
 
-            // Show PYQ tag if available (now inside q-header)
             const pyqTag = document.getElementById('pyqTag');
             if (q.Pyq && q.Pyq.trim() !== '') {
                 pyqTag.textContent = '📌 ' + q.Pyq;
@@ -2057,7 +2166,7 @@
             setTimeout(() => submitTest(true), 1500);
         }
 
-        // ==================== SUBMISSION (with review data) ====================
+        // ==================== SUBMISSION ====================
         async function submitTest(skipConfirm = false) {
             if (state.testSubmitted) return;
             if (!questions.length) { showToast('No test data loaded'); return; }
@@ -2121,7 +2230,6 @@
 
                 const result = calculateScore();
 
-                // Store review data for the result page
                 const reviewData = {
                     testName: testConfig.testName,
                     exam: testConfig.exam,
@@ -2140,7 +2248,6 @@
                 };
                 localStorage.setItem('last_review_data', JSON.stringify(reviewData));
 
-                // Save test results to localStorage
                 const results = JSON.parse(localStorage.getItem('test_results') || '[]');
                 results.push({
                     testCode,
@@ -2158,7 +2265,6 @@
                 if (results.length > 50) results.shift();
                 localStorage.setItem('test_results', JSON.stringify(results));
 
-                // Submit to Google Sheets
                 const user = JSON.parse(localStorage.getItem('user'));
                 if (user) {
                     const params = new URLSearchParams({
@@ -2192,8 +2298,7 @@
         }
 
         function calculateScore() {
-            let correct = 0,
-                wrong = 0;
+            let correct = 0, wrong = 0;
             questions.forEach((q, idx) => {
                 if (state.answers[idx] === q.c) correct++;
                 else if (state.answers[idx] !== undefined) wrong++;
