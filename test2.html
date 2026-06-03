@@ -6,8 +6,7 @@
     <title>Mock Test — Professional Exam Platform</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #4f46e5;
@@ -2024,13 +2023,10 @@
             setTimeout(() => submitTest(true), 1500);
         }
 
-        // ==================== SUBMISSION ====================
+        // ==================== SUBMISSION (with review data) ====================
         async function submitTest(skipConfirm = false) {
             if (state.testSubmitted) return;
-            if (!questions.length) {
-                showToast('No test data loaded');
-                return;
-            }
+            if (!questions.length) { showToast('No test data loaded'); return; }
 
             const answered = Object.keys(state.answers).length;
             const unanswered = questions.length - answered;
@@ -2068,6 +2064,27 @@
             state.timerInterval = null;
 
             const result = calculateScore();
+
+            // Store review data for the result page
+            const reviewData = {
+                testName: testConfig.testName,
+                exam: testConfig.exam,
+                questions: questions.map((q, idx) => ({
+                    question: q.en,
+                    image_url: q.image_url || null,
+                    options: q.oEn,
+                    correctIndex: q.c,
+                    explanation: q.exp || q.explanation || 'No explanation provided.',
+                    userAnswer: state.answers[idx] !== undefined ? state.answers[idx] : null
+                })),
+                score: result.score,
+                total: result.total,
+                accuracy: result.accuracy,
+                timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft
+            };
+            localStorage.setItem('last_review_data', JSON.stringify(reviewData));
+
+            // Save test results to localStorage
             const results = JSON.parse(localStorage.getItem('test_results') || '[]');
             results.push({
                 testCode,
@@ -2075,7 +2092,7 @@
                 total: result.total,
                 accuracy: result.accuracy,
                 date: new Date().toISOString().split('T')[0],
-                timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft,
+                timeTaken: reviewData.timeTaken,
                 correct: result.correct,
                 wrong: result.wrong,
                 attempted: result.attempted,
@@ -2085,6 +2102,7 @@
             if (results.length > 50) results.shift();
             localStorage.setItem('test_results', JSON.stringify(results));
 
+            // Submit to Google Sheets
             const user = JSON.parse(localStorage.getItem('user'));
             if (user) {
                 const params = new URLSearchParams({
@@ -2099,20 +2117,16 @@
                     wrong: result.wrong,
                     attempted: result.attempted,
                     unanswered: result.unanswered,
-                    timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft,
+                    timeTaken: reviewData.timeTaken,
                     date: new Date().toISOString().split('T')[0],
                     examType: testConfig.exam
                 });
                 fetch(API_URL + '?' + params.toString()).catch(() => {});
             }
 
-            const timeTaken = (testConfig.duration || 10) * 60 - state.timeLeft;
-            const redirectUrl =
-                `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}`;
-
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 800);
+            const timeTaken = reviewData.timeTaken;
+            const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}`;
+            setTimeout(() => { window.location.href = redirectUrl; }, 800);
         }
 
         function calculateScore() {
