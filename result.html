@@ -382,6 +382,11 @@
             color: var(--dark);
         }
         .btn-dark { background: var(--gray-900); color: white; }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
 
         .card {
             border-radius: var(--radius-xl);
@@ -836,7 +841,7 @@
             border-radius: 3px;
         }
 
-        /* REVIEW MODAL STYLES */
+        /* REVIEW MODAL STYLES – now unused, but kept for completeness */
         .review-modal-content {
             padding: 20px;
             overflow-y: auto;
@@ -1145,7 +1150,7 @@
                 <button class="btn btn-primary btn-full" onclick="window.location.href='exam.html'">
                     <i class="fas fa-home"></i> Back to Exams
                 </button>
-                <button class="btn btn-review" onclick="openReview()">
+                <button class="btn btn-review" id="reviewAnswersBtn" onclick="openReviewPage()">
                     <i class="fas fa-search"></i> Review Answers
                 </button>
                 <button class="btn btn-reviews" onclick="window.location.href='test-reviews.html?testCode=${encodeURIComponent(testCode)}&testName=${encodeURIComponent(testCode)}'">
@@ -1249,7 +1254,7 @@
         </div>
     </div>
 
-    <!-- Review Modal -->
+    <!-- Review Modal – kept for backward compatibility, but not used for navigation -->
     <div class="review-overlay" id="reviewOverlay">
         <div class="review-container">
             <div class="review-header">
@@ -1274,17 +1279,12 @@
         const attempted = parseInt(params.get('attempted')) || 0;
         const unanswered = parseInt(params.get('unanswered')) || 0;
         const examType = params.get('examType') || '';
+        const attemptTimestamp = params.get('timestamp') || '';
 
         const user = JSON.parse(localStorage.getItem('user')) || { username: 'student', name: 'Student' };
 
         let selectedRating = 0;
         let userHasReviewed = false;
-
-        // Confirm before leaving
-        window.addEventListener('beforeunload', (e) => {
-            e.preventDefault();
-            e.returnValue = 'Are you sure you want to leave? You can go back to the exam page.';
-        });
 
         // Set date
         const today = new Date();
@@ -1583,60 +1583,41 @@
             setTimeout(() => { c.style.transition = 'opacity 1s'; c.style.opacity = '0'; }, 5000);
         }
 
-        // ==================== REVIEW MODAL ====================
-        function openReview() {
-            const reviewData = localStorage.getItem('last_review_data');
-            if (!reviewData) {
-                Swal.fire({icon:'info', title:'Review Unavailable', text:'No review data found. Please retake the test.', confirmButtonColor:'#6366f1'});
-                return;
-            }
-            const data = JSON.parse(reviewData);
-            const container = document.getElementById('reviewContent');
-            container.innerHTML = '';
-            const letters = ['A', 'B', 'C', 'D'];
-
-            data.questions.forEach((q, idx) => {
-                const userAns = q.userAnswer;
-                const correctAns = q.correctIndex;
-                const isCorrect = userAns === correctAns;
-                const isAnswered = userAns !== null;
-                const explanation = q.explanation;
-
-                let optionsHTML = '';
-                q.options.forEach((opt, i) => {
-                    let optClass = 'review-option';
-                    if (i === correctAns) optClass += ' correct';
-                    if (i === userAns && !isCorrect) optClass += ' wrong';
-                    if (i === userAns && isCorrect) optClass += ' correct';
-                    optionsHTML += `
-                        <div class="${optClass}">
-                            <div class="review-option-letter">${letters[i]}</div>
-                            <span>${opt}</span>
-                        </div>`;
-                });
-
-                const badgeClass = isAnswered ? (isCorrect ? 'correct' : 'wrong') : 'unanswered';
-                const badgeText = isAnswered ? (isCorrect ? '✓ Correct' : '✗ Wrong') : '○ Unanswered';
-
-                const cardHTML = `
-                    <div class="review-q-card">
-                        <div class="review-q-header">
-                            <span class="q-num">Q ${idx+1}</span>
-                            <span class="result-badge ${badgeClass}">${badgeText}</span>
-                        </div>
-                        <div class="review-q-text">${q.question}</div>
-                        ${q.image_url ? `<div class="review-q-img"><img src="https://testmaster-pro.github.io/Questions-image/${q.image_url}" alt="Question image" /></div>` : ''}
-                        <div class="review-options-grid">${optionsHTML}</div>
-                        <div class="review-explanation"><strong>💡 Explanation:</strong> ${explanation}</div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', cardHTML);
-            });
-
-            document.getElementById('reviewOverlay').classList.add('show');
-            document.body.style.overflow = 'hidden';
+        // ==================== REVIEW ANSWERS REDIRECT ====================
+        function openReviewPage() {
+            // Build URL for reviewresult.html, passing all current parameters
+            const currentParams = new URLSearchParams(window.location.search);
+            const reviewUrl = `reviewresult.html?${currentParams.toString()}`;
+            window.location.href = reviewUrl;
         }
 
+        // On load, check if review data exists for this attempt
+        (function checkReviewDataAvailability() {
+            if (!attemptTimestamp) {
+                const btn = document.getElementById('reviewAnswersBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Review unavailable';
+                btn.title = 'No timestamp provided for review data';
+                return;
+            }
+            const storedUser = JSON.parse(localStorage.getItem('user')) || { username: 'guest' };
+            const username = storedUser.username;
+            const key = `reviewData_${username}_${testCode}_${attemptTimestamp}`;
+            const data = JSON.parse(localStorage.getItem(key) || 'null');
+            if (!data) {
+                const btn = document.getElementById('reviewAnswersBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Review unavailable';
+                btn.title = 'Review data not found in local storage';
+            }
+        })();
+
+        // ==================== INLINE REVIEW MODAL (legacy, not used for navigation) ====================
+        function openReview() {
+            // This function is kept for backward compatibility but is no longer used.
+            // Redirect to new review page instead.
+            openReviewPage();
+        }
         function closeReview() {
             document.getElementById('reviewOverlay').classList.remove('show');
             document.body.style.overflow = '';
@@ -1802,4 +1783,4 @@
         setTimeout(init, 600);
     </script>
 </body>
-    </html>
+</html>
