@@ -836,7 +836,7 @@
             border-radius: 3px;
         }
 
-        /* ========== NEW REVIEW MODAL STYLES (MATCHES EXAM FORMAT) ========== */
+        /* REVIEW MODAL STYLES */
         .review-modal-content {
             padding: 20px;
             overflow-y: auto;
@@ -947,7 +947,6 @@
             color: #4338ca;
         }
 
-        /* Review Modal Overlay (keep original) */
         .review-overlay {
             display: none;
             position: fixed;
@@ -1143,11 +1142,11 @@
             </div>
 
             <div class="btn-row">
-                <button class="btn btn-primary btn-full" onclick="window.location.href='dashboard.html'">
-                    <i class="fas fa-home"></i> Back to Dashboard
+                <button class="btn btn-primary btn-full" onclick="window.location.href='exam.html'">
+                    <i class="fas fa-home"></i> Back to Exams
                 </button>
                 <button class="btn btn-review" onclick="openReview()">
-                    <i class="fas fa-search"></i> Review
+                    <i class="fas fa-search"></i> Review Answers
                 </button>
                 <button class="btn btn-reviews" onclick="window.location.href='test-reviews.html?testCode=${encodeURIComponent(testCode)}&testName=${encodeURIComponent(testCode)}'">
                     <i class="fas fa-star"></i> All Reviews
@@ -1161,10 +1160,10 @@
             </div>
         </div>
 
-        <!-- Inline Review Card -->
+        <!-- Inline Rating Card -->
         <div class="review-card" id="reviewCard">
             <div class="card-title">
-                <i class="fas fa-star" style="color:#f59e0b;"></i> Rate this Test
+                <i class="fas fa-star" style="color:#f59e0b;"></i> Rating
             </div>
 
             <div class="review-header-big">
@@ -1172,7 +1171,7 @@
                     <div class="review-average-number" id="avgRatingNumber">0.0</div>
                     <div class="review-average-stars">
                         <span class="stars-display" id="avgStarsDisplay">☆</span>
-                        <span class="review-count-text" id="reviewCountDisplay">0 reviews</span>
+                        <span class="review-count-text" id="reviewCountDisplay">0 ratings</span>
                     </div>
                 </div>
             </div>
@@ -1188,13 +1187,13 @@
                 <input type="hidden" id="ratingValue" value="0">
                 <textarea class="review-textarea" id="reviewText" placeholder="What did you think about this test? Share your experience..." maxlength="500"></textarea>
                 <div class="char-counter"><span id="charCount">0</span> / 500</div>
-                <button class="btn-submit-review" id="submitReviewBtn" onclick="submitReview()">
-                    <i class="fas fa-paper-plane"></i> Submit Review
+                <button class="btn-submit-review" id="submitReviewBtn" onclick="submitRating()">
+                    <i class="fas fa-paper-plane"></i> Submit Rating
                 </button>
             </div>
 
             <div id="alreadyReviewedMsg" class="already-reviewed-box hidden">
-                <i class="fas fa-check-circle"></i> You've already reviewed this test. Thank you!
+                <i class="fas fa-check-circle"></i> You've already rated this test. Thank you!
             </div>
         </div>
 
@@ -1280,6 +1279,12 @@
 
         let selectedRating = 0;
         let userHasReviewed = false;
+
+        // Confirm before leaving
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = 'Are you sure you want to leave? You can go back to the exam page.';
+        });
 
         // Set date
         const today = new Date();
@@ -1543,7 +1548,7 @@
             c.width = innerWidth; c.height = innerHeight;
             const particles = [];
             const colors = ['#6366f1','#8b5cf6','#10b981','#f59e0b','#ef4444','#fbbf24','#ec4899','#60a5fa'];
-            for (let i=0;i<<120;i++) particles.push({
+            for (let i=0; i<120; i++) particles.push({
                 x: Math.random()*c.width,
                 y: Math.random()*c.height - c.height,
                 size: Math.random()*8+3,
@@ -1578,7 +1583,7 @@
             setTimeout(() => { c.style.transition = 'opacity 1s'; c.style.opacity = '0'; }, 5000);
         }
 
-        // ==================== REVIEW MODAL (from localStorage) ====================
+        // ==================== REVIEW MODAL ====================
         function openReview() {
             const reviewData = localStorage.getItem('last_review_data');
             if (!reviewData) {
@@ -1602,7 +1607,7 @@
                     let optClass = 'review-option';
                     if (i === correctAns) optClass += ' correct';
                     if (i === userAns && !isCorrect) optClass += ' wrong';
-                    if (i === userAns && isCorrect) optClass += ' correct'; // same as correct
+                    if (i === userAns && isCorrect) optClass += ' correct';
                     optionsHTML += `
                         <div class="${optClass}">
                             <div class="review-option-letter">${letters[i]}</div>
@@ -1721,14 +1726,14 @@
                 if (data.success && data.reviews) {
                     const reviews = data.reviews.filter(r => r.status !== 'deleted');
                     const count = reviews.length;
-                    document.getElementById('reviewCountDisplay').textContent = `${count} review${count!==1?'s':''}`;
+                    document.getElementById('reviewCountDisplay').textContent = `${count} rating${count!==1?'s':''}`;
                     if (count > 0) {
                         const avg = reviews.reduce((sum, r) => sum + (r.rating||0), 0) / count;
                         document.getElementById('avgRatingNumber').textContent = avg.toFixed(1);
                         const fullStars = Math.floor(avg);
                         const hasHalf = avg - fullStars >= 0.5;
                         let starsHTML = '';
-                        for (let i=0; i<<5; i++) {
+                        for (let i=0; i<5; i++) {
                             if (i < fullStars) starsHTML += '<i class="fa-solid fa-star"></i>';
                             else if (i === fullStars && hasHalf) starsHTML += '<i class="fa-solid fa-star-half-stroke"></i>';
                             else starsHTML += '<i class="fa-regular fa-star"></i>';
@@ -1746,7 +1751,7 @@
             } catch(e) {}
         }
 
-        async function submitReview() {
+        async function submitRating() {
             if (selectedRating === 0) {
                 Swal.fire({ icon:'warning', title:'Rating required', text:'Please select a star rating.', confirmButtonColor:'#6366f1' });
                 return;
@@ -1771,19 +1776,19 @@
                 const res = await fetch(API_URL + '?' + p.toString());
                 const data = await res.json();
                 if (data.success) {
-                    Swal.fire({ icon:'success', title:'Review submitted!', text:'Thank you for your feedback.', confirmButtonColor:'#10b981', timer:2000 });
+                    Swal.fire({ icon:'success', title:'Rating submitted!', text:'Thank you for your feedback.', confirmButtonColor:'#10b981', timer:2000 });
                     document.getElementById('reviewForm').classList.add('hidden');
                     document.getElementById('alreadyReviewedMsg').classList.remove('hidden');
                     userHasReviewed = true;
                     loadReviewSummary();
                 } else {
-                    Swal.fire({ icon:'error', title:'Failed', text:data.error || 'Could not submit review.', confirmButtonColor:'#6366f1' });
+                    Swal.fire({ icon:'error', title:'Failed', text:data.error || 'Could not submit rating.', confirmButtonColor:'#6366f1' });
                 }
             } catch(e) {
                 Swal.fire({ icon:'error', title:'Error', text:'Network error.', confirmButtonColor:'#6366f1' });
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review';
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Rating';
             }
         }
 
@@ -1797,4 +1802,4 @@
         setTimeout(init, 600);
     </script>
 </body>
-</html>
+    </html>
