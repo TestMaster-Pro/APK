@@ -2246,7 +2246,17 @@
                     accuracy: result.accuracy,
                     timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft
                 };
+
+                // Store under the generic "last_review_data" key (backward compatibility)
                 localStorage.setItem('last_review_data', JSON.stringify(reviewData));
+
+                // **** NEW: store with a unique key per attempt (username + testCode + timestamp) ****
+                const timestamp = Date.now().toString();
+                reviewData.timestamp = timestamp;
+                const storedUser = JSON.parse(localStorage.getItem('user'));
+                const username = storedUser ? storedUser.username : 'guest';
+                const perAttemptKey = `reviewData_${username}_${testCode}_${timestamp}`;
+                localStorage.setItem(perAttemptKey, JSON.stringify(reviewData));
 
                 const results = JSON.parse(localStorage.getItem('test_results') || '[]');
                 results.push({
@@ -2287,7 +2297,8 @@
                 }
 
                 const timeTaken = reviewData.timeTaken;
-                const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}`;
+                // Pass timestamp in the redirect URL so result.html can locate the stored review data
+                const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}&timestamp=${timestamp}`;
                 setTimeout(() => { window.location.href = redirectUrl; }, 800);
             } catch (err) {
                 console.error('Submit error:', err);
