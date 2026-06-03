@@ -799,6 +799,7 @@
             animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             transition: var(--transition);
             width: 100%;
+            position: relative;
         }
 
         @keyframes slideUp {
@@ -849,6 +850,13 @@
             letter-spacing: 0.3px;
         }
 
+        .q-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
         .q-marks {
             font-weight: 700;
             font-size: 12px;
@@ -857,6 +865,18 @@
             padding: 6px 14px;
             border-radius: 100px;
             border: 1px solid rgba(245, 158, 11, 0.2);
+            white-space: nowrap;
+        }
+
+        .pyq-tag {
+            display: none;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            opacity: 0.8;
+            margin: 0;
+            white-space: nowrap;
         }
 
         .question-text {
@@ -1523,7 +1543,10 @@
         <div class="question-card" id="questionCard">
             <div class="q-header">
                 <span class="q-badge" id="qNumber">Q 1/0</span>
-                <span class="q-marks" id="qMarks">+5 / -1</span>
+                <div class="q-header-right">
+                    <span class="q-marks" id="qMarks">+5 / -1</span>
+                    <span class="pyq-tag" id="pyqTag" style="display:none;"></span>
+                </div>
             </div>
             <div class="question-text" id="questionText"></div>
             <div class="options-grid" id="optionsGrid"></div>
@@ -1536,7 +1559,7 @@
         </div>
 
         <div class="submit-section">
-            <button class="submit-above-palette" onclick="submitTest()">
+            <button class="submit-above-palette" id="submitBtn" onclick="submitTest()">
                 <i class="fas fa-check-double"></i> Submit Test
             </button>
         </div>
@@ -1823,6 +1846,7 @@
                 document.getElementById('questionText').innerHTML =
                     '<p style="color:var(--text-muted);">Loading questions...</p>';
                 document.getElementById('optionsGrid').innerHTML = '';
+                document.getElementById('pyqTag').style.display = 'none';
                 return;
             }
 
@@ -1863,6 +1887,16 @@
                         `<div class="option-letter">${letters[i]}</div><span>${opt || 'Option ' + letters[i]}</span>`;
                     grid.appendChild(card);
                 });
+            }
+
+            // Show PYQ tag if available (now inside q-header)
+            const pyqTag = document.getElementById('pyqTag');
+            if (q.Pyq && q.Pyq.trim() !== '') {
+                pyqTag.textContent = '📌 ' + q.Pyq;
+                pyqTag.style.display = 'block';
+            } else {
+                pyqTag.textContent = '';
+                pyqTag.style.display = 'none';
             }
 
             document.getElementById('prevBtn').disabled = state.currentIndex === 0;
@@ -2028,105 +2062,133 @@
             if (state.testSubmitted) return;
             if (!questions.length) { showToast('No test data loaded'); return; }
 
-            const answered = Object.keys(state.answers).length;
-            const unanswered = questions.length - answered;
+            const submitBtn = document.getElementById('submitBtn');
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
 
-            if (!skipConfirm && unanswered > 0) {
-                const result = await Swal.fire({
-                    title: 'Submit Test?',
-                    html: `<b>${unanswered}</b> question(s) are still unanswered.<br>Submit anyway?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#4f46e5',
-                    cancelButtonColor: '#ef4444',
-                    confirmButtonText: 'Yes, submit!',
-                    cancelButtonText: 'Go back'
-                });
-                if (!result.isConfirmed) return;
-            }
+            try {
+                const answered = Object.keys(state.answers).length;
+                const unanswered = questions.length - answered;
 
-            if (!skipConfirm && unanswered === 0) {
-                const result = await Swal.fire({
-                    title: 'Submit Test?',
-                    text: 'All questions answered. Are you ready to submit?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#4f46e5',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Yes, submit!',
-                    cancelButtonText: 'Review again'
-                });
-                if (!result.isConfirmed) return;
-            }
+                if (!skipConfirm && unanswered > 0) {
+                    submitBtn.innerHTML = originalHTML;
+                    submitBtn.disabled = false;
+                    const result = await Swal.fire({
+                        title: 'Submit Test?',
+                        html: `<b>${unanswered}</b> question(s) are still unanswered.<br>Submit anyway?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4f46e5',
+                        cancelButtonColor: '#ef4444',
+                        confirmButtonText: 'Yes, submit!',
+                        cancelButtonText: 'Go back'
+                    });
+                    if (!result.isConfirmed) {
+                        submitBtn.innerHTML = originalHTML;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                    submitBtn.disabled = true;
+                }
 
-            state.testSubmitted = true;
-            clearInterval(state.timerInterval);
-            state.timerInterval = null;
+                if (!skipConfirm && unanswered === 0) {
+                    submitBtn.innerHTML = originalHTML;
+                    submitBtn.disabled = false;
+                    const result = await Swal.fire({
+                        title: 'Submit Test?',
+                        text: 'All questions answered. Are you ready to submit?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4f46e5',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Yes, submit!',
+                        cancelButtonText: 'Review again'
+                    });
+                    if (!result.isConfirmed) {
+                        submitBtn.innerHTML = originalHTML;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                    submitBtn.disabled = true;
+                }
 
-            const result = calculateScore();
+                state.testSubmitted = true;
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
 
-            // Store review data for the result page
-            const reviewData = {
-                testName: testConfig.testName,
-                exam: testConfig.exam,
-                questions: questions.map((q, idx) => ({
-                    question: q.en,
-                    image_url: q.image_url || null,
-                    options: q.oEn,
-                    correctIndex: q.c,
-                    explanation: q.exp || q.explanation || 'No explanation provided.',
-                    userAnswer: state.answers[idx] !== undefined ? state.answers[idx] : null
-                })),
-                score: result.score,
-                total: result.total,
-                accuracy: result.accuracy,
-                timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft
-            };
-            localStorage.setItem('last_review_data', JSON.stringify(reviewData));
+                const result = calculateScore();
 
-            // Save test results to localStorage
-            const results = JSON.parse(localStorage.getItem('test_results') || '[]');
-            results.push({
-                testCode,
-                score: result.score,
-                total: result.total,
-                accuracy: result.accuracy,
-                date: new Date().toISOString().split('T')[0],
-                timeTaken: reviewData.timeTaken,
-                correct: result.correct,
-                wrong: result.wrong,
-                attempted: result.attempted,
-                unanswered: result.unanswered,
-                examType: testConfig.exam
-            });
-            if (results.length > 50) results.shift();
-            localStorage.setItem('test_results', JSON.stringify(results));
+                // Store review data for the result page
+                const reviewData = {
+                    testName: testConfig.testName,
+                    exam: testConfig.exam,
+                    questions: questions.map((q, idx) => ({
+                        question: q.en,
+                        image_url: q.image_url || null,
+                        options: q.oEn,
+                        correctIndex: q.c,
+                        explanation: q.exp || q.explanation || 'No explanation provided.',
+                        userAnswer: state.answers[idx] !== undefined ? state.answers[idx] : null
+                    })),
+                    score: result.score,
+                    total: result.total,
+                    accuracy: result.accuracy,
+                    timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft
+                };
+                localStorage.setItem('last_review_data', JSON.stringify(reviewData));
 
-            // Submit to Google Sheets
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (user) {
-                const params = new URLSearchParams({
-                    action: 'submitResult',
-                    username: user.username,
-                    name: user.name,
+                // Save test results to localStorage
+                const results = JSON.parse(localStorage.getItem('test_results') || '[]');
+                results.push({
                     testCode,
                     score: result.score,
-                    totalMarks: result.total,
+                    total: result.total,
                     accuracy: result.accuracy,
+                    date: new Date().toISOString().split('T')[0],
+                    timeTaken: reviewData.timeTaken,
                     correct: result.correct,
                     wrong: result.wrong,
                     attempted: result.attempted,
                     unanswered: result.unanswered,
-                    timeTaken: reviewData.timeTaken,
-                    date: new Date().toISOString().split('T')[0],
                     examType: testConfig.exam
                 });
-                fetch(API_URL + '?' + params.toString()).catch(() => {});
-            }
+                if (results.length > 50) results.shift();
+                localStorage.setItem('test_results', JSON.stringify(results));
 
-            const timeTaken = reviewData.timeTaken;
-            const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}`;
-            setTimeout(() => { window.location.href = redirectUrl; }, 800);
+                // Submit to Google Sheets
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (user) {
+                    const params = new URLSearchParams({
+                        action: 'submitResult',
+                        username: user.username,
+                        name: user.name,
+                        testCode,
+                        score: result.score,
+                        totalMarks: result.total,
+                        accuracy: result.accuracy,
+                        correct: result.correct,
+                        wrong: result.wrong,
+                        attempted: result.attempted,
+                        unanswered: result.unanswered,
+                        timeTaken: reviewData.timeTaken,
+                        date: new Date().toISOString().split('T')[0],
+                        examType: testConfig.exam
+                    });
+                    fetch(API_URL + '?' + params.toString()).catch(() => {});
+                }
+
+                const timeTaken = reviewData.timeTaken;
+                const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}`;
+                setTimeout(() => { window.location.href = redirectUrl; }, 800);
+            } catch (err) {
+                console.error('Submit error:', err);
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+                showToast('Error submitting. Please try again.');
+            }
         }
 
         function calculateScore() {
