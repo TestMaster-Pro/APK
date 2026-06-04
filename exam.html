@@ -9,7 +9,8 @@
     <title>Mock Library · TestMasterPro.space</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
     <style>
         :root {
             --primary: #243748;
@@ -94,6 +95,15 @@
             transform: translateY(-100%); transition: transform 0.3s ease;
         }
         .offline-banner.show { transform: translateY(0); }
+
+        /* Loading line */
+        .loading-line {
+            position: fixed; top: 54px; left: 0; height: 3px; background: linear-gradient(90deg, #4f46e5, #06b6d4);
+            width: 0%; z-index: 300; opacity: 1; box-shadow: 0 0 8px rgba(79,70,229,0.4);
+            transition: width 0.4s ease, opacity 0.5s ease;
+        }
+        .loading-line.active { width: 100%; opacity: 1; }
+        .loading-line.done { width: 100%; opacity: 0; }
 
         /* Sidebar */
         .sidebar-overlay {
@@ -389,7 +399,7 @@
         .test-list { display: flex; flex-direction: column; gap: 14px; }
         .premium-test-card {
             background: #fff; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e8ecf0; position: relative; overflow: hidden;
+            border: 1px solid #e8ecf0; position: relative; overflow: visible; /* changed to visible for ribbon */
             transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.25s ease;
             animation: cardFadeIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1) both;
         }
@@ -498,6 +508,17 @@
         }
         .empty-selection h2 { font-size: 16px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
         .empty-selection p { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
+
+        /* Ribbon badges */
+        .ribbon {
+            position: absolute; top: -4px; left: -4px; background: #f59e0b; color: #fff;
+            padding: 3px 12px 3px 16px; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            border-radius: 0 6px 6px 0; z-index: 8;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.15); line-height: 1.2; 
+        }
+        .ribbon.latest { background: #4f46e5; }
+        .ribbon.new { background: #06b6d4; }
 
         /* Sheet */
         .sheet-overlay {
@@ -627,6 +648,7 @@
 <body>
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
+    <div class="loading-line" id="loadingLine"></div>
 
     <!-- Sidebar -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
@@ -914,6 +936,20 @@
         if (!user) window.location.href = 'index.html';
         const savedCategory = localStorage.getItem('selectedCategory') || user?.targetExam || '';
 
+        // Loading line control
+        function showLoadingLine(active = true) {
+            const line = document.getElementById('loadingLine');
+            if (!line) return;
+            if (active) {
+                line.classList.add('active');
+                line.classList.remove('done');
+            } else {
+                line.classList.add('done');
+                line.classList.remove('active');
+                setTimeout(() => { line.classList.remove('done'); }, 600);
+            }
+        }
+
         function showToast(message, type = 'info', duration = 3000) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -1071,25 +1107,21 @@
             });
         }
 
-        // ---------- LOAD MOCKS (MERGED FROM BOTH SOURCES) ----------
-        async function loadMocks() {
+        // ---------- FETCH & CACHE ----------
+        async function fetchAllMocks() {
             let sheetTests = [];
             let localTests = [];
-
             // 1. Fetch from Google Sheet
             try {
                 const sheetResp = await fetch(TEST_API_URL + '?action=getAllMockTests', { cache: 'no-store' });
                 if (sheetResp.ok) {
                     const sheetData = await sheetResp.json();
                     if (sheetData.success && Array.isArray(sheetData.tests)) {
-                        // Mark sheet tests so we can route them to test2.html
                         sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
                         console.log('✅ Loaded from Google Sheet:', sheetTests.length);
                     }
                 }
-            } catch (e) {
-                console.warn('Sheet fetch failed', e);
-            }
+            } catch (e) { console.warn('Sheet fetch failed', e); }
 
             // 2. Fetch from mocks.json
             try {
@@ -1097,34 +1129,51 @@
                 if (localResp.ok) {
                     const localData = await localResp.json();
                     if (Array.isArray(localData) && localData.length) {
-                        // Local tests are NOT from sheet
                         localTests = localData.map(t => ({ ...t, fromSheet: false }));
                         console.log('✅ Loaded from mocks.json:', localTests.length);
                     }
                 }
-            } catch (e) {
-                console.warn('mocks.json fetch failed', e);
-            }
+            } catch (e) { console.warn('mocks.json fetch failed', e); }
 
-            // 3. If both sources failed, use hardcoded fallback
-            if (sheetTests.length === 0 && localTests.length === 0) {
-                allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
-                showToast('Using offline data. Some tests may not be available.', 'warning');
-            } else {
-                // Merge both arrays, removing duplicates by testCode (sheet tests take priority)
-                const merged = [...sheetTests];
-                const existingCodes = new Set(sheetTests.map(t => t.testCode));
-                localTests.forEach(test => {
-                    if (!existingCodes.has(test.testCode)) {
-                        merged.push(test);
-                    }
-                });
-                allMocks = merged;
+            // 3. Merge: sheet tests take priority
+            const merged = [...sheetTests];
+            const existingCodes = new Set(sheetTests.map(t => t.testCode));
+            localTests.forEach(test => {
+                if (!existingCodes.has(test.testCode)) merged.push(test);
+            });
+            if (!merged.length) {
+                // fallback
+                FALLBACK_MOCKS.forEach(t => merged.push({ ...t, fromSheet: false }));
+                console.warn('Using fallback mocks');
             }
+            // Add sequence and sort latest first
+            const sorted = merged.map((m, i) => ({ ...m, _seq: i })).sort((a, b) => b._seq - a._seq);
+            return sorted;
+        }
 
+        function cacheMocks(data) {
+            try {
+                localStorage.setItem('cachedMocksData', JSON.stringify(data));
+                localStorage.setItem('cachedMocksTime', Date.now());
+            } catch (e) { console.warn('Cache save failed', e); }
+        }
+
+        function getCachedMocks() {
+            try {
+                const raw = localStorage.getItem('cachedMocksData');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length) return parsed;
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        function setupFromData(mocksArray) {
+            allMocks = mocksArray;
             extractCategories();
             buildCategoryImageMap();
-
+            // decide which view to show
             if (savedCategory && allCategories.includes(savedCategory)) {
                 selectedCategory = savedCategory;
                 showTestView();
@@ -1148,6 +1197,59 @@
                     categoryImageMap[cat] = m.imageurl.trim();
                 }
             });
+        }
+
+        async function backgroundRefresh() {
+            showLoadingLine(true);
+            showToast('Checking for new tests...', 'info', 2000);
+            try {
+                const fresh = await fetchAllMocks();
+                allMocks = fresh;
+                cacheMocks(fresh);
+                extractCategories();
+                buildCategoryImageMap();
+                // refresh UI if test view is open
+                if (document.getElementById('testView').classList.contains('active')) {
+                    updateTestViewHeader();
+                    renderFilterAccordions();
+                    applyFilters();
+                } else {
+                    // refresh category view counts maybe
+                    renderCategoryCards(allCategories);
+                }
+                showToast('Tests updated successfully!', 'success', 2500);
+            } catch (err) {
+                showToast('Could not update tests. Using existing data.', 'error', 4000);
+            } finally {
+                showLoadingLine(false);
+            }
+        }
+
+        async function loadInitialData() {
+            showLoadingLine(true);
+            const cached = getCachedMocks();
+            if (cached) {
+                // Show cached immediately
+                setupFromData(cached);
+                showLoadingLine(false);
+                // Background refresh
+                backgroundRefresh();
+            } else {
+                // First visit: fetch fresh
+                try {
+                    const fresh = await fetchAllMocks();
+                    allMocks = fresh;
+                    cacheMocks(fresh);
+                    setupFromData(fresh);
+                } catch (e) {
+                    // fallback
+                    allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false, _seq: 0 })).sort((a,b) => b._seq - a._seq);
+                    setupFromData(allMocks);
+                    showToast('Could not load tests. Offline data used.', 'error');
+                } finally {
+                    showLoadingLine(false);
+                }
+            }
         }
 
         function groupByCategoryUniqueExams(arr) {
@@ -1461,8 +1563,14 @@
                 const yearBadgeHTML = test.year ? `<span class="premium-badge-year"><i class="fas fa-calendar-alt"></i> ${test.year}</span>` : '';
                 const fromSheet = test.fromSheet === true;
 
+                // Ribbon based on position in filtered list (first = Latest, next two = New)
+                let ribbonHTML = '';
+                if (idx === 0) ribbonHTML = '<div class="ribbon latest">Latest</div>';
+                else if (idx === 1 || idx === 2) ribbonHTML = '<div class="ribbon new">New</div>';
+
                 return `
                 <div class="premium-test-card" style="animation-delay:${idx*0.05}s">
+                    ${ribbonHTML}
                     <div class="premium-top-glow"></div>
                     <div class="premium-card-body">
                         <div class="premium-card-top-row">
@@ -1531,14 +1639,12 @@
 
         document.getElementById('finalStartBtn').addEventListener('click', () => {
             if (currentTestData.fromSheet) {
-                // Sheet test → open in test2.html
                 if (!currentTestData.code) {
                     showToast('Test code missing.', 'error');
                     return;
                 }
                 window.location.href = `test2.html?testCode=${encodeURIComponent(currentTestData.code)}`;
             } else {
-                // Local test → open in test.html
                 if (!currentTestData.file) {
                     showToast('Test file not configured properly. Please contact support.', 'error');
                     return;
@@ -1638,7 +1744,7 @@
 
         (function init() {
             updateOnlineStatus();
-            loadMocks();
+            loadInitialData();
             loadUserResults();
             loadPremium();
             renderFooterExamCategories();
