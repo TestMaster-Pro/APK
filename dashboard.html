@@ -58,6 +58,7 @@
             --safe-bottom: env(safe-area-inset-bottom,0px);
             --safe-top: env(safe-area-inset-top,0px);
             --max-width: 1200px;
+            --desktop-sidebar-width: 260px;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -70,6 +71,20 @@
             padding-bottom:calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
         }
         body.sidebar-open, body.sheet-open { overflow:hidden; position:fixed; width:100%; height:100%; }
+
+        /* Desktop layout – sidebar always visible */
+        @media (min-width: 1024px) {
+            body { padding-bottom: 0; }
+            body.sidebar-open, body.sheet-open { overflow: auto; position: static; width: auto; height: auto; }
+            .app-layout { display: flex; min-height: 100vh; }
+            .main-content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+            .sidebar-overlay { position: static; width: var(--desktop-sidebar-width); flex-shrink: 0; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; visibility: visible; opacity: 1; z-index: auto; transform: none; box-shadow: none; border-radius: 0; }
+            .sidebar-overlay .sidebar { transform: translateX(0); position: relative; height: 100vh; max-width: none; width: 100%; border-radius: 0; box-shadow: 1px 0 20px rgba(0,0,0,0.05); border-right: 1px solid var(--border-light); }
+            .sidebar-overlay .sidebar-close-btn { display: none; }
+            .hamburger-btn { display: none; }
+            .floating-ai-btn { bottom: 24px; right: 24px; }
+            .bottom-nav { display: none; }
+        }
 
         .toast-container { position:fixed; top:calc(12px + var(--safe-top)); left:50%; transform:translateX(-50%) translateY(-120%); z-index:1000; display:flex; flex-direction:column; gap:8px; width:92%; max-width:400px; pointer-events:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
         .toast-container.show { transform:translateX(-50%) translateY(0); }
@@ -222,8 +237,11 @@
         .qa-coins { background:linear-gradient(135deg,#f59e0b,#b45309); box-shadow:0 4px 14px rgba(245,158,11,0.25); }
         .qa-use-coins { background:linear-gradient(135deg,#8b5cf6,#6d28d9); box-shadow:0 4px 14px rgba(139,92,246,0.25); }
         .qa-results { background:linear-gradient(135deg,#f43f5e,#be123c); box-shadow:0 4px 14px rgba(244,63,94,0.25); }
+        .qa-apk { background:linear-gradient(135deg,#0ea5e9,#0284c7); box-shadow:0 4px 14px rgba(14,165,233,0.25); }
+        .qa-apk .qa-icon { background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.25); }
+
         @media (min-width:640px) {
-            .qa-scroll { display:grid; grid-template-columns:repeat(6,1fr); gap:14px; max-width:780px; margin:0 auto; }
+            .qa-scroll { display:grid; grid-template-columns:repeat(7,1fr); gap:14px; max-width:900px; margin:0 auto; }
             .qa-card { max-width:none; aspect-ratio:1/0.9; border-radius:20px; }
             .qa-card span { font-size:12px; }
             .qa-icon { width:38px; height:38px; font-size:18px; }
@@ -411,170 +429,178 @@
         });
     </script>
     <!-- ===== END ONESIGNAL ===== -->
-
 </head>
 <body>
     <div class="net-toast offline" id="netToast"><i class="fas fa-wifi-slash"></i><span id="netMsg">You're offline</span></div>
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
 
-    <button class="floating-ai-btn" onclick="navigate('aichat.html')" title="AI Study Assistant">
-        <i class="fas fa-robot"></i>
-    </button>
-
-    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
-        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
-            <div class="sidebar-brand">
-                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
-                <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
-                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="sidebar-user-card">
-                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
-                <div class="sidebar-user-info">
-                    <div class="name" id="sidebarUserName">Student</div>
-                    <span class="tag" id="sidebarUserTag">Learner</span>
+    <div class="app-layout">
+        <!-- SIDEBAR OVERLAY (mobile) / ALWAYS VISIBLE (desktop) -->
+        <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+            <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+                <div class="sidebar-brand">
+                    <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
+                    <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
                 </div>
-            </div>
-            <div class="sidebar-streak" id="sidebarStreak" style="display:none;" onclick="navigate('streak.html')">
-                <div class="streak-fire"><i class="fas fa-fire"></i></div>
-                <div class="streak-info"><span id="streakCount">0</span> day streak</div>
-            </div>
-            <nav class="sidebar-nav">
-                <div class="sidebar-nav-label">Main Menu</div>
-                <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
-                <div class="sidebar-nav-label">Features</div>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('referral')"><i class="fas fa-gift"></i> Referral Rewards</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('favorites')"><i class="fas fa-heart"></i> My Favorites</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('coins')"><i class="fas fa-coins"></i> Coin History</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('coin-use')"><i class="fas fa-exchange-alt"></i> Coin Use Request</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
-                <div class="sidebar-nav-label">Premium</div>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
-                <div class="sidebar-nav-label">App</div>
-                <button class="sidebar-nav-item install-sidebar-item" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
-                <div class="sidebar-nav-label">Account</div>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
-                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            </nav>
-            <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
-        </aside>
-    </div>
-
-    <nav class="navbar">
-        <div class="nav-left">
-            <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
-            <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
-        </div>
-        <div class="nav-right">
-            <button class="bell-icon-btn" id="bellBtn" onclick="navigate('notices.html')" title="Latest Updates"><i class="fas fa-bell"></i><span class="badge" id="bellBadge"></span></button>
-            <button class="chat-icon-btn" onclick="navigate('chat.html')" title="Support Chat"><i class="fas fa-comments"></i></button>
-            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">
-                <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="hero-slider-wrap" id="heroWrap">
-            <div class="hero-slider" id="heroSlider">
-                <div style="min-width:100%;height:220px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse" style="margin-right:8px;"></i> Loading banners...</div>
-            </div>
-            <div class="hero-dots" id="heroDots"></div>
-        </div>
-
-        <div class="quick-actions" style="margin-bottom:20px;">
-            <div class="qa-scroll">
-                <button class="qa-card qa-aimock" onclick="navigate('aimock.html')"><div class="qa-icon"><i class="fas fa-robot"></i></div><span>AI Mock<br>Test</span></button>
-                <button class="qa-card qa-challenge" onclick="navigate('challenge.html')"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span></button>
-                <button class="qa-card qa-refer" onclick="navigate('referral.html')"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span></button>
-                <button class="qa-card qa-coins" onclick="navigate('coin-history.html')"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span></button>
-                <button class="qa-card qa-use-coins" onclick="navigate('usecoin.html')"><div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span></button>
-                <button class="qa-card qa-results" onclick="navigate('allresult.html')"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span></button>
-            </div>
-        </div>
-
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-calendar-alt"></i></div><h2>Upcoming Exams</h2><span class="badge-tag">NEW</span></div>
-            <div class="upcoming-scroll" id="upcomingScroll"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;width:100%;"><i class="fas fa-spinner fa-pulse"></i> Loading upcoming exams...</div></div>
-        </section>
-
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-file-alt"></i></div><h2>Free Mock Test</h2><span class="badge-tag">EXAMS</span></div>
-            <div class="mock-accordion" id="mockAccordion"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;"><i class="fas fa-spinner fa-pulse"></i> Loading mock tests...</div></div>
-        </section>
-
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-fire"></i></div><h2>Popular Mock Tests</h2><span class="badge-tag">TRENDING</span></div>
-            <div class="popular-slider-wrap" id="popularSliderWrap">
-                <div class="popular-slider" id="popularSlider"><div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);font-size:13px;display:flex;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div></div>
-                <div class="popular-dots" id="popularDots"></div>
-            </div>
-        </section>
-
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-users"></i></div><h2>Stay Connected With Mockers</h2></div>
-            <div class="social-grid">
-                <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-                <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span></a>
-                <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram"><i class="fab fa-instagram"></i><span>Instagram</span></a>
-                <a href="#" class="social-card youtube coming-soon" onclick="return false;"><i class="fab fa-youtube"></i><span>YouTube</span></a>
-            </div>
-        </section>
-
-        <div class="feedback-section">
-            <h3>💬 What Our Students Say</h3>
-            <div class="feedback-marquee">
-                <div class="feedback-marquee-inner">
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
-                    <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
-                    <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
+                <div class="sidebar-user-card">
+                    <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                    <div class="sidebar-user-info">
+                        <div class="name" id="sidebarUserName">Student</div>
+                        <span class="tag" id="sidebarUserTag">Learner</span>
+                    </div>
                 </div>
-            </div>
-            <div class="feedback-actions"><button class="feedback-btn" onclick="window.location.href='reviews.html'"><i class="fas fa-paper-plane"></i> Give Your Feedback</button></div>
+                <div class="sidebar-streak" id="sidebarStreak" style="display:none;" onclick="navigate('streak.html')">
+                    <div class="streak-fire"><i class="fas fa-fire"></i></div>
+                    <div class="streak-info"><span id="streakCount">0</span> day streak</div>
+                </div>
+                <nav class="sidebar-nav">
+                    <div class="sidebar-nav-label">Main Menu</div>
+                    <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
+                    <div class="sidebar-nav-label">Features</div>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('referral')"><i class="fas fa-gift"></i> Referral Rewards</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('favorites')"><i class="fas fa-heart"></i> My Favorites</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('coins')"><i class="fas fa-coins"></i> Coin History</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('coin-use')"><i class="fas fa-exchange-alt"></i> Coin Use Request</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
+                    <div class="sidebar-nav-label">Premium</div>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
+                    <div class="sidebar-nav-label">App</div>
+                    <button class="sidebar-nav-item install-sidebar-item" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
+                    <button class="sidebar-nav-item" onclick="navigate('apk.html')"><i class="fas fa-info-circle"></i> About APK</button>
+                    <div class="sidebar-nav-label">Account</div>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
+                    <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
+                    <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </nav>
+                <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
+            </aside>
         </div>
-    </div>
 
-    <footer class="pro-footer">
-        <div class="footer-grid">
-            <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
-            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
-        </div>
-        <div class="footer-install-section">
-            <button class="footer-install-btn" onclick="openInstallPopup()">
-                <i class="fas fa-download"></i> Download APK
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <button class="floating-ai-btn" onclick="navigate('aichat.html')" title="AI Study Assistant">
+                <i class="fas fa-robot"></i>
             </button>
-        </div>
-        <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
-        <div class="footer-social">
-            <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-            <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
-        </div>
-        <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
-    </footer>
 
-    <nav class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-item active" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
-        <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
-        <button class="bottom-nav-item" onclick="navigate('blogs.html')"><i class="fas fa-blog"></i><span>Blog</span></button>
-        <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
-    </nav>
+            <nav class="navbar">
+                <div class="nav-left">
+                    <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                    <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
+                </div>
+                <div class="nav-right">
+                    <button class="bell-icon-btn" id="bellBtn" onclick="navigate('notices.html')" title="Latest Updates"><i class="fas fa-bell"></i><span class="badge" id="bellBadge"></span></button>
+                    <button class="chat-icon-btn" onclick="navigate('chat.html')" title="Support Chat"><i class="fas fa-comments"></i></button>
+                    <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">
+                        <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container">
+                <div class="hero-slider-wrap" id="heroWrap">
+                    <div class="hero-slider" id="heroSlider">
+                        <div style="min-width:100%;height:220px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse" style="margin-right:8px;"></i> Loading banners...</div>
+                    </div>
+                    <div class="hero-dots" id="heroDots"></div>
+                </div>
+
+                <div class="quick-actions" style="margin-bottom:20px;">
+                    <div class="qa-scroll">
+                        <button class="qa-card qa-aimock" onclick="navigate('aimock.html')"><div class="qa-icon"><i class="fas fa-robot"></i></div><span>AI Mock<br>Test</span></button>
+                        <button class="qa-card qa-challenge" onclick="navigate('challenge.html')"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span></button>
+                        <button class="qa-card qa-refer" onclick="navigate('referral.html')"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span></button>
+                        <button class="qa-card qa-coins" onclick="navigate('coin-history.html')"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span></button>
+                        <button class="qa-card qa-use-coins" onclick="navigate('usecoin.html')"><div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span></button>
+                        <button class="qa-card qa-results" onclick="navigate('allresult.html')"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span></button>
+                        <button class="qa-card qa-apk" onclick="navigate('apk.html')"><div class="qa-icon"><i class="fas fa-download"></i></div><span>Get APK</span></button>
+                    </div>
+                </div>
+
+                <section style="margin-bottom:20px;">
+                    <div class="section-header"><div class="section-icon"><i class="fas fa-calendar-alt"></i></div><h2>Upcoming Exams</h2><span class="badge-tag">NEW</span></div>
+                    <div class="upcoming-scroll" id="upcomingScroll"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;width:100%;"><i class="fas fa-spinner fa-pulse"></i> Loading upcoming exams...</div></div>
+                </section>
+
+                <section style="margin-bottom:20px;">
+                    <div class="section-header"><div class="section-icon"><i class="fas fa-file-alt"></i></div><h2>Free Mock Test</h2><span class="badge-tag">EXAMS</span></div>
+                    <div class="mock-accordion" id="mockAccordion"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;"><i class="fas fa-spinner fa-pulse"></i> Loading mock tests...</div></div>
+                    <div id="mockLoading" style="display:none; text-align:center; padding:12px; font-size:13px; color:var(--gray-500);"><i class="fas fa-sync-alt fa-spin"></i> Updating mock tests...</div>
+                </section>
+
+                <section style="margin-bottom:20px;">
+                    <div class="section-header"><div class="section-icon"><i class="fas fa-fire"></i></div><h2>Popular Mock Tests</h2><span class="badge-tag">TRENDING</span></div>
+                    <div class="popular-slider-wrap" id="popularSliderWrap">
+                        <div class="popular-slider" id="popularSlider"><div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);font-size:13px;display:flex;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div></div>
+                        <div class="popular-dots" id="popularDots"></div>
+                    </div>
+                </section>
+
+                <section style="margin-bottom:20px;">
+                    <div class="section-header"><div class="section-icon"><i class="fas fa-users"></i></div><h2>Stay Connected With Mockers</h2></div>
+                    <div class="social-grid">
+                        <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+                        <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span></a>
+                        <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+                        <a href="#" class="social-card youtube coming-soon" onclick="return false;"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+                    </div>
+                </section>
+
+                <div class="feedback-section">
+                    <h3>✨ What Our Students Say</h3>
+                    <div class="feedback-marquee">
+                        <div class="feedback-marquee-inner">
+                            <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
+                            <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
+                            <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
+                            <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
+                            <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
+                            <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
+                        </div>
+                    </div>
+                    <div class="feedback-actions"><button class="feedback-btn" onclick="window.location.href='reviews.html'"><i class="fas fa-paper-plane"></i> Give Your Feedback</button></div>
+                </div>
+            </div>
+
+            <footer class="pro-footer">
+                <div class="footer-grid">
+                    <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
+                    <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+                </div>
+                <div class="footer-install-section">
+                    <button class="footer-install-btn" onclick="openInstallPopup()">
+                        <i class="fas fa-download"></i> Download APK
+                    </button>
+                </div>
+                <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
+                <div class="footer-social">
+                    <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
+                    <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
+            </footer>
+
+            <nav class="bottom-nav" id="bottomNav">
+                <button class="bottom-nav-item active" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
+                <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
+                <button class="bottom-nav-item" onclick="navigate('blogs.html')"><i class="fas fa-blog"></i><span>Blog</span></button>
+                <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
+            </nav>
+        </div>
+    </div>
 
     <script>
         // ======================= API & JSON PATHS =======================
@@ -588,9 +614,25 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
         const TEST_API_URL = API_URL;
         const STREAK_API_URL = API_URL;
+        const MOCKS_CACHE_KEY = 'cachedAllMocks';
 
         let isOffline = false;
         const user = JSON.parse(localStorage.getItem('user'));
+
+        // ---------- Mock Data Caching ----------
+        function saveMocksToCache(data) {
+            try { localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data)); } catch(e) {}
+        }
+        function loadMocksFromCache() {
+            try {
+                const cached = localStorage.getItem(MOCKS_CACHE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            return null;
+        }
 
         // ---------- APK Download Popup ----------
         function openInstallPopup() {
@@ -611,7 +653,7 @@
                 showCancelButton: true,
                 cancelButtonText: 'Maybe Later',
                 cancelButtonColor: '#94a3b8',
-                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions →</a>'
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions ↗</a>'
             }).then((result) => {
                 if (result.isConfirmed) {
                     const link = document.createElement('a');
@@ -649,9 +691,26 @@
         function updateOnlineStatus(){ isOffline=!navigator.onLine; const b=document.getElementById('offlineBanner'); if(isOffline){b.classList.add('show');showToast("You're offline. Using cached data.",'warning',4000);} else{b.classList.remove('show');} }
         window.addEventListener('online',updateOnlineStatus); window.addEventListener('offline',updateOnlineStatus);
         function navigate(u){window.location.href=u;}
-        function openSidebar(){const o=document.getElementById('sidebarOverlay');o.classList.remove('hidden');requestAnimationFrame(()=>o.classList.add('active'));document.body.classList.add('sidebar-open');}
-        function closeSidebar(e){if(e.target===document.getElementById('sidebarOverlay'))closeSidebarDirect();}
-        function closeSidebarDirect(){const o=document.getElementById('sidebarOverlay');o.classList.remove('active');document.body.classList.remove('sidebar-open');setTimeout(()=>{if(!o.classList.contains('active'))o.classList.add('hidden')},400);}
+        function openSidebar(){
+            if (window.innerWidth >= 1024) return; // sidebar already visible on desktop
+            const o=document.getElementById('sidebarOverlay');
+            o.classList.remove('hidden');
+            requestAnimationFrame(()=>o.classList.add('active'));
+            document.body.classList.add('sidebar-open');
+        }
+        function closeSidebar(e){
+            if (window.innerWidth >= 1024) return;
+            if(e.target===document.getElementById('sidebarOverlay')) closeSidebarDirect();
+        }
+        function closeSidebarDirect(){
+            if (window.innerWidth >= 1024) return;
+            const o=document.getElementById('sidebarOverlay');
+            o.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            setTimeout(()=>{
+                if(!o.classList.contains('active')) o.classList.add('hidden');
+            },400);
+        }
         function sidebarNavigate(action){
             closeSidebarDirect();
             setTimeout(()=>{
@@ -670,46 +729,78 @@
         // ---------- Global merged mock data ----------
         let allMocks = [];
 
-        // Load local mocks.json immediately and render, then fetch sheet and merge/update
+        // Load mocks: use cache first, then update from local json + sheet
         async function loadAllMocks() {
-            // Step 1: Load local mocks instantly
-            try {
-                const localResp = await fetch(JSON_PATHS.mocks, { cache: 'no-store' });
-                if (localResp.ok) {
-                    const localData = await localResp.json();
-                    if (Array.isArray(localData) && localData.length) {
-                        allMocks = localData.map(t => ({ ...t, fromSheet: false }));
-                    } else {
-                        allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
-                    }
-                } else {
-                    allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
-                }
-            } catch (e) {
-                allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false }));
+            const mockAccordionEl = document.getElementById('mockAccordion');
+            const mockLoadingEl = document.getElementById('mockLoading');
+
+            // Step 1: Show cached data instantly
+            const cached = loadMocksFromCache();
+            if (cached) {
+                allMocks = cached;
+                renderMockAccordion();
+                renderFooterExamCategories();
+            } else {
+                // No cache, show fallback
+                allMocks = [...FALLBACK_MOCKS];
+                renderMockAccordion();
+                renderFooterExamCategories();
             }
 
-            // Render immediately with local data
-            renderMockAccordion();
-            renderFooterExamCategories();
-
-            // Step 2: Fetch sheet data in background and update
+            // Step 2: Fetch fresh data in background
+            mockLoadingEl.style.display = 'block';
             try {
-                const sheetResp = await fetch(`${TEST_API_URL}?action=getAllMockTests`, { cache: 'no-store' });
-                if (sheetResp.ok) {
-                    const sheetData = await sheetResp.json();
-                    if (sheetData.success && Array.isArray(sheetData.tests)) {
-                        const sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
-                        // Merge: sheet tests take priority over local
-                        const existingCodes = new Set(sheetTests.map(t => t.testCode));
-                        const localOnly = allMocks.filter(t => !existingCodes.has(t.testCode));
-                        allMocks = [...sheetTests, ...localOnly];
-                        // Re-render with updated data
-                        renderMockAccordion();
-                        renderFooterExamCategories();
+                // Load local mocks.json
+                let localData = [];
+                try {
+                    const localResp = await fetch(JSON_PATHS.mocks, { cache: 'no-store' });
+                    if (localResp.ok) {
+                        const json = await localResp.json();
+                        if (Array.isArray(json) && json.length) localData = json;
                     }
+                } catch (e) { /* ignore */ }
+
+                // Load sheet data
+                let sheetData = [];
+                try {
+                    const sheetResp = await fetch(`${TEST_API_URL}?action=getAllMockTests`, { cache: 'no-store' });
+                    if (sheetResp.ok) {
+                        const json = await sheetResp.json();
+                        if (json.success && Array.isArray(json.tests)) {
+                            sheetData = json.tests.map(t => ({ ...t, fromSheet: true }));
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+
+                // Merge: sheet tests override local by testCode
+                const mergedMap = new Map();
+                // add local data
+                if (localData.length) {
+                    localData.forEach(t => mergedMap.set(t.testCode || t.exam, { ...t, fromSheet: false }));
                 }
-            } catch (e) { console.warn('Sheet fetch failed, using local data only.', e); }
+                // add/override with sheet data
+                if (sheetData.length) {
+                    sheetData.forEach(t => mergedMap.set(t.testCode || t.exam, t));
+                }
+
+                const freshMocks = Array.from(mergedMap.values());
+                if (freshMocks.length > 0) {
+                    allMocks = freshMocks;
+                    saveMocksToCache(allMocks);
+                } else if (!cached) {
+                    // no fresh data and no cache, use fallback
+                    allMocks = [...FALLBACK_MOCKS];
+                    saveMocksToCache(allMocks);
+                }
+            } catch (e) {
+                console.warn('Background mock update failed', e);
+                if (!cached) allMocks = [...FALLBACK_MOCKS];
+            } finally {
+                mockLoadingEl.style.display = 'none';
+                // Re-render with latest data
+                renderMockAccordion();
+                renderFooterExamCategories();
+            }
         }
 
         // ---------- Upcoming Exams ----------
@@ -776,6 +867,7 @@
             html+=`<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Support Chat</a></li>`;
             html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html+=`<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
+            html+=`<li><a onclick="navigate('apk.html')">📱 Get APK</a></li>`;
             c.innerHTML=html;
         }
         async function renderFooterUpcoming(){ const c=document.getElementById('footerUpcomingExams'); const d=await fetchJSON(JSON_PATHS.upcomingfooter,FALLBACK_UPCOMING_FOOTER); if(!d.length){c.innerHTML='<li><a>No upcoming exams</a></li>';return;} c.innerHTML=d.map(e=>`<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join(''); }
@@ -808,9 +900,19 @@
         // ---------- Notification Bell ----------
         async function renderNotificationBell(){ const bell=document.getElementById('bellBtn'); try{ const r=await fetch(JSON_PATHS.notices,{cache:'no-store'}); if(!r.ok)throw new Error('No notices'); const n=await r.json(); if(Array.isArray(n)&&n.length){ n.sort((a,b)=>new Date(b.date+' '+(b.time||'00:00'))-new Date(a.date+' '+(a.time||'00:00'))); bell.title=n[0]?.headline||'Latest Updates'; } }catch(e){bell.title='Tap to view notices';} }
 
+        // ---------- Desktop Sidebar Initialization ----------
+        function initDesktopSidebar() {
+            if (window.innerWidth >= 1024) {
+                const overlay = document.getElementById('sidebarOverlay');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('active'); // ensure visible
+            }
+        }
+
         // ---------- Initialization ----------
         function init(){
             updateOnlineStatus();updateNetStatus();
+            initDesktopSidebar();
             const premiumBadge=document.getElementById('premiumBadge');
             if(user){
                 setAvatar('userInitial',user,user.isPremium||user.plan==='premium');
@@ -825,11 +927,12 @@
             }
             fetchAndDisplayServerStreak();renderNotificationBell();loadHeroSlides();
             renderUpcomingExams();
-            loadAllMocks();          // Instantly loads local, then updates from sheet
+            loadAllMocks();          // Cache-aware loading
             renderPopularSlider();
             renderFooterUpcoming();
         }
-        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active'))closeSidebarDirect();});
+        window.addEventListener('resize', initDesktopSidebar);
+        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active')&&window.innerWidth<1024)closeSidebarDirect();});
         document.addEventListener('DOMContentLoaded',init);
     </script>
     <script>
