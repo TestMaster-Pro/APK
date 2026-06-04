@@ -329,6 +329,25 @@
         .change-category-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); transform: translateY(-1px); }
         .change-category-btn:active { transform: scale(0.95); transition: 0.06s; }
 
+        /* Selected Filters Bar */
+        .selected-filters-bar {
+            display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+            margin-bottom: 12px; min-height: 0;
+        }
+        .filter-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--white); border: 2px solid var(--primary-light); border-radius: 30px;
+            padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--primary);
+            box-shadow: var(--shadow-xs); transition: var(--transition-fast); cursor: default;
+        }
+        .filter-chip .chip-label { font-size: 11px; color: var(--gray-500); font-weight: 500; margin-right: 2px; }
+        .filter-chip .chip-remove {
+            width: 20px; height: 20px; border-radius: 50%; background: var(--red-light);
+            border: none; color: var(--red); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 10px; transition: var(--transition-fast);
+        }
+        .filter-chip .chip-remove:hover { background: var(--red); color: #fff; }
+
         /* Filter Accordion */
         .filter-accordion { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
         .mock-accordion-item {
@@ -355,7 +374,40 @@
         .mock-accordion-body {
             max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .mock-accordion-item.open .mock-accordion-body { max-height: 600px; }
+        .mock-accordion-item.open .mock-accordion-body { max-height: 800px; }
+
+        /* Exam card grid (small) */
+        .exam-card-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 14px 14px;
+        }
+        @media (min-width: 500px) { .exam-card-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 768px) { .exam-card-grid { grid-template-columns: repeat(5, 1fr); } }
+
+        .exam-small-card {
+            background: var(--white); border-radius: 14px; padding: 12px 6px 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            cursor: pointer; border: 1.5px solid #e8ecf0; transition: all 0.25s ease;
+            box-shadow: var(--shadow-xs); user-select: none;
+        }
+        .exam-small-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-sm); border-color: var(--primary-light); }
+        .exam-small-card:active { transform: scale(0.94); }
+        .exam-small-card .exam-img-wrap {
+            width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light);
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
+            color: var(--primary); overflow: hidden; border: 1px solid rgba(0,0,0,0.04);
+        }
+        .exam-small-card .exam-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .exam-small-card .exam-name {
+            font-size: 11px; font-weight: 700; color: var(--gray-700); text-align: center;
+            line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .exam-small-card.active-exam {
+            border-color: var(--primary); background: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(36,55,72,0.1);
+        }
+        .exam-small-card.all-exam { background: #f8fafc; }
+
+        /* Vertical chips (Subject, Chapter) */
         .vertical-chip-list { padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 3px; }
         @media (min-width: 640px) { .vertical-chip-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; } }
         .vertical-chip {
@@ -372,6 +424,34 @@
         }
         .vertical-chip .vc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
         .vertical-chip.active .vc-dot { background: var(--primary); box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.12); }
+
+        /* Filter buttons row */
+        .filter-buttons-row {
+            display: flex; gap: 10px; margin-top: 8px; margin-bottom: 8px;
+        }
+        .filter-btn {
+            flex: 1; padding: 12px 8px; border-radius: 14px; border: 2px solid var(--gray-200);
+            background: #fff; font-weight: 700; font-size: 12px; color: var(--gray-600);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 6px; transition: var(--transition-fast); font-family: var(--font);
+            box-shadow: var(--shadow-xs); white-space: nowrap;
+        }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+        .filter-btn:active { transform: scale(0.95); }
+        .filter-btn.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 800; }
+        .horizontal-year-bar {
+            display: none; flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding: 8px 0;
+            margin-bottom: 8px;
+        }
+        .horizontal-year-bar.show { display: flex; }
+        .horizontal-year-chip {
+            padding: 8px 18px; border-radius: 24px; background: var(--white); border: 2px solid var(--gray-200);
+            font-weight: 600; font-size: 13px; color: var(--gray-600); cursor: pointer;
+            white-space: nowrap; transition: var(--transition-fast); flex-shrink: 0;
+            box-shadow: var(--shadow-xs);
+        }
+        .horizontal-year-chip:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+        .horizontal-year-chip.active-year { border-color: var(--primary); background: var(--primary); color: #fff; }
 
         .search-row-vertical { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
         .search-chip-vertical {
@@ -399,7 +479,7 @@
         .test-list { display: flex; flex-direction: column; gap: 14px; }
         .premium-test-card {
             background: #fff; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e8ecf0; position: relative; overflow: visible; /* changed to visible for ribbon */
+            border: 1px solid #e8ecf0; position: relative; overflow: visible;
             transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.25s ease;
             animation: cardFadeIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1) both;
         }
@@ -635,6 +715,17 @@
 
         .hidden { display: none !important; }
 
+        /* Loading spinner */
+        .loading-spinner {
+            display: flex; justify-content: center; align-items: center; padding: 40px; color: var(--primary);
+            font-size: 14px; font-weight: 700; gap: 10px;
+        }
+        .spinner {
+            border: 3px solid var(--gray-200); border-top: 3px solid var(--primary); border-radius: 50%;
+            width: 24px; height: 24px; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         @media (min-width: 600px) { .bottom-nav { display: none; } body { padding-bottom: 0; } .container { padding: 18px 18px calc(24px + var(--safe-bottom)); } .pro-footer { padding-bottom: 30px; } .category-card-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
         @media (max-width: 480px) {
             .footer-grid { gap: 24px; } .footer-col h3 { font-size: 15px; } .footer-col a { font-size: 12px; }
@@ -733,23 +824,19 @@
                     <i class="fas fa-arrow-left"></i> Change Category
                 </button>
             </div>
+            <!-- Selected filters bar -->
+            <div class="selected-filters-bar" id="selectedFiltersBar"></div>
             <div class="filter-accordion" id="filterAccordion">
-                <div class="mock-accordion-item" id="yearAccordionItem">
-                    <button class="mock-accordion-header" onclick="toggleAccordion('yearAccordionBody','yearArrow','yearAccordionItem')">
-                        <div class="ma-left"><span><i class="fas fa-calendar-alt" style="margin-right:8px;"></i> Year</span></div>
-                        <span class="ma-count" id="yearBadge">All</span>
-                        <i class="fas fa-chevron-down ma-arrow" id="yearArrow"></i>
-                    </button>
-                    <div class="mock-accordion-body" id="yearAccordionBody"><div class="vertical-chip-list" id="yearChips"></div></div>
-                </div>
+                <!-- Exam accordion (first, auto‑open) -->
                 <div class="mock-accordion-item" id="examAccordionItem">
                     <button class="mock-accordion-header" onclick="toggleAccordion('examAccordionBody','examArrow','examAccordionItem')">
                         <div class="ma-left"><span><i class="fas fa-file-alt" style="margin-right:8px;"></i> Exam</span></div>
                         <span class="ma-count" id="examBadge">All</span>
                         <i class="fas fa-chevron-down ma-arrow" id="examArrow"></i>
                     </button>
-                    <div class="mock-accordion-body" id="examAccordionBody"><div class="vertical-chip-list" id="examChips"></div></div>
+                    <div class="mock-accordion-body" id="examAccordionBody"><div class="exam-card-grid" id="examCardsGrid"></div></div>
                 </div>
+                <!-- Subject accordion -->
                 <div class="mock-accordion-item" id="subjectAccordionItem">
                     <button class="mock-accordion-header" onclick="toggleAccordion('subjectAccordionBody','subjectArrow','subjectAccordionItem')">
                         <div class="ma-left"><span><i class="fas fa-book" style="margin-right:8px;"></i> Subject</span></div>
@@ -758,6 +845,7 @@
                     </button>
                     <div class="mock-accordion-body" id="subjectAccordionBody"><div class="vertical-chip-list" id="subjectChips"></div></div>
                 </div>
+                <!-- Chapter accordion -->
                 <div class="mock-accordion-item" id="chapterAccordionItem">
                     <button class="mock-accordion-header" onclick="toggleAccordion('chapterAccordionBody','chapterArrow','chapterAccordionItem')">
                         <div class="ma-left"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> Chapter</span></div>
@@ -766,6 +854,13 @@
                     </button>
                     <div class="mock-accordion-body" id="chapterAccordionBody"><div class="vertical-chip-list" id="chapterChips"></div></div>
                 </div>
+                <!-- Year / Type / Sort buttons row -->
+                <div class="filter-buttons-row">
+                    <button class="filter-btn" id="yearFilterBtn" onclick="toggleYearBar()"><i class="fas fa-calendar-alt"></i> <span id="yearBtnText">Year</span></button>
+                    <button class="filter-btn" id="typeFilterBtn" onclick="cycleTypeFilter()"><i class="fas fa-tag"></i> <span id="typeBtnText">All</span></button>
+                    <button class="filter-btn" id="sortFilterBtn" onclick="toggleSortOrder()"><i class="fas fa-sort-amount-down-alt"></i> <span id="sortBtnText">Oldest</span></button>
+                </div>
+                <div class="horizontal-year-bar" id="horizontalYearBar"></div>
                 <div class="search-row-vertical">
                     <div class="search-chip-vertical"><i class="fas fa-search" style="color:var(--primary);"></i><input type="text" id="searchInput" placeholder="Search tests..."></div>
                     <button class="clear-chip-vertical" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
@@ -931,6 +1026,8 @@
         let searchDebounceTimer = null;
         let isOffline = false;
         let bookmarkedTests = JSON.parse(localStorage.getItem('bookmarkedTests') || '[]');
+        let selectedType = 'all';  // 'all', 'free', 'paid'
+        let sortOrder = 'oldest';  // 'oldest' or 'newest'
 
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
@@ -1038,7 +1135,7 @@
         function openHowToUse() {
             Swal.fire({
                 title: 'How to Use',
-                html: `<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a <b>Category</b>.</p><p><b>2.</b> Use <b>Year, Exam, Subject & Chapter</b> filters.</p><p><b>3.</b> Click <b>Attempt</b> to start.</p></div>`,
+                html: `<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a <b>Category</b>.</p><p><b>2.</b> Use <b>Year, Subject & Chapter</b> filters.</p><p><b>3.</b> Click <b>Attempt</b> to start.</p></div>`,
                 confirmButtonText: 'Got it!',
                 confirmButtonColor: '#243748',
                 icon: 'info'
@@ -1073,6 +1170,22 @@
                 item.classList.add('open');
                 setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
             }
+        }
+
+        function openExamAccordion() {
+            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+            const item = document.getElementById('examAccordionItem');
+            item.classList.add('open');
+            setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+        }
+
+        function closeExamAccordion() {
+            const item = document.getElementById('examAccordionItem');
+            item.classList.remove('open');
+        }
+
+        function closeAllAccordions() {
+            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
         }
 
         function openInstallPopup() {
@@ -1111,43 +1224,36 @@
         async function fetchAllMocks() {
             let sheetTests = [];
             let localTests = [];
-            // 1. Fetch from Google Sheet
             try {
                 const sheetResp = await fetch(TEST_API_URL + '?action=getAllMockTests', { cache: 'no-store' });
                 if (sheetResp.ok) {
                     const sheetData = await sheetResp.json();
                     if (sheetData.success && Array.isArray(sheetData.tests)) {
                         sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
-                        console.log('✅ Loaded from Google Sheet:', sheetTests.length);
                     }
                 }
             } catch (e) { console.warn('Sheet fetch failed', e); }
 
-            // 2. Fetch from mocks.json
             try {
                 const localResp = await fetch(JSON_PATHS.mocks, { cache: 'no-store' });
                 if (localResp.ok) {
                     const localData = await localResp.json();
                     if (Array.isArray(localData) && localData.length) {
                         localTests = localData.map(t => ({ ...t, fromSheet: false }));
-                        console.log('✅ Loaded from mocks.json:', localTests.length);
                     }
                 }
             } catch (e) { console.warn('mocks.json fetch failed', e); }
 
-            // 3. Merge: sheet tests take priority
             const merged = [...sheetTests];
             const existingCodes = new Set(sheetTests.map(t => t.testCode));
             localTests.forEach(test => {
                 if (!existingCodes.has(test.testCode)) merged.push(test);
             });
             if (!merged.length) {
-                // fallback
                 FALLBACK_MOCKS.forEach(t => merged.push({ ...t, fromSheet: false }));
-                console.warn('Using fallback mocks');
             }
-            // Add sequence and sort latest first
-            const sorted = merged.map((m, i) => ({ ...m, _seq: i })).sort((a, b) => b._seq - a._seq);
+            // Sort by sequence ascending (oldest first by default)
+            const sorted = merged.map((m, i) => ({ ...m, _seq: i })).sort((a, b) => a._seq - b._seq);
             return sorted;
         }
 
@@ -1173,7 +1279,6 @@
             allMocks = mocksArray;
             extractCategories();
             buildCategoryImageMap();
-            // decide which view to show
             if (savedCategory && allCategories.includes(savedCategory)) {
                 selectedCategory = savedCategory;
                 showTestView();
@@ -1208,13 +1313,12 @@
                 cacheMocks(fresh);
                 extractCategories();
                 buildCategoryImageMap();
-                // refresh UI if test view is open
                 if (document.getElementById('testView').classList.contains('active')) {
                     updateTestViewHeader();
                     renderFilterAccordions();
                     applyFilters();
+                    renderSelectedFiltersBar();
                 } else {
-                    // refresh category view counts maybe
                     renderCategoryCards(allCategories);
                 }
                 showToast('Tests updated successfully!', 'success', 2500);
@@ -1226,28 +1330,23 @@
         }
 
         async function loadInitialData() {
-            showLoadingLine(true);
             const cached = getCachedMocks();
             if (cached) {
-                // Show cached immediately
                 setupFromData(cached);
-                showLoadingLine(false);
-                // Background refresh
                 backgroundRefresh();
             } else {
-                // First visit: fetch fresh
+                // Show spinner while loading
+                document.getElementById('categoryCardGrid').innerHTML = '<div class="loading-spinner"><div class="spinner"></div> Loading tests…</div>';
+                document.getElementById('testList').innerHTML = '<div class="loading-spinner"><div class="spinner"></div> Loading tests…</div>';
                 try {
                     const fresh = await fetchAllMocks();
                     allMocks = fresh;
                     cacheMocks(fresh);
                     setupFromData(fresh);
                 } catch (e) {
-                    // fallback
-                    allMocks = FALLBACK_MOCKS.map(t => ({ ...t, fromSheet: false, _seq: 0 })).sort((a,b) => b._seq - a._seq);
+                    allMocks = FALLBACK_MOCKS.map((t, i) => ({ ...t, fromSheet: false, _seq: i })).sort((a,b) => a._seq - b._seq);
                     setupFromData(allMocks);
                     showToast('Could not load tests. Offline data used.', 'error');
-                } finally {
-                    showLoadingLine(false);
                 }
             }
         }
@@ -1303,6 +1402,35 @@
             return true;
         }
 
+        // ---- SELECTED FILTERS BAR ----
+        function renderSelectedFiltersBar() {
+            const bar = document.getElementById('selectedFiltersBar');
+            let chips = [];
+            if (selectedYear) chips.push({ label: 'Year', value: selectedYear, clear: () => clearFilter('year') });
+            if (selectedExam) chips.push({ label: 'Exam', value: selectedExam, clear: () => clearFilter('exam') });
+            if (selectedSubject) chips.push({ label: 'Subject', value: selectedSubject, clear: () => clearFilter('subject') });
+            if (selectedChapter) chips.push({ label: 'Chapter', value: selectedChapter, clear: () => clearFilter('chapter') });
+            if (!chips.length) { bar.innerHTML = ''; return; }
+            bar.innerHTML = chips.map(c => `
+                <div class="filter-chip">
+                    <span class="chip-label">${c.label}:</span> ${c.value}
+                    <button class="chip-remove" onclick="event.stopPropagation(); (${c.clear})()"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function clearFilter(type) {
+            if (type === 'year') { selectedYear = ''; }
+            else if (type === 'exam') { selectedExam = ''; selectedSubject=''; selectedChapter=''; }
+            else if (type === 'subject') { selectedSubject=''; selectedChapter=''; }
+            else if (type === 'chapter') { selectedChapter=''; }
+            closeAllAccordions();
+            renderFilterAccordions();
+            applyFilters();
+            renderSelectedFiltersBar();
+            showToast(`Cleared ${type} filter`, 'info');
+        }
+
         function showCategoryView() {
             document.getElementById('categoryView').classList.remove('hidden');
             document.getElementById('testView').classList.remove('active');
@@ -1318,9 +1446,14 @@
             selectedSubject = '';
             selectedChapter = '';
             document.getElementById('searchInput').value = '';
+            selectedType = 'all';
+            sortOrder = 'oldest';
             updateTestViewHeader();
             renderFilterAccordions();
             applyFilters();
+            renderSelectedFiltersBar();
+            // auto-open exam accordion
+            openExamAccordion();
         }
 
         function goBackToCategories() {
@@ -1400,21 +1533,36 @@
         function renderFilterAccordions() {
             let filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
 
-            const years = [...new Set(filtered.map(m => m.year).filter(Boolean))].sort();
-            document.getElementById('yearChips').innerHTML =
-                `<button class="vertical-chip ${selectedYear === '' ? 'active' : ''}" onclick="selectYearFilter('')"><span class="vc-dot"></span> 📅 All Years</button>` +
-                years.map(y => `<button class="vertical-chip ${selectedYear === y ? 'active' : ''}" onclick="selectYearFilter('${y.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${y}</button>`).join('');
-            document.getElementById('yearBadge').textContent = selectedYear || 'All';
-
-            if (selectedYear) filtered = filtered.filter(m => m.year === selectedYear);
+            // Exam accordion – small cards grid
             const exams = [...new Set(filtered.map(m => m.exam).filter(Boolean))].sort();
-            document.getElementById('examChips').innerHTML =
-                `<button class="vertical-chip ${selectedExam === '' ? 'active' : ''}" onclick="selectExamFilter('')"><span class="vc-dot"></span> 📋 All Exams</button>` +
-                exams.map(ex => `<button class="vertical-chip ${selectedExam === ex ? 'active' : ''}" onclick="selectExamFilter('${ex.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${ex}</button>`).join('');
+            const examGrid = document.getElementById('examCardsGrid');
+            examGrid.innerHTML = '';
+            // "All Exams" reset card
+            examGrid.innerHTML += `
+                <div class="exam-small-card all-exam ${selectedExam === '' ? 'active-exam' : ''}" onclick="selectExamFilter('')">
+                    <div class="exam-img-wrap"><i class="fas fa-layer-group"></i></div>
+                    <div class="exam-name">All Exams</div>
+                </div>`;
+            exams.forEach(ex => {
+                const testWithImg = filtered.find(m => m.exam === ex && m.imageurl);
+                const imgSrc = testWithImg?.imageurl || '';
+                const activeClass = selectedExam === ex ? ' active-exam' : '';
+                examGrid.innerHTML += `
+                <div class="exam-small-card ${activeClass}" onclick="selectExamFilter('${ex.replace(/'/g,"\\'")}')">
+                    <div class="exam-img-wrap">
+                        ${imgSrc ? `<img src="${imgSrc}" alt="${ex}" loading="lazy">` : '<i class="fas fa-file-alt"></i>'}
+                    </div>
+                    <div class="exam-name">${ex}</div>
+                </div>`;
+            });
             document.getElementById('examBadge').textContent = selectedExam || 'All';
 
-            let examFiltered = filtered;
+            // Apply year filter for subject/chapter extraction
+            let yearFiltered = filtered;
+            if (selectedYear) yearFiltered = filtered.filter(m => m.year === selectedYear);
+            let examFiltered = yearFiltered;
             if (selectedExam) examFiltered = examFiltered.filter(m => m.exam === selectedExam);
+
             const subjects = [...new Set(examFiltered.map(m => m.subject).filter(Boolean))].sort();
             document.getElementById('subjectChips').innerHTML =
                 `<button class="vertical-chip ${selectedSubject === '' ? 'active' : ''}" onclick="selectSubjectFilter('')"><span class="vc-dot"></span> 📖 All Subjects</button>` +
@@ -1433,17 +1581,83 @@
                 chapterContainer.innerHTML = '<div style="padding:12px;color:var(--gray-400);font-size:12px;text-align:center;">No chapters available</div>';
             }
             document.getElementById('chapterBadge').textContent = selectedChapter || 'All';
+
+            // Horizontal year bar (visible only when toggled)
+            renderHorizontalYearBar(filtered);
+            // Update year button text
+            document.getElementById('yearBtnText').textContent = selectedYear ? `Year: ${selectedYear}` : 'Year';
+            // Update type button
+            updateTypeButton();
+            // Update sort button
+            document.getElementById('sortBtnText').textContent = sortOrder === 'oldest' ? 'Oldest' : 'Newest';
+        }
+
+        function renderHorizontalYearBar(filteredMocks) {
+            const bar = document.getElementById('horizontalYearBar');
+            const years = [...new Set(filteredMocks.map(m => m.year).filter(Boolean))].sort();
+            if (!years.length) {
+                bar.innerHTML = '<span style="color:var(--gray-400);font-size:12px;padding:8px;">No years available</span>';
+            } else {
+                bar.innerHTML = `
+                    <button class="horizontal-year-chip ${selectedYear === '' ? 'active-year' : ''}" onclick="selectYearFromBar('')">All Years</button>
+                    ${years.map(y => `<button class="horizontal-year-chip ${selectedYear === y ? 'active-year' : ''}" onclick="selectYearFromBar('${y.replace(/'/g,"\\'")}')">${y}</button>`).join('')}
+                `;
+            }
         }
 
         function selectYearFilter(year) {
+            // kept for compatibility, but not used for main UI; may be called from elsewhere if needed
             selectedYear = (selectedYear === year) ? '' : year;
-            selectedExam = '';
-            selectedSubject = '';
-            selectedChapter = '';
+            closeAllAccordions();
             renderFilterAccordions();
             applyFilters();
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            document.getElementById('yearAccordionItem').classList.add('open');
+            renderSelectedFiltersBar();
+            document.getElementById('horizontalYearBar').classList.remove('show');
+        }
+
+        function selectYearFromBar(year) {
+            selectedYear = (selectedYear === year) ? '' : year;
+            document.getElementById('horizontalYearBar').classList.remove('show');
+            closeAllAccordions();
+            renderFilterAccordions();
+            applyFilters();
+            renderSelectedFiltersBar();
+            if (selectedYear) showToast(`Year: ${selectedYear}`, 'success');
+        }
+
+        function toggleYearBar() {
+            const bar = document.getElementById('horizontalYearBar');
+            const isShowing = bar.classList.contains('show');
+            bar.classList.toggle('show', !isShowing);
+            // update content (in case mocks changed)
+            const filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
+            renderHorizontalYearBar(filtered);
+        }
+
+        function cycleTypeFilter() {
+            if (selectedType === 'all') selectedType = 'free';
+            else if (selectedType === 'free') selectedType = 'paid';
+            else selectedType = 'all';
+            updateTypeButton();
+            applyFilters();
+        }
+
+        function updateTypeButton() {
+            const btnText = document.getElementById('typeBtnText');
+            switch (selectedType) {
+                case 'free': btnText.textContent = 'Free Only'; break;
+                case 'paid': btnText.textContent = 'Premium'; break;
+                default: btnText.textContent = 'All'; break;
+            }
+            const btn = document.getElementById('typeFilterBtn');
+            if (selectedType === 'all') btn.classList.remove('active');
+            else btn.classList.add('active');
+        }
+
+        function toggleSortOrder() {
+            sortOrder = (sortOrder === 'oldest') ? 'newest' : 'oldest';
+            document.getElementById('sortBtnText').textContent = sortOrder === 'oldest' ? 'Oldest' : 'Newest';
+            applyFilters();
         }
 
         function selectExamFilter(exam) {
@@ -1452,8 +1666,9 @@
             selectedChapter = '';
             renderFilterAccordions();
             applyFilters();
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            document.getElementById('examAccordionItem').classList.add('open');
+            renderSelectedFiltersBar();
+            closeExamAccordion();
+            if (selectedExam) showToast(`Exam: ${selectedExam}`, 'success');
         }
 
         function selectSubjectFilter(subject) {
@@ -1461,16 +1676,17 @@
             selectedChapter = '';
             renderFilterAccordions();
             applyFilters();
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            document.getElementById('subjectAccordionItem').classList.add('open');
+            renderSelectedFiltersBar();
+            // Close the accordion after selection
+            closeAllAccordions();
         }
 
         function selectChapterFilter(chapter) {
             selectedChapter = (selectedChapter === chapter) ? '' : chapter;
             renderFilterAccordions();
             applyFilters();
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            document.getElementById('chapterAccordionItem').classList.add('open');
+            renderSelectedFiltersBar();
+            closeAllAccordions();
         }
 
         function clearAllFilters() {
@@ -1478,10 +1694,17 @@
             selectedExam = '';
             selectedSubject = '';
             selectedChapter = '';
+            selectedType = 'all';
+            sortOrder = 'oldest';
             document.getElementById('searchInput').value = '';
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+            document.getElementById('horizontalYearBar').classList.remove('show');
+            closeAllAccordions();
+            updateTypeButton();
+            document.getElementById('sortBtnText').textContent = 'Oldest';
+            document.getElementById('yearBtnText').textContent = 'Year';
             renderFilterAccordions();
             applyFilters();
+            renderSelectedFiltersBar();
             showToast('All filters cleared', 'info');
         }
 
@@ -1534,6 +1757,18 @@
                 (m.testName && m.testName.toLowerCase().includes(search)) ||
                 (m.testCode && m.testCode.toLowerCase().includes(search))
             );
+            // Type filter
+            if (selectedType === 'free') {
+                filtered = filtered.filter(m => m.type === 'free' || !m.type || m.type === '');
+            } else if (selectedType === 'paid') {
+                filtered = filtered.filter(m => m.type === 'paid' || (m.type && m.type !== 'free'));
+            }
+            // Sort order
+            if (sortOrder === 'oldest') {
+                filtered.sort((a, b) => (a._seq || 0) - (b._seq || 0));
+            } else {
+                filtered.sort((a, b) => (b._seq || 0) - (a._seq || 0));
+            }
             displayTests(filtered);
         }
 
@@ -1563,14 +1798,10 @@
                 const yearBadgeHTML = test.year ? `<span class="premium-badge-year"><i class="fas fa-calendar-alt"></i> ${test.year}</span>` : '';
                 const fromSheet = test.fromSheet === true;
 
-                // Ribbon based on position in filtered list (first = Latest, next two = New)
                 let ribbonHTML = '';
-                if (idx === 0) ribbonHTML = '<div class="ribbon latest">Latest</div>';
-                else if (idx === 1 || idx === 2) ribbonHTML = '<div class="ribbon new">New</div>';
-
+                // No ribbon for "latest" unless sort is newest and first; we'll avoid ribbons since order is dynamic
                 return `
                 <div class="premium-test-card" style="animation-delay:${idx*0.05}s">
-                    ${ribbonHTML}
                     <div class="premium-top-glow"></div>
                     <div class="premium-card-body">
                         <div class="premium-card-top-row">
@@ -1736,6 +1967,7 @@
                 if (document.getElementById('sidebarOverlay').classList.contains('active')) closeSidebarDirect();
                 if (document.getElementById('instructionSheetOverlay').classList.contains('active')) closeInstructionSheet();
                 document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
+                document.getElementById('horizontalYearBar').classList.remove('show');
             }
         });
         document.getElementById('instructionSheetOverlay').addEventListener('click', e => {
