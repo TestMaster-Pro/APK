@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* --- ALL YOUR EXISTING CSS (UNCHANGED) --- */
         :root {
             --primary: #243748;
             --primary-dark: #1a2a36;
@@ -739,16 +740,16 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- FOOTER – now exactly matches Dashboard design and links -->
     <footer class="pro-footer">
-        <div class="footer-install-section">
-            <button class="footer-install-btn" onclick="openInstallPopup()">
-                <i class="fas fa-download"></i> Add to Home Screen · Download APK
-            </button>
-        </div>
         <div class="footer-grid">
             <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"><li><i class="fas fa-spinner fa-pulse"></i> Loading categories…</li></ul></div>
             <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+        </div>
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()">
+                <i class="fas fa-download"></i> Download APK
+            </button>
         </div>
         <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
         <div class="footer-social">
@@ -931,7 +932,6 @@
 
             const [localMocks, sheetTests, aiTests] = results;
 
-            // Normalize with category property for footer grouping
             const normLocal = localMocks.map(t => ({ testCode: t.testCode, testName: t.testName || t.name || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl, category: t.category || 'Other', fromAi: false }));
             const normSheet = sheetTests.map(t => ({ testCode: t.testCode, testName: t.testName || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl, category: t.category || 'Other', fromAi: false }));
             const normAi = aiTests.map(t => ({ testCode: t.testId, testName: t.testName || t.testId, exam: t.examName, subject: t.subject, imageurl: '', category: '', fromAi: true }));
@@ -1240,7 +1240,6 @@
                 document.getElementById('avgAccuracy').textContent='0%';
                 document.getElementById('totalTimeSpent').textContent='0m';
             }
-            // weakest subject still works
             updateSubjectInsights();
         }
         function updateSubjectInsights() {
@@ -1356,13 +1355,12 @@
             }
         }
 
-        /* ---------- footer content (mocks.json + sheet, with categories) ---------- */
+        /* ---------- footer content (mocks.json + sheet, exactly like dashboard) ---------- */
         const JSON_PATHS = { mocks: './mocks.json', upcomingfooter: './json/upcomingfooter.json' };
         async function fetchJSON(p, fb) { try { const r = await fetch(p, { cache:'no-store' }); if (!r.ok) throw new Error(`HTTP ${r.status}`); const d = await r.json(); if (!Array.isArray(d) || !d.length) throw new Error('Empty'); return d; } catch(e) { if(fb) return fb; throw e; } }
         function groupByCategoryUniqueExams(arr) { const map={}; arr.forEach(item=>{ const cat=item.category||'Other'; if(!map[cat]) map[cat]={exams:[],seen:new Set()}; if(!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam); map[cat].exams.push(item); } }); return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams})); }
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
-            // allSheetDefs contains both local and sheet mocks with category property
             let defsForFooter = allSheetDefs.length ? allSheetDefs : (allMocks.length ? allMocks : await fetchJSON(JSON_PATHS.mocks, []));
             if (!Array.isArray(defsForFooter)) defsForFooter = [];
             const grouped = groupByCategoryUniqueExams(defsForFooter);
@@ -1370,17 +1368,13 @@
             grouped.forEach(cat => {
                 html += `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
             });
-            if (allSheetDefs.length) {
-                const uniqueExams = [...new Set(allSheetDefs.map(t => t.exam).filter(Boolean))];
-                if (uniqueExams.length) {
-                    html += `<li style="margin-top:8px;"><strong style="color:#fbbf24;font-size:12px;">Practice Tests</strong></li>`;
-                    uniqueExams.forEach(exam => {
-                        html += `<li><a onclick="navigate('exam2.html?exam=${encodeURIComponent(exam)}')">${exam}</a></li>`;
-                    });
-                }
-            }
-            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
+            // Extra links – identical to dashboard
+            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Mock Test</a></li>`;
+            html += `<li><a onclick="navigate('book.html')"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
+            html += `<li><a onclick="navigate('aichat.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Chat</a></li>`;
+            html += `<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Support Chat</a></li>`;
             html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
+            html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             c.innerHTML = html || '<li><a>No exams</a></li>';
         }
         async function renderFooterUpcoming() {
