@@ -6,7 +6,36 @@
     <title>Mock Test — Professional Exam Platform</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['\\[', '\\]']
+                ],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                }
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                ignoreHtmlClass: 'no-mathjax'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+
     <style>
         :root {
             --primary: #4f46e5;
@@ -176,7 +205,8 @@
         }
 
         @keyframes gentlePulse {
-            0%, 100% {
+            0%,
+            100% {
                 transform: scale(1);
                 box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35);
             }
@@ -487,7 +517,7 @@
 
         @media (max-width: 768px) {
             .mock-container {
-                padding: 12px;
+                padding: 8px;
             }
         }
 
@@ -502,12 +532,14 @@
             border: 1px solid var(--card-border);
             box-shadow: var(--shadow);
             transition: var(--transition);
+            overflow: hidden;
         }
 
         @media (max-width: 768px) {
             .top-bar {
                 border-radius: var(--radius);
-                margin: 0 0 16px 0;
+                margin: 0 0 12px 0;
+                padding: 12px 14px;
             }
         }
 
@@ -731,7 +763,8 @@
         }
 
         @keyframes timerPulse {
-            0%, 100% {
+            0%,
+            100% {
                 transform: scale(1);
                 box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2);
             }
@@ -749,6 +782,7 @@
             border: 1px solid var(--card-border);
             box-shadow: var(--shadow);
             transition: var(--transition);
+            overflow: hidden;
         }
 
         .progress-header {
@@ -760,6 +794,8 @@
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .progress-header span:last-child {
@@ -804,6 +840,12 @@
             transition: var(--transition);
             width: 100%;
             position: relative;
+            /* THE FIX: allow horizontal scroll on the entire card when content overflows */
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            max-width: 100%;
+            min-width: 0;
         }
 
         @keyframes slideUp {
@@ -828,7 +870,8 @@
 
         @media (max-width: 768px) {
             .question-card {
-                padding: 20px;
+                padding: 16px 12px;
+                border-radius: var(--radius-sm);
             }
         }
 
@@ -843,6 +886,14 @@
             border-bottom: 1px solid var(--border);
         }
 
+        @media (max-width: 768px) {
+            .q-header {
+                margin-bottom: 14px;
+                padding-bottom: 12px;
+                gap: 8px;
+            }
+        }
+
         .q-badge {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
@@ -852,6 +903,7 @@
             font-size: 12px;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
             letter-spacing: 0.3px;
+            white-space: nowrap;
         }
 
         .q-header-right {
@@ -894,9 +946,16 @@
             border-left: 4px solid var(--primary);
             margin-bottom: 24px;
             word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            /* Keep overflow-x auto as a fallback for extremely long inline elements */
+            overflow-x: auto;
+            overflow-y: visible;
             flex-shrink: 0;
             transition: var(--transition);
             white-space: pre-line;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
         }
 
         @media (min-width: 1024px) {
@@ -907,6 +966,16 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .question-text {
+                font-size: 14px;
+                padding: 14px;
+                line-height: 1.7;
+                margin-bottom: 16px;
+                border-left-width: 3px;
+            }
+        }
+
         .question-text img {
             display: block;
             max-width: 100%;
@@ -914,6 +983,21 @@
             border-radius: 12px;
             margin: 18px auto 0;
             box-shadow: var(--shadow);
+        }
+
+        /* MathJax elements inside question text should also scroll if needed */
+        .question-text mjx-container,
+        .question-text .MathJax,
+        .question-text mjx-math {
+            overflow-x: auto;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .question-text mjx-container[display="true"] {
+            overflow-x: auto;
+            display: block;
+            max-width: 100%;
         }
 
         .options-grid {
@@ -952,6 +1036,9 @@
             position: relative;
             overflow: hidden;
             user-select: none;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            min-width: 0;
         }
 
         @media (min-width: 1024px) {
@@ -959,6 +1046,14 @@
                 padding: 18px 22px;
                 font-size: 15px;
                 min-height: 56px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .option-card {
+                padding: 14px 16px;
+                font-size: 13px;
+                gap: 10px;
             }
         }
 
@@ -1015,6 +1110,15 @@
             border: 1.5px solid var(--border);
         }
 
+        @media (max-width: 768px) {
+            .option-letter {
+                width: 30px;
+                height: 30px;
+                font-size: 11px;
+                border-radius: 8px;
+            }
+        }
+
         .option-card.selected .option-letter {
             background: rgba(255, 255, 255, 0.25);
             color: white;
@@ -1039,6 +1143,13 @@
             flex-shrink: 0;
         }
 
+        @media (max-width: 768px) {
+            .action-row {
+                gap: 8px;
+                margin-top: 18px;
+            }
+        }
+
         .btn {
             padding: 10px 16px;
             border-radius: var(--radius-xs);
@@ -1059,6 +1170,15 @@
             white-space: nowrap;
             letter-spacing: 0.2px;
             user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                padding: 9px 12px;
+                font-size: 11px;
+                min-width: 60px;
+                gap: 4px;
+            }
         }
 
         .btn:disabled {
@@ -1148,6 +1268,14 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--card-border);
             transition: var(--transition);
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .palette-card {
+                padding: 14px;
+                border-radius: var(--radius-sm);
+            }
         }
 
         .palette-header {
@@ -1155,6 +1283,8 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .palette-title {
@@ -1171,6 +1301,7 @@
             gap: 12px;
             font-size: 11px;
             font-weight: 600;
+            flex-wrap: wrap;
         }
 
         .palette-stat {
@@ -1225,6 +1356,15 @@
             user-select: none;
         }
 
+        @media (max-width: 768px) {
+            .palette-num {
+                font-size: 10px;
+                min-width: 26px;
+                min-height: 26px;
+                border-radius: 6px;
+            }
+        }
+
         .palette-num:hover {
             background: var(--hover-bg);
             transform: scale(1.08);
@@ -1272,6 +1412,13 @@
             border-top: 1px solid var(--border);
         }
 
+        @media (max-width: 768px) {
+            .legend {
+                gap: 10px;
+                font-size: 10px;
+            }
+        }
+
         .legend span {
             display: flex;
             align-items: center;
@@ -1303,6 +1450,16 @@
             animation: toastSlide 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             max-width: 320px;
             line-height: 1.5;
+            word-break: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .toast {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: calc(100vw - 20px);
+            }
         }
 
         @keyframes toastSlide {
@@ -1366,11 +1523,19 @@
                 padding: 12px 14px;
             }
             .question-card {
-                padding: 18px;
+                padding: 14px 10px;
+            }
+            .question-text {
+                padding: 12px;
+                font-size: 13px;
             }
             .option-card {
-                padding: 14px;
-                font-size: 13px;
+                padding: 12px 14px;
+                font-size: 12px;
+            }
+            .btn {
+                padding: 8px 10px;
+                font-size: 11px;
             }
         }
 
@@ -1410,7 +1575,8 @@
             }
             .btn {
                 padding: 8px 10px;
-                font-size: 11px;
+                font-size: 10px;
+                min-width: 50px;
             }
         }
     </style>
@@ -1518,7 +1684,6 @@
                 <div class="top-actions-left">
                     <button class="icon-btn danger" onclick="confirmExit()" title="Exit Test" aria-label="Exit test"><i class="fas fa-sign-out-alt"></i></button>
                     <button class="icon-btn" onclick="openSidebar()" title="Info & Help" aria-label="Open info"><i class="fas fa-circle-info"></i></button>
-                    <!-- Language container (single toggle or multiple buttons) -->
                     <div class="lang-selector" id="langSelector" style="display:none;"></div>
                     <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Mode" aria-label="Toggle theme">
                         <i class="fas fa-sun" id="themeIcon"></i>
@@ -1617,14 +1782,13 @@
             });
         }
 
-        // ---------- Language map ----------
         const LANG_MAP = {
-            'hindi':      { code: 'hi', native: 'हिन्दी', english: 'English' },
-            'marathi':    { code: 'mr', native: 'मराठी', english: 'English' },
-            'gujarati':   { code: 'gu', native: 'ગુજરાતી', english: 'English' },
-            'bengali':    { code: 'bn', native: 'বাংলা', english: 'English' },
-            'tamil':      { code: 'ta', native: 'தமிழ்', english: 'English' },
-            'telugu':     { code: 'te', native: 'తెలుగు', english: 'English' },
+            'hindi': { code: 'hi', native: 'हिन्दी', english: 'English' },
+            'marathi': { code: 'mr', native: 'मराठी', english: 'English' },
+            'gujarati': { code: 'gu', native: 'ગુજરાતી', english: 'English' },
+            'bengali': { code: 'bn', native: 'বাংলা', english: 'English' },
+            'tamil': { code: 'ta', native: 'தமிழ்', english: 'English' },
+            'telugu': { code: 'te', native: 'తెలుగు', english: 'English' },
         };
 
         const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -1638,14 +1802,13 @@
             timeLeft: 0,
             timerInterval: null,
             testSubmitted: false,
-            lang: 'en',          // current active language code
-            altLanguages: [],    // array of { code, native, english } for available alternate languages
+            lang: 'en',
+            altLanguages: [],
             theme: 'light',
             welcomeDone: false,
             candidateName: 'Candidate'
         };
 
-        // ==================== WELCOME SEQUENCE ====================
         function runWelcomeSequence() {
             const overlay = document.getElementById('welcomeOverlay');
             const countdownEl = document.getElementById('countdownNumber');
@@ -1693,7 +1856,6 @@
             setTimeout(showCountdown, 500);
         }
 
-        // ==================== SIDEBAR ====================
         function openSidebar() {
             document.getElementById('sidebarPanel').classList.add('active');
             document.getElementById('sidebarBackdrop').classList.add('active');
@@ -1710,7 +1872,6 @@
             if (e.key === 'Escape') closeSidebar();
         });
 
-        // ==================== THEME ====================
         function applyTheme(theme) {
             state.theme = theme;
             document.body.setAttribute('data-theme', theme);
@@ -1735,7 +1896,6 @@
             }
         }
 
-        // ==================== LOAD TEST DATA ====================
         async function loadTestData() {
             try {
                 const res = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
@@ -1768,7 +1928,6 @@
 
                 state.timeLeft = (testConfig.duration || 10) * 60;
 
-                // Top bar exam info
                 const examIconTop = document.getElementById('examIconTop');
                 if (testConfig.imageurl) {
                     examIconTop.innerHTML =
@@ -1781,7 +1940,6 @@
                 document.getElementById('qMarks').textContent =
                     `+${testConfig.marksPerQuestion || 1} / -${testConfig.negativeMarking || 0}`;
 
-                // Sidebar info
                 document.getElementById('siTestName').textContent = testConfig.testName || 'Untitled';
                 document.getElementById('siExam').textContent = testConfig.exam || 'N/A';
                 document.getElementById('siSubject').textContent = testConfig.subject || 'N/A';
@@ -1790,14 +1948,12 @@
                 document.getElementById('siNeg').textContent = testConfig.negativeMarking || 0;
                 document.getElementById('siDuration').textContent = (testConfig.duration || 10) + ' min';
 
-                // Candidate name
                 const storedUser = JSON.parse(localStorage.getItem('user'));
                 if (storedUser && storedUser.name) {
                     state.candidateName = storedUser.name;
                 }
                 updateCandidateBadge();
 
-                // ----- MULTI-LANGUAGE DETECTION -----
                 const langSelector = document.getElementById('langSelector');
                 if (testConfig.language && testConfig.language.trim()) {
                     const langNames = testConfig.language.split(/[&,]+/).map(s => s.trim().toLowerCase());
@@ -1810,17 +1966,14 @@
                         state.altLanguages = availableLangs;
                         langSelector.style.display = 'flex';
 
-                        // Determine initial language
                         const savedLang = localStorage.getItem('mock_lang');
                         if (savedLang && availableLangs.some(l => l.code === savedLang)) {
                             state.lang = savedLang;
                         } else {
-                            state.lang = 'en'; // default to English
+                            state.lang = 'en';
                         }
 
-                        // Build UI based on number of alternates
                         if (availableLangs.length === 1) {
-                            // Single toggle button (like original)
                             langSelector.innerHTML = '';
                             const toggleBtn = document.createElement('button');
                             toggleBtn.className = 'lang-btn' + (state.lang === availableLangs[0].code ? ' active' : '');
@@ -1828,7 +1981,6 @@
                             toggleBtn.onclick = () => toggleSingleLanguage(availableLangs[0]);
                             langSelector.appendChild(toggleBtn);
                         } else {
-                            // Multiple buttons: English + each alternate
                             buildMultiLanguageSelector();
                         }
                     } else {
@@ -1838,7 +1990,6 @@
                     langSelector.style.display = 'none';
                 }
 
-                // Update welcome screen
                 const examIcon = document.getElementById('welcomeExamIcon');
                 if (testConfig.imageurl) {
                     examIcon.innerHTML =
@@ -1876,9 +2027,6 @@
             document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + name + '!';
         }
 
-        // ==================== LANGUAGE SWITCHING ====================
-
-        // Single toggle (1 alternate)
         function toggleSingleLanguage(altLang) {
             if (state.lang === 'en') {
                 state.lang = altLang.code;
@@ -1887,7 +2035,6 @@
             }
             localStorage.setItem('mock_lang', state.lang);
 
-            // Update button text
             const btn = document.querySelector('#langSelector .lang-btn');
             if (btn) {
                 btn.textContent = state.lang === 'en' ? altLang.native : 'English';
@@ -1896,19 +2043,16 @@
             renderQuestion();
         }
 
-        // Multiple languages (2+ alternates) – show buttons for English and each alternate
         function buildMultiLanguageSelector() {
             const selector = document.getElementById('langSelector');
             selector.innerHTML = '';
 
-            // English button
             const enBtn = document.createElement('button');
             enBtn.className = 'lang-btn' + (state.lang === 'en' ? ' active' : '');
             enBtn.textContent = 'English';
             enBtn.onclick = () => setLanguage('en');
             selector.appendChild(enBtn);
 
-            // Alternate language buttons
             state.altLanguages.forEach(lang => {
                 const btn = document.createElement('button');
                 btn.className = 'lang-btn' + (state.lang === lang.code ? ' active' : '');
@@ -1922,7 +2066,6 @@
             state.lang = langCode;
             localStorage.setItem('mock_lang', langCode);
 
-            // Update button active states
             const selector = document.getElementById('langSelector');
             selector.querySelectorAll('.lang-btn').forEach(btn => {
                 const btnText = btn.textContent;
@@ -1935,7 +2078,6 @@
             renderQuestion();
         }
 
-        // ==================== RENDER QUESTION (multi-lang) ====================
         function renderQuestion() {
             if (state.testSubmitted) return;
             if (!questions.length || !questions[state.currentIndex]) {
@@ -1962,7 +2104,7 @@
             if (q.image_url) {
                 const imgUrl = `https://testmaster-pro.github.io/Questions-image/${q.image_url}`;
                 questionHTML += `<div style="margin-top:18px; text-align:center;">
-                    <img src="${imgUrl}" alt="Question image" style="max-width:100%; height:auto; border-radius:12px; box-shadow: var(--shadow);" onerror="this.style.display='none';" />
+                    <img src="${imgUrl}" alt="Question image" style="max-width:100%; height:auto; border-radius:12px; box-shadow: var(--shadow);" onerror="this.style.display='none';" loading="lazy" />
                 </div>`;
             }
             document.getElementById('questionText').innerHTML = questionHTML;
@@ -2012,6 +2154,11 @@
             document.getElementById('nextBtn').disabled = state.currentIndex === questions.length - 1;
             updateProgress();
             renderPaletteHighlight();
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([document.getElementById('questionCard')]).catch(err =>
+                    console.warn('MathJax typeset error:', err));
+            }
         }
 
         function selectOption(index) {
@@ -2064,7 +2211,6 @@
             }
         }
 
-        // ==================== PALETTE ====================
         function renderPalette() {
             const grid = document.getElementById('paletteGrid');
             grid.innerHTML = '';
@@ -2090,7 +2236,7 @@
                         state.currentIndex = i;
                         renderQuestion();
                         document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth',
-                        block: 'start' });
+                            block: 'start' });
                     }
                 };
                 grid.appendChild(num);
@@ -2126,7 +2272,6 @@
                 `${answered}/${questions.length} answered (${Math.round(pct)}%)`;
         }
 
-        // ==================== TIMER ====================
         function startTimer() {
             updateTimerDisplay();
             if (state.timerInterval) clearInterval(state.timerInterval);
@@ -2166,7 +2311,6 @@
             setTimeout(() => submitTest(true), 1500);
         }
 
-        // ==================== SUBMISSION ====================
         async function submitTest(skipConfirm = false) {
             if (state.testSubmitted) return;
             if (!questions.length) { showToast('No test data loaded'); return; }
@@ -2247,10 +2391,8 @@
                     timeTaken: (testConfig.duration || 10) * 60 - state.timeLeft
                 };
 
-                // Store under the generic "last_review_data" key (backward compatibility)
                 localStorage.setItem('last_review_data', JSON.stringify(reviewData));
 
-                // **** NEW: store with a unique key per attempt (username + testCode + timestamp) ****
                 const timestamp = Date.now().toString();
                 reviewData.timestamp = timestamp;
                 const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -2297,8 +2439,8 @@
                 }
 
                 const timeTaken = reviewData.timeTaken;
-                // Pass timestamp in the redirect URL so result.html can locate the stored review data
-                const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}&timestamp=${timestamp}`;
+                const redirectUrl =
+                    `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(testCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}&timestamp=${timestamp}`;
                 setTimeout(() => { window.location.href = redirectUrl; }, 800);
             } catch (err) {
                 console.error('Submit error:', err);
@@ -2309,7 +2451,8 @@
         }
 
         function calculateScore() {
-            let correct = 0, wrong = 0;
+            let correct = 0,
+                wrong = 0;
             questions.forEach((q, idx) => {
                 if (state.answers[idx] === q.c) correct++;
                 else if (state.answers[idx] !== undefined) wrong++;
@@ -2350,7 +2493,6 @@
             }
         }
 
-        // Swipe navigation
         let touchStartX = 0;
         let touchStartY = 0;
         const questionCard = document.getElementById('questionCard');
@@ -2369,7 +2511,6 @@
             }
         }, { passive: true });
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', e => {
             if (state.testSubmitted ||
                 document.getElementById('sidebarPanel').classList.contains('active') ||
@@ -2432,7 +2573,6 @@
             }, 2200);
         }
 
-        // ==================== INIT ====================
         async function init() {
             loadTheme();
             const storedUser = JSON.parse(localStorage.getItem('user'));
