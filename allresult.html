@@ -84,6 +84,12 @@
         .offline-banner { position:fixed; top:0; left:0; width:100%; background:var(--red); color:#fff; text-align:center; padding:6px; font-size:11px; font-weight:700; z-index:999; transform:translateY(-100%); transition:transform 0.3s ease; }
         .offline-banner.show { transform:translateY(0); }
 
+        /* Top sync progress bar */
+        .sync-progress {
+            position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg, var(--primary), var(--green));
+            z-index:1001; width:0%; transition:width 0.4s ease; box-shadow:0 1px 4px rgba(0,0,0,0.1);
+        }
+
         /* Sidebar */
         .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250; opacity:0; visibility:hidden; transition:opacity 0.35s ease,visibility 0.35s; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
         .sidebar-overlay.active { opacity:1; visibility:visible; }
@@ -153,45 +159,25 @@
         .stat-info h3 { font-size:clamp(17px,3.8vw,22px); font-weight:800; letter-spacing:-0.3px; color:var(--gray-800); }
         .stat-info p { color:var(--gray-400); font-size:clamp(10px,2.2vw,12px); font-weight:600; }
 
-        /* Inline fetch loader */
-        .fetch-loader {
-            display:none;
-            align-items:center;
-            justify-content:center;
-            gap:10px;
-            padding:10px 14px;
-            margin-bottom:14px;
-            background:var(--white);
-            border-radius:var(--radius);
-            border:1px solid #e8ecf0;
-            box-shadow:var(--shadow-xs);
-            color:var(--primary);
-            font-weight:600;
-            font-size:13px;
-            animation:fadeIn 0.3s ease;
-        }
-        .fetch-loader i { font-size:16px; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
-
         /* Filter section */
         .filter-section { background:var(--white); border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:14px; box-shadow:var(--shadow-xs); display:flex; flex-wrap:wrap; align-items:center; gap:10px; border:1px solid #e8ecf0; }
         .date-range-row { display:flex; align-items:center; gap:8px; width:100%; flex-wrap:wrap; }
         .date-range-row .label { font-weight:700; color:var(--gray-700); white-space:nowrap; font-size:clamp(12px,2.6vw,14px); }
         .input-with-icon { position:relative; flex:1 1 120px; min-width:110px; }
         .input-with-icon input[type="date"] {
-            padding:6px 10px 6px 32px;
-            border:2px solid var(--gray-200);
-            border-radius:12px;
+            padding:5px 8px 5px 30px;
+            border:1.5px solid var(--gray-200);
+            border-radius:10px;
             font-family:var(--font);
-            font-size:12px;
+            font-size:11px;
             background:#f8fafc;
             width:100%;
             transition:var(--transition-fast);
             outline:none;
-            min-height:34px;
+            min-height:32px;
         }
-        .input-with-icon input[type="date"]:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(36,55,72,0.08); background:white; }
-        .input-with-icon i { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--gray-400); font-size:13px; pointer-events:none; }
+        .input-with-icon input[type="date"]:focus { border-color:var(--primary); box-shadow:0 0 0 2px rgba(36,55,72,0.08); background:white; }
+        .input-with-icon i { position:absolute; left:8px; top:50%; transform:translateY(-50%); color:var(--gray-400); font-size:12px; pointer-events:none; }
 
         .filter-bar-inline { display:flex; gap:8px; flex-wrap:wrap; flex:1; min-width:200px; }
         .filter-bar-inline input { padding:10px 14px; border:2px solid var(--gray-200); border-radius:14px; font-family:var(--font); font-size:clamp(11px,2.3vw,13px); background:#f8fafc; flex:1 1 130px; min-width:120px; transition:var(--transition-fast); outline:none; }
@@ -265,18 +251,19 @@
             overflow:hidden;
         }
         /* App icon background on card */
-        .card-inner::after {
-            content: '';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 64px;
-            height: 64px;
-            background: url('image/favicon.jpg') center/contain no-repeat;
-            opacity: 0.04;
-            pointer-events: none;
-            z-index: 0;
-        }
+    .card-inner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: url('image/appicon.jpg') center/contain no-repeat;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+}
         .card-checkbox-wrap {
             position:absolute;
             top:10px;
@@ -525,6 +512,7 @@
     </style>
 </head>
 <body>
+    <div class="sync-progress" id="syncProgress"></div>
     <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
     <div class="toast-container" id="toastContainer"></div>
 
@@ -612,7 +600,7 @@
             <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--red),#f87171);"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-info"><h3 id="weakestSubject">--</h3><p>Needs Focus</p></div></div>
         </div>
 
-        <!-- Filters (only date & search, no exam/subject filter) -->
+        <!-- Filters (only date & search) -->
         <div class="filter-section">
             <div class="date-range-row">
                 <span class="label">📅 Date Range:</span>
@@ -632,12 +620,6 @@
                 </div>
             </div>
             <button class="reset-btn" onclick="resetFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
-        </div>
-
-        <!-- Inline fetch loader -->
-        <div class="fetch-loader" id="fetchLoader">
-            <i class="fas fa-circle-notch fa-spin"></i>
-            <span id="fetchLoaderText">Fetching your results...</span>
         </div>
 
         <!-- Results panel -->
@@ -714,11 +696,11 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
         const STREAK_API_URL = API_URL;
 
-        let allTestDefs = [];       // merged definitions (testCode, testName, exam, subject, imageurl)
-        let allMocks = [];          // local mocks.json (kept for footer)
+        let allTestDefs = [];
+        let allMocks = [];
         let allUserResults = [];
         let filteredResults = [];
-        let selectedExam = '';      // kept for possible future use but no filter
+        let selectedExam = '';
         let currentSort = { field: 'date', direction: 'desc' };
         let currentPage = 1;
         const RESULTS_PER_PAGE = 15;
@@ -801,88 +783,84 @@
             else { el.textContent = (userObj && userObj.name) ? userObj.name.charAt(0).toUpperCase() : 'S'; }
         }
 
-        /* ---------- loading helpers ---------- */
-        function showInlineLoading(msg) {
-            const el = document.getElementById('fetchLoader');
-            const txt = document.getElementById('fetchLoaderText');
-            if (el && txt) { txt.textContent = msg || 'Fetching your results...'; el.style.display = 'flex'; }
+        /* ---------- sync progress bar ---------- */
+        function setSyncProgress(percent) {
+            document.getElementById('syncProgress').style.width = percent + '%';
         }
-        function hideInlineLoading() {
-            const el = document.getElementById('fetchLoader');
-            if (el) el.style.display = 'none';
-        }
-        function showLoading(m) { Swal.fire({ title:m||'Loading...', allowOutsideClick:false, showConfirmButton:false, didOpen:()=>Swal.showLoading() }); }
-        function hideLoading() { Swal.close(); }
 
-        /* ---------- load all test definitions ---------- */
-        async function loadAllTestDefinitions() {
+        /* ---------- cache management ---------- */
+        const CACHE_KEY = 'allResultsCache';
+        const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+
+        function getCachedData() {
             try {
-                const [localMocks, sheetTests, aiTests] = await Promise.all([
-                    fetch('mocks.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []),
-                    fetch(`${API_URL}?action=getAllMockTests`).then(r => r.ok ? r.json() : []).then(d => d.success && d.tests ? d.tests : []).catch(() => []),
-                    fetch(`${API_URL}?action=getAiMockTests`).then(r => r.ok ? r.json() : []).then(d => d.success && d.tests ? d.tests : []).catch(() => [])
-                ]);
+                const raw = localStorage.getItem(CACHE_KEY);
+                if (!raw) return null;
+                const cache = JSON.parse(raw);
+                if (Date.now() - cache.timestamp < CACHE_DURATION) {
+                    return cache;
+                }
+            } catch(e) {}
+            return null;
+        }
 
-                const normLocal = localMocks.map(t => ({ testCode: t.testCode, testName: t.testName || t.name || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
-                const normSheet = sheetTests.map(t => ({ testCode: t.testCode, testName: t.testName || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
-                const normAi = aiTests.map(t => ({ testCode: t.testId, testName: t.testName || t.testId, exam: t.examName, subject: t.subject, imageurl: '' }));
+        function setCachedData(testDefs, results) {
+            try {
+                const cache = {
+                    testDefs,
+                    results,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+            } catch(e) {}
+        }
 
-                const merged = [...normSheet, ...normAi];
-                const seenCodes = new Set(merged.map(t => t.testCode));
-                normLocal.forEach(t => {
-                    if (!seenCodes.has(t.testCode)) {
-                        merged.push(t);
-                        seenCodes.add(t.testCode);
-                    }
+        /* ---------- load all test definitions (with progress) ---------- */
+        async function loadAllTestDefinitions(updateProgress) {
+            const tasks = [
+                fetch('mocks.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []),
+                fetch(`${API_URL}?action=getAllMockTests`).then(r => r.ok ? r.json() : []).then(d => d.success && d.tests ? d.tests : []).catch(() => []),
+                fetch(`${API_URL}?action=getAiMockTests`).then(r => r.ok ? r.json() : []).then(d => d.success && d.tests ? d.tests : []).catch(() => [])
+            ];
+
+            let completed = 0;
+            const results = await Promise.all(tasks.map(p => p.then(res => { completed++; if (updateProgress) updateProgress(completed / tasks.length * 100); return res; })));
+
+            const [localMocks, sheetTests, aiTests] = results;
+
+            const normLocal = localMocks.map(t => ({ testCode: t.testCode, testName: t.testName || t.name || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
+            const normSheet = sheetTests.map(t => ({ testCode: t.testCode, testName: t.testName || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
+            const normAi = aiTests.map(t => ({ testCode: t.testId, testName: t.testName || t.testId, exam: t.examName, subject: t.subject, imageurl: '' }));
+
+            const merged = [...normSheet, ...normAi];
+            const seenCodes = new Set(merged.map(t => t.testCode));
+            normLocal.forEach(t => {
+                if (!seenCodes.has(t.testCode)) {
+                    merged.push(t);
+                    seenCodes.add(t.testCode);
+                }
+            });
+            allTestDefs = merged;
+            allMocks = localMocks;
+        }
+
+        /* ---------- load user results (with progress) ---------- */
+        async function loadUserResults(updateProgress) {
+            const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+            if (updateProgress) updateProgress(100);
+            const d = await res.json();
+            if (d.success) {
+                allUserResults = d.results;
+                allUserResults.forEach(r => {
+                    const def = allTestDefs.find(t => t.testCode === r.testCode);
+                    r.examName = def?.exam || 'Unknown';
+                    r.subjectName = def?.subject || '';
+                    r.testName = def?.testName || r.testCode;
+                    r.examImage = def?.imageurl || '';
                 });
-                allTestDefs = merged;
-                allMocks = localMocks;
-            } catch (e) {
-                // fallback to local only
-                try {
-                    const localMocks = await fetch('mocks.json', { cache: 'no-store' }).then(r => r.json());
-                    allTestDefs = localMocks.map(t => ({ testCode: t.testCode, testName: t.testName || t.name || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
-                    allMocks = localMocks;
-                } catch (err) {
-                    allTestDefs = [];
-                    allMocks = [];
-                }
+                return true;
             }
-        }
-
-        /* ---------- load user results ---------- */
-        async function loadUserResults() {
-            showInlineLoading('Fetching your results...');
-            try {
-                const r = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
-                const d = await r.json();
-                hideInlineLoading();
-                if (d.success) {
-                    allUserResults = d.results;
-                    // enrich with test definitions
-                    allUserResults.forEach(r => {
-                        const def = allTestDefs.find(t => t.testCode === r.testCode);
-                        r.examName = def?.exam || 'Unknown';
-                        r.subjectName = def?.subject || '';
-                        r.testName = def?.testName || r.testCode;
-                        r.examImage = def?.imageurl || '';
-                    });
-                    filteredResults = [...allUserResults];
-                    selectedRows = new Set();
-                    currentPage = 1;
-                    applyResultFilters();
-                    updateStats();
-                    updateSubjectInsights();
-                } else {
-                    allUserResults = []; filteredResults = []; selectedRows = new Set();
-                    updateStats(); updateSubjectInsights(); renderTable([]); renderMobileCards([]);
-                }
-            } catch (e) {
-                hideInlineLoading();
-                showToast('Could not load results. Please try again.', 'error');
-                allUserResults = []; filteredResults = []; selectedRows = new Set();
-                updateStats(); updateSubjectInsights(); renderTable([]); renderMobileCards([]);
-            }
+            return false;
         }
 
         function applyResultFilters() {
@@ -1244,10 +1222,24 @@
             const btnRefresh = document.getElementById('btnRefresh');
             btnRefresh.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...';
             btnRefresh.disabled = true;
-            await loadUserResults();
+            setSyncProgress(0);
+            await loadAllTestDefinitions(p => setSyncProgress(p * 0.75));
+            const ok = await loadUserResults(p => setSyncProgress(75 + p * 0.25));
+            setSyncProgress(100);
+            setTimeout(() => setSyncProgress(0), 600);
             btnRefresh.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
             btnRefresh.disabled = false;
-            showToast('Results refreshed!','success');
+            if (ok) {
+                setCachedData(allTestDefs, allUserResults);
+                filteredResults = [...allUserResults];
+                applyResultFilters();
+                updateStats();
+                updateSubjectInsights();
+                renderFooterExamCategories();
+                showToast('Results refreshed!', 'success');
+            } else {
+                showToast('Could not refresh results.', 'error');
+            }
         }
 
         /* ---------- footer content ---------- */
@@ -1256,7 +1248,7 @@
         function groupByCategoryUniqueExams(arr) { const map={}; arr.forEach(item=>{ const cat=item.category||'Other'; if(!map[cat]) map[cat]={exams:[],seen:new Set()}; if(!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam); map[cat].exams.push(item); } }); return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams})); }
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
-            const data = await fetchJSON(JSON_PATHS.mocks, []);
+            const data = allMocks.length ? allMocks : await fetchJSON(JSON_PATHS.mocks, []);
             const grouped = groupByCategoryUniqueExams(data);
             if (!grouped.length) { c.innerHTML='<li><a>No exams</a></li>'; return; }
             let html='';
@@ -1287,7 +1279,7 @@
         document.getElementById('analysisModal').addEventListener('click', function(e) { if (e.target === this) closeAnalysis(); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (document.getElementById('analysisModal').style.display === 'flex') closeAnalysis(); if (document.getElementById('sidebarOverlay').classList.contains('active')) closeSidebarDirect(); } });
 
-        /* ---------- init ---------- */
+        /* ---------- init with cache-first strategy ---------- */
         (async function init() {
             updateOnlineStatus();
             displayStreak();
@@ -1295,13 +1287,63 @@
             setAvatarWithPic('sidebarAvatar', user);
             document.getElementById('sidebarUserName').textContent = user?.name || 'Student';
             document.getElementById('sidebarUserTag').textContent = user?.preparingFor || 'Learner';
-            showInlineLoading('Loading test definitions...');
-            await loadAllTestDefinitions();
-            hideInlineLoading();
-            await loadUserResults();
-            renderFooterExamCategories();
-            renderFooterUpcoming();
+
+            const cached = getCachedData();
+            if (cached) {
+                // Render immediately from cache
+                allTestDefs = cached.testDefs;
+                allMocks = cached.testDefs; // for footer (not exact but ok)
+                allUserResults = cached.results;
+                filteredResults = [...allUserResults];
+                applyResultFilters();
+                updateStats();
+                updateSubjectInsights();
+                renderFooterExamCategories();
+                renderFooterUpcoming();
+                // Start background fetch for fresh data
+                backgroundSync();
+            } else {
+                // No cache: fetch fresh with progress bar
+                setSyncProgress(0);
+                await loadAllTestDefinitions(p => setSyncProgress(p * 0.75));
+                const ok = await loadUserResults(p => setSyncProgress(75 + p * 0.25));
+                setSyncProgress(100);
+                setTimeout(() => setSyncProgress(0), 600);
+                if (ok) {
+                    setCachedData(allTestDefs, allUserResults);
+                    filteredResults = [...allUserResults];
+                    applyResultFilters();
+                    updateStats();
+                    updateSubjectInsights();
+                    renderFooterExamCategories();
+                    renderFooterUpcoming();
+                } else {
+                    showToast('Could not load results. Please try again.', 'error');
+                    renderFooterExamCategories();
+                    renderFooterUpcoming();
+                }
+            }
         })();
+
+        async function backgroundSync() {
+            setSyncProgress(0);
+            await loadAllTestDefinitions(p => setSyncProgress(p * 0.75));
+            const ok = await loadUserResults(p => setSyncProgress(75 + p * 0.25));
+            setSyncProgress(100);
+            setTimeout(() => setSyncProgress(0), 600);
+            if (ok) {
+                setCachedData(allTestDefs, allUserResults);
+                filteredResults = [...allUserResults];
+                applyResultFilters();
+                updateStats();
+                updateSubjectInsights();
+                renderFooterExamCategories();
+            }
+        }
+
+        /* ---------- helper loading ---------- */
+        function showLoading(m) { Swal.fire({ title:m||'Loading...', allowOutsideClick:false, showConfirmButton:false, didOpen:()=>Swal.showLoading() }); }
+        function hideLoading() { Swal.close(); }
     </script>
 </body>
 </html>
