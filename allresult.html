@@ -148,10 +148,10 @@
         .page-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; }
         .page-header h1 { font-size:clamp(20px, 4.5vw, 24px); font-weight:800; color:var(--gray-800); display:flex; align-items:center; gap:8px; }
 
-        /* Stats cards */
+        /* Stats cards (4 cards now) */
         .stats-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:10px; margin-bottom:16px; animation:cardSlideIn 0.5s ease-out; }
-        @media (min-width:600px) { .stats-grid { grid-template-columns: repeat(3,1fr); gap:14px; } }
-        @media (min-width:900px) { .stats-grid { grid-template-columns: repeat(5,1fr); gap:16px; margin-bottom:24px; } }
+        @media (min-width:600px) { .stats-grid { grid-template-columns: repeat(2,1fr); gap:14px; } }
+        @media (min-width:900px) { .stats-grid { grid-template-columns: repeat(4,1fr); gap:16px; margin-bottom:24px; } }
         .stat-card { background:var(--white); border-radius:var(--radius); padding:14px 12px; box-shadow:var(--shadow-xs); display:flex; align-items:center; gap:10px; transition:var(--transition-smooth); border:1px solid #e8ecf0; cursor:default; min-height:60px; }
         .stat-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px); border-color:var(--primary-light); }
         .stat-icon { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:16px; color:white; flex-shrink:0; box-shadow:0 4px 10px rgba(0,0,0,0.1); transition:var(--transition-smooth); }
@@ -163,6 +163,8 @@
         .filter-section { background:var(--white); border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:14px; box-shadow:var(--shadow-xs); display:flex; flex-wrap:wrap; align-items:center; gap:10px; border:1px solid #e8ecf0; }
         .date-range-row { display:flex; align-items:center; gap:8px; width:100%; flex-wrap:wrap; }
         .date-range-row .label { font-weight:700; color:var(--gray-700); white-space:nowrap; font-size:clamp(12px,2.6vw,14px); }
+        .date-range-row .date-to { font-weight:600; color:var(--gray-500); margin:0 4px; display:none; }
+        @media (min-width:400px) { .date-range-row .date-to { display:inline; } }
         .input-with-icon { position:relative; flex:1 1 120px; min-width:110px; }
         .input-with-icon input[type="date"] {
             padding:5px 8px 5px 30px;
@@ -192,6 +194,44 @@
         .btn-bulk-delete.visible { display:flex; }
         .reset-btn { background:var(--gray-100); border:1.5px solid var(--gray-200); color:var(--gray-600); padding:10px 16px; border-radius:40px; font-weight:600; font-size:clamp(11px,2.3vw,13px); cursor:pointer; display:flex; align-items:center; gap:5px; white-space:nowrap; transition:var(--transition-fast); }
         .reset-btn:hover { background:var(--gray-200); }
+
+        /* Loading quotes */
+        .loading-quote-container {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin: 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid rgba(36,55,72,0.1);
+            box-shadow: var(--shadow-xs);
+            animation: cardSlideIn 0.4s ease-out;
+            transition: opacity 0.3s;
+        }
+        .loading-quote-container.hidden { display: none; }
+        .loading-spinner {
+            width: 32px; height: 32px;
+            border: 3px solid rgba(36,55,72,0.15);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-quote-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            flex: 1;
+            line-height: 1.4;
+        }
+        .loading-quote-progress {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
 
         /* Results panel */
         .results-panel { background:var(--white); border-radius:var(--radius-xl); box-shadow:var(--shadow-sm); overflow:hidden; border:1px solid #e8ecf0; animation:cardSlideIn 0.5s ease-out; }
@@ -224,7 +264,7 @@
         .row-checkbox { width:17px; height:17px; cursor:pointer; accent-color:var(--primary); border-radius:4px; }
         .checkbox-col { width:40px; text-align:center; }
 
-        /* Mobile result cards – softer, with background logo */
+        /* Mobile result cards – professional thin top border */
         .mobile-cards-container { display:none; flex-direction:column; gap:14px; padding:10px 4px; }
         @media (max-width:639px) {
             .results-table-wrap { display:none !important; }
@@ -233,13 +273,27 @@
         .result-card {
             position:relative;
             border-radius:22px;
-            padding:1px;
-            background: linear-gradient(135deg, rgba(36,55,72,0.08), rgba(0,102,255,0.08), rgba(76,211,138,0.08));
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            padding:0;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
             transition:var(--transition-smooth);
             animation:cardSlideIn 0.45s ease-out;
+            border: 1px solid #e8ecf0;
+            overflow: hidden;
         }
-        .result-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform:translateY(-1px); }
+        .result-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); transform:translateY(-2px); }
+        /* Thin, professional top glow */
+        .result-top-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4);
+            border-radius: 22px 22px 0 0;
+            box-shadow: 0 1px 4px rgba(79,70,229,0.2);
+            z-index: 2;
+        }
         .card-inner {
             background:#fff;
             border-radius:20px;
@@ -249,21 +303,22 @@
             gap:12px;
             position:relative;
             overflow:hidden;
+            padding-top: 10px;
         }
-        /* App icon background on card */
-    .card-inner::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    background: url('image/appicon.jpg') center/contain no-repeat;
-    opacity: 0.2;
-    pointer-events: none;
-    z-index: 0;
-}
+        /* Subtle app icon watermark */
+        .card-inner::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: url('image/appicon.jpg') center/contain no-repeat;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
         .card-checkbox-wrap {
             position:absolute;
             top:10px;
@@ -282,9 +337,9 @@
             z-index: 1;
         }
         .card-exam-image {
-            width:48px;
-            height:48px;
-            border-radius:14px;
+            width:44px;
+            height:44px;
+            border-radius:12px;
             background:var(--primary-light);
             display:flex;
             align-items:center;
@@ -292,13 +347,13 @@
             overflow:hidden;
             flex-shrink:0;
             border:2px solid #fff;
-            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            box-shadow:0 2px 6px rgba(0,0,0,0.06);
         }
         .card-exam-image img { width:100%; height:100%; object-fit:cover; }
         .card-title-block { flex:1; min-width:0; position: relative; z-index: 1; }
         .card-test-name {
             font-weight:700;
-            font-size:15px;
+            font-size:14px;
             color:var(--gray-800);
             line-height:1.25;
             overflow:hidden;
@@ -308,7 +363,7 @@
             -webkit-box-orient:vertical;
         }
         .card-test-code {
-            font-size:11px;
+            font-size:10px;
             color:var(--gray-400);
             font-weight:500;
             margin-top:2px;
@@ -317,30 +372,30 @@
             display:flex;
             flex-direction:column;
             align-items:center;
-            gap:3px;
+            gap:2px;
             flex-shrink:0;
             position: relative;
             z-index: 1;
         }
         .card-score-circle {
-            width:54px;
-            height:54px;
+            width:48px;
+            height:48px;
             border-radius:50%;
             display:flex;
             align-items:center;
             justify-content:center;
             font-weight:800;
-            font-size:13px;
+            font-size:12px;
             flex-shrink:0;
             background:#fff;
-            border:3px solid transparent;
+            border:2px solid transparent;
         }
         .card-score-circle.master { border-color:var(--green); color:#065f46; box-shadow:0 0 0 3px #d1fae5; }
         .card-score-circle.proficient { border-color:#6366f1; color:#3730a3; box-shadow:0 0 0 3px #e0e7ff; }
         .card-score-circle.needs-review { border-color:#f59e0b; color:#92400e; box-shadow:0 0 0 3px #fef3c7; }
         .card-score-circle.failed { border-color:var(--red); color:#991b1b; box-shadow:0 0 0 3px #fee2e2; }
         .card-score-label {
-            font-size:9px;
+            font-size:8px;
             font-weight:700;
             color:var(--gray-400);
             text-transform:uppercase;
@@ -350,52 +405,52 @@
         .card-stats-row {
             display:grid;
             grid-template-columns:repeat(4, 1fr);
-            gap:8px;
+            gap:6px;
             position: relative;
             z-index: 1;
         }
         .stat-box {
             background:#f8fafc;
-            border-radius:12px;
-            padding:10px 6px;
+            border-radius:10px;
+            padding:8px 4px;
             text-align:center;
             border:1px solid #e8ecf1;
             display:flex;
             flex-direction:column;
             align-items:center;
-            gap:3px;
+            gap:2px;
         }
         .stat-box .stat-val {
-            font-size:13px;
+            font-size:12px;
             font-weight:700;
             color:var(--gray-800);
         }
         .stat-box .stat-label {
-            font-size:9px;
+            font-size:8px;
             font-weight:600;
             color:var(--gray-400);
             text-transform:uppercase;
-            letter-spacing:0.4px;
+            letter-spacing:0.3px;
         }
 
         .card-status-bar {
             display:flex;
             align-items:center;
             justify-content:space-between;
-            gap:10px;
+            gap:8px;
             flex-wrap:wrap;
             position: relative;
             z-index: 1;
         }
         .card-status-bar .accuracy-text {
-            font-size:12px;
+            font-size:11px;
             font-weight:600;
             color:var(--gray-500);
         }
 
         .card-actions {
             display:flex;
-            gap:8px;
+            gap:6px;
             justify-content:flex-end;
             border-top:1px solid #f1f5f9;
             padding-top:10px;
@@ -403,18 +458,18 @@
             z-index: 1;
         }
         .card-action-btn {
-            padding:8px 14px;
-            border-radius:25px;
+            padding:7px 10px;
+            border-radius:20px;
             border:1.5px solid #e2e8f0;
             background:white;
             font-weight:600;
-            font-size:12px;
+            font-size:11px;
             cursor:pointer;
             font-family:var(--font);
             transition:var(--transition-fast);
             display:flex;
             align-items:center;
-            gap:5px;
+            gap:4px;
             flex:1;
             justify-content:center;
         }
@@ -474,6 +529,15 @@
         .footer-col a::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px; background:var(--accent); transition:width 0.3s ease; }
         .footer-col a:hover { color:#ffffff; transform:translateX(3px); }
         .footer-col a:hover::after { width:100%; }
+        .footer-install-section { text-align: center; margin: 16px 0 20px; }
+        .footer-install-btn {
+            display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff; border: none; padding: 14px 24px; border-radius: 28px; font-weight: 700; font-size: 14px;
+            cursor: pointer; font-family: var(--font); transition: all 0.25s ease;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); text-decoration: none;
+        }
+        .footer-install-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(79, 70, 229, 0.55); color: #fff; }
+        .footer-install-btn:active { transform: scale(0.94); transition: 0.06s; }
         .footer-email { text-align:center; margin-bottom:24px; }
         .footer-email a { color:#38bdf8; font-size:14px; font-weight:600; text-decoration:none; transition:color 0.2s; }
         .footer-email a:hover { color:var(--accent); }
@@ -591,26 +655,26 @@
             </div>
         </div>
 
-        <!-- Stats cards -->
+        <!-- Stats cards (4 cards, Best Accuracy removed) -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));"><i class="fas fa-file-alt"></i></div><div class="stat-info"><h3 id="totalAttempts">0</h3><p>Total Attempts</p></div></div>
             <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--green),#34d399);"><i class="fas fa-percent"></i></div><div class="stat-info"><h3 id="avgAccuracy">0%</h3><p>Avg Accuracy</p></div></div>
-            <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--accent),#fbbf24);"><i class="fas fa-trophy"></i></div><div class="stat-info"><h3 id="bestAccuracy">0%</h3><p>Best Accuracy</p></div></div>
             <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);"><i class="fas fa-clock"></i></div><div class="stat-info"><h3 id="totalTimeSpent">0m</h3><p>Total Time</p></div></div>
             <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--red),#f87171);"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-info"><h3 id="weakestSubject">--</h3><p>Needs Focus</p></div></div>
         </div>
 
-        <!-- Filters (only date & search) -->
+        <!-- Filters (date range with "to" label) -->
         <div class="filter-section">
             <div class="date-range-row">
                 <span class="label">📅 Date Range:</span>
                 <div class="input-with-icon">
                     <i class="fas fa-calendar-alt"></i>
-                    <input type="date" id="startDate" onchange="applyResultFilters()" placeholder="Start Date">
+                    <input type="date" id="startDate" onchange="applyResultFilters()" placeholder="01/01/2026">
                 </div>
+                <span class="date-to">to</span>
                 <div class="input-with-icon">
                     <i class="fas fa-calendar-alt"></i>
-                    <input type="date" id="endDate" onchange="applyResultFilters()" placeholder="End Date">
+                    <input type="date" id="endDate" onchange="applyResultFilters()" placeholder="01/02/2026">
                 </div>
             </div>
             <div class="filter-bar-inline">
@@ -620,6 +684,13 @@
                 </div>
             </div>
             <button class="reset-btn" onclick="resetFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
+        </div>
+
+        <!-- Loading status with quotes -->
+        <div class="loading-quote-container" id="loadingQuoteBox">
+            <div class="loading-spinner"></div>
+            <div class="loading-quote-text" id="loadingQuoteText">We're working, fetching your results...</div>
+            <div class="loading-quote-progress" id="loadingQuoteProgress">0%</div>
         </div>
 
         <!-- Results panel -->
@@ -670,6 +741,11 @@
 
     <!-- Footer -->
     <footer class="pro-footer">
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()">
+                <i class="fas fa-download"></i> Add to Home Screen · Download APK
+            </button>
+        </div>
         <div class="footer-grid">
             <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"><li><i class="fas fa-spinner fa-pulse"></i> Loading categories…</li></ul></div>
             <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
@@ -696,8 +772,9 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
         const STREAK_API_URL = API_URL;
 
-        let allTestDefs = [];
-        let allMocks = [];
+        let allTestDefs = [];            // merged definitions (for result enrichment)
+        let allSheetDefs = [];          // definitions from sheet & local only (no AI)
+        let allMocks = [];              // local mocks.json data (for footer fallback)
         let allUserResults = [];
         let filteredResults = [];
         let selectedExam = '';
@@ -788,30 +865,56 @@
             document.getElementById('syncProgress').style.width = percent + '%';
         }
 
+        /* ---------- loading quotes management ---------- */
+        const loadingQuotes = [
+            "We're working, fetching your results...",
+            "Almost there, just a moment...",
+            "Analyzing your performance...",
+            "Crunching the numbers...",
+            "Loading your test history...",
+            "Preparing your analytics..."
+        ];
+        let quoteInterval = null;
+
+        function startLoadingQuotes() {
+            const box = document.getElementById('loadingQuoteBox');
+            box.classList.remove('hidden');
+            let i = 0;
+            const textEl = document.getElementById('loadingQuoteText');
+            const progressEl = document.getElementById('loadingQuoteProgress');
+            quoteInterval = setInterval(() => {
+                i = (i + 1) % loadingQuotes.length;
+                textEl.textContent = loadingQuotes[i];
+                const currentProgress = parseInt(progressEl.textContent) || 0;
+                const newProgress = Math.min(currentProgress + 5, 95);
+                progressEl.textContent = newProgress + '%';
+                setSyncProgress(newProgress);
+            }, 2000);
+        }
+
+        function stopLoadingQuotes() {
+            clearInterval(quoteInterval);
+            const box = document.getElementById('loadingQuoteBox');
+            setTimeout(() => box.classList.add('hidden'), 300);
+        }
+
         /* ---------- cache management ---------- */
         const CACHE_KEY = 'allResultsCache';
-        const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+        const CACHE_DURATION = 30 * 60 * 1000;
 
         function getCachedData() {
             try {
                 const raw = localStorage.getItem(CACHE_KEY);
                 if (!raw) return null;
                 const cache = JSON.parse(raw);
-                if (Date.now() - cache.timestamp < CACHE_DURATION) {
-                    return cache;
-                }
+                if (Date.now() - cache.timestamp < CACHE_DURATION) return cache;
             } catch(e) {}
             return null;
         }
 
-        function setCachedData(testDefs, results) {
+        function setCachedData(testDefs, sheetDefs, results) {
             try {
-                const cache = {
-                    testDefs,
-                    results,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+                localStorage.setItem(CACHE_KEY, JSON.stringify({ testDefs, sheetDefs, results, timestamp: Date.now() }));
             } catch(e) {}
         }
 
@@ -828,19 +931,18 @@
 
             const [localMocks, sheetTests, aiTests] = results;
 
-            const normLocal = localMocks.map(t => ({ testCode: t.testCode, testName: t.testName || t.name || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
-            const normSheet = sheetTests.map(t => ({ testCode: t.testCode, testName: t.testName || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl }));
-            const normAi = aiTests.map(t => ({ testCode: t.testId, testName: t.testName || t.testId, exam: t.examName, subject: t.subject, imageurl: '' }));
+            // Normalize with category property for footer grouping
+            const normLocal = localMocks.map(t => ({ testCode: t.testCode, testName: t.testName || t.name || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl, category: t.category || 'Other', fromAi: false }));
+            const normSheet = sheetTests.map(t => ({ testCode: t.testCode, testName: t.testName || t.testCode, exam: t.exam, subject: t.subject, imageurl: t.imageurl, category: t.category || 'Other', fromAi: false }));
+            const normAi = aiTests.map(t => ({ testCode: t.testId, testName: t.testName || t.testId, exam: t.examName, subject: t.subject, imageurl: '', category: '', fromAi: true }));
 
-            const merged = [...normSheet, ...normAi];
-            const seenCodes = new Set(merged.map(t => t.testCode));
-            normLocal.forEach(t => {
-                if (!seenCodes.has(t.testCode)) {
-                    merged.push(t);
-                    seenCodes.add(t.testCode);
-                }
-            });
-            allTestDefs = merged;
+            // Merge for result enrichment (all sources)
+            allTestDefs = [...normSheet, ...normAi];
+            const seenCodes = new Set(allTestDefs.map(t => t.testCode));
+            normLocal.forEach(t => { if (!seenCodes.has(t.testCode)) { allTestDefs.push(t); seenCodes.add(t.testCode); } });
+
+            // For footer: only sheet + local (no AI)
+            allSheetDefs = [...normSheet, ...normLocal.filter(t => !seenCodes.has(t.testCode))];
             allMocks = localMocks;
         }
 
@@ -856,7 +958,7 @@
                     r.examName = def?.exam || 'Unknown';
                     r.subjectName = def?.subject || '';
                     r.testName = def?.testName || r.testCode;
-                    r.examImage = def?.imageurl || '';
+                    r.examImage = def?.imageurl || 'image/appicon.jpg';
                 });
                 return true;
             }
@@ -1001,15 +1103,17 @@
                 const rowKey = getRowKey(r);
                 const isChecked = selectedRows.has(rowKey) ? 'checked' : '';
                 const ts = r.timestamp || '';
-                const examImage = r.examImage || '';
-                const imageHTML = examImage ? `<img src="${examImage}" alt="${r.examName}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-graduation-cap\\' style=\\'font-size:20px;color:var(--primary);\\'></i>'">` : '<i class="fas fa-graduation-cap" style="font-size:20px;color:var(--primary);"></i>';
+                const examImage = r.examImage || 'image/appicon.jpg';
                 return `<div class="result-card" data-rowkey="${rowKey}" data-timestamp="${ts}">
+                    <div class="result-top-glow"></div>
                     <div class="card-inner">
                         <div class="card-checkbox-wrap">
                             <input type="checkbox" class="row-checkbox" data-rowkey="${rowKey}" ${isChecked} onchange="toggleRowSelect(this)" onclick="event.stopPropagation();">
                         </div>
                         <div class="card-header-row">
-                            <div class="card-exam-image">${imageHTML}</div>
+                            <div class="card-exam-image">
+                                <img src="${examImage}" alt="${r.examName}" onerror="this.onerror=null; this.src='image/appicon.jpg';">
+                            </div>
                             <div class="card-title-block">
                                 <div class="card-test-name">${r.testName || r.testCode}</div>
                                 <div class="card-test-code">${r.testCode} · ${r.examName || 'Unknown Exam'}</div>
@@ -1129,16 +1233,15 @@
             if (results.length>0) {
                 const accuracies = results.map(r=>parseFloat(r.accuracy)||0);
                 const avg = Math.round(accuracies.reduce((a,b)=>a+b,0)/accuracies.length);
-                const best = Math.max(...accuracies);
                 const totalSecs = results.reduce((sum,r)=>sum+(parseFloat(r.timeTaken)||0),0);
                 document.getElementById('avgAccuracy').textContent = avg+'%';
-                document.getElementById('bestAccuracy').textContent = best+'%';
                 document.getElementById('totalTimeSpent').textContent = Math.round(totalSecs/60)+'m';
             } else {
                 document.getElementById('avgAccuracy').textContent='0%';
-                document.getElementById('bestAccuracy').textContent='0%';
                 document.getElementById('totalTimeSpent').textContent='0m';
             }
+            // weakest subject still works
+            updateSubjectInsights();
         }
         function updateSubjectInsights() {
             const results = filteredResults.length>0?filteredResults:allUserResults;
@@ -1222,15 +1325,26 @@
             const btnRefresh = document.getElementById('btnRefresh');
             btnRefresh.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...';
             btnRefresh.disabled = true;
+            startLoadingQuotes();
             setSyncProgress(0);
-            await loadAllTestDefinitions(p => setSyncProgress(p * 0.75));
-            const ok = await loadUserResults(p => setSyncProgress(75 + p * 0.25));
+            await loadAllTestDefinitions(p => {
+                setSyncProgress(p * 0.75);
+                document.getElementById('loadingQuoteProgress').textContent = Math.round(p * 0.75) + '%';
+                document.getElementById('loadingQuoteText').textContent = loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)];
+            });
+            const ok = await loadUserResults(p => {
+                setSyncProgress(75 + p * 0.25);
+                document.getElementById('loadingQuoteProgress').textContent = Math.round(75 + p * 0.25) + '%';
+                if (p >= 0.8) document.getElementById('loadingQuoteText').textContent = "Almost done...";
+            });
             setSyncProgress(100);
-            setTimeout(() => setSyncProgress(0), 600);
+            document.getElementById('loadingQuoteProgress').textContent = '100%';
+            document.getElementById('loadingQuoteText').textContent = 'Ready!';
+            setTimeout(stopLoadingQuotes, 600);
             btnRefresh.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
             btnRefresh.disabled = false;
             if (ok) {
-                setCachedData(allTestDefs, allUserResults);
+                setCachedData(allTestDefs, allSheetDefs, allUserResults);
                 filteredResults = [...allUserResults];
                 applyResultFilters();
                 updateStats();
@@ -1242,37 +1356,74 @@
             }
         }
 
-        /* ---------- footer content ---------- */
+        /* ---------- footer content (mocks.json + sheet, with categories) ---------- */
         const JSON_PATHS = { mocks: './mocks.json', upcomingfooter: './json/upcomingfooter.json' };
         async function fetchJSON(p, fb) { try { const r = await fetch(p, { cache:'no-store' }); if (!r.ok) throw new Error(`HTTP ${r.status}`); const d = await r.json(); if (!Array.isArray(d) || !d.length) throw new Error('Empty'); return d; } catch(e) { if(fb) return fb; throw e; } }
         function groupByCategoryUniqueExams(arr) { const map={}; arr.forEach(item=>{ const cat=item.category||'Other'; if(!map[cat]) map[cat]={exams:[],seen:new Set()}; if(!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam); map[cat].exams.push(item); } }); return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams})); }
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
-            const data = allMocks.length ? allMocks : await fetchJSON(JSON_PATHS.mocks, []);
-            const grouped = groupByCategoryUniqueExams(data);
-            if (!grouped.length) { c.innerHTML='<li><a>No exams</a></li>'; return; }
-            let html='';
-            grouped.forEach(cat=>{ html+=`<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`; });
-            html+=`<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
-            html+=`<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
-            c.innerHTML=html;
+            // allSheetDefs contains both local and sheet mocks with category property
+            let defsForFooter = allSheetDefs.length ? allSheetDefs : (allMocks.length ? allMocks : await fetchJSON(JSON_PATHS.mocks, []));
+            if (!Array.isArray(defsForFooter)) defsForFooter = [];
+            const grouped = groupByCategoryUniqueExams(defsForFooter);
+            let html = '';
+            grouped.forEach(cat => {
+                html += `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
+            });
+            if (allSheetDefs.length) {
+                const uniqueExams = [...new Set(allSheetDefs.map(t => t.exam).filter(Boolean))];
+                if (uniqueExams.length) {
+                    html += `<li style="margin-top:8px;"><strong style="color:#fbbf24;font-size:12px;">Practice Tests</strong></li>`;
+                    uniqueExams.forEach(exam => {
+                        html += `<li><a onclick="navigate('exam2.html?exam=${encodeURIComponent(exam)}')">${exam}</a></li>`;
+                    });
+                }
+            }
+            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
+            html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
+            c.innerHTML = html || '<li><a>No exams</a></li>';
         }
         async function renderFooterUpcoming() {
             const c = document.getElementById('footerUpcomingExams');
             const d = await fetchJSON(JSON_PATHS.upcomingfooter, [{name:'CUET UG 2026',date:'20 May 2026'},{name:'SSC CGL 2026',date:'12 June 2026'},{name:'SBI PO 2026',date:'18 Aug 2026'}]);
-            c.innerHTML=d.map(e=>`<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
+            c.innerHTML = d.map(e => `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
         }
 
         /* ---------- action queue stubs ---------- */
-        function queueAction(type, data) {
-            actionQueue.push({ type, data, timestamp: Date.now() });
-            localStorage.setItem('actionQueue', JSON.stringify(actionQueue));
-        }
-        function processActionQueue() {
-            const queue = JSON.parse(localStorage.getItem('actionQueue') || '[]');
-            if (!queue.length) return;
-            localStorage.removeItem('actionQueue');
-            actionQueue = [];
+        function queueAction(type, data) { actionQueue.push({ type, data, timestamp: Date.now() }); localStorage.setItem('actionQueue', JSON.stringify(actionQueue)); }
+        function processActionQueue() { const queue = JSON.parse(localStorage.getItem('actionQueue') || '[]'); if (!queue.length) return; localStorage.removeItem('actionQueue'); actionQueue = []; }
+
+        /* ---------- APK install popup ---------- */
+        function openInstallPopup() {
+            Swal.fire({
+                title: '📲 Install TestMaster Pro',
+                html: `
+                <div style="text-align:center;">
+                    <p style="font-size:14px;font-weight:600;color:#243748;margin-bottom:8px;">Get the App Experience!</p>
+                    <p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file and install it on your Android device.</p>
+                    <div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;">
+                        <i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i>
+                        <p style="font-weight:700;color:#1e293b;margin:4px 0;">TestMasterPro.apk</p>
+                        <p style="font-size:10px;color:#94a3b8;">Latest Version · Safe & Secure</p>
+                    </div>
+                </div>`,
+                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
+                confirmButtonColor: '#4f46e5',
+                showCancelButton: true,
+                cancelButtonText: 'Maybe Later',
+                cancelButtonColor: '#94a3b8',
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions →</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const link = document.createElement('a');
+                    link.href = 'TestMasterPro.apk';
+                    link.download = 'TestMasterPro.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Downloading TestMasterPro.apk...', 'success', 4000);
+                }
+            });
         }
 
         /* ---------- keyboard & overlay handling ---------- */
@@ -1290,9 +1441,8 @@
 
             const cached = getCachedData();
             if (cached) {
-                // Render immediately from cache
                 allTestDefs = cached.testDefs;
-                allMocks = cached.testDefs; // for footer (not exact but ok)
+                allSheetDefs = cached.sheetDefs || [];
                 allUserResults = cached.results;
                 filteredResults = [...allUserResults];
                 applyResultFilters();
@@ -1300,17 +1450,24 @@
                 updateSubjectInsights();
                 renderFooterExamCategories();
                 renderFooterUpcoming();
-                // Start background fetch for fresh data
                 backgroundSync();
             } else {
-                // No cache: fetch fresh with progress bar
+                startLoadingQuotes();
                 setSyncProgress(0);
-                await loadAllTestDefinitions(p => setSyncProgress(p * 0.75));
-                const ok = await loadUserResults(p => setSyncProgress(75 + p * 0.25));
+                await loadAllTestDefinitions(p => {
+                    setSyncProgress(p * 0.75);
+                    document.getElementById('loadingQuoteProgress').textContent = Math.round(p * 0.75) + '%';
+                });
+                const ok = await loadUserResults(p => {
+                    setSyncProgress(75 + p * 0.25);
+                    document.getElementById('loadingQuoteProgress').textContent = Math.round(75 + p * 0.25) + '%';
+                });
                 setSyncProgress(100);
-                setTimeout(() => setSyncProgress(0), 600);
+                document.getElementById('loadingQuoteProgress').textContent = '100%';
+                document.getElementById('loadingQuoteText').textContent = 'Ready!';
+                setTimeout(stopLoadingQuotes, 600);
                 if (ok) {
-                    setCachedData(allTestDefs, allUserResults);
+                    setCachedData(allTestDefs, allSheetDefs, allUserResults);
                     filteredResults = [...allUserResults];
                     applyResultFilters();
                     updateStats();
@@ -1326,13 +1483,22 @@
         })();
 
         async function backgroundSync() {
+            startLoadingQuotes();
             setSyncProgress(0);
-            await loadAllTestDefinitions(p => setSyncProgress(p * 0.75));
-            const ok = await loadUserResults(p => setSyncProgress(75 + p * 0.25));
+            await loadAllTestDefinitions(p => {
+                setSyncProgress(p * 0.75);
+                document.getElementById('loadingQuoteProgress').textContent = Math.round(p * 0.75) + '%';
+            });
+            const ok = await loadUserResults(p => {
+                setSyncProgress(75 + p * 0.25);
+                document.getElementById('loadingQuoteProgress').textContent = Math.round(75 + p * 0.25) + '%';
+            });
             setSyncProgress(100);
-            setTimeout(() => setSyncProgress(0), 600);
+            document.getElementById('loadingQuoteProgress').textContent = '100%';
+            document.getElementById('loadingQuoteText').textContent = 'Ready!';
+            setTimeout(stopLoadingQuotes, 600);
             if (ok) {
-                setCachedData(allTestDefs, allUserResults);
+                setCachedData(allTestDefs, allSheetDefs, allUserResults);
                 filteredResults = [...allUserResults];
                 applyResultFilters();
                 updateStats();
@@ -1341,7 +1507,6 @@
             }
         }
 
-        /* ---------- helper loading ---------- */
         function showLoading(m) { Swal.fire({ title:m||'Loading...', allowOutsideClick:false, showConfirmButton:false, didOpen:()=>Swal.showLoading() }); }
         function hideLoading() { Swal.close(); }
     </script>
