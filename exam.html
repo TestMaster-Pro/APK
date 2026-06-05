@@ -899,7 +899,7 @@
         if (!user) window.location.href = 'index.html';
         const savedCategory = localStorage.getItem('selectedCategory') || user?.targetExam || '';
 
-        // ---------- UI helpers ----------
+        // ---------- UI Helpers ----------
         function showLoadingLine(active = true) {
             const line = document.getElementById('loadingLine');
             if (!line) return;
@@ -975,11 +975,16 @@
             });
         }
 
+        // Accordion: open one closes others, and selecting inside closes it
         function toggleAccordion(bodyId, arrowId, itemId) {
             const item = document.getElementById(itemId);
             const isOpen = item.classList.contains('open');
+            // Close all other accordions
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            if (!isOpen) { item.classList.add('open'); setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150); }
+            if (!isOpen) {
+                item.classList.add('open');
+                setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
+            }
         }
 
         function openExamAccordion() {
@@ -1016,7 +1021,7 @@
                 }
             } catch (e) { console.warn('mocks.json fetch failed', e); }
 
-            // Combine all, no dedup by testCode (categories can share testCode)
+            // Combine all, no dedup by testCode
             let all = [...apiTests, ...localTests];
             if (!all.length) all = FALLBACK_MOCKS.map(t => ({ ...t, source: 'fallback' }));
 
@@ -1201,7 +1206,7 @@
             showToast(`📂 ${category} selected`, 'success');
         }
 
-        // ---------- Filter rendering ----------
+        // ---------- Filter rendering (accordions close after selection) ----------
         function renderFilterAccordions() {
             const filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
 
@@ -1246,6 +1251,33 @@
             }
         }
 
+        // Filter selection functions – close accordion after picking
+        function selectExamFilter(exam) {
+            selectedExam = (selectedExam === exam) ? '' : exam;
+            selectedSubject = ''; selectedChapter = '';
+            closeExamAccordion();
+            renderFilterAccordions();
+            applyFilters();
+            renderSelectedFiltersBar();
+        }
+
+        function selectSubjectFilter(subject) {
+            selectedSubject = (selectedSubject === subject) ? '' : subject;
+            selectedChapter = '';
+            closeSubjectAccordion();
+            renderFilterAccordions();
+            applyFilters();
+            renderSelectedFiltersBar();
+        }
+
+        function selectChapterFilter(chapter) {
+            selectedChapter = (selectedChapter === chapter) ? '' : chapter;
+            closeChapterAccordion();
+            renderFilterAccordions();
+            applyFilters();
+            renderSelectedFiltersBar();
+        }
+
         function selectYearFromBar(year) {
             selectedYear = (selectedYear === year) ? '' : year;
             document.getElementById('horizontalYearBar').classList.remove('show');
@@ -1254,6 +1286,10 @@
             applyFilters();
             renderSelectedFiltersBar();
         }
+
+        function closeExamAccordion() { document.getElementById('examAccordionItem').classList.remove('open'); }
+        function closeSubjectAccordion() { document.getElementById('subjectAccordionItem').classList.remove('open'); }
+        function closeChapterAccordion() { document.getElementById('chapterAccordionItem').classList.remove('open'); }
 
         function toggleYearBar() {
             const bar = document.getElementById('horizontalYearBar');
@@ -1282,29 +1318,6 @@
             applyFilters();
         }
 
-        function selectExamFilter(exam) {
-            selectedExam = (selectedExam === exam) ? '' : exam;
-            selectedSubject = ''; selectedChapter = '';
-            renderFilterAccordions();
-            applyFilters();
-            renderSelectedFiltersBar();
-        }
-
-        function selectSubjectFilter(subject) {
-            selectedSubject = (selectedSubject === subject) ? '' : subject;
-            selectedChapter = '';
-            renderFilterAccordions();
-            applyFilters();
-            renderSelectedFiltersBar();
-        }
-
-        function selectChapterFilter(chapter) {
-            selectedChapter = (selectedChapter === chapter) ? '' : chapter;
-            renderFilterAccordions();
-            applyFilters();
-            renderSelectedFiltersBar();
-        }
-
         function clearAllFilters() {
             selectedYear = ''; selectedExam = ''; selectedSubject = ''; selectedChapter = '';
             selectedType = 'all'; sortOrder = 'oldest';
@@ -1313,6 +1326,7 @@
             updateTypeButton();
             document.getElementById('sortBtnText').textContent = 'Oldest';
             document.getElementById('yearBtnText').textContent = 'Year';
+            closeAllAccordions();
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
@@ -1336,7 +1350,7 @@
             renderSelectedFiltersBar();
         }
 
-        // ---------- Test display (dedup by testCode only inside category) ----------
+        // ---------- Test display (dedup by testCode inside category) ----------
         function applyFilters() {
             if (!selectedCategory) {
                 document.getElementById('testList').innerHTML = '<div class="empty-selection"><h2>Select a Category First</h2></div>';
@@ -1510,6 +1524,6 @@
             renderFooterExamCategories();
             renderFooterUpcoming();
         })();
-    </script>
+    </script> 
 </body>
 </html>
