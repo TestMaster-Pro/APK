@@ -979,7 +979,6 @@
         function toggleAccordion(bodyId, arrowId, itemId) {
             const item = document.getElementById(itemId);
             const isOpen = item.classList.contains('open');
-            // Close all other accordions
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
             if (!isOpen) {
                 item.classList.add('open');
@@ -1021,7 +1020,6 @@
                 }
             } catch (e) { console.warn('mocks.json fetch failed', e); }
 
-            // Combine all, no dedup by testCode
             let all = [...apiTests, ...localTests];
             if (!all.length) all = FALLBACK_MOCKS.map(t => ({ ...t, source: 'fallback' }));
 
@@ -1210,10 +1208,28 @@
         function renderFilterAccordions() {
             const filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
 
+            // Exams with images
             const exams = [...new Set(filtered.map(m => m.exam).filter(Boolean))].sort();
+            const examImageMap = {};
+            // Find first image for each exam in the current category
+            exams.forEach(ex => {
+                const testWithImg = filtered.find(m => m.exam === ex && m.imageurl);
+                examImageMap[ex] = testWithImg ? testWithImg.imageurl : '';
+            });
+
             document.getElementById('examCardsGrid').innerHTML =
-                `<div class="exam-small-card all-exam ${selectedExam === '' ? 'active-exam' : ''}" onclick="selectExamFilter('')"><div class="exam-img-wrap"><i class="fas fa-layer-group"></i></div><div class="exam-name">All Exams</div></div>` +
-                exams.map(ex => `<div class="exam-small-card${selectedExam === ex ? ' active-exam' : ''}" onclick="selectExamFilter('${ex.replace(/'/g, "\\'")}')"><div class="exam-img-wrap"><i class="fas fa-file-alt"></i></div><div class="exam-name">${ex}</div></div>`).join('');
+                `<div class="exam-small-card all-exam ${selectedExam === '' ? 'active-exam' : ''}" onclick="selectExamFilter('')">
+                    <div class="exam-img-wrap"><i class="fas fa-layer-group"></i></div>
+                    <div class="exam-name">All Exams</div>
+                </div>` +
+                exams.map(ex => {
+                    const imgHTML = examImageMap[ex] ? `<img src="${examImageMap[ex]}" alt="${ex}">` : '<i class="fas fa-file-alt"></i>';
+                    const activeClass = selectedExam === ex ? ' active-exam' : '';
+                    return `<div class="exam-small-card${activeClass}" onclick="selectExamFilter('${ex.replace(/'/g, "\\'")}')">
+                        <div class="exam-img-wrap">${imgHTML}</div>
+                        <div class="exam-name">${ex}</div>
+                    </div>`;
+                }).join('');
             document.getElementById('examBadge').textContent = selectedExam || 'All';
 
             let yearFiltered = selectedYear ? filtered.filter(m => m.year === selectedYear) : filtered;
@@ -1366,7 +1382,6 @@
             if (selectedType === 'free') filtered = filtered.filter(m => m.type === 'free' || !m.type);
             else if (selectedType === 'paid') filtered = filtered.filter(m => m.type === 'paid' || (m.type && m.type !== 'free'));
 
-            // Deduplicate by testCode for display
             const seen = new Set();
             filtered = filtered.filter(t => {
                 if (seen.has(t.testCode)) return false;
@@ -1451,7 +1466,7 @@
                 localStorage.setItem('last_mock_file', file);
                 window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(testCode)}`;
             } else {
-                window.location.href = `instructions.html?testCode=${encodeURIComponent(testCode)}`;
+                window.location.href = `test2.html?testCode=${encodeURIComponent(testCode)}`;
             }
         }
 
@@ -1524,6 +1539,6 @@
             renderFooterExamCategories();
             renderFooterUpcoming();
         })();
-    </script> 
+    </script>
 </body>
 </html>
