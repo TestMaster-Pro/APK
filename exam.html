@@ -9,8 +9,7 @@
     <title>Mock Library · TestMasterPro.space</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #243748;
@@ -61,1839 +60,605 @@
             --max-width: 1200px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        html {
-            scroll-behavior: smooth;
-            height: 100%;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; height: 100%; }
         body {
-            font-family: var(--font);
-            background: var(--gray-50);
-            min-height: 100vh;
-            min-height: 100dvh;
-            color: var(--gray-800);
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: contain;
-            max-width: 100vw;
+            font-family: var(--font); background: var(--gray-50); min-height: 100vh; min-height: 100dvh;
+            color: var(--gray-800); display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain; max-width: 100vw;
             padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
         }
-        body.sidebar-open,
-        body.sheet-open {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-        }
+        body.sidebar-open, body.sheet-open { overflow: hidden; position: fixed; width: 100%; height: 100%; }
 
-        /* Toast */
         .toast-container {
-            position: fixed;
-            top: calc(12px + var(--safe-top));
-            left: 50%;
-            transform: translateX(-50%) translateY(-120%);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 92%;
-            max-width: 400px;
-            pointer-events: none;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: fixed; top: calc(12px + var(--safe-top)); left: 50%; transform: translateX(-50%) translateY(-120%);
+            z-index: 1000; display: flex; flex-direction: column; gap: 8px; width: 92%; max-width: 400px;
+            pointer-events: none; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .toast-container.show {
-            transform: translateX(-50%) translateY(0);
-        }
+        .toast-container.show { transform: translateX(-50%) translateY(0); }
         .toast-item {
-            background: var(--gray-800);
-            color: #fff;
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow-lg);
-            animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: all;
-            border-left: 3px solid var(--blue);
+            background: var(--gray-800); color: #fff; padding: 12px 16px; border-radius: var(--radius);
+            font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+            box-shadow: var(--shadow-lg); animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: all; border-left: 3px solid var(--blue);
         }
-        .toast-item.success {
-            border-left-color: var(--green);
-        }
-        .toast-item.error {
-            border-left-color: var(--red);
-        }
-        .toast-item.warning {
-            border-left-color: #f59e0b;
-        }
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateY(-16px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
+        .toast-item.success { border-left-color: var(--green); }
+        .toast-item.error { border-left-color: var(--red); }
+        .toast-item.warning { border-left-color: #f59e0b; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(-16px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         .offline-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--red);
-            color: #fff;
-            text-align: center;
-            padding: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            z-index: 999;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; background: var(--red); color: #fff;
+            text-align: center; padding: 6px; font-size: 11px; font-weight: 700; z-index: 999;
+            transform: translateY(-100%); transition: transform 0.3s ease;
         }
-        .offline-banner.show {
-            transform: translateY(0);
-        }
+        .offline-banner.show { transform: translateY(0); }
 
-        /* Loading line */
         .loading-line {
-            position: fixed;
-            top: 54px;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #4f46e5, #06b6d4);
-            width: 0%;
-            z-index: 300;
-            opacity: 1;
-            box-shadow: 0 0 8px rgba(79, 70, 229, 0.4);
+            position: fixed; top: 54px; left: 0; height: 3px; background: linear-gradient(90deg, #4f46e5, #06b6d4);
+            width: 0%; z-index: 300; opacity: 1; box-shadow: 0 0 8px rgba(79,70,229,0.4);
             transition: width 0.4s ease, opacity 0.5s ease;
         }
-        .loading-line.active {
-            width: 100%;
-            opacity: 1;
-        }
-        .loading-line.done {
-            width: 100%;
-            opacity: 0;
-        }
+        .loading-line.active { width: 100%; opacity: 1; }
+        .loading-line.done { width: 100%; opacity: 0; }
 
-        /* Sidebar */
         .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 250;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.35s ease, visibility 0.35s;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 250; opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
         }
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            height: 100dvh;
-            width: 290px;
-            max-width: 82vw;
-            background: #fff;
-            z-index: 251;
-            transform: translateX(-110%);
-            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.18);
-            border-radius: 0 22px 22px 0;
-            overflow: hidden;
+            position: fixed; top: 0; left: 0; height: 100%; height: 100dvh; width: 290px; max-width: 82vw;
+            background: #fff; z-index: 251; transform: translateX(-110%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); display: flex; flex-direction: column;
+            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.18); border-radius: 0 22px 22px 0; overflow: hidden;
             border-right: 1px solid rgba(0, 0, 0, 0.04);
         }
-        .sidebar-overlay.active .sidebar {
-            transform: translateX(0);
-        }
+        .sidebar-overlay.active .sidebar { transform: translateX(0); }
         .sidebar-brand {
-            background: linear-gradient(135deg, #243748, #1f3140);
-            padding: 20px 16px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-            position: relative;
+            background: linear-gradient(135deg, #243748, #1f3140); padding: 20px 16px 16px;
+            display: flex; align-items: center; gap: 10px; flex-shrink: 0; position: relative;
         }
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #fff;
-            flex-shrink: 0;
+            width: 40px; height: 40px; background: rgba(255, 255, 255, 0.15); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0;
         }
-        .sidebar-brand-text {
-            color: #fff;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: -0.3px;
-        }
-        .sidebar-brand-text small {
-            display: block;
-            font-weight: 400;
-            font-size: 9px;
-            opacity: 0.8;
-        }
+        .sidebar-brand-text { color: #fff; font-weight: 700; font-size: 14px; letter-spacing: -0.3px; }
+        .sidebar-brand-text small { display: block; font-weight: 400; font-size: 9px; opacity: 0.8; }
         .sidebar-close-btn {
-            position: absolute;
-            top: 14px;
-            right: 12px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; top: 14px; right: 12px; width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;
+            cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center;
             transition: var(--transition-fast);
         }
-        .sidebar-close-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: rotate(90deg) scale(1.1);
-        }
+        .sidebar-close-btn:hover { background: rgba(255, 255, 255, 0.25); transform: rotate(90deg) scale(1.1); }
         .sidebar-user-card {
-            padding: 14px 16px;
-            background: #fafbfc;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
+            padding: 14px 16px; background: #fafbfc; border-bottom: 1px solid #eee;
+            display: flex; align-items: center; gap: 10px; flex-shrink: 0;
         }
         .sidebar-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary);
-            flex-shrink: 0;
-            overflow: hidden;
-            border: 2px solid #fff;
+            width: 44px; height: 44px; border-radius: 14px; background: var(--primary-light);
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;
+            color: var(--primary); flex-shrink: 0; overflow: hidden; border: 2px solid #fff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
-        .sidebar-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .sidebar-user-info .name {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--gray-800);
-        }
+        .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .sidebar-user-info .name { font-weight: 600; font-size: 13px; color: var(--gray-800); }
         .sidebar-user-info .tag {
-            font-size: 10px;
-            color: var(--primary);
-            font-weight: 600;
-            background: var(--primary-light);
-            padding: 2px 8px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-top: 2px;
+            font-size: 10px; color: var(--primary); font-weight: 600; background: var(--primary-light);
+            padding: 2px 8px; border-radius: 12px; display: inline-block; margin-top: 2px;
         }
         .sidebar-nav {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+            flex: 1; overflow-y: auto; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px;
             -webkit-overflow-scrolling: touch;
         }
         .sidebar-nav-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: var(--gray-400);
-            font-weight: 700;
-            padding: 14px 8px 6px;
-            font-family: var(--font);
+            font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gray-400);
+            font-weight: 700; padding: 14px 8px 6px; font-family: var(--font);
         }
         .sidebar-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 13px;
-            color: var(--gray-600);
-            transition: var(--transition-fast);
-            text-decoration: none;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-            font-family: var(--font);
+            display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 12px;
+            cursor: pointer; font-weight: 500; font-size: 13px; color: var(--gray-600);
+            transition: var(--transition-fast); text-decoration: none; border: none; background: transparent;
+            width: 100%; text-align: left; font-family: var(--font);
         }
-        .sidebar-nav-item:hover {
-            background: var(--gray-100);
-            color: var(--gray-800);
-            transform: translateX(3px);
-        }
-        .sidebar-nav-item:active {
-            transform: scale(0.97);
-        }
-        .sidebar-nav-item.active-nav {
-            background: var(--primary-light);
-            color: var(--primary);
-            font-weight: 700;
-        }
+        .sidebar-nav-item:hover { background: var(--gray-100); color: var(--gray-800); transform: translateX(3px); }
+        .sidebar-nav-item:active { transform: scale(0.97); }
+        .sidebar-nav-item.active-nav { background: var(--primary-light); color: var(--primary); font-weight: 700; }
         .sidebar-nav-item i {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-            background: var(--gray-100);
-            color: var(--gray-500);
+            width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; flex-shrink: 0; background: var(--gray-100); color: var(--gray-500);
         }
-        .sidebar-nav-item.active-nav i {
-            background: var(--primary);
-            color: #fff;
-        }
-        .sidebar-nav-item.logout-item:hover {
-            background: var(--red-light);
-            color: var(--red);
-        }
-        .sidebar-version {
-            text-align: center;
-            font-size: 10px;
-            color: var(--gray-300);
-            padding: 10px;
-            flex-shrink: 0;
-        }
+        .sidebar-nav-item.active-nav i { background: var(--primary); color: #fff; }
+        .sidebar-nav-item.logout-item:hover { background: var(--red-light); color: var(--red); }
+        .sidebar-version { text-align: center; font-size: 10px; color: var(--gray-300); padding: 10px; flex-shrink: 0; }
 
-        /* Navbar */
         .navbar {
-            background: #fff;
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 16px rgba(0, 0, 0, 0.04);
-            gap: 8px;
-            flex-wrap: nowrap;
-            min-height: 54px;
-            border-bottom: 1px solid #eee;
+            background: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 16px rgba(0, 0, 0, 0.04);
+            gap: 8px; flex-wrap: nowrap; min-height: 54px; border-bottom: 1px solid #eee;
         }
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
+        .nav-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .hamburger-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--gray-100);
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-            color: var(--gray-600);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-fast);
-            flex-shrink: 0;
+            width: 36px; height: 36px; border-radius: 10px; background: var(--gray-100); border: none;
+            cursor: pointer; font-size: 15px; color: var(--gray-600); display: flex; align-items: center;
+            justify-content: center; transition: var(--transition-fast); flex-shrink: 0;
         }
-        .hamburger-btn:hover {
-            background: var(--gray-200);
-        }
+        .hamburger-btn:hover { background: var(--gray-200); }
         .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--primary);
-            cursor: pointer;
-            white-space: nowrap;
-            letter-spacing: -0.3px;
+            display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 15px; color: var(--primary);
+            cursor: pointer; white-space: nowrap; letter-spacing: -0.3px;
         }
-        .nav-brand i {
-            font-size: 17px;
-            color: var(--blue);
-        }
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
+        .nav-brand i { font-size: 17px; color: var(--blue); }
+        .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .user-avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--primary);
-            cursor: pointer;
-            flex-shrink: 0;
-            overflow: hidden;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-            transition: var(--transition-fast);
+            width: 34px; height: 34px; border-radius: 10px; background: var(--primary-light);
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
+            color: var(--primary); cursor: pointer; flex-shrink: 0; overflow: hidden;
+            border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); transition: var(--transition-fast);
         }
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .user-avatar:hover {
-            transform: scale(1.08);
-        }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-avatar:hover { transform: scale(1.08); }
         .btn-chat-nav {
-            background: var(--primary-light);
-            color: var(--primary);
-            border: none;
-            padding: 7px 12px;
-            border-radius: 22px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-family: var(--font);
-            transition: 0.2s;
-            text-decoration: none;
+            background: var(--primary-light); color: var(--primary); border: none; padding: 7px 12px;
+            border-radius: 22px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex;
+            align-items: center; gap: 5px; font-family: var(--font); transition: 0.2s; text-decoration: none;
         }
-        .btn-chat-nav:hover {
-            background: var(--primary);
-            color: #fff;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(36, 55, 72, 0.2);
-        }
+        .btn-chat-nav:hover { background: var(--primary); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(36, 55, 72, 0.2); }
         .btn-logout-nav {
-            background: var(--red-light);
-            color: var(--red);
-            border: none;
-            padding: 7px 12px;
-            border-radius: 22px;
-            font-weight: 600;
-            font-size: 11px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-family: var(--font);
+            background: var(--red-light); color: var(--red); border: none; padding: 7px 12px;
+            border-radius: 22px; font-weight: 600; font-size: 11px; cursor: pointer; display: flex;
+            align-items: center; gap: 5px; font-family: var(--font);
         }
 
         .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 14px 14px calc(20px + var(--bottom-nav-height));
-            position: relative;
-            z-index: 5;
-            width: 100%;
-            flex: 1;
+            max-width: var(--max-width); margin: 0 auto; padding: 14px 14px calc(20px + var(--bottom-nav-height));
+            position: relative; z-index: 5; width: 100%; flex: 1;
         }
 
-        /* ========== CATEGORY VIEW ========== */
-        #categoryView {
-            display: block;
-        }
-        #categoryView.hidden {
-            display: none !important;
-        }
+        #categoryView { display: block; }
+        #categoryView.hidden { display: none !important; }
 
-        .category-hero {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 10px 0;
-        }
-        .category-hero h2 {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--gray-800);
-            letter-spacing: -0.4px;
-            margin-bottom: 4px;
-        }
-        .category-hero p {
-            font-size: 12px;
-            color: var(--gray-500);
-            font-weight: 500;
-        }
+        .category-hero { text-align: center; margin-bottom: 20px; padding: 10px 0; }
+        .category-hero h2 { font-size: 20px; font-weight: 800; color: var(--gray-800); letter-spacing: -0.4px; margin-bottom: 4px; }
+        .category-hero p { font-size: 12px; color: var(--gray-500); font-weight: 500; }
 
         .search-bar-top {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #fff;
-            border-radius: 28px;
-            padding: 12px 18px;
-            border: 2px solid var(--gray-200);
-            box-shadow: var(--shadow-xs);
-            transition: var(--transition);
-            margin-bottom: 18px;
+            display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 28px;
+            padding: 12px 18px; border: 2px solid var(--gray-200); box-shadow: var(--shadow-xs);
+            transition: var(--transition); margin-bottom: 18px;
         }
         .search-bar-top:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.06), var(--shadow-sm);
+            border-color: var(--primary); box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.06), var(--shadow-sm);
         }
-        .search-bar-top i {
-            color: var(--gray-400);
-            font-size: 16px;
-            flex-shrink: 0;
-        }
+        .search-bar-top i { color: var(--gray-400); font-size: 16px; flex-shrink: 0; }
         .search-bar-top input {
-            border: none;
-            outline: none;
-            font-family: var(--font);
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--gray-700);
-            width: 100%;
-            background: transparent;
-            min-width: 0;
+            border: none; outline: none; font-family: var(--font); font-weight: 500; font-size: 14px;
+            color: var(--gray-700); width: 100%; background: transparent; min-width: 0;
         }
-        .search-bar-top input::placeholder {
-            color: var(--gray-400);
-        }
+        .search-bar-top input::placeholder { color: var(--gray-400); }
 
-        /* Category Cards */
-        .category-card-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-        @media (min-width: 500px) {
-            .category-card-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
-            }
-        }
-        @media (min-width: 768px) {
-            .category-card-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 18px;
-            }
-        }
-        @media (min-width: 1024px) {
-            .category-card-grid {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 20px;
-            }
-        }
+        .category-card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        @media (min-width: 500px) { .category-card-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+        @media (min-width: 768px) { .category-card-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+        @media (min-width: 1024px) { .category-card-grid { grid-template-columns: repeat(5, 1fr); gap: 20px; } }
 
         .category-card {
-            border-radius: 20px;
-            padding: 20px 14px 18px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
+            border-radius: 20px; padding: 20px 14px 18px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 12px; cursor: pointer;
             border: 1.5px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(0, 0, 0, 0.04);
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            aspect-ratio: 1 / 1;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            color: #1e293b;
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 1 / 1;
+            position: relative; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent;
+            color: #1e293b; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
         }
         .category-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at 130% -10%, rgba(255, 255, 255, 0.55), transparent 60%);
-            z-index: 0;
-            pointer-events: none;
+            z-index: 0; pointer-events: none;
         }
         .category-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 35%;
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 35%;
             background: linear-gradient(to top, rgba(255, 255, 255, 0.25), transparent);
-            z-index: 0;
-            pointer-events: none;
-            border-radius: 0 0 20px 20px;
+            z-index: 0; pointer-events: none; border-radius: 0 0 20px 20px;
         }
         .category-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13), 0 4px 14px rgba(0, 0, 0, 0.06);
+            transform: translateY(-8px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13), 0 4px 14px rgba(0, 0, 0, 0.06);
             border-color: rgba(255, 255, 255, 0.9);
         }
-        .category-card:active {
-            transform: scale(0.94);
-            transition: 0.1s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
+        .category-card:active { transform: scale(0.94); transition: 0.1s; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); }
         .category-card .cat-image-wrap {
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 255, 255, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            overflow: hidden;
+            width: 64px; height: 64px; border-radius: 18px; background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.7); display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0; position: relative; z-index: 1;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
-        .category-card .cat-image-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 16px;
-        }
+        .category-card .cat-image-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
         .category-card .cat-image-wrap .cat-icon-fallback {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            color: #475569;
-            font-size: 24px;
+            display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+            color: #475569; font-size: 24px;
         }
         .category-card:hover .cat-image-wrap {
-            transform: scale(1.12) rotate(-3deg);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transform: scale(1.12) rotate(-3deg); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             border-color: rgba(255, 255, 255, 0.95);
         }
         .category-card .cat-name {
-            font-weight: 700;
-            font-size: 13px;
-            text-align: center;
-            letter-spacing: -0.2px;
-            line-height: 1.35;
-            position: relative;
-            z-index: 1;
-            color: #334155;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-weight: 700; font-size: 13px; text-align: center; letter-spacing: -0.2px; line-height: 1.35;
+            position: relative; z-index: 1; color: #334155; display: -webkit-box;
+            -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
         }
         .category-card .cat-count-badge {
-            font-size: 10px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 4px 12px;
-            border-radius: 14px;
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            color: #475569;
-            letter-spacing: 0.2px;
+            font-size: 10px; font-weight: 600; background: rgba(255, 255, 255, 0.6);
+            padding: 4px 12px; border-radius: 14px; position: relative; z-index: 1;
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.7); color: #475569; letter-spacing: 0.2px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
         }
         .no-category-found {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--gray-500);
-            font-weight: 600;
-            font-size: 14px;
+            grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--gray-500);
+            font-weight: 600; font-size: 14px;
         }
 
-        /* ========== TEST VIEW ========== */
-        #testView {
-            display: none;
-        }
-        #testView.active {
-            display: block;
-        }
+        #testView { display: none; }
+        #testView.active { display: block; }
 
         .test-view-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
             justify-content: space-between;
         }
-        .test-view-breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-500);
-        }
-        .test-view-breadcrumb i {
-            color: var(--primary);
-        }
-        .test-view-breadcrumb span {
-            color: var(--primary);
-            font-weight: 700;
-        }
+        .test-view-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--gray-500); }
+        .test-view-breadcrumb i { color: var(--primary); }
+        .test-view-breadcrumb span { color: var(--primary); font-weight: 700; }
         .change-category-btn {
-            padding: 10px 16px;
-            border-radius: 24px;
-            background: #fff;
-            border: 2px solid var(--gray-200);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--gray-500);
-            transition: var(--transition-fast);
-            font-family: var(--font);
-            white-space: nowrap;
-            box-shadow: var(--shadow-xs);
-            flex-shrink: 0;
+            padding: 10px 16px; border-radius: 24px; background: #fff; border: 2px solid var(--gray-200);
+            cursor: pointer; font-weight: 600; font-size: 12px; color: var(--gray-500);
+            transition: var(--transition-fast); font-family: var(--font); white-space: nowrap;
+            box-shadow: var(--shadow-xs); flex-shrink: 0;
         }
-        .change-category-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: var(--primary-light);
-            transform: translateY(-1px);
-        }
-        .change-category-btn:active {
-            transform: scale(0.95);
-            transition: 0.06s;
-        }
+        .change-category-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); transform: translateY(-1px); }
+        .change-category-btn:active { transform: scale(0.95); transition: 0.06s; }
 
-        /* Selected Filters Bar */
         .selected-filters-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 12px;
-            min-height: 0;
+            display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+            margin-bottom: 12px; min-height: 0;
         }
         .filter-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--white);
-            border: 2px solid var(--primary-light);
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary);
-            box-shadow: var(--shadow-xs);
-            transition: var(--transition-fast);
-            cursor: default;
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--white); border: 2px solid var(--primary-light); border-radius: 30px;
+            padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--primary);
+            box-shadow: var(--shadow-xs); transition: var(--transition-fast); cursor: default;
         }
-        .filter-chip .chip-label {
-            font-size: 11px;
-            color: var(--gray-500);
-            font-weight: 500;
-            margin-right: 2px;
-        }
+        .filter-chip .chip-label { font-size: 11px; color: var(--gray-500); font-weight: 500; margin-right: 2px; }
         .filter-chip .chip-remove {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--red-light);
-            border: none;
-            color: var(--red);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 10px;
-            transition: var(--transition-fast);
+            width: 20px; height: 20px; border-radius: 50%; background: var(--red-light);
+            border: none; color: var(--red); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 10px; transition: var(--transition-fast);
         }
-        .filter-chip .chip-remove:hover {
-            background: var(--red);
-            color: #fff;
-        }
+        .filter-chip .chip-remove:hover { background: var(--red); color: #fff; }
 
-        /* Filter Accordion */
-        .filter-accordion {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 18px;
-        }
+        .filter-accordion { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
         .mock-accordion-item {
-            background: #fff;
-            border-radius: var(--radius);
-            border: 1px solid #e8ecf0;
-            overflow: hidden;
-            transition: var(--transition);
-            box-shadow: var(--shadow-xs);
+            background: #fff; border-radius: var(--radius); border: 1px solid #e8ecf0; overflow: hidden;
+            transition: var(--transition); box-shadow: var(--shadow-xs);
         }
-        .mock-accordion-item.open {
-            border-color: #c4d0dc;
-            box-shadow: var(--shadow-sm);
-        }
+        .mock-accordion-item.open { border-color: #c4d0dc; box-shadow: var(--shadow-sm); }
         .mock-accordion-header {
-            width: 100%;
-            padding: 14px 16px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            font-family: var(--font);
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--gray-700);
-            transition: var(--transition-fast);
-            text-align: left;
-            user-select: none;
+            width: 100%; padding: 14px 16px; background: transparent; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            font-family: var(--font); font-weight: 600; font-size: 14px; color: var(--gray-700);
+            transition: var(--transition-fast); text-align: left; user-select: none;
         }
-        .mock-accordion-header:active {
-            background: #f9fafb;
-        }
-        .mock-accordion-header .ma-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            min-width: 0;
-        }
+        .mock-accordion-header:active { background: #f9fafb; }
+        .mock-accordion-header .ma-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
         .mock-accordion-header .ma-count {
-            font-size: 11px;
-            color: var(--gray-400);
-            font-weight: 500;
-            background: var(--gray-100);
-            padding: 3px 10px;
-            border-radius: 12px;
-            flex-shrink: 0;
+            font-size: 11px; color: var(--gray-400); font-weight: 500; background: var(--gray-100);
+            padding: 3px 10px; border-radius: 12px; flex-shrink: 0;
         }
         .mock-accordion-header .ma-arrow {
-            font-size: 12px;
-            color: var(--gray-400);
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
+            font-size: 12px; color: var(--gray-400); transition: transform 0.3s ease; flex-shrink: 0;
         }
-        .mock-accordion-item.open .ma-arrow {
-            transform: rotate(180deg);
-            color: var(--primary);
-        }
+        .mock-accordion-item.open .ma-arrow { transform: rotate(180deg); color: var(--primary); }
         .mock-accordion-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .mock-accordion-item.open .mock-accordion-body {
-            max-height: 800px;
-        }
+        .mock-accordion-item.open .mock-accordion-body { max-height: 800px; }
 
-        /* Exam card grid (small) */
         .exam-card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding: 10px 14px 14px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 14px 14px;
         }
-        @media (min-width: 500px) {
-            .exam-card-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-        @media (min-width: 768px) {
-            .exam-card-grid {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
+        @media (min-width: 500px) { .exam-card-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 768px) { .exam-card-grid { grid-template-columns: repeat(5, 1fr); } }
 
         .exam-small-card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 12px 6px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            border: 1.5px solid #e8ecf0;
-            transition: all 0.25s ease;
-            box-shadow: var(--shadow-xs);
-            user-select: none;
+            background: var(--white); border-radius: 14px; padding: 12px 6px 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            cursor: pointer; border: 1.5px solid #e8ecf0; transition: all 0.25s ease;
+            box-shadow: var(--shadow-xs); user-select: none;
         }
-        .exam-small-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-sm);
-            border-color: var(--primary-light);
-        }
-        .exam-small-card:active {
-            transform: scale(0.94);
-        }
+        .exam-small-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-sm); border-color: var(--primary-light); }
+        .exam-small-card:active { transform: scale(0.94); }
         .exam-small-card .exam-img-wrap {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: var(--primary);
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light);
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
+            color: var(--primary); overflow: hidden; border: 1px solid rgba(0,0,0,0.04);
         }
-        .exam-small-card .exam-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .exam-small-card .exam-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .exam-small-card .exam-name {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--gray-700);
-            text-align: center;
-            line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 11px; font-weight: 700; color: var(--gray-700); text-align: center;
+            line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
         .exam-small-card.active-exam {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            box-shadow: 0 0 0 2px rgba(36, 55, 72, 0.1);
+            border-color: var(--primary); background: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(36,55,72,0.1);
         }
-        .exam-small-card.all-exam {
-            background: #f8fafc;
-        }
+        .exam-small-card.all-exam { background: #f8fafc; }
 
-        /* Vertical chips (Subject, Chapter) */
-        .vertical-chip-list {
-            padding: 4px 12px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-        @media (min-width: 640px) {
-            .vertical-chip-list {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
-            }
-        }
+        .vertical-chip-list { padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 3px; }
+        @media (min-width: 640px) { .vertical-chip-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; } }
         .vertical-chip {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            background: var(--gray-50);
-            border: 2px solid transparent;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--gray-600);
-            transition: var(--transition-fast);
-            text-align: left;
-            font-family: var(--font);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
+            width: 100%; padding: 12px 16px; border-radius: 12px; background: var(--gray-50);
+            border: 2px solid transparent; cursor: pointer; font-weight: 600; font-size: 13px;
+            color: var(--gray-600); transition: var(--transition-fast); text-align: left;
+            font-family: var(--font); display: flex; align-items: center; gap: 10px; position: relative; overflow: hidden;
         }
-        .vertical-chip:hover {
-            background: var(--gray-100);
-            color: var(--gray-800);
-            transform: translateX(4px);
-        }
-        .vertical-chip:active {
-            transform: scale(0.97);
-            transition: 0.06s;
-            background: var(--primary-light);
-        }
+        .vertical-chip:hover { background: var(--gray-100); color: var(--gray-800); transform: translateX(4px); }
+        .vertical-chip:active { transform: scale(0.97); transition: 0.06s; background: var(--primary-light); }
         .vertical-chip.active {
-            background: var(--primary-light);
-            border-color: var(--primary);
-            color: var(--primary);
-            font-weight: 700;
-            box-shadow: 0 2px 12px rgba(36, 55, 72, 0.12);
+            background: var(--primary-light); border-color: var(--primary); color: var(--primary);
+            font-weight: 700; box-shadow: 0 2px 12px rgba(36, 55, 72, 0.12);
         }
-        .vertical-chip .vc-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--gray-300);
-            flex-shrink: 0;
-        }
-        .vertical-chip.active .vc-dot {
-            background: var(--primary);
-            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.12);
-        }
+        .vertical-chip .vc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
+        .vertical-chip.active .vc-dot { background: var(--primary); box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.12); }
 
-        /* Filter buttons row */
         .filter-buttons-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-            margin-bottom: 8px;
+            display: flex; gap: 10px; margin-top: 8px; margin-bottom: 8px;
         }
         .filter-btn {
-            flex: 1;
-            padding: 12px 8px;
-            border-radius: 14px;
-            border: 2px solid var(--gray-200);
-            background: #fff;
-            font-weight: 700;
-            font-size: 12px;
-            color: var(--gray-600);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: var(--transition-fast);
-            font-family: var(--font);
-            box-shadow: var(--shadow-xs);
-            white-space: nowrap;
+            flex: 1; padding: 12px 8px; border-radius: 14px; border: 2px solid var(--gray-200);
+            background: #fff; font-weight: 700; font-size: 12px; color: var(--gray-600);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 6px; transition: var(--transition-fast); font-family: var(--font);
+            box-shadow: var(--shadow-xs); white-space: nowrap;
         }
-        .filter-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: var(--primary-light);
-        }
-        .filter-btn:active {
-            transform: scale(0.95);
-        }
-        .filter-btn.active {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary);
-            font-weight: 800;
-        }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+        .filter-btn:active { transform: scale(0.95); }
+        .filter-btn.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 800; }
         .horizontal-year-bar {
-            display: none;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            gap: 8px;
-            padding: 8px 0;
+            display: none; flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding: 8px 0;
             margin-bottom: 8px;
         }
-        .horizontal-year-bar.show {
-            display: flex;
-        }
+        .horizontal-year-bar.show { display: flex; }
         .horizontal-year-chip {
-            padding: 8px 18px;
-            border-radius: 24px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--gray-600);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: var(--transition-fast);
-            flex-shrink: 0;
+            padding: 8px 18px; border-radius: 24px; background: var(--white); border: 2px solid var(--gray-200);
+            font-weight: 600; font-size: 13px; color: var(--gray-600); cursor: pointer;
+            white-space: nowrap; transition: var(--transition-fast); flex-shrink: 0;
             box-shadow: var(--shadow-xs);
         }
-        .horizontal-year-chip:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        .horizontal-year-chip.active-year {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: #fff;
-        }
+        .horizontal-year-chip:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+        .horizontal-year-chip.active-year { border-color: var(--primary); background: var(--primary); color: #fff; }
 
-        .search-row-vertical {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 4px;
-        }
+        .search-row-vertical { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
         .search-chip-vertical {
-            padding: 12px 16px;
-            border-radius: var(--radius-lg);
-            background: white;
-            border: 2px solid var(--gray-200);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: text;
-            color: var(--gray-700);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            font-family: var(--font);
-            box-shadow: var(--shadow-xs);
+            padding: 12px 16px; border-radius: var(--radius-lg); background: white; border: 2px solid var(--gray-200);
+            font-weight: 600; font-size: 13px; cursor: text; color: var(--gray-700);
+            transition: var(--transition); display: flex; align-items: center; gap: 10px; flex: 1;
+            font-family: var(--font); box-shadow: var(--shadow-xs);
         }
         .search-chip-vertical input {
-            border: none;
-            outline: none;
-            font-family: inherit;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--gray-700);
-            width: 100%;
-            background: transparent;
-            min-width: 0;
+            border: none; outline: none; font-family: inherit; font-weight: 600; font-size: 13px;
+            color: var(--gray-700); width: 100%; background: transparent; min-width: 0;
         }
-        .search-chip-vertical input::placeholder {
-            color: var(--gray-400);
-        }
-        .search-chip-vertical:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.08), var(--shadow-sm);
-        }
+        .search-chip-vertical input::placeholder { color: var(--gray-400); }
+        .search-chip-vertical:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.08), var(--shadow-sm); }
         .clear-chip-vertical {
-            padding: 12px 18px;
-            border-radius: var(--radius-lg);
-            background: var(--red-light);
-            border: 2px solid #fecaca;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            color: var(--red);
-            transition: var(--transition);
-            white-space: nowrap;
-            font-family: var(--font);
-            flex-shrink: 0;
-            box-shadow: var(--shadow-xs);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            padding: 12px 18px; border-radius: var(--radius-lg); background: var(--red-light);
+            border: 2px solid #fecaca; font-weight: 700; font-size: 12px; cursor: pointer; color: var(--red);
+            transition: var(--transition); white-space: nowrap; font-family: var(--font); flex-shrink: 0;
+            box-shadow: var(--shadow-xs); display: flex; align-items: center; gap: 6px;
         }
-        .clear-chip-vertical:hover {
-            background: #fee2e2;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-        .clear-chip-vertical:active {
-            transform: scale(0.94);
-            transition: 0.06s;
-        }
+        .clear-chip-vertical:hover { background: #fee2e2; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+        .clear-chip-vertical:active { transform: scale(0.94); transition: 0.06s; }
 
-        /* Test Cards */
-        .test-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
+        .test-list { display: flex; flex-direction: column; gap: 14px; }
         .premium-test-card {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e8ecf0;
-            position: relative;
-            overflow: visible;
+            background: #fff; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e8ecf0; position: relative; overflow: visible;
             transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.25s ease;
             animation: cardFadeIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1) both;
         }
-        @keyframes cardFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .premium-test-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-            border-color: #d0d7e0;
-        }
-        .premium-test-card:active {
-            transform: scale(0.98);
-            transition: 0.1s;
-        }
+        @keyframes cardFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .premium-test-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1); border-color: #d0d7e0; }
+        .premium-test-card:active { transform: scale(0.98); transition: 0.1s; }
         .premium-top-glow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #4f46e5, #06b6d4, #8b5cf6);
-            border-radius: 20px 20px 0 0;
+            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4, #8b5cf6); border-radius: 20px 20px 0 0;
         }
-        .premium-card-body {
-            padding: 16px 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            position: relative;
-        }
-        .premium-card-top-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
+        .premium-card-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; position: relative; }
+        .premium-card-top-row { display: flex; align-items: flex-start; gap: 12px; }
         .premium-exam-logo {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #f9fafb, #eef1f5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            font-size: 18px;
-            color: var(--primary);
+            width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #f9fafb, #eef1f5);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.04);
+            font-size: 18px; color: var(--primary);
         }
-        .premium-exam-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .premium-card-info {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .premium-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            align-items: center;
-        }
+        .premium-exam-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .premium-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+        .premium-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
         .premium-badge-exam {
-            background: rgba(36, 55, 72, 0.07);
-            color: #1e293b;
-            padding: 3px 9px;
-            border-radius: 14px;
-            font-size: 10px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
+            background: rgba(36, 55, 72, 0.07); color: #1e293b; padding: 3px 9px; border-radius: 14px;
+            font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px;
             border: 1px solid rgba(36, 55, 72, 0.08);
         }
         .premium-badge-year {
-            background: #fefce8;
-            color: #a16207;
-            padding: 3px 9px;
-            border-radius: 14px;
-            font-size: 10px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
+            background: #fefce8; color: #a16207; padding: 3px 9px; border-radius: 14px; font-size: 10px;
+            font-weight: 700; display: inline-flex; align-items: center; gap: 3px;
             border: 1px solid rgba(161, 98, 7, 0.12);
         }
         .premium-badge-diff {
-            padding: 3px 9px;
-            border-radius: 14px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            padding: 3px 9px; border-radius: 14px; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.3px;
         }
-        .diff-easy {
-            background: #ecfdf5;
-            color: #059669;
-        }
-        .diff-moderate {
-            background: #fefce8;
-            color: #a16207;
-        }
-        .diff-hard {
-            background: #fef2f2;
-            color: #dc2626;
-        }
-        .diff-prev-year {
-            background: #f0f9ff;
-            color: #0369a1;
-        }
+        .diff-easy { background: #ecfdf5; color: #059669; }
+        .diff-moderate { background: #fefce8; color: #a16207; }
+        .diff-hard { background: #fef2f2; color: #dc2626; }
+        .diff-prev-year { background: #f0f9ff; color: #0369a1; }
         .premium-test-title {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: -0.2px;
-            color: #0f172a;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 15px; font-weight: 700; line-height: 1.3; letter-spacing: -0.2px; color: #0f172a;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
             word-break: break-word;
         }
         .premium-bookmark-btn {
-            position: absolute;
-            top: 10px;
-            right: 14px;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            z-index: 5;
+            position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0, 0, 0, 0.06);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: #94a3b8; font-size: 14px; transition: all 0.2s ease; z-index: 5;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
         }
-        .premium-bookmark-btn:hover {
-            background: #fff;
-            color: #f59e0b;
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.18);
-        }
-        .premium-bookmark-btn.bookmarked {
-            color: #f59e0b;
-            background: rgba(245, 158, 11, 0.12);
-            border-color: rgba(245, 158, 11, 0.3);
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
-        }
-        .premium-info-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748b;
-            align-items: center;
-        }
-        .premium-info-row span {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            white-space: nowrap;
-        }
-        .premium-info-row i {
-            font-size: 13px;
-            color: #94a3b8;
-        }
-        .premium-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-top: 2px;
-        }
+        .premium-bookmark-btn:hover { background: #fff; color: #f59e0b; transform: scale(1.1); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.18); }
+        .premium-bookmark-btn.bookmarked { color: #f59e0b; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08); }
+        .premium-info-row { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; font-weight: 600; color: #64748b; align-items: center; }
+        .premium-info-row span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+        .premium-info-row i { font-size: 13px; color: #94a3b8; }
+        .premium-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
         .premium-tag {
-            background: #f8fafc;
-            padding: 4px 10px;
-            border-radius: 16px;
-            font-size: 10px;
-            font-weight: 600;
-            color: #475569;
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            border: 1px solid #e8ecf0;
-            white-space: nowrap;
+            background: #f8fafc; padding: 4px 10px; border-radius: 16px; font-size: 10px; font-weight: 600;
+            color: #475569; display: inline-flex; align-items: center; gap: 3px; border: 1px solid #e8ecf0; white-space: nowrap;
         }
         .premium-score-preview {
-            font-size: 11px;
-            font-weight: 700;
-            background: rgba(16, 185, 129, 0.08);
-            color: #065f46;
-            padding: 4px 10px;
-            border-radius: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
+            font-size: 11px; font-weight: 700; background: rgba(16, 185, 129, 0.08); color: #065f46;
+            padding: 4px 10px; border-radius: 14px; display: inline-flex; align-items: center; gap: 5px;
             border: 1px solid rgba(16, 185, 129, 0.12);
         }
-        .premium-action-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 2px;
-        }
+        .premium-action-buttons { display: flex; gap: 8px; margin-top: 2px; }
         .btn-attempt {
-            flex: 2;
-            background: linear-gradient(135deg, #14293d, #1f4565);
-            color: white;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 3px 10px rgba(20, 41, 61, 0.2);
-            transition: all 0.2s ease;
-            font-family: var(--font);
+            flex: 2; background: linear-gradient(135deg, #14293d, #1f4565); color: white; border: none;
+            padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            box-shadow: 0 3px 10px rgba(20, 41, 61, 0.2); transition: all 0.2s ease; font-family: var(--font);
         }
-        .btn-attempt:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(20, 41, 61, 0.3);
-        }
-        .btn-attempt:active {
-            transform: scale(0.96);
-        }
+        .btn-attempt:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20, 41, 61, 0.3); }
+        .btn-attempt:active { transform: scale(0.96); }
         .btn-rank {
-            flex: 1;
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            color: #1e293b;
-            border: none;
-            padding: 10px 12px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2);
-            transition: all 0.2s ease;
-            font-family: var(--font);
+            flex: 1; background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1e293b; border: none;
+            padding: 10px 12px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2); transition: all 0.2s ease; font-family: var(--font);
         }
-        .btn-rank:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
-        }
-        .btn-rank:active {
-            transform: scale(0.96);
-        }
+        .btn-rank:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3); }
+        .btn-rank:active { transform: scale(0.96); }
 
         .empty-selection {
-            text-align: center;
-            padding: 50px 20px;
-            background: var(--white);
-            border-radius: var(--radius-xl);
-            border: 1px solid #e8ecf0;
-            box-shadow: var(--shadow-sm);
-            margin-top: 8px;
+            text-align: center; padding: 50px 20px; background: var(--white); border-radius: var(--radius-xl);
+            border: 1px solid #e8ecf0; box-shadow: var(--shadow-sm); margin-top: 8px;
         }
         .icon-pulse {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 14px;
-            font-size: 24px;
-            color: var(--primary);
-            animation: softPulse 2.5s infinite;
+            width: 60px; height: 60px; border-radius: 50%; background: var(--primary-light);
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+            font-size: 24px; color: var(--primary); animation: softPulse 2.5s infinite;
             box-shadow: 0 4px 16px rgba(36, 55, 72, 0.1);
         }
         @keyframes softPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(36, 55, 72, 0.22);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 16px rgba(36, 55, 72, 0);
-                transform: scale(1.03);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(36, 55, 72, 0.22); transform: scale(1); }
+            50% { box-shadow: 0 0 0 16px rgba(36, 55, 72, 0); transform: scale(1.03); }
         }
-        .empty-selection h2 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gray-800);
-            margin-bottom: 6px;
-        }
-        .empty-selection p {
-            font-size: 12px;
-            color: var(--gray-500);
-            line-height: 1.5;
-        }
+        .empty-selection h2 { font-size: 16px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+        .empty-selection p { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
 
-        /* Ribbon badges */
-        .ribbon {
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            background: #f59e0b;
-            color: #fff;
-            padding: 3px 12px 3px 16px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 0 6px 6px 0;
-            z-index: 8;
-            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
-            line-height: 1.2;
-        }
-        .ribbon.latest {
-            background: #4f46e5;
-        }
-        .ribbon.new {
-            background: #06b6d4;
-        }
-
-        /* Footer */
         .pro-footer {
-            background: var(--secondary);
-            color: var(--text-light);
-            padding: 40px 20px 100px;
-            position: relative;
-            margin-top: 24px;
-            border-radius: 0;
+            background: var(--secondary); color: var(--text-light); padding: 40px 20px 100px;
+            position: relative; margin-top: 24px; border-radius: 0;
         }
-        .pro-footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24);
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
+        .pro-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24); }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 600px; margin: 0 auto 30px; }
         .footer-col h3 {
-            font-size: 17px;
-            font-weight: 700;
-            margin-bottom: 18px;
-            color: #ffffff;
-            letter-spacing: -0.2px;
-            position: relative;
-            padding-bottom: 8px;
+            font-size: 17px; font-weight: 700; margin-bottom: 18px; color: #ffffff; letter-spacing: -0.2px;
+            position: relative; padding-bottom: 8px;
         }
-        .footer-col h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 30px;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-        .footer-col ul {
-            list-style: none;
-        }
-        .footer-col li {
-            margin-bottom: 11px;
-            line-height: 1.4;
-        }
+        .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--accent); border-radius: 2px; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 11px; line-height: 1.4; }
         .footer-col a {
-            color: var(--accent);
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.25s ease;
-            cursor: pointer;
-            position: relative;
+            color: var(--accent); font-size: 13px; font-weight: 500; text-decoration: none; display: inline-block;
+            transition: all 0.25s ease; cursor: pointer; position: relative;
         }
-        .footer-col a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-        .footer-col a:hover {
-            color: #ffffff;
-            transform: translateX(3px);
-        }
-        .footer-col a:hover::after {
-            width: 100%;
-        }
-        .footer-install-section {
-            text-align: center;
-            margin: 16px 0 20px;
-        }
+        .footer-col a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+        .footer-col a:hover { color: #ffffff; transform: translateX(3px); }
+        .footer-col a:hover::after { width: 100%; }
+        .footer-install-section { text-align: center; margin: 16px 0 20px; }
         .footer-install-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: #fff;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 28px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            font-family: var(--font);
-            transition: all 0.25s ease;
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-            text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff; border: none; padding: 14px 24px; border-radius: 28px; font-weight: 700; font-size: 14px;
+            cursor: pointer; font-family: var(--font); transition: all 0.25s ease;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); text-decoration: none;
         }
-        .footer-install-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 28px rgba(79, 70, 229, 0.55);
-            color: #fff;
-        }
-        .footer-install-btn:active {
-            transform: scale(0.94);
-            transition: 0.06s;
-        }
-        .footer-email {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .footer-email a {
-            color: #38bdf8;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-email a:hover {
-            color: var(--accent);
-        }
-        .footer-bottom {
-            text-align: center;
-            border-top: 1px solid var(--border-light);
-            padding-top: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .footer-bottom p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-        .footer-bottom a {
-            font-size: 12px;
-            color: var(--text-light);
-            font-weight: 500;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-bottom a:hover {
-            color: var(--accent);
-        }
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin: 20px 0;
-        }
+        .footer-install-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(79, 70, 229, 0.55); color: #fff; }
+        .footer-install-btn:active { transform: scale(0.94); transition: 0.06s; }
+        .footer-email { text-align: center; margin-bottom: 24px; }
+        .footer-email a { color: #38bdf8; font-size: 14px; font-weight: 600; text-decoration: none; transition: color 0.2s; }
+        .footer-email a:hover { color: var(--accent); }
+        .footer-bottom { text-align: center; border-top: 1px solid var(--border-light); padding-top: 20px; max-width: 600px; margin: 0 auto; }
+        .footer-bottom p { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+        .footer-bottom a { font-size: 12px; color: var(--text-light); font-weight: 500; text-decoration: none; transition: color 0.2s; }
+        .footer-bottom a:hover { color: var(--accent); }
+        .footer-social { display: flex; justify-content: center; gap: 16px; margin: 20px 0; }
         .footer-social a {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 16px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-light);
+            width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 255, 255, 0.05);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+            font-size: 16px; transition: all 0.3s ease; border: 1px solid var(--border-light);
         }
-        .footer-social a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--accent);
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-        .footer-yt-channel {
-            text-align: center;
-            margin: 10px 0 18px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #fbbf24;
-        }
-        .footer-yt-channel i {
-            margin-right: 6px;
-            color: #ff0000;
-        }
+        .footer-social a:hover { background: rgba(255, 255, 255, 0.1); color: var(--accent); transform: translateY(-3px); border-color: var(--accent); }
+        .footer-yt-channel { text-align: center; margin: 10px 0 18px; font-size: 13px; font-weight: 600; color: #fbbf24; }
+        .footer-yt-channel i { margin-right: 6px; color: #ff0000; }
 
-        /* Bottom Nav */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: calc(var(--bottom-nav-height) + var(--safe-bottom));
-            background: #fff;
-            border-top: 1px solid #e8ecf0;
-            z-index: 95;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-            padding-top: 8px;
-            padding-bottom: var(--safe-bottom);
+            position: fixed; bottom: 0; left: 0; right: 0; height: calc(var(--bottom-nav-height) + var(--safe-bottom));
+            background: #fff; border-top: 1px solid #e8ecf0; z-index: 95; display: flex; justify-content: space-around;
+            align-items: flex-start; padding-top: 8px; padding-bottom: var(--safe-bottom);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
         }
         .bottom-nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            padding: 4px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            color: var(--gray-400);
-            transition: var(--transition-fast);
-            font-family: var(--font);
-            text-decoration: none;
-            position: relative;
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px;
+            border: none; background: transparent; cursor: pointer; color: var(--gray-400);
+            transition: var(--transition-fast); font-family: var(--font); text-decoration: none; position: relative;
         }
-        .bottom-nav-item.active {
-            color: var(--primary);
-        }
-        .bottom-nav-item:active {
-            transform: scale(0.9);
-        }
-        .bottom-nav-item i {
-            font-size: 20px;
-            transition: transform 0.2s;
-        }
-        .bottom-nav-item:hover i {
-            transform: translateY(-2px);
-        }
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 600;
-        }
-        .bottom-nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            width: 20px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
+        .bottom-nav-item.active { color: var(--primary); }
+        .bottom-nav-item:active { transform: scale(0.9); }
+        .bottom-nav-item i { font-size: 20px; transition: transform 0.2s; }
+        .bottom-nav-item:hover i { transform: translateY(-2px); }
+        .bottom-nav-item span { font-size: 10px; font-weight: 600; }
+        .bottom-nav-item.active::before { content: ''; position: absolute; top: -8px; width: 20px; height: 3px; background: var(--primary); border-radius: 2px; }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* Loading spinner */
         .loading-spinner {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            color: var(--primary);
-            font-size: 14px;
-            font-weight: 700;
-            gap: 10px;
+            display: flex; justify-content: center; align-items: center; padding: 40px; color: var(--primary);
+            font-size: 14px; font-weight: 700; gap: 10px;
         }
         .spinner {
-            border: 3px solid var(--gray-200);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 0.8s linear infinite;
+            border: 3px solid var(--gray-200); border-top: 3px solid var(--primary); border-radius: 50%;
+            width: 24px; height: 24px; animation: spin 0.8s linear infinite;
         }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .refresh-status {
+            text-align: center; font-size: 12px; color: var(--gray-500); margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .refresh-status .spinner-sm {
+            width: 14px; height: 14px; border: 2px solid var(--gray-200); border-top-color: var(--primary);
+            border-radius: 50%; animation: spin 0.6s linear infinite;
         }
 
-        @media (min-width: 600px) {
-            .bottom-nav {
-                display: none;
-            }
-            body {
-                padding-bottom: 0;
-            }
-            .container {
-                padding: 18px 18px calc(24px + var(--safe-bottom));
-            }
-            .pro-footer {
-                padding-bottom: 30px;
-            }
-            .category-card-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 16px;
-            }
-        }
+        @media (min-width: 600px) { .bottom-nav { display: none; } body { padding-bottom: 0; } .container { padding: 18px 18px calc(24px + var(--safe-bottom)); } .pro-footer { padding-bottom: 30px; } .category-card-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
         @media (max-width: 480px) {
-            .footer-grid {
-                gap: 24px;
-            }
-            .footer-col h3 {
-                font-size: 15px;
-            }
-            .footer-col a {
-                font-size: 12px;
-            }
-            .category-card {
-                padding: 16px 10px 14px;
-                border-radius: 16px;
-                gap: 8px;
-            }
-            .category-card .cat-image-wrap {
-                width: 48px;
-                height: 48px;
-                border-radius: 14px;
-                font-size: 18px;
-            }
-            .category-card .cat-image-wrap .cat-icon-fallback {
-                font-size: 20px;
-            }
-            .category-card .cat-name {
-                font-size: 11px;
-            }
+            .footer-grid { gap: 24px; } .footer-col h3 { font-size: 15px; } .footer-col a { font-size: 12px; }
+            .category-card { padding: 16px 10px 14px; border-radius: 16px; gap: 8px; }
+            .category-card .cat-image-wrap { width: 48px; height: 48px; border-radius: 14px; font-size: 18px; }
+            .category-card .cat-image-wrap .cat-icon-fallback { font-size: 20px; }
+            .category-card .cat-name { font-size: 11px; }
         }
     </style>
 </head>
@@ -1985,10 +750,8 @@
                     <i class="fas fa-arrow-left"></i> Change Category
                 </button>
             </div>
-            <!-- Selected filters bar -->
             <div class="selected-filters-bar" id="selectedFiltersBar"></div>
             <div class="filter-accordion" id="filterAccordion">
-                <!-- Exam accordion (first, auto‑open) -->
                 <div class="mock-accordion-item" id="examAccordionItem">
                     <button class="mock-accordion-header" onclick="toggleAccordion('examAccordionBody','examArrow','examAccordionItem')">
                         <div class="ma-left"><span><i class="fas fa-file-alt" style="margin-right:8px;"></i> Exam</span></div>
@@ -1997,7 +760,6 @@
                     </button>
                     <div class="mock-accordion-body" id="examAccordionBody"><div class="exam-card-grid" id="examCardsGrid"></div></div>
                 </div>
-                <!-- Subject accordion -->
                 <div class="mock-accordion-item" id="subjectAccordionItem">
                     <button class="mock-accordion-header" onclick="toggleAccordion('subjectAccordionBody','subjectArrow','subjectAccordionItem')">
                         <div class="ma-left"><span><i class="fas fa-book" style="margin-right:8px;"></i> Subject</span></div>
@@ -2006,7 +768,6 @@
                     </button>
                     <div class="mock-accordion-body" id="subjectAccordionBody"><div class="vertical-chip-list" id="subjectChips"></div></div>
                 </div>
-                <!-- Chapter accordion -->
                 <div class="mock-accordion-item" id="chapterAccordionItem">
                     <button class="mock-accordion-header" onclick="toggleAccordion('chapterAccordionBody','chapterArrow','chapterAccordionItem')">
                         <div class="ma-left"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> Chapter</span></div>
@@ -2015,13 +776,15 @@
                     </button>
                     <div class="mock-accordion-body" id="chapterAccordionBody"><div class="vertical-chip-list" id="chapterChips"></div></div>
                 </div>
-                <!-- Year / Type / Sort buttons row -->
                 <div class="filter-buttons-row">
                     <button class="filter-btn" id="yearFilterBtn" onclick="toggleYearBar()"><i class="fas fa-calendar-alt"></i> <span id="yearBtnText">Year</span></button>
                     <button class="filter-btn" id="typeFilterBtn" onclick="cycleTypeFilter()"><i class="fas fa-tag"></i> <span id="typeBtnText">All</span></button>
                     <button class="filter-btn" id="sortFilterBtn" onclick="toggleSortOrder()"><i class="fas fa-sort-amount-down-alt"></i> <span id="sortBtnText">Oldest</span></button>
                 </div>
                 <div class="horizontal-year-bar" id="horizontalYearBar"></div>
+                <div class="refresh-status" id="refreshStatus" style="display:none;">
+                    <span class="spinner-sm"></span> Loading new tests...
+                </div>
                 <div class="search-row-vertical">
                     <div class="search-chip-vertical"><i class="fas fa-search" style="color:var(--primary);"></i><input type="text" id="searchInput" placeholder="Search tests..."></div>
                     <button class="clear-chip-vertical" onclick="clearAllFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
@@ -2073,38 +836,17 @@
     </nav>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
-        const TEST_API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzoMsKhBEcvvybSGwRacvR3sx2r_T-zP1Nd5qCa4AFX3NRFZikfoM_aIuEbOsfhF9lreA/exec';
+        const TEST_API_URL = API_URL;
+        const JSON_PATHS = { mocks: './mocks.json', upcomingfooter: './json/upcomingfooter.json' };
 
-        const JSON_PATHS = {
-            mocks: './mocks.json',
-            upcomingfooter: './json/upcomingfooter.json'
-        };
         const FALLBACK_MOCKS = [
-            { file: 'sbi_po.html', exam: 'SBI PO', subject: 'QA', chapter: 'Full', testName: 'SBI PO Mock',
-                testCode: 'SBI-PO-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.25,
-                type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Bank',
-                year: '2026', imageurl: '' },
-            { file: 'ibps_clerk.html', exam: 'IBPS Clerk', subject: 'Reasoning', chapter: 'Full',
-                testName: 'IBPS Clerk Mock', testCode: 'IBPS-CLK-01', duration: 60, totalQuestions: 100,
-                marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate',
-                language: 'Eng & Hin', category: 'Bank', year: '2026', imageurl: '' },
-            { file: 'ssc_cgl.html', exam: 'SSC CGL', subject: 'GI', chapter: 'Full', testName: 'SSC CGL Mock',
-                testCode: 'SSC-CGL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5,
-                type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'Eng & Hin', category: 'SSC',
-                year: '2026', imageurl: '' },
-            { file: 'ssc_chsl.html', exam: 'SSC CHSL', subject: 'English', chapter: 'Full', testName: 'SSC CHSL Mock',
-                testCode: 'SSC-CHSL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5,
-                type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'SSC',
-                year: '2026', imageurl: '' },
-            { file: 'rrb_ntpc.html', exam: 'RRB NTPC', subject: 'GA', chapter: 'Full', testName: 'RRB NTPC Mock',
-                testCode: 'RRB-NTPC-01', duration: 90, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.33,
-                type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Railway',
-                year: '2026', imageurl: '' },
-            { file: 'cuet_gat.html', exam: 'CUET GAT', subject: 'GT', chapter: 'Full', testName: 'CUET GAT Mock',
-                testCode: 'CUET-GAT-01', duration: 60, totalQuestions: 50, marksPerQuestion: 5, negativeMarking: 1,
-                type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'Eng & Hin', category: 'CUET',
-                year: '2026', imageurl: '' }
+            { file: 'sbi_po.html', exam: 'SBI PO', subject: 'QA', chapter: 'Full', testName: 'SBI PO Mock', testCode: 'SBI-PO-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Bank', year: '2026', imageurl: '' },
+            { file: 'ibps_clerk.html', exam: 'IBPS Clerk', subject: 'Reasoning', chapter: 'Full', testName: 'IBPS Clerk Mock', testCode: 'IBPS-CLK-01', duration: 60, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.25, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Bank', year: '2026', imageurl: '' },
+            { file: 'ssc_cgl.html', exam: 'SSC CGL', subject: 'GI', chapter: 'Full', testName: 'SSC CGL Mock', testCode: 'SSC-CGL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'Eng & Hin', category: 'SSC', year: '2026', imageurl: '' },
+            { file: 'ssc_chsl.html', exam: 'SSC CHSL', subject: 'English', chapter: 'Full', testName: 'SSC CHSL Mock', testCode: 'SSC-CHSL-01', duration: 60, totalQuestions: 100, marksPerQuestion: 2, negativeMarking: 0.5, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'SSC', year: '2026', imageurl: '' },
+            { file: 'rrb_ntpc.html', exam: 'RRB NTPC', subject: 'GA', chapter: 'Full', testName: 'RRB NTPC Mock', testCode: 'RRB-NTPC-01', duration: 90, totalQuestions: 100, marksPerQuestion: 1, negativeMarking: 0.33, type: 'free', requiredPlan: 'none', difficulty: 'Moderate', language: 'Eng & Hin', category: 'Railway', year: '2026', imageurl: '' },
+            { file: 'cuet_gat.html', exam: 'CUET GAT', subject: 'GT', chapter: 'Full', testName: 'CUET GAT Mock', testCode: 'CUET-GAT-01', duration: 60, totalQuestions: 50, marksPerQuestion: 5, negativeMarking: 1, type: 'free', requiredPlan: 'none', difficulty: 'Hard', language: 'Eng & Hin', category: 'CUET', year: '2026', imageurl: '' }
         ];
         const FALLBACK_UPCOMING_FOOTER = [
             { id: 1, name: 'ReNEET UG 2026', date: '15 May 2026' }, { id: 2, name: 'CUET UG 2026', date: '20 May 2026' },
@@ -2115,12 +857,7 @@
             { id: 7, name: 'SSC CGL Tier-I 2026', date: '12 June 2026' },
             { id: 8, name: 'SSC JE 2026', date: '18 August 2026' },
             { id: 9, name: 'UPSC (CSE) 2026', date: '28 May 2026' },
-            { id: 10, name: 'SBI PO Prelims 2026', date: '18 August 2026' },
-            { id: 11, name: 'SSC Steno Grade C & D 2026', date: '30 August 2026' },
-            { id: 12, name: 'SBI Clerk Prelims 2026', date: '22 September 2026' },
-            { id: 13, name: 'IBPS PO Prelims 2026', date: '18 August 2026' },
-            { id: 14, name: 'IBPS Clerk Prelims 2026', date: '22 September 2026' },
-            { id: 15, name: 'SSC CPO Tier I 2026', date: '10 July 2026' }
+            { id: 10, name: 'SBI PO Prelims 2026', date: '18 August 2026' }
         ];
 
         const catGradients = [
@@ -2133,18 +870,11 @@
             'linear-gradient(135deg, #fff3e0, #ffe4c0, #ffd6a0)',
             'linear-gradient(135deg, #e8f0e0, #d4e4c8, #c0d8b0)',
             'linear-gradient(135deg, #ede9fe, #ddd0fc, #cebdf8)',
-            'linear-gradient(135deg, #e0f2fe, #c8e4fc, #b0d8f8)',
-            'linear-gradient(135deg, #fef3c7, #fde68a, #fcd970)',
-            'linear-gradient(135deg, #fce7f3, #fbcfe8, #f8b8d8)',
-            'linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7)',
-            'linear-gradient(135deg, #fff9e0, #fff0c0, #ffe8a0)',
-            'linear-gradient(135deg, #e0f0f8, #c8e0f0, #b0d0e8)',
-            'linear-gradient(135deg, #f0e8f0, #e4d0e4, #d8bcd8)',
+            'linear-gradient(135deg, #e0f2fe, #c8e4fc, #b0d8f8)'
         ];
         const catIcons = [
             'fa-graduation-cap', 'fa-university', 'fa-flask', 'fa-calculator', 'fa-globe', 'fa-book',
-            'fa-atom', 'fa-laptop-code', 'fa-brain', 'fa-chart-line', 'fa-building', 'fa-briefcase',
-            'fa-landmark', 'fa-scale-balanced', 'fa-microscope', 'fa-shield-alt'
+            'fa-atom', 'fa-laptop-code', 'fa-brain', 'fa-chart-line'
         ];
 
         let allMocks = [];
@@ -2161,56 +891,49 @@
         let searchDebounceTimer = null;
         let isOffline = false;
         let bookmarkedTests = JSON.parse(localStorage.getItem('bookmarkedTests') || '[]');
-        let selectedType = 'all'; // 'all', 'free', 'paid'
-        let sortOrder = 'oldest'; // 'oldest' or 'newest'
+        let selectedType = 'all';
+        let sortOrder = 'oldest';
+        let isRefreshing = false;
 
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
         const savedCategory = localStorage.getItem('selectedCategory') || user?.targetExam || '';
 
-        // Loading line control
+        // ---------- UI helpers ----------
         function showLoadingLine(active = true) {
             const line = document.getElementById('loadingLine');
             if (!line) return;
-            if (active) {
-                line.classList.add('active');
-                line.classList.remove('done');
-            } else {
-                line.classList.add('done');
-                line.classList.remove('active');
-                setTimeout(() => { line.classList.remove('done'); }, 600);
-            }
+            if (active) { line.classList.add('active'); line.classList.remove('done'); }
+            else { line.classList.add('done'); line.classList.remove('active'); setTimeout(() => line.classList.remove('done'), 600); }
         }
 
-        function showToast(message, type = 'info', duration = 3000) {
+        function showToast(msg, type = 'info', duration = 3000) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast-item ${type}`;
-            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle',
-                info: 'fa-info-circle' };
-            toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
             container.appendChild(toast);
             container.classList.add('show');
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateY(-8px)';
                 toast.style.transition = '0.3s';
-                setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.remove(
-                        'show'); }, 300);
+                setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.remove('show'); }, 300);
             }, duration);
         }
 
         function updateOnlineStatus() {
             isOffline = !navigator.onLine;
             const banner = document.getElementById('offlineBanner');
-            if (isOffline) { banner.classList.add('show');
-                showToast("You're offline. Using cached data.", 'warning', 4000); } else { banner.classList.remove('show'); }
+            if (isOffline) { banner.classList.add('show'); showToast("You're offline. Using cached data.", 'warning', 4000); }
+            else banner.classList.remove('show');
         }
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
 
-        function setAvatarWithPic(elementId, userObj) {
-            const el = document.getElementById(elementId);
+        function setAvatarWithPic(elId, userObj) {
+            const el = document.getElementById(elId);
             if (!el) return;
             if (userObj?.avatarUrl) el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar">`;
             else if (userObj?.profilePicUrl) el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar">`;
@@ -2221,48 +944,20 @@
         document.getElementById('sidebarUserName').textContent = user?.name || 'Student';
         document.getElementById('sidebarUserTag').textContent = user?.preparingFor || 'Learner';
 
-        function openSidebar() {
-            const overlay = document.getElementById('sidebarOverlay');
-            overlay.classList.remove('hidden');
-            requestAnimationFrame(() => overlay.classList.add('active'));
-            document.body.classList.add('sidebar-open');
-        }
-
+        function openSidebar() { const overlay = document.getElementById('sidebarOverlay'); overlay.classList.remove('hidden'); requestAnimationFrame(() => overlay.classList.add('active')); document.body.classList.add('sidebar-open'); }
         function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
-
-        function closeSidebarDirect() {
-            const overlay = document.getElementById('sidebarOverlay');
-            overlay.classList.remove('active');
-            document.body.classList.remove('sidebar-open');
-            setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400);
-        }
-
+        function closeSidebarDirect() { const overlay = document.getElementById('sidebarOverlay'); overlay.classList.remove('active'); document.body.classList.remove('sidebar-open'); setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400); }
         function navigate(url) { window.location.href = url; }
 
         function sidebarNavigate(action) {
             closeSidebarDirect();
             setTimeout(() => {
                 const map = {
-                    dashboard: 'dashboard.html',
-                    mocks: 'exam.html',
-                    aimock: 'aimock.html',
-                    books: 'book.html',
-                    study: 'book.html',
-                    results: 'allresult.html',
-                    leaderboard: 'leaderboard.html',
-                    chat: 'chat.html',
-                    aichat: 'aichat.html',
-                    streak: 'streak.html',
-                    'daily-challenge': 'challenge.html',
-                    referral: 'referral.html',
-                    favorites: 'favorites.html',
-                    coins: 'coin-history.html',
-                    'coin-use': 'usecoin.html',
-                    reviews: 'reviews.html',
-                    premium: 'payment.html',
-                    profile: 'profile.html',
-                    instructions: 'instructions',
-                    logout: 'logout'
+                    dashboard: 'dashboard.html', mocks: 'exam.html', aimock: 'aimock.html', books: 'book.html', study: 'book.html',
+                    results: 'allresult.html', leaderboard: 'leaderboard.html', chat: 'chat.html', aichat: 'aichat.html',
+                    streak: 'streak.html', 'daily-challenge': 'challenge.html', referral: 'referral.html', favorites: 'favorites.html',
+                    coins: 'coin-history.html', 'coin-use': 'usecoin.html', reviews: 'reviews.html', premium: 'payment.html',
+                    profile: 'profile.html', instructions: 'instructions', logout: 'logout'
                 };
                 if (action === 'logout') logout();
                 else if (action === 'instructions') openHowToUse();
@@ -2271,32 +966,12 @@
         }
 
         function openHowToUse() {
-            Swal.fire({
-                title: 'How to Use',
-                html: '<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a <b>Category</b>.</p><p><b>2.</b> Use <b>Year, Subject & Chapter</b> filters.</p><p><b>3.</b> Click <b>Attempt</b> to start.</p></div>',
-                confirmButtonText: 'Got it!',
-                confirmButtonColor: '#243748',
-                icon: 'info'
-            });
+            Swal.fire({ title: 'How to Use', html: `<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a <b>Category</b>.</p><p><b>2.</b> Use <b>Year, Subject & Chapter</b> filters.</p><p><b>3.</b> Click <b>Attempt</b> to start.</p></div>`, confirmButtonText: 'Got it!', confirmButtonColor: '#243748', icon: 'info' });
         }
 
         function logout() {
-            Swal.fire({
-                title: 'Logout?',
-                text: 'Are you sure?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                confirmButtonColor: '#ff4d5a',
-                cancelButtonColor: '#243748'
-            }).then(r => {
-                if (r.isConfirmed) {
-                    localStorage.removeItem('user');
-                    localStorage.removeItem('selectedCategory');
-                    showToast('Logged out', 'success');
-                    setTimeout(() => window.location.href = 'index.html', 800);
-                }
+            Swal.fire({ title: 'Logout?', text: 'Are you sure?', icon: 'question', showCancelButton: true, confirmButtonText: 'Yes', cancelButtonText: 'No', confirmButtonColor: '#ff4d5a', cancelButtonColor: '#243748' }).then(r => {
+                if (r.isConfirmed) { localStorage.removeItem('user'); localStorage.removeItem('selectedCategory'); showToast('Logged out', 'success'); setTimeout(() => window.location.href = 'index.html', 800); }
             });
         }
 
@@ -2304,10 +979,7 @@
             const item = document.getElementById(itemId);
             const isOpen = item.classList.contains('open');
             document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-            if (!isOpen) {
-                item.classList.add('open');
-                setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
-            }
+            if (!isOpen) { item.classList.add('open'); setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150); }
         }
 
         function openExamAccordion() {
@@ -2317,118 +989,54 @@
             setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
         }
 
-        function closeExamAccordion() {
-            const item = document.getElementById('examAccordionItem');
-            item.classList.remove('open');
-        }
+        function closeAllAccordions() { document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open')); }
 
-        function closeAllAccordions() {
-            document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-        }
-
-        function openInstallPopup() {
-            Swal.fire({
-                title: '📲 Install TestMaster Pro',
-                html: `
-                <div style="text-align:center;">
-                    <p style="font-size:14px;font-weight:600;color:#243748;margin-bottom:8px;">Get the App Experience!</p>
-                    <p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file and install it on your Android device.</p>
-                    <div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;">
-                        <i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i>
-                        <p style="font-weight:700;color:#1e293b;margin:4px 0;">TestMasterPro.apk</p>
-                        <p style="font-size:10px;color:#94a3b8;">Latest Version · Safe & Secure</p>
-                    </div>
-                </div>`,
-                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
-                confirmButtonColor: '#4f46e5',
-                showCancelButton: true,
-                cancelButtonText: 'Maybe Later',
-                cancelButtonColor: '#94a3b8',
-                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions →</a>'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const link = document.createElement('a');
-                    link.href = 'TestMasterPro.apk';
-                    link.download = 'TestMasterPro.apk';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showToast('Downloading TestMasterPro.apk...', 'success', 4000);
-                }
-            });
-        }
-
-        // ---------- FETCH & CACHE ----------
+        // ---------- Data fetching (no dedup across categories) ----------
         async function fetchAllMocks() {
-            let sheetTests = [];
+            let apiTests = [];
             let localTests = [];
+
             try {
-                const sheetResp = await fetch(TEST_API_URL + '?action=getAllMockTests', { cache: 'no-store' });
-                if (sheetResp.ok) {
-                    const sheetData = await sheetResp.json();
-                    if (sheetData.success && Array.isArray(sheetData.tests)) {
-                        sheetTests = sheetData.tests.map(t => ({ ...t, fromSheet: true }));
+                const resp = await fetch(TEST_API_URL + '?action=getAllMockTests', { cache: 'no-store' });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.success && Array.isArray(data.tests)) {
+                        apiTests = data.tests.map(t => ({ ...t, source: 'api' }));
                     }
                 }
-            } catch (e) { console.warn('Sheet fetch failed', e); }
+            } catch (e) { console.warn('API fetch failed', e); }
 
             try {
                 const localResp = await fetch(JSON_PATHS.mocks, { cache: 'no-store' });
                 if (localResp.ok) {
                     const localData = await localResp.json();
-                    if (Array.isArray(localData) && localData.length) {
-                        localTests = localData.map(t => ({ ...t, fromSheet: false }));
+                    if (Array.isArray(localData)) {
+                        localTests = localData.map(t => ({ ...t, source: 'json' }));
                     }
                 }
             } catch (e) { console.warn('mocks.json fetch failed', e); }
 
-            const merged = [...sheetTests];
-            const existingCodes = new Set(sheetTests.map(t => t.testCode));
-            localTests.forEach(test => {
-                if (!existingCodes.has(test.testCode)) merged.push(test);
-            });
-            if (!merged.length) {
-                FALLBACK_MOCKS.forEach(t => merged.push({ ...t, fromSheet: false }));
-            }
-            // Sort by sequence ascending (oldest first by default)
-            const sorted = merged.map((m, i) => ({ ...m, _seq: i })).sort((a, b) => a._seq - b._seq);
-            return sorted;
+            // Combine all, no dedup by testCode (categories can share testCode)
+            let all = [...apiTests, ...localTests];
+            if (!all.length) all = FALLBACK_MOCKS.map(t => ({ ...t, source: 'fallback' }));
+
+            return all.map((m, i) => ({ ...m, _seq: i }));
         }
 
-        function cacheMocks(data) {
-            try {
-                localStorage.setItem('cachedMocksData', JSON.stringify(data));
-                localStorage.setItem('cachedMocksTime', Date.now());
-            } catch (e) { console.warn('Cache save failed', e); }
+        function cacheApiData(data) {
+            try { localStorage.setItem('apiCachedMocks', JSON.stringify(data)); localStorage.setItem('apiCachedTime', Date.now()); } catch(e) {}
         }
-
-        function getCachedMocks() {
-            try {
-                const raw = localStorage.getItem('cachedMocksData');
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length) return parsed;
-                }
-            } catch (e) {}
+        function getCachedApiData() {
+            try { const raw = localStorage.getItem('apiCachedMocks'); if (raw) return JSON.parse(raw); } catch(e) {}
             return null;
-        }
-
-        function setupFromData(mocksArray) {
-            allMocks = mocksArray;
-            extractCategories();
-            buildCategoryImageMap();
-            if (savedCategory && allCategories.includes(savedCategory)) {
-                selectedCategory = savedCategory;
-                showTestView();
-            } else {
-                showCategoryView();
-            }
         }
 
         function extractCategories() {
             const catMap = {};
-            allMocks.forEach(m => { const cat = m?.category || 'Uncategorized';
-                catMap[cat] = (catMap[cat] || 0) + 1; });
+            allMocks.forEach(m => {
+                const cat = m?.category || 'Uncategorized';
+                catMap[cat] = (catMap[cat] || 0) + 1;
+            });
             allCategories = Object.keys(catMap).sort();
             categoryTestCounts = catMap;
         }
@@ -2443,186 +1051,122 @@
             });
         }
 
+        function showRefreshIndicator(show) { document.getElementById('refreshStatus').style.display = show ? 'flex' : 'none'; }
+
         async function backgroundRefresh() {
-            showLoadingLine(true);
-            showToast('Checking for new tests...', 'info', 2000);
+            if (isRefreshing) return;
+            isRefreshing = true;
+            showRefreshIndicator(true);
             try {
                 const fresh = await fetchAllMocks();
                 allMocks = fresh;
-                cacheMocks(fresh);
+                cacheApiData(fresh.filter(t => t.source === 'api'));
                 extractCategories();
                 buildCategoryImageMap();
                 if (document.getElementById('testView').classList.contains('active')) {
-                    updateTestViewHeader();
                     renderFilterAccordions();
                     applyFilters();
-                    renderSelectedFiltersBar();
                 } else {
                     renderCategoryCards(allCategories);
                 }
-                showToast('Tests updated successfully!', 'success', 2500);
+                showToast('Tests updated!', 'success', 2500);
             } catch (err) {
-                showToast('Could not update tests. Using existing data.', 'error', 4000);
+                showToast('Could not update tests.', 'error', 4000);
             } finally {
-                showLoadingLine(false);
+                isRefreshing = false;
+                showRefreshIndicator(false);
             }
         }
 
         async function loadInitialData() {
-            const cached = getCachedMocks();
-            if (cached) {
-                setupFromData(cached);
-                backgroundRefresh();
-            } else {
-                // Show spinner while loading
-                document.getElementById('categoryCardGrid').innerHTML =
-                    '<div class="loading-spinner"><div class="spinner"></div> Loading tests…</div>';
-                document.getElementById('testList').innerHTML =
-                    '<div class="loading-spinner"><div class="spinner"></div> Loading tests…</div>';
-                try {
-                    const fresh = await fetchAllMocks();
-                    allMocks = fresh;
-                    cacheMocks(fresh);
-                    setupFromData(fresh);
-                } catch (e) {
-                    allMocks = FALLBACK_MOCKS.map((t, i) => ({ ...t, fromSheet: false, _seq: i })).sort((a, b) => a._seq -
-                        b._seq);
-                    setupFromData(allMocks);
+            const cachedApi = getCachedApiData();
+            const online = navigator.onLine;
+
+            if (cachedApi && !online) {
+                allMocks = cachedApi.map((m,i) => ({...m, _seq:i}));
+                extractCategories();
+                buildCategoryImageMap();
+                if (savedCategory && allCategories.includes(savedCategory)) {
+                    selectedCategory = savedCategory;
+                    showTestView();
+                } else {
+                    showCategoryView();
+                }
+                return;
+            }
+
+            try {
+                const fresh = await fetchAllMocks();
+                allMocks = fresh;
+                cacheApiData(fresh.filter(t => t.source === 'api'));
+                extractCategories();
+                buildCategoryImageMap();
+                if (savedCategory && allCategories.includes(savedCategory)) {
+                    selectedCategory = savedCategory;
+                    showTestView();
+                } else {
+                    showCategoryView();
+                }
+            } catch (e) {
+                if (cachedApi) {
+                    allMocks = cachedApi.map((m,i) => ({...m, _seq:i}));
+                    extractCategories();
+                    buildCategoryImageMap();
+                    if (savedCategory && allCategories.includes(savedCategory)) {
+                        selectedCategory = savedCategory;
+                        showTestView();
+                    } else {
+                        showCategoryView();
+                    }
+                } else {
+                    allMocks = FALLBACK_MOCKS.map((t,i) => ({...t, _seq:i}));
+                    extractCategories();
+                    buildCategoryImageMap();
+                    showCategoryView();
                     showToast('Could not load tests. Offline data used.', 'error');
                 }
             }
         }
 
-        function groupByCategoryUniqueExams(arr) {
-            const map = {};
-            arr.forEach(item => {
-                const cat = item.category || 'Other';
-                if (!map[cat]) map[cat] = { exams: [], seen: new Set() };
-                if (!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam);
-                    map[cat].exams.push(item); }
-            });
-            return Object.keys(map).sort().map(cat => ({ category: cat, exams: map[cat].exams }));
-        }
-
-        async function fetchJSON(p, fb) {
-            try {
-                const r = await fetch(p, { cache: 'no-store' });
-                if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                const d = await r.json();
-                if (!Array.isArray(d) || !d.length) throw new Error('Empty data');
-                return d;
-            } catch (e) {
-                if (fb) { console.warn(`Could not load ${p}, using fallback.`, e.message); return fb; }
-                throw e;
-            }
-        }
-
-        async function loadUserResults() {
-            try {
-                const r = await fetch(
-                    `${API_URL}?action=getUserResults&username=${encodeURIComponent(user?.username||'')}`);
-                const d = await r.json();
-                if (d?.success && Array.isArray(d.results)) userResults = d.results;
-            } catch (e) {}
-        }
-
-        async function loadPremium() {
-            try {
-                if (user?.premiumPlans) userPremiumPlans = user.premiumPlans;
-                const r = await fetch(
-                    `${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user?.username||'')}`);
-                const d = await r.json();
-                if (d?.success && Array.isArray(d.premiumPlans)) {
-                    userPremiumPlans = d.premiumPlans;
-                    user.premiumPlans = d.premiumPlans;
-                    localStorage.setItem('user', JSON.stringify(user));
-                }
-            } catch (e) {}
-        }
-
-        function hasAccess(test) {
-            if (!test || test.type === 'free') return true;
-            if (!Array.isArray(userPremiumPlans) || !userPremiumPlans.length) return false;
-            if (test.requiredPlan) return userPremiumPlans.some(p => p?.planType === test.requiredPlan);
-            return true;
-        }
-
-        // ---- SELECTED FILTERS BAR ----
-        function renderSelectedFiltersBar() {
-            const bar = document.getElementById('selectedFiltersBar');
-            let chips = [];
-            if (selectedYear) chips.push({ label: 'Year', value: selectedYear, clear: () => clearFilter('year') });
-            if (selectedExam) chips.push({ label: 'Exam', value: selectedExam, clear: () => clearFilter('exam') });
-            if (selectedSubject) chips.push({ label: 'Subject', value: selectedSubject, clear: () => clearFilter(
-                    'subject') });
-            if (selectedChapter) chips.push({ label: 'Chapter', value: selectedChapter, clear: () => clearFilter(
-                    'chapter') });
-            if (!chips.length) { bar.innerHTML = ''; return; }
-            bar.innerHTML = chips.map(c => `
-                <div class="filter-chip">
-                    <span class="chip-label">${c.label}:</span> ${c.value}
-                    <button class="chip-remove" onclick="event.stopPropagation(); (${c.clear})()"><i class="fas fa-times"></i></button>
-                </div>
-            `).join('');
-        }
-
-        function clearFilter(type) {
-            if (type === 'year') { selectedYear = ''; } else if (type === 'exam') { selectedExam = '';
-                selectedSubject = '';
-                selectedChapter = ''; } else if (type === 'subject') { selectedSubject = '';
-                selectedChapter = ''; } else if (type === 'chapter') { selectedChapter = ''; }
-            closeAllAccordions();
-            renderFilterAccordions();
-            applyFilters();
-            renderSelectedFiltersBar();
-            showToast(`Cleared ${type} filter`, 'info');
-        }
-
+        // ---------- Views ----------
         function showCategoryView() {
             document.getElementById('categoryView').classList.remove('hidden');
             document.getElementById('testView').classList.remove('active');
-            document.getElementById('categorySearchInput').value = '';
             renderCategoryCards(allCategories);
         }
 
         function showTestView() {
             document.getElementById('categoryView').classList.add('hidden');
             document.getElementById('testView').classList.add('active');
-            selectedYear = '';
-            selectedExam = '';
-            selectedSubject = '';
-            selectedChapter = '';
+            selectedYear = ''; selectedExam = ''; selectedSubject = ''; selectedChapter = '';
+            selectedType = 'all'; sortOrder = 'oldest';
             document.getElementById('searchInput').value = '';
-            selectedType = 'all';
-            sortOrder = 'oldest';
+            updateTypeButton();
+            document.getElementById('sortBtnText').textContent = 'Oldest';
+            document.getElementById('yearBtnText').textContent = 'Year';
             updateTestViewHeader();
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
-            // auto-open exam accordion
             openExamAccordion();
         }
 
         function goBackToCategories() {
             selectedCategory = '';
             localStorage.removeItem('selectedCategory');
-            if (user) { user.targetExam = '';
-                localStorage.setItem('user', JSON.stringify(user)); }
             showCategoryView();
             showToast('Select a category to continue', 'info');
         }
 
         function updateTestViewHeader() {
             document.getElementById('testViewCategoryName').textContent = selectedCategory;
-            document.getElementById('testViewCategoryCount').textContent =
-                `(${categoryTestCounts[selectedCategory]||0} tests)`;
+            document.getElementById('testViewCategoryCount').textContent = `(${categoryTestCounts[selectedCategory] || 0} tests)`;
         }
 
         function renderCategoryCards(categories) {
             const grid = document.getElementById('categoryCardGrid');
             if (!categories.length) {
-                grid.innerHTML =
-                    '<div class="no-category-found"><i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:8px;"></i>No categories found</div>';
+                grid.innerHTML = '<div class="no-category-found">No categories found</div>';
                 return;
             }
             grid.innerHTML = categories.map((cat, idx) => {
@@ -2630,17 +1174,11 @@
                 const iconClass = catIcons[idx % catIcons.length];
                 const count = categoryTestCounts[cat] || 0;
                 const catImage = categoryImageMap[cat] || '';
-                const safeCat = cat.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const imageHTML = catImage ?
-                    `<img src="${catImage}" alt="${cat}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` :
-                    '';
+                const safeCat = cat.replace(/'/g, "\\'");
+                const imageHTML = catImage ? `<img src="${catImage}" alt="${cat}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : '';
                 const fallbackStyle = catImage ? 'style="display:none;"' : '';
-                return `
-                <div class="category-card" style="background:${gradient};" onclick="selectCategory('${safeCat}')" data-category="${safeCat}">
-                    <div class="cat-image-wrap">
-                        ${imageHTML}
-                        <div class="cat-icon-fallback" ${fallbackStyle}><i class="fas ${iconClass}"></i></div>
-                    </div>
+                return `<div class="category-card" style="background:${gradient};" onclick="selectCategory('${safeCat}')">
+                    <div class="cat-image-wrap">${imageHTML}<div class="cat-icon-fallback" ${fallbackStyle}><i class="fas ${iconClass}"></i></div></div>
                     <div class="cat-name">${cat}</div>
                     <div class="cat-count-badge">${count} test${count !== 1 ? 's' : ''}</div>
                 </div>`;
@@ -2649,130 +1187,63 @@
 
         function filterCategoryCards() {
             const query = document.getElementById('categorySearchInput').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('#categoryCardGrid .category-card');
-            let visibleCount = 0;
-            cards.forEach(card => {
-                const catName = (card.getAttribute('data-category') || '').toLowerCase();
-                if (!query || catName.includes(query)) {
-                    card.style.display = '';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+            document.querySelectorAll('#categoryCardGrid .category-card').forEach(card => {
+                const catName = (card.querySelector('.cat-name')?.textContent || '').toLowerCase();
+                card.style.display = (!query || catName.includes(query)) ? '' : 'none';
             });
-            const noFoundEl = document.getElementById('categoryCardGrid').querySelector('.no-category-found');
-            if (visibleCount === 0 && cards.length > 0) {
-                if (!noFoundEl) {
-                    const el = document.createElement('div');
-                    el.className = 'no-category-found';
-                    el.innerHTML =
-                        '<i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:8px;"></i>No matching categories';
-                    document.getElementById('categoryCardGrid').appendChild(el);
-                }
-            } else {
-                if (noFoundEl) noFoundEl.remove();
-            }
         }
 
-        async function selectCategory(category) {
+        function selectCategory(category) {
             if (!category || !allCategories.includes(category)) return;
             selectedCategory = category;
             localStorage.setItem('selectedCategory', category);
-            if (user) { user.targetExam = category;
-                localStorage.setItem('user', JSON.stringify(user)); }
             showTestView();
             showToast(`📂 ${category} selected`, 'success');
         }
 
+        // ---------- Filter rendering ----------
         function renderFilterAccordions() {
-            let filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
+            const filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
 
-            // Exam accordion – small cards grid
             const exams = [...new Set(filtered.map(m => m.exam).filter(Boolean))].sort();
-            const examGrid = document.getElementById('examCardsGrid');
-            examGrid.innerHTML = '';
-            // "All Exams" reset card
-            examGrid.innerHTML += `
-                <div class="exam-small-card all-exam ${selectedExam === '' ? 'active-exam' : ''}" onclick="selectExamFilter('')">
-                    <div class="exam-img-wrap"><i class="fas fa-layer-group"></i></div>
-                    <div class="exam-name">All Exams</div>
-                </div>`;
-            exams.forEach(ex => {
-                const testWithImg = filtered.find(m => m.exam === ex && m.imageurl);
-                const imgSrc = testWithImg?.imageurl || '';
-                const activeClass = selectedExam === ex ? ' active-exam' : '';
-                examGrid.innerHTML += `
-                <div class="exam-small-card ${activeClass}" onclick="selectExamFilter('${ex.replace(/'/g,"\\'")}')">
-                    <div class="exam-img-wrap">
-                        ${imgSrc ? `<img src="${imgSrc}" alt="${ex}" loading="lazy">` : '<i class="fas fa-file-alt"></i>'}
-                    </div>
-                    <div class="exam-name">${ex}</div>
-                </div>`;
-            });
+            document.getElementById('examCardsGrid').innerHTML =
+                `<div class="exam-small-card all-exam ${selectedExam === '' ? 'active-exam' : ''}" onclick="selectExamFilter('')"><div class="exam-img-wrap"><i class="fas fa-layer-group"></i></div><div class="exam-name">All Exams</div></div>` +
+                exams.map(ex => `<div class="exam-small-card${selectedExam === ex ? ' active-exam' : ''}" onclick="selectExamFilter('${ex.replace(/'/g, "\\'")}')"><div class="exam-img-wrap"><i class="fas fa-file-alt"></i></div><div class="exam-name">${ex}</div></div>`).join('');
             document.getElementById('examBadge').textContent = selectedExam || 'All';
 
-            // Apply year filter for subject/chapter extraction
-            let yearFiltered = filtered;
-            if (selectedYear) yearFiltered = filtered.filter(m => m.year === selectedYear);
-            let examFiltered = yearFiltered;
-            if (selectedExam) examFiltered = examFiltered.filter(m => m.exam === selectedExam);
+            let yearFiltered = selectedYear ? filtered.filter(m => m.year === selectedYear) : filtered;
+            let examFiltered = selectedExam ? yearFiltered.filter(m => m.exam === selectedExam) : yearFiltered;
 
             const subjects = [...new Set(examFiltered.map(m => m.subject).filter(Boolean))].sort();
             document.getElementById('subjectChips').innerHTML =
                 `<button class="vertical-chip ${selectedSubject === '' ? 'active' : ''}" onclick="selectSubjectFilter('')"><span class="vc-dot"></span> 📖 All Subjects</button>` +
-                subjects.map(s =>
-                    `<button class="vertical-chip ${selectedSubject === s ? 'active' : ''}" onclick="selectSubjectFilter('${s.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${s}</button>`
-                    ).join('');
+                subjects.map(s => `<button class="vertical-chip ${selectedSubject === s ? 'active' : ''}" onclick="selectSubjectFilter('${s.replace(/'/g, "\\'")}')"><span class="vc-dot"></span> ${s}</button>`).join('');
             document.getElementById('subjectBadge').textContent = selectedSubject || 'All';
 
-            let subjFiltered = examFiltered;
-            if (selectedSubject) subjFiltered = subjFiltered.filter(m => m.subject === selectedSubject);
+            let subjFiltered = selectedSubject ? examFiltered.filter(m => m.subject === selectedSubject) : examFiltered;
             const chapters = [...new Set(subjFiltered.map(m => m.chapter).filter(Boolean))].sort();
             const chapterContainer = document.getElementById('chapterChips');
-            if (chapters.length > 0) {
-                chapterContainer.innerHTML =
-                    `<button class="vertical-chip ${selectedChapter === '' ? 'active' : ''}" onclick="selectChapterFilter('')"><span class="vc-dot"></span> 📑 All Chapters</button>` +
-                    chapters.map(ch =>
-                        `<button class="vertical-chip ${selectedChapter === ch ? 'active' : ''}" onclick="selectChapterFilter('${ch.replace(/'/g,"\\'")}')"><span class="vc-dot"></span> ${ch}</button>`
-                        ).join('');
+            if (chapters.length) {
+                chapterContainer.innerHTML = `<button class="vertical-chip ${selectedChapter === '' ? 'active' : ''}" onclick="selectChapterFilter('')"><span class="vc-dot"></span> 📑 All Chapters</button>` +
+                    chapters.map(ch => `<button class="vertical-chip ${selectedChapter === ch ? 'active' : ''}" onclick="selectChapterFilter('${ch.replace(/'/g, "\\'")}')"><span class="vc-dot"></span> ${ch}</button>`).join('');
             } else {
-                chapterContainer.innerHTML =
-                    '<div style="padding:12px;color:var(--gray-400);font-size:12px;text-align:center;">No chapters available</div>';
+                chapterContainer.innerHTML = '<div style="padding:12px;color:var(--gray-400);text-align:center;">No chapters available</div>';
             }
             document.getElementById('chapterBadge').textContent = selectedChapter || 'All';
 
-            // Horizontal year bar (visible only when toggled)
             renderHorizontalYearBar(filtered);
-            // Update year button text
             document.getElementById('yearBtnText').textContent = selectedYear ? `Year: ${selectedYear}` : 'Year';
-            // Update type button
-            updateTypeButton();
-            // Update sort button
-            document.getElementById('sortBtnText').textContent = sortOrder === 'oldest' ? 'Oldest' : 'Newest';
         }
 
         function renderHorizontalYearBar(filteredMocks) {
             const bar = document.getElementById('horizontalYearBar');
             const years = [...new Set(filteredMocks.map(m => m.year).filter(Boolean))].sort();
             if (!years.length) {
-                bar.innerHTML =
-                    '<span style="color:var(--gray-400);font-size:12px;padding:8px;">No years available</span>';
+                bar.innerHTML = '<span style="color:var(--gray-400);font-size:12px;padding:8px;">No years available</span>';
             } else {
-                bar.innerHTML = `
-                    <button class="horizontal-year-chip ${selectedYear === '' ? 'active-year' : ''}" onclick="selectYearFromBar('')">All Years</button>
-                    ${years.map(y => `<button class="horizontal-year-chip ${selectedYear === y ? 'active-year' : ''}" onclick="selectYearFromBar('${y.replace(/'/g,"\\'")}')">${y}</button>`).join('')}
-                `;
+                bar.innerHTML = `<button class="horizontal-year-chip ${selectedYear === '' ? 'active-year' : ''}" onclick="selectYearFromBar('')">All Years</button>` +
+                    years.map(y => `<button class="horizontal-year-chip ${selectedYear === y ? 'active-year' : ''}" onclick="selectYearFromBar('${y}')">${y}</button>`).join('');
             }
-        }
-
-        function selectYearFilter(year) {
-            // kept for compatibility, but not used for main UI; may be called from elsewhere if needed
-            selectedYear = (selectedYear === year) ? '' : year;
-            closeAllAccordions();
-            renderFilterAccordions();
-            applyFilters();
-            renderSelectedFiltersBar();
-            document.getElementById('horizontalYearBar').classList.remove('show');
         }
 
         function selectYearFromBar(year) {
@@ -2782,59 +1253,41 @@
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
-            if (selectedYear) showToast(`Year: ${selectedYear}`, 'success');
         }
 
         function toggleYearBar() {
             const bar = document.getElementById('horizontalYearBar');
-            const isShowing = bar.classList.contains('show');
-            bar.classList.toggle('show', !isShowing);
-            // update content (in case mocks changed)
-            const filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
-            renderHorizontalYearBar(filtered);
+            bar.classList.toggle('show');
+            if (bar.classList.contains('show')) {
+                const filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
+                renderHorizontalYearBar(filtered);
+            }
         }
 
         function cycleTypeFilter() {
-            if (selectedType === 'all') selectedType = 'free';
-            else if (selectedType === 'free') selectedType = 'paid';
-            else selectedType = 'all';
+            selectedType = selectedType === 'all' ? 'free' : (selectedType === 'free' ? 'paid' : 'all');
             updateTypeButton();
             applyFilters();
         }
 
         function updateTypeButton() {
             const btnText = document.getElementById('typeBtnText');
-            switch (selectedType) {
-                case 'free':
-                    btnText.textContent = 'Free Only';
-                    break;
-                case 'paid':
-                    btnText.textContent = 'Premium';
-                    break;
-                default:
-                    btnText.textContent = 'All';
-                    break;
-            }
-            const btn = document.getElementById('typeFilterBtn');
-            if (selectedType === 'all') btn.classList.remove('active');
-            else btn.classList.add('active');
+            btnText.textContent = selectedType === 'free' ? 'Free Only' : (selectedType === 'paid' ? 'Premium' : 'All');
+            document.getElementById('typeFilterBtn').classList.toggle('active', selectedType !== 'all');
         }
 
         function toggleSortOrder() {
-            sortOrder = (sortOrder === 'oldest') ? 'newest' : 'oldest';
+            sortOrder = sortOrder === 'oldest' ? 'newest' : 'oldest';
             document.getElementById('sortBtnText').textContent = sortOrder === 'oldest' ? 'Oldest' : 'Newest';
             applyFilters();
         }
 
         function selectExamFilter(exam) {
             selectedExam = (selectedExam === exam) ? '' : exam;
-            selectedSubject = '';
-            selectedChapter = '';
+            selectedSubject = ''; selectedChapter = '';
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
-            closeExamAccordion();
-            if (selectedExam) showToast(`Exam: ${selectedExam}`, 'success');
         }
 
         function selectSubjectFilter(subject) {
@@ -2843,8 +1296,6 @@
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
-            // Close the accordion after selection
-            closeAllAccordions();
         }
 
         function selectChapterFilter(chapter) {
@@ -2852,96 +1303,43 @@
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
-            closeAllAccordions();
         }
 
         function clearAllFilters() {
-            selectedYear = '';
-            selectedExam = '';
-            selectedSubject = '';
-            selectedChapter = '';
-            selectedType = 'all';
-            sortOrder = 'oldest';
+            selectedYear = ''; selectedExam = ''; selectedSubject = ''; selectedChapter = '';
+            selectedType = 'all'; sortOrder = 'oldest';
             document.getElementById('searchInput').value = '';
             document.getElementById('horizontalYearBar').classList.remove('show');
-            closeAllAccordions();
             updateTypeButton();
             document.getElementById('sortBtnText').textContent = 'Oldest';
             document.getElementById('yearBtnText').textContent = 'Year';
             renderFilterAccordions();
             applyFilters();
             renderSelectedFiltersBar();
-            showToast('All filters cleared', 'info');
         }
 
-        document.getElementById('searchInput').addEventListener('input', function() {
-            clearTimeout(searchDebounceTimer);
-            searchDebounceTimer = setTimeout(() => applyFilters(), 300);
-        });
-
-        function getDifficultyInfo(difficulty) {
-            if (!difficulty) return null;
-            const d = difficulty.trim().toLowerCase();
-            const map = {
-                'easy': { cls: 'diff-easy', label: 'Easy' },
-                'moderate': { cls: 'diff-moderate', label: 'Moderate' },
-                'hard': { cls: 'diff-hard', label: 'Hard' },
-                'medium': { cls: 'diff-moderate', label: 'Medium' },
-                'previous year': { cls: 'diff-prev-year', label: 'Prev Year' }
-            };
-            return map[d] || { cls: 'diff-moderate', label: d.charAt(0).toUpperCase() + d.slice(1) };
+        function renderSelectedFiltersBar() {
+            const bar = document.getElementById('selectedFiltersBar');
+            let chips = [];
+            if (selectedYear) chips.push({ label: 'Year', value: selectedYear, clear: () => { selectedYear = ''; applyAfterClear(); } });
+            if (selectedExam) chips.push({ label: 'Exam', value: selectedExam, clear: () => { selectedExam = ''; selectedSubject = ''; selectedChapter = ''; applyAfterClear(); } });
+            if (selectedSubject) chips.push({ label: 'Subject', value: selectedSubject, clear: () => { selectedSubject = ''; selectedChapter = ''; applyAfterClear(); } });
+            if (selectedChapter) chips.push({ label: 'Chapter', value: selectedChapter, clear: () => { selectedChapter = ''; applyAfterClear(); } });
+            if (!chips.length) { bar.innerHTML = ''; return; }
+            bar.innerHTML = chips.map(c => `<div class="filter-chip"><span class="chip-label">${c.label}:</span> ${c.value}<button class="chip-remove" onclick="event.stopPropagation(); (${c.clear.toString().replace(/\"/g, '&quot;')})()"><i class="fas fa-times"></i></button></div>`).join('');
         }
 
-        function toggleBookmark(testCode) {
-            const idx = bookmarkedTests.indexOf(testCode);
-            if (idx > -1) {
-                bookmarkedTests.splice(idx, 1);
-                if (user?.username) fetch(
-                    `${API_URL}?action=removeFavorite&username=${user.username}&type=test&itemId=${testCode}`).catch(
-                    () => {});
-                showToast('Bookmark removed', 'info');
-            } else {
-                bookmarkedTests.push(testCode);
-                if (user?.username) fetch(
-                    `${API_URL}?action=addFavorite&username=${user.username}&type=test&itemId=${testCode}`).catch(() => {});
-                showToast('Test bookmarked!', 'success');
-            }
-            localStorage.setItem('bookmarkedTests', JSON.stringify(bookmarkedTests));
+        function applyAfterClear() {
+            closeAllAccordions();
+            renderFilterAccordions();
             applyFilters();
+            renderSelectedFiltersBar();
         }
 
-        // ---- DIRECT REDIRECT TO INSTRUCTIONS.HTML ----
-        function goToInstructions(file, code, exam, name, duration, totalQs, marks, negative, fromSheet = false) {
-            // Store test metadata in localStorage for the instructions page to pick up
-            const testMeta = {
-                file: file,
-                code: code,
-                exam: exam,
-                name: name,
-                duration: duration,
-                totalQs: totalQs,
-                marks: marks,
-                negative: negative,
-                fromSheet: fromSheet
-            };
-            localStorage.setItem('pendingTestMeta', JSON.stringify(testMeta));
-
-            if (fromSheet) {
-                // Sheet-based test → redirect to instructions.html with testCode
-                window.location.href = `instructions.html?testCode=${encodeURIComponent(code)}`;
-            } else {
-                // Local file-based test → store file and redirect to instructions.html
-                localStorage.setItem('last_mock_file', file);
-                localStorage.setItem('current_exam', exam || '');
-                window.location.href =
-                    `instructions.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(code)}`;
-            }
-        }
-
+        // ---------- Test display (dedup by testCode only inside category) ----------
         function applyFilters() {
             if (!selectedCategory) {
-                document.getElementById('testList').innerHTML =
-                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-folder-open"></i></div><h2>Select a Category First</h2></div>';
+                document.getElementById('testList').innerHTML = '<div class="empty-selection"><h2>Select a Category First</h2></div>';
                 return;
             }
             let filtered = allMocks.filter(m => (m?.category || 'Uncategorized') === selectedCategory);
@@ -2950,146 +1348,160 @@
             if (selectedSubject) filtered = filtered.filter(m => m.subject === selectedSubject);
             if (selectedChapter) filtered = filtered.filter(m => m.chapter === selectedChapter);
             const search = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (search) filtered = filtered.filter(m =>
-                (m.testName && m.testName.toLowerCase().includes(search)) ||
-                (m.testCode && m.testCode.toLowerCase().includes(search))
-            );
-            // Type filter
-            if (selectedType === 'free') {
-                filtered = filtered.filter(m => m.type === 'free' || !m.type || m.type === '');
-            } else if (selectedType === 'paid') {
-                filtered = filtered.filter(m => m.type === 'paid' || (m.type && m.type !== 'free'));
-            }
-            // Sort order
-            if (sortOrder === 'oldest') {
-                filtered.sort((a, b) => (a._seq || 0) - (b._seq || 0));
-            } else {
-                filtered.sort((a, b) => (b._seq || 0) - (a._seq || 0));
-            }
+            if (search) filtered = filtered.filter(m => (m.testName && m.testName.toLowerCase().includes(search)) || (m.testCode && m.testCode.toLowerCase().includes(search)));
+            if (selectedType === 'free') filtered = filtered.filter(m => m.type === 'free' || !m.type);
+            else if (selectedType === 'paid') filtered = filtered.filter(m => m.type === 'paid' || (m.type && m.type !== 'free'));
+
+            // Deduplicate by testCode for display
+            const seen = new Set();
+            filtered = filtered.filter(t => {
+                if (seen.has(t.testCode)) return false;
+                seen.add(t.testCode);
+                return true;
+            });
+
+            filtered.sort((a, b) => sortOrder === 'oldest' ? (a._seq || 0) - (b._seq || 0) : (b._seq || 0) - (a._seq || 0));
             displayTests(filtered);
         }
 
         function displayTests(tests) {
             const list = document.getElementById('testList');
-            if (!selectedCategory) {
-                list.innerHTML =
-                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-folder-open"></i></div><h2>Select a Category First</h2></div>';
-                return;
-            }
             if (!tests.length) {
-                list.innerHTML =
-                    '<div class="empty-selection"><div class="icon-pulse"><i class="fas fa-search"></i></div><h2>No Tests Found</h2><p>Try adjusting your filters or change the category.</p></div>';
+                list.innerHTML = '<div class="empty-selection"><h2>No Tests Found</h2></div>';
                 return;
             }
             list.innerHTML = tests.map((test, idx) => {
                 const isBookmarked = bookmarkedTests.includes(test.testCode);
-                const attempted = userResults.some(r => r.testCode === test.testCode);
                 const bestResult = userResults.find(r => r.testCode === test.testCode);
-                const accessible = hasAccess(test);
                 const diffInfo = getDifficultyInfo(test.difficulty);
-                const diffTagHTML = diffInfo ?
-                    `<span class="premium-badge-diff ${diffInfo.cls}">${diffInfo.label}</span>` : '';
-                const tags = [];
-                if (test.chapter) tags.push(test.chapter);
-                if (test.language) tags.push(test.language);
-                const testTypeTag = (test.type === 'paid') ? (test.requiredPlan === 'premium_plus' ? 'Plus' : (test
-                    .requiredPlan === 'ultimate' ? 'Ultimate' : 'Pro')) : null;
-                if (testTypeTag) tags.push(testTypeTag);
-                const fileParam = test.file ? test.file.replace(/'/g, "\\'") : '';
-                const yearBadgeHTML = test.year ?
-                    `<span class="premium-badge-year"><i class="fas fa-calendar-alt"></i> ${test.year}</span>` : '';
-                const fromSheet = test.fromSheet === true;
+                const yearBadgeHTML = test.year ? `<span class="premium-badge-year"><i class="fas fa-calendar-alt"></i> ${test.year}</span>` : '';
+
+                let tagsHTML = '';
+                if (test.chapter) tagsHTML += `<span class="premium-tag"><i class="fas fa-layer-group"></i> ${test.chapter}</span>`;
+                if (test.language) tagsHTML += `<span class="premium-tag"><i class="fas fa-language"></i> ${test.language}</span>`;
+                if (test.type === 'paid' && test.requiredPlan) {
+                    const planLabel = test.requiredPlan === 'premium_plus' ? 'Plus' : (test.requiredPlan === 'ultimate' ? 'Ultimate' : 'Pro');
+                    tagsHTML += `<span class="premium-tag" style="background:#fef3c7;color:#a16207;"><i class="fas fa-crown"></i> ${planLabel}</span>`;
+                }
+                const tagsSection = tagsHTML ? `<div class="premium-tags">${tagsHTML}</div>` : '';
 
                 return `
                 <div class="premium-test-card" style="animation-delay:${idx*0.05}s">
                     <div class="premium-top-glow"></div>
                     <div class="premium-card-body">
                         <div class="premium-card-top-row">
-                            <div class="premium-exam-logo">
-                                ${test.imageurl ? `<img src="${test.imageurl}" alt="${test.exam}" loading="lazy">` : '<i class="fas fa-graduation-cap"></i>'}
-                            </div>
+                            <div class="premium-exam-logo">${test.imageurl ? `<img src="${test.imageurl}" alt="${test.exam}">` : '<i class="fas fa-graduation-cap"></i>'}</div>
                             <div class="premium-card-info">
                                 <div class="premium-badges">
-                                    <span class="premium-badge-exam"><i class="fas fa-building"></i> ${test.exam || 'General'}</span>
+                                    <span class="premium-badge-exam">${test.exam || 'General'}</span>
                                     ${yearBadgeHTML}
-                                    ${diffTagHTML}
+                                    ${diffInfo ? `<span class="premium-badge-diff ${diffInfo.cls}">${diffInfo.label}</span>` : ''}
                                 </div>
-                                <div class="premium-test-title">${test.testName || 'Untitled Test'}</div>
+                                <div class="premium-test-title">${test.testName || 'Untitled'}</div>
                                 <div class="premium-info-row">
-                                    <span><i class="far fa-clock"></i> ${test.duration||30}m</span>
-                                    <span><i class="far fa-question-circle"></i> ${test.totalQuestions||0} Qs</span>
-                                    <span><i class="fas fa-star"></i> +${test.marksPerQuestion||1}</span>
+                                    <span><i class="far fa-clock"></i> ${test.duration || 30}m</span>
+                                    <span><i class="far fa-question-circle"></i> ${test.totalQuestions || 0} Qs</span>
+                                    <span><i class="fas fa-star"></i> +${test.marksPerQuestion || 1}</span>
                                 </div>
-                                ${tags.length ? `<div class="premium-tags">${tags.map(t => `<span class="premium-tag">${t}</span>`).join('')}</div>` : ''}
+                                ${tagsSection}
                                 ${bestResult ? `<div class="premium-score-preview"><i class="fas fa-trophy"></i> Best: ${bestResult.score}/${bestResult.totalMarks} (${bestResult.accuracy}%)</div>` : ''}
                             </div>
                         </div>
-                        <button class="premium-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" onclick="event.stopPropagation(); toggleBookmark('${test.testCode}')">
-                            <i class="fas fa-bookmark"></i>
-                        </button>
+                        <button class="premium-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" onclick="event.stopPropagation(); toggleBookmark('${test.testCode}')"><i class="fas fa-bookmark"></i></button>
                         <div class="premium-action-buttons">
-                            ${accessible ?
-                                `<button class="btn-attempt" onclick="goToInstructions('${fileParam}','${test.testCode}','${test.exam}','${test.testName}',${test.duration||30},${test.totalQuestions||0},${test.marksPerQuestion||1},${test.negativeMarking||0},${fromSheet})"><i class="fas fa-play"></i> ${attempted ? 'Retake' : 'Attempt'}</button>` :
-                                `<button class="btn-attempt" style="background:gray;" onclick="handleLockedTest('${test.requiredPlan||'premium'}')"><i class="fas fa-lock"></i> Unlock</button>`
-                            }
-                            <button class="btn-rank" onclick="viewLeaderboard('${test.testCode}','${test.exam||''}')"><i class="fas fa-trophy"></i> Rank</button>
+                            <button class="btn-attempt" onclick="startTest('${test.testCode}','${test.file || ''}','${test.source || 'api'}')"><i class="fas fa-play"></i> Attempt</button>
+                            <button class="btn-rank" onclick="viewLeaderboard('${test.testCode}')"><i class="fas fa-trophy"></i> Rank</button>
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        function handleLockedTest(plan) {
-            Swal.fire({
-                title: '🔒 Premium',
-                text: `Requires ${plan} plan.`,
-                icon: 'info',
-                confirmButtonText: 'View Plans',
-                confirmButtonColor: '#f59e0b',
-                showCancelButton: true
-            }).then(r => { if (r.isConfirmed) window.location.href = 'payment.html'; });
+        function getDifficultyInfo(diff) {
+            if (!diff) return null;
+            const map = { easy: { cls: 'diff-easy', label: 'Easy' }, moderate: { cls: 'diff-moderate', label: 'Moderate' }, hard: { cls: 'diff-hard', label: 'Hard' } };
+            return map[diff.trim().toLowerCase()] || { cls: 'diff-moderate', label: diff };
         }
 
-        function viewLeaderboard(code, exam) {
-            localStorage.setItem('current_exam', exam || '');
-            window.location.href =
-                `leaderboard.html?testCode=${encodeURIComponent(code)}&exam=${encodeURIComponent(exam||'')}`;
+        function toggleBookmark(testCode) {
+            const idx = bookmarkedTests.indexOf(testCode);
+            if (idx > -1) { bookmarkedTests.splice(idx, 1); showToast('Bookmark removed', 'info'); }
+            else { bookmarkedTests.push(testCode); showToast('Bookmarked!', 'success'); }
+            localStorage.setItem('bookmarkedTests', JSON.stringify(bookmarkedTests));
+            applyFilters();
+        }
+
+        function startTest(testCode, file, source) {
+            if (!testCode) return showToast('Test code missing.', 'error');
+            if (source === 'json' && file) {
+                localStorage.setItem('last_mock_file', file);
+                window.location.href = `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(testCode)}`;
+            } else {
+                window.location.href = `test2.html?testCode=${encodeURIComponent(testCode)}`;
+            }
+        }
+
+        function viewLeaderboard(code) { window.location.href = `leaderboard.html?testCode=${encodeURIComponent(code)}`; }
+
+        // ---------- User / Footer ----------
+        async function loadUserResults() {
+            try {
+                const r = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user?.username || '')}`);
+                const d = await r.json();
+                if (d?.success && Array.isArray(d.results)) userResults = d.results;
+            } catch (e) {}
+        }
+
+        async function loadPremium() {
+            try {
+                if (user?.premiumPlans) userPremiumPlans = user.premiumPlans;
+                const r = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user?.username || '')}`);
+                const d = await r.json();
+                if (d?.success && Array.isArray(d.premiumPlans)) {
+                    userPremiumPlans = d.premiumPlans;
+                    user.premiumPlans = d.premiumPlans;
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+            } catch (e) {}
+        }
+
+        function groupByCategoryUniqueExams(arr) {
+            const map = {};
+            arr.forEach(item => {
+                const cat = item.category || 'Other';
+                if (!map[cat]) map[cat] = { exams: [], seen: new Set() };
+                if (!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam); map[cat].exams.push(item); }
+            });
+            return Object.keys(map).sort().map(cat => ({ category: cat, exams: map[cat].exams }));
+        }
+
+        async function fetchJSON(p, fb) {
+            try { const r = await fetch(p); if (!r.ok) throw new Error(); return await r.json(); } catch (e) { return fb; }
         }
 
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
             const data = await fetchJSON(JSON_PATHS.mocks, FALLBACK_MOCKS);
             const grouped = groupByCategoryUniqueExams(data);
-            if (!grouped.length) { c.innerHTML = '<li><a>No exams</a></li>'; return; }
-            let html = '';
-            grouped.forEach(cat => {
-                html +=
-                    `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
-            });
-            html +=
-                '<li><a onclick="navigate(\'aimock.html\')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Mock Test</a></li>';
-            html += '<li><a onclick="navigate(\'referral.html\')">Refer & Earn</a></li>';
-            html += '<li><a onclick="navigate(\'usecoin.html\')">Coin Exchange</a></li>';
+            let html = grouped.map(cat => `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}')">${cat.category}</a></li>`).join('');
+            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
             c.innerHTML = html;
         }
 
         async function renderFooterUpcoming() {
             const c = document.getElementById('footerUpcomingExams');
             const d = await fetchJSON(JSON_PATHS.upcomingfooter, FALLBACK_UPCOMING_FOOTER);
-            if (!d.length) { c.innerHTML = '<li><a>No upcoming exams</a></li>'; return; }
-            c.innerHTML = d.map(e =>
-                `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join(
-                '');
+            c.innerHTML = d.map(e => `<li><a>${e.name}</a></li>`).join('');
         }
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                if (document.getElementById('sidebarOverlay').classList.contains('active')) closeSidebarDirect();
-                document.querySelectorAll('.mock-accordion-item.open').forEach(el => el.classList.remove('open'));
-                document.getElementById('horizontalYearBar').classList.remove('show');
-            }
+        // Listeners
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(applyFilters, 300);
         });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebarDirect(); } });
 
+        // Init
         (function init() {
             updateOnlineStatus();
             loadInitialData();
