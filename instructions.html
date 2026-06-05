@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#2563eb">
+    <title>Test Instructions · TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-heading: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --font: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .logo img {
+            height: 36px;
+            width: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .back-btn {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Main Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .exam-image-area {
+            display: flex;
+            justify-content: center;
+            margin-bottom: -10px;
+        }
+        .exam-image-area img {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 3px solid #fff;
+            background: #f1f5f9;
+        }
+        .test-title {
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            color: var(--text-heading);
+            line-height: 1.3;
+            word-break: break-word;
+        }
+
+        /* Info grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+        }
+        .info-card {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        .info-card:hover {
+            background: #fff;
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .info-content h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+        .info-content .val {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        /* Breakdown tables */
+        .breakdown-section {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+        }
+        .breakdown-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-heading);
+        }
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .breakdown-table th {
+            text-align: left;
+            padding: 10px 8px;
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .breakdown-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+            color: var(--text);
+        }
+        .breakdown-table tr:last-child td { border-bottom: none; }
+        .col-no { width: 50px; text-align: center; }
+        .col-name { font-weight: 600; }
+        .col-count { text-align: center; font-weight: 700; color: var(--primary); }
+
+        /* Instructions */
+        .instructions-heading {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+        .instructions-list {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--text);
+            padding-left: 24px;
+        }
+        .instructions-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Language selector */
+        .lang-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .lang-row label {
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+        }
+        .lang-select {
+            height: 48px;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            background: #fff;
+            color: var(--text);
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s;
+        }
+        .lang-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .warning-note {
+            color: #d32f2f;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fef2f2;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border-left: 4px solid #d32f2f;
+        }
+
+        /* Declaration */
+        .declaration-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            user-select: none;
+        }
+        .declaration-box input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-prev {
+            background: #94a3b8;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            height: 52px;
+            min-width: 150px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .btn-prev:hover {
+            background: #64748b;
+            transform: translateY(-1px);
+        }
+        .btn-start {
+            background: linear-gradient(90deg, var(--primary), #3b82f6);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            height: 52px;
+            min-width: 220px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0.5;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .btn-start.active {
+            opacity: 1;
+            pointer-events: auto;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+        }
+        .btn-start.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.5);
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.9);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .card { padding: 20px 16px; }
+            .test-title { font-size: 26px; }
+            .info-grid { grid-template-columns: 1fr 1fr; }
+            .btn-row { flex-direction: column; align-items: stretch; }
+            .btn-prev, .btn-start { width: 100%; }
+            .exam-image-area img { width: 60px; height: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Please wait, loading...</p>
+    </div>
+
+    <header class="header">
+        <a href="dashboard.html" class="logo">
+            <img src="image/appicon.jpg" alt="TestMaster Pro Logo" onerror="this.style.display='none';">
+            <span>TestMaster Pro</span>
+        </a>
+        <button class="back-btn" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+    </header>
+
+    <main class="card" id="mainCard" style="visibility:hidden;">
+        <div class="exam-image-area" id="examImageArea"></div>
+        <h1 class="test-title" id="testTitle"></h1>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon"><i class="fas fa-clock"></i></div>
+                <div class="info-content">
+                    <h4>Duration</h4>
+                    <div class="val"><span id="durationVal">--</span> min</div>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon"><i class="fas fa-question-circle"></i></div>
+                <div class="info-content">
+                    <h4>Questions</h4>
+                    <div class="val" id="totalQVal">--</div>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon"><i class="fas fa-trophy"></i></div>
+                <div class="info-content">
+                    <h4>Max Marks</h4>
+                    <div class="val" id="maxMarksVal">--</div>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon"><i class="fas fa-minus-circle"></i></div>
+                <div class="info-content">
+                    <h4>Negative</h4>
+                    <div class="val" id="negVal">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Breakdown Table -->
+        <div class="breakdown-section" id="subjectBreakdownArea" style="display:none;">
+            <h3><i class="fas fa-book"></i> Subject Breakdown</h3>
+            <table class="breakdown-table">
+                <thead>
+                    <tr>
+                        <th class="col-no">No.</th>
+                        <th>Subject</th>
+                        <th class="col-count">Questions</th>
+                    </tr>
+                </thead>
+                <tbody id="subjectTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Chapter Breakdown Table -->
+        <div class="breakdown-section" id="chapterBreakdownArea" style="display:none;">
+            <h3><i class="fas fa-layer-group"></i> Chapter Breakdown</h3>
+            <table class="breakdown-table">
+                <thead>
+                    <tr>
+                        <th class="col-no">No.</th>
+                        <th>Chapter</th>
+                        <th class="col-count">Questions</th>
+                    </tr>
+                </thead>
+                <tbody id="chapterTableBody"></tbody>
+            </table>
+        </div>
+
+        <div>
+            <h2 class="instructions-heading">📋 Instructions</h2>
+            <ol class="instructions-list" id="instructionsList"></ol>
+        </div>
+
+        <div class="lang-row">
+            <label for="langSelect"><i class="fas fa-language"></i> Choose Language:</label>
+            <select id="langSelect" class="lang-select">
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <div class="warning-note">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>All questions will appear in your selected language.</span>
+        </div>
+
+        <label class="declaration-box" for="agreeCheck">
+            <input type="checkbox" id="agreeCheck" onchange="toggleStartButton()">
+            <span>I have read and understood all the instructions. I agree to attempt the test honestly.</span>
+        </label>
+
+        <div class="btn-row">
+            <button class="btn-prev" onclick="history.back()"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="startBtn" class="btn-start" disabled onclick="startTest()">
+                <i class="fas fa-play"></i> Start Test
+            </button>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxWm6fuSZcoWDBbSG2n-gpfzteRLgE7FpS9kIvOm-lKrparJ_4dd38vRg3cL8zs-lAn/exec';
+        const urlParams = new URLSearchParams(window.location.search);
+        const testCode = urlParams.get('testCode');
+
+        if (!testCode) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Test code missing',
+                text: 'No test specified. Please select a test first.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => { window.location.href = 'exam.html'; });
+        }
+
+        let testData = null;
+        let questions = [];
+
+        async function fetchTestData() {
+            try {
+                const resp = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
+                const data = await resp.json();
+                if (!data.success) throw new Error(data.error || 'Test not found');
+                testData = data.test;
+                questions = Array.isArray(testData.questions) ? testData.questions : [];
+                buildUI();
+            } catch (error) {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to load test',
+                    text: error.message || 'Please check your connection.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => { window.location.href = 'exam.html'; });
+            }
+        }
+
+        function buildUI() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            const mainCard = document.getElementById('mainCard');
+            mainCard.style.visibility = 'visible';
+
+            // Exam image
+            const imgArea = document.getElementById('examImageArea');
+            if (testData.imageurl) {
+                imgArea.innerHTML = `<img src="${testData.imageurl}" alt="${testData.exam || 'Exam'}" onerror="this.style.display='none';">`;
+            } else {
+                imgArea.innerHTML = '';
+            }
+
+            // Title
+            document.getElementById('testTitle').textContent =
+                `${testData.exam || 'Exam'} – ${testData.testName || 'Mock Test'}`;
+
+            // Stats
+            const totalQ = questions.length || testData.totalQuestions || 0;
+            const duration = testData.duration || 60;
+            const marksPerQ = testData.marksPerQuestion || 1;
+            const totalMarks = totalQ * marksPerQ;
+            const negative = testData.negativeMarking || 0;
+
+            document.getElementById('durationVal').textContent = duration;
+            document.getElementById('totalQVal').textContent = totalQ;
+            document.getElementById('maxMarksVal').textContent = totalMarks;
+            document.getElementById('negVal').textContent = negative.toFixed(2);
+
+            buildBreakdowns();
+
+            // Instructions
+            const list = document.getElementById('instructionsList');
+            list.innerHTML = `
+                <li>The test contains <strong>${totalQ} questions</strong>.</li>
+                <li>Each question has <strong>4 options</strong>.</li>
+                <li>You have to complete the test in <strong>${duration} minutes</strong>.</li>
+                <li><strong>${marksPerQ} mark(s)</strong> for each correct answer.</li>
+                <li><strong>${negative} mark(s)</strong> will be deducted for each wrong answer.</li>
+                <li>No marks for unattempted questions.</li>
+                <li>Do not refresh the page during the test.</li>
+            `;
+
+            // Language dropdown
+            const langSelect = document.getElementById('langSelect');
+            if (testData.language && testData.language.toLowerCase().includes('hindi')) {
+                const option = document.createElement('option');
+                option.value = 'hi';
+                option.textContent = 'हिन्दी (Hindi)';
+                langSelect.appendChild(option);
+            }
+            const savedLang = localStorage.getItem('mock_lang');
+            if (savedLang && [...langSelect.options].some(opt => opt.value === savedLang)) {
+                langSelect.value = savedLang;
+            }
+        }
+
+        function buildBreakdowns() {
+            // --- Subject breakdown ---
+            let subjectData = null;
+            if (
+                testData.subjectDetails &&
+                typeof testData.subjectDetails === 'object' &&
+                Object.keys(testData.subjectDetails).length > 0
+            ) {
+                // Check if all values are numeric
+                const vals = Object.values(testData.subjectDetails);
+                if (vals.every(v => !isNaN(parseFloat(v)) && isFinite(v))) {
+                    subjectData = testData.subjectDetails;
+                }
+            }
+            if (!subjectData) {
+                // Fallback: aggregate from questions
+                subjectData = new Map();
+                questions.forEach(q => {
+                    if (q.subject) {
+                        const s = q.subject.trim();
+                        subjectData.set(s, (subjectData.get(s) || 0) + 1);
+                    }
+                });
+            }
+
+            // Populate subject table
+            const subjectArea = document.getElementById('subjectBreakdownArea');
+            const subjectBody = document.getElementById('subjectTableBody');
+            const subjectEntries = subjectData instanceof Map
+                ? Array.from(subjectData.entries())
+                : Object.entries(subjectData);
+            if (subjectEntries.length > 0) {
+                subjectArea.style.display = 'block';
+                subjectBody.innerHTML = '';
+                subjectEntries.forEach(([name, count], idx) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td class="col-no">${idx + 1}</td>
+                                     <td class="col-name">${name}</td>
+                                     <td class="col-count">${count}</td>`;
+                    subjectBody.appendChild(row);
+                });
+            } else {
+                subjectArea.style.display = 'none';
+            }
+
+            // --- Chapter breakdown ---
+            let chapterData = null;
+            if (
+                testData.chapterDetails &&
+                typeof testData.chapterDetails === 'object' &&
+                Object.keys(testData.chapterDetails).length > 0
+            ) {
+                const vals = Object.values(testData.chapterDetails);
+                if (vals.every(v => !isNaN(parseFloat(v)) && isFinite(v))) {
+                    chapterData = testData.chapterDetails;
+                }
+            }
+            if (!chapterData) {
+                chapterData = new Map();
+                questions.forEach(q => {
+                    if (q.chapter) {
+                        const c = q.chapter.trim();
+                        chapterData.set(c, (chapterData.get(c) || 0) + 1);
+                    }
+                });
+            }
+
+            const chapterArea = document.getElementById('chapterBreakdownArea');
+            const chapterBody = document.getElementById('chapterTableBody');
+            const chapterEntries = chapterData instanceof Map
+                ? Array.from(chapterData.entries())
+                : Object.entries(chapterData);
+            if (chapterEntries.length > 0) {
+                chapterArea.style.display = 'block';
+                chapterBody.innerHTML = '';
+                chapterEntries.forEach(([name, count], idx) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td class="col-no">${idx + 1}</td>
+                                     <td class="col-name">${name}</td>
+                                     <td class="col-count">${count}</td>`;
+                    chapterBody.appendChild(row);
+                });
+            } else {
+                chapterArea.style.display = 'none';
+            }
+        }
+
+        function toggleStartButton() {
+            const btn = document.getElementById('startBtn');
+            const checked = document.getElementById('agreeCheck').checked;
+            if (checked) {
+                btn.classList.add('active');
+                btn.disabled = false;
+            } else {
+                btn.classList.remove('active');
+                btn.disabled = true;
+            }
+        }
+
+        function startTest() {
+            if (!document.getElementById('agreeCheck').checked) return;
+            const lang = document.getElementById('langSelect').value;
+            localStorage.setItem('mock_lang', lang);
+            const params = new URLSearchParams();
+            params.set('testCode', testCode);
+            if (lang !== 'en') params.set('lang', lang);
+            window.location.href = `test2.html?${params.toString()}`;
+        }
+
+        window.addEventListener('load', () => {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            fetchTestData();
+        });
+    </script>
+</body>
+</html>
