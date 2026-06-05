@@ -145,9 +145,14 @@
             flex-direction: column;
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.6s ease, visibility 0.6s ease, background 0.5s ease;
             opacity: 1;
             visibility: visible;
+        }
+
+        .welcome-overlay.white-bg {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
         }
 
         .welcome-overlay.fading-out {
@@ -169,6 +174,12 @@
             -webkit-backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .welcome-overlay.white-bg .welcome-card {
+            background: rgba(255,255,255,0.95);
+            border-color: #e2e8f0;
         }
 
         .welcome-card::before {
@@ -223,6 +234,7 @@
             margin-bottom: 4px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+            transition: color 0.4s ease;
         }
 
         .welcome-candidate {
@@ -230,6 +242,7 @@
             font-weight: 600;
             color: var(--text-heading);
             margin-bottom: 16px;
+            transition: color 0.4s ease;
         }
 
         .welcome-exam-name {
@@ -239,6 +252,7 @@
             margin-bottom: 4px;
             letter-spacing: -0.5px;
             line-height: 1.2;
+            display: none;
         }
 
         .welcome-test-name {
@@ -248,6 +262,7 @@
             margin-bottom: 28px;
             line-height: 1.5;
             padding: 0 12px;
+            display: none;
         }
 
         .countdown-wrapper {
@@ -840,7 +855,6 @@
             transition: var(--transition);
             width: 100%;
             position: relative;
-            /* THE FIX: allow horizontal scroll on the entire card when content overflows */
             overflow-x: auto;
             overflow-y: visible;
             -webkit-overflow-scrolling: touch;
@@ -948,7 +962,6 @@
             word-wrap: break-word;
             word-break: break-word;
             overflow-wrap: anywhere;
-            /* Keep overflow-x auto as a fallback for extremely long inline elements */
             overflow-x: auto;
             overflow-y: visible;
             flex-shrink: 0;
@@ -985,7 +998,6 @@
             box-shadow: var(--shadow);
         }
 
-        /* MathJax elements inside question text should also scroll if needed */
         .question-text mjx-container,
         .question-text .MathJax,
         .question-text mjx-math {
@@ -1588,11 +1600,11 @@
             <div class="welcome-icon" id="welcomeExamIcon"><i class="fas fa-graduation-cap"></i></div>
             <div class="welcome-title">Best of Luck!</div>
             <div class="welcome-candidate" id="welcomeCandidateLine">Welcome!</div>
-            <div class="welcome-exam-name" id="welcomeExamName">Loading...</div>
-            <div class="welcome-test-name" id="welcomeTestName"></div>
+            <div class="welcome-exam-name" id="welcomeExamName" style="display:none;">Loading...</div>
+            <div class="welcome-test-name" id="welcomeTestName" style="display:none;"></div>
             <div class="countdown-wrapper">
-                <div class="countdown-number" id="countdownNumber">3</div>
-                <div class="countdown-label">GET READY</div>
+                <div class="countdown-number" id="countdownNumber"></div>
+                <div class="countdown-label" id="countdownLabel">Loading…</div>
             </div>
         </div>
     </div>
@@ -1811,28 +1823,23 @@
 
         function runWelcomeSequence() {
             const overlay = document.getElementById('welcomeOverlay');
-            const countdownEl = document.getElementById('countdownNumber');
-            const countdownLabel = document.querySelector('.countdown-label');
+            const welcomeIcon = document.getElementById('welcomeExamIcon');
+            // Always show app logo (image/appicon.jpg), fallback to icon if missing
+            welcomeIcon.innerHTML = `<img src="image/appicon.jpg" alt="App Logo" style="width:100%;height:100%;object-fit:cover;" onerror="this.innerHTML='<i class=&quot;fas fa-graduation-cap&quot;></i>';">`;
+            // Only display username
+            document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + (state.candidateName || 'Candidate') + '!';
+            // Hide exam/test name lines (already hidden via CSS)
+            // Clear countdown number, show loading
+            document.getElementById('countdownNumber').innerHTML = '';
+            document.getElementById('countdownLabel').textContent = 'Loading…';
 
-            if (testConfig) {
-                const examIcon = document.getElementById('welcomeExamIcon');
-                if (testConfig.imageurl) {
-                    examIcon.innerHTML =
-                        `<img src="${testConfig.imageurl}" alt="${testConfig.exam || 'Exam'}" style="width:100%;height:100%;object-fit:cover;">`;
-                } else {
-                    examIcon.innerHTML = `<i class="fas fa-graduation-cap"></i>`;
-                }
-                document.getElementById('welcomeExamName').textContent = testConfig.exam || 'Exam';
-                document.getElementById('welcomeTestName').textContent = testConfig.testName || '';
-            }
-            document.getElementById('welcomeCandidateLine').textContent =
-                'Welcome, ' + (state.candidateName || 'Candidate') + '!';
-
-            const seq = ['3', '2', '1', 'Go!'];
+            const seq = ['3', '2', 'Go!'];
             let step = 0;
 
             function showCountdown() {
                 if (step >= seq.length) {
+                    // After Go!, turn overlay white then fade out
+                    overlay.classList.add('white-bg');
                     overlay.classList.add('fading-out');
                     state.welcomeDone = true;
                     if (testConfig && !state.timerInterval && !state.testSubmitted) startTimer();
@@ -1841,6 +1848,8 @@
                     }, 600);
                     return;
                 }
+                const countdownEl = document.getElementById('countdownNumber');
+                const countdownLabel = document.getElementById('countdownLabel');
                 countdownEl.textContent = seq[step];
                 countdownEl.classList.remove('countdown-pop');
                 void countdownEl.offsetWidth;
@@ -1989,18 +1998,6 @@
                 } else {
                     langSelector.style.display = 'none';
                 }
-
-                const examIcon = document.getElementById('welcomeExamIcon');
-                if (testConfig.imageurl) {
-                    examIcon.innerHTML =
-                        `<img src="${testConfig.imageurl}" alt="${testConfig.exam || 'Exam'}" style="width:100%;height:100%;object-fit:cover;">`;
-                } else {
-                    examIcon.innerHTML = `<i class="fas fa-graduation-cap"></i>`;
-                }
-                document.getElementById('welcomeExamName').textContent = testConfig.exam || 'Exam';
-                document.getElementById('welcomeTestName').textContent = testConfig.testName || '';
-                document.getElementById('welcomeCandidateLine').textContent =
-                    'Welcome, ' + (state.candidateName || 'Candidate') + '!';
 
                 if (state.welcomeDone && !state.timerInterval && !state.testSubmitted) startTimer();
 
