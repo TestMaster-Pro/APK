@@ -334,6 +334,40 @@
 
         .hidden { display:none !important; }
 
+        /* GUEST PROFILE STYLES */
+        .guest-profile-container {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--glass-bg);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-lg);
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        .guest-profile-container i {
+            font-size: 64px;
+            color: var(--gray-400);
+            display: block;
+            margin-bottom: 16px;
+        }
+        .guest-profile-container h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--gray-800);
+        }
+        .guest-profile-container p {
+            color: var(--gray-500);
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+        .guest-profile-container .btn {
+            min-width: 160px;
+            margin: 0 auto;
+        }
+
         @media (min-width:600px) {
             .bottom-nav { display:none; }
             body { padding-bottom:0; }
@@ -421,91 +455,103 @@
 
     <!-- Main Content -->
     <div class="container">
-        <section class="profile-hero-v2 reveal active">
-            <div class="hero-cover"></div>
-            <div class="hero-content">
-                <div class="avatar-wrapper" onclick="openAvatarGrid()">
-                    <div class="avatar-glow"></div>
-                    <div class="avatar-ring-v2"><div class="avatar-inner" id="avatarDisplay"></div></div>
-                    <div class="avatar-edit-v2" onclick="event.stopPropagation(); openAvatarGrid()"><i class="fas fa-camera"></i></div>
-                    <div class="online-pulse"></div>
-                </div>
-                <h1 class="hero-name" id="displayName">—</h1>
-                <div class="hero-meta"><span class="username-pill"><i class="fas fa-at"></i> <span id="displayUsername">unknown</span></span><span class="verified-badge" id="verifiedBadge" style="display:none;"><i class="fas fa-check-circle"></i> Verified</span></div>
-                <div class="hero-badges" id="heroBadges"></div>
-                <div class="action-bar">
-                    <a href="dashboard.html" class="btn btn-outline"><i class="fas fa-th-large"></i> Dashboard</a>
-                    <button class="btn btn-primary" onclick="toggleEditSection()"><i class="fas fa-pen-to-square"></i> Edit Profile</button>
-                    <button class="btn btn-danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                </div>
-            </div>
-        </section>
+        <!-- Guest message (hidden by default) -->
+        <div class="guest-profile-container" id="guestProfile">
+            <i class="fas fa-user-lock"></i>
+            <h2>Guest Account</h2>
+            <p>Please log in with your real account to access your full profile, edit options, and all settings.</p>
+            <!-- Updated to clear storage and redirect -->
+            <button class="btn btn-primary" onclick="localStorage.removeItem('user'); window.location.href='index.html';"><i class="fas fa-sign-in-alt"></i> Login Now</button>
+        </div>
 
-        <section class="bento-grid reveal" id="statsGrid"></section>
+        <!-- Profile content (hidden when guest) -->
+        <div id="profileContent">
+            <section class="profile-hero-v2 reveal active">
+                <div class="hero-cover"></div>
+                <div class="hero-content">
+                    <div class="avatar-wrapper" onclick="openAvatarGrid()">
+                        <div class="avatar-glow"></div>
+                        <div class="avatar-ring-v2"><div class="avatar-inner" id="avatarDisplay"></div></div>
+                        <div class="avatar-edit-v2" onclick="event.stopPropagation(); openAvatarGrid()"><i class="fas fa-camera"></i></div>
+                        <div class="online-pulse"></div>
+                    </div>
+                    <h1 class="hero-name" id="displayName">—</h1>
+                    <div class="hero-meta"><span class="username-pill"><i class="fas fa-at"></i> <span id="displayUsername">unknown</span></span><span class="verified-badge" id="verifiedBadge" style="display:none;"><i class="fas fa-check-circle"></i> Verified</span></div>
+                    <div class="hero-badges" id="heroBadges"></div>
+                    <div class="action-bar">
+                        <a href="dashboard.html" class="btn btn-outline"><i class="fas fa-th-large"></i> Dashboard</a>
+                        <button class="btn btn-primary" onclick="toggleEditSection()"><i class="fas fa-pen-to-square"></i> Edit Profile</button>
+                        <button class="btn btn-danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </div>
+                </div>
+            </section>
 
-        <section class="completion-section reveal" id="completionSection">
-            <div class="completion-card">
-                <div class="completion-ring">
-                    <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="progress" cx="60" cy="60" r="54" id="completionCircle"/></svg>
-                    <div class="completion-text"><span id="completionPercent">0</span><span>%</span></div>
-                </div>
-                <div class="completion-info">
-                    <h3>Profile Strength</h3>
-                    <p id="completionHint">Complete your profile to unlock all features</p>
-                    <div class="completion-steps" id="completionSteps"></div>
-                </div>
-            </div>
-        </section>
+            <section class="bento-grid reveal" id="statsGrid"></section>
 
-        <section class="glass-section reveal" id="editSection" style="display:none;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-user-pen"></i></div><div><h2 class="section-title">Edit Profile</h2><div class="section-subtitle">Update your personal information</div></div></div>
-            <div class="section-divider"></div>
-            <form id="editProfileForm">
-                <div class="form-grid">
-                    <div class="floating-group"><input type="text" id="editName" placeholder=" " required><i class="input-icon fas fa-user"></i><label>Full Name *</label></div>
-                    <div class="floating-group"><input type="tel" id="editMobile" placeholder=" " pattern="[0-9]{10}" required><i class="input-icon fas fa-phone"></i><label>Mobile *</label></div>
-                    <div class="floating-group full-width"><input type="email" id="editEmail" placeholder=" "><i class="input-icon fas fa-envelope"></i><label>Email Address</label></div>
-                    <div class="floating-group"><input type="text" id="editState" placeholder=" " list="statesList"><i class="input-icon fas fa-map-marker-alt"></i><label>State</label><datalist id="statesList"><option value="Andhra Pradesh"><option value="Bihar"><option value="Delhi"><option value="Gujarat"><option value="Haryana"><option value="Karnataka"><option value="Kerala"><option value="Madhya Pradesh"><option value="Maharashtra"><option value="Punjab"><option value="Rajasthan"><option value="Tamil Nadu"><option value="Telangana"><option value="Uttar Pradesh"><option value="West Bengal"></datalist></div>
-                    <div class="floating-group"><select id="editEducation" required><option value="" disabled selected></option><option value="10th Pass">10th Pass</option><option value="12th Pass">12th Pass</option><option value="Graduate">Graduate</option><option value="Post Graduate">Post Graduate</option></select><i class="input-icon fas fa-graduation-cap"></i><label>Education</label></div>
-                    <div class="floating-group full-width"><select id="editPreparingFor" required><option value="" disabled selected></option><option value="SSC">SSC</option><option value="UPSC">UPSC</option><option value="Banking">Banking</option><option value="Railway">Railway</option><option value="CUET">CUET</option><option value="JEE">JEE</option><option value="NEET">NEET</option></select><i class="input-icon fas fa-bullseye"></i><label>Preparing For</label></div>
+            <section class="completion-section reveal" id="completionSection">
+                <div class="completion-card">
+                    <div class="completion-ring">
+                        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="progress" cx="60" cy="60" r="54" id="completionCircle"/></svg>
+                        <div class="completion-text"><span id="completionPercent">0</span><span>%</span></div>
+                    </div>
+                    <div class="completion-info">
+                        <h3>Profile Strength</h3>
+                        <p id="completionHint">Complete your profile to unlock all features</p>
+                        <div class="completion-steps" id="completionSteps"></div>
+                    </div>
                 </div>
-                <div class="hint-pill"><i class="fas fa-shield-halved"></i> Enter your current password to confirm changes</div>
-                <div class="floating-group"><input type="password" id="editConfirmPassword" placeholder=" " required><i class="input-icon fas fa-lock"></i><label>Current Password *</label><button type="button" class="pass-toggle" onclick="togglePass('editConfirmPassword', this)"><i class="fas fa-eye"></i></button></div>
-                <div class="action-bar" style="margin-top:24px;">
-                    <button type="button" class="btn btn-outline" onclick="toggleEditSection()">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="saveProfileBtn"><i class="fas fa-check-circle"></i> Save Changes</button>
-                </div>
-            </form>
-            <div class="alert-toast" id="editAlert"></div>
-        </section>
+            </section>
 
-        <section class="glass-section reveal">
-            <div class="section-header"><div class="section-icon" style="background:rgba(255,77,90,0.08);color:var(--red);"><i class="fas fa-shield-halved"></i></div><div><h2 class="section-title">Security</h2><div class="section-subtitle">Change your password to keep your account safe</div></div></div>
-            <div class="section-divider"></div>
-            <form id="passwordForm">
-                <div class="form-grid">
-                    <div class="floating-group"><input type="password" id="currentPassword" placeholder=" " required><i class="input-icon fas fa-lock"></i><label>Current Password</label><button type="button" class="pass-toggle" onclick="togglePass('currentPassword', this)"><i class="fas fa-eye"></i></button></div>
-                    <div class="floating-group"><input type="password" id="newPassword" placeholder=" " minlength="6" required><i class="input-icon fas fa-key"></i><label>New Password</label><button type="button" class="pass-toggle" onclick="togglePass('newPassword', this)"><i class="fas fa-eye"></i></button></div>
-                </div>
-                <div class="strength-wrapper" id="strengthWrapper" style="display:none;">
-                    <div class="strength-label"><span>Password Strength</span><span class="strength-value" id="strengthValue">Weak</span></div>
-                    <div class="strength-bars"><div class="strength-bar" id="bar1"></div><div class="strength-bar" id="bar2"></div><div class="strength-bar" id="bar3"></div><div class="strength-bar" id="bar4"></div></div>
-                    <div class="pass-requirements"><div class="req-item" id="req1"><i class="fas fa-circle"></i> 6+ characters</div><div class="req-item" id="req2"><i class="fas fa-circle"></i> Starts with letter</div><div class="req-item" id="req3"><i class="fas fa-circle"></i> Uppercase letter</div><div class="req-item" id="req4"><i class="fas fa-circle"></i> Number included</div></div>
-                </div>
-                <div class="action-bar" style="margin-top:24px;"><button type="submit" class="btn btn-primary" id="passwordBtn" style="width:100%;"><i class="fas fa-rotate"></i> Update Password</button></div>
-            </form>
-            <div class="alert-toast" id="passwordAlert"></div>
-        </section>
+            <section class="glass-section reveal" id="editSection" style="display:none;">
+                <div class="section-header"><div class="section-icon"><i class="fas fa-user-pen"></i></div><div><h2 class="section-title">Edit Profile</h2><div class="section-subtitle">Update your personal information</div></div></div>
+                <div class="section-divider"></div>
+                <form id="editProfileForm">
+                    <div class="form-grid">
+                        <div class="floating-group"><input type="text" id="editName" placeholder=" " required><i class="input-icon fas fa-user"></i><label>Full Name *</label></div>
+                        <div class="floating-group"><input type="tel" id="editMobile" placeholder=" " pattern="[0-9]{10}" required><i class="input-icon fas fa-phone"></i><label>Mobile *</label></div>
+                        <div class="floating-group full-width"><input type="email" id="editEmail" placeholder=" "><i class="input-icon fas fa-envelope"></i><label>Email Address</label></div>
+                        <div class="floating-group"><input type="text" id="editState" placeholder=" " list="statesList"><i class="input-icon fas fa-map-marker-alt"></i><label>State</label><datalist id="statesList"><option value="Andhra Pradesh"><option value="Bihar"><option value="Delhi"><option value="Gujarat"><option value="Haryana"><option value="Karnataka"><option value="Kerala"><option value="Madhya Pradesh"><option value="Maharashtra"><option value="Punjab"><option value="Rajasthan"><option value="Tamil Nadu"><option value="Telangana"><option value="Uttar Pradesh"><option value="West Bengal"></datalist></div>
+                        <div class="floating-group"><select id="editEducation" required><option value="" disabled selected></option><option value="10th Pass">10th Pass</option><option value="12th Pass">12th Pass</option><option value="Graduate">Graduate</option><option value="Post Graduate">Post Graduate</option></select><i class="input-icon fas fa-graduation-cap"></i><label>Education</label></div>
+                        <div class="floating-group full-width"><select id="editPreparingFor" required><option value="" disabled selected></option><option value="SSC">SSC</option><option value="UPSC">UPSC</option><option value="Banking">Banking</option><option value="Railway">Railway</option><option value="CUET">CUET</option><option value="JEE">JEE</option><option value="NEET">NEET</option></select><i class="input-icon fas fa-bullseye"></i><label>Preparing For</label></div>
+                    </div>
+                    <div class="hint-pill"><i class="fas fa-shield-halved"></i> Enter your current password to confirm changes</div>
+                    <div class="floating-group"><input type="password" id="editConfirmPassword" placeholder=" " required><i class="input-icon fas fa-lock"></i><label>Current Password *</label><button type="button" class="pass-toggle" onclick="togglePass('editConfirmPassword', this)"><i class="fas fa-eye"></i></button></div>
+                    <div class="action-bar" style="margin-top:24px;">
+                        <button type="button" class="btn btn-outline" onclick="toggleEditSection()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="saveProfileBtn"><i class="fas fa-check-circle"></i> Save Changes</button>
+                    </div>
+                </form>
+                <div class="alert-toast" id="editAlert"></div>
+            </section>
 
-        <section class="glass-section reveal">
-            <div class="section-header"><div class="section-icon" style="background:rgba(245,158,11,0.08);color:var(--warning);"><i class="fas fa-headset"></i></div><div><h2 class="section-title">Help & Support</h2><div class="section-subtitle">We're here to help you 24/7</div></div></div>
-            <div class="section-divider"></div>
-            <div class="support-orbs">
-                <a href="mailto:testmaster.helpdesk@gmail.com" class="support-orb email"><div class="orb-icon orb-email"><i class="fas fa-envelope"></i></div><div class="orb-title">Email Us</div><div class="orb-desc">testmaster.helpdesk@gmail.com</div></a>
-                <a href="https://t.me/cuet007_bot" target="_blank" class="support-orb telegram"><div class="orb-icon orb-telegram"><i class="fab fa-telegram-plane"></i></div><div class="orb-title">Telegram</div><div class="orb-desc">@cuet007_bot</div></a>
-                <a href="chat.html" class="support-orb chat"><div class="orb-icon orb-chat"><i class="fas fa-comments"></i></div><div class="orb-title">Community Chat</div><div class="orb-desc">Join the discussion</div></a>
-            </div>
-        </section>
+            <section class="glass-section reveal">
+                <div class="section-header"><div class="section-icon" style="background:rgba(255,77,90,0.08);color:var(--red);"><i class="fas fa-shield-halved"></i></div><div><h2 class="section-title">Security</h2><div class="section-subtitle">Change your password to keep your account safe</div></div></div>
+                <div class="section-divider"></div>
+                <form id="passwordForm">
+                    <div class="form-grid">
+                        <div class="floating-group"><input type="password" id="currentPassword" placeholder=" " required><i class="input-icon fas fa-lock"></i><label>Current Password</label><button type="button" class="pass-toggle" onclick="togglePass('currentPassword', this)"><i class="fas fa-eye"></i></button></div>
+                        <div class="floating-group"><input type="password" id="newPassword" placeholder=" " minlength="6" required><i class="input-icon fas fa-key"></i><label>New Password</label><button type="button" class="pass-toggle" onclick="togglePass('newPassword', this)"><i class="fas fa-eye"></i></button></div>
+                    </div>
+                    <div class="strength-wrapper" id="strengthWrapper" style="display:none;">
+                        <div class="strength-label"><span>Password Strength</span><span class="strength-value" id="strengthValue">Weak</span></div>
+                        <div class="strength-bars"><div class="strength-bar" id="bar1"></div><div class="strength-bar" id="bar2"></div><div class="strength-bar" id="bar3"></div><div class="strength-bar" id="bar4"></div></div>
+                        <div class="pass-requirements"><div class="req-item" id="req1"><i class="fas fa-circle"></i> 6+ characters</div><div class="req-item" id="req2"><i class="fas fa-circle"></i> Starts with letter</div><div class="req-item" id="req3"><i class="fas fa-circle"></i> Uppercase letter</div><div class="req-item" id="req4"><i class="fas fa-circle"></i> Number included</div></div>
+                    </div>
+                    <div class="action-bar" style="margin-top:24px;"><button type="submit" class="btn btn-primary" id="passwordBtn" style="width:100%;"><i class="fas fa-rotate"></i> Update Password</button></div>
+                </form>
+                <div class="alert-toast" id="passwordAlert"></div>
+            </section>
+
+            <section class="glass-section reveal">
+                <div class="section-header"><div class="section-icon" style="background:rgba(245,158,11,0.08);color:var(--warning);"><i class="fas fa-headset"></i></div><div><h2 class="section-title">Help & Support</h2><div class="section-subtitle">We're here to help you 24/7</div></div></div>
+                <div class="section-divider"></div>
+                <div class="support-orbs">
+                    <a href="mailto:testmaster.helpdesk@gmail.com" class="support-orb email"><div class="orb-icon orb-email"><i class="fas fa-envelope"></i></div><div class="orb-title">Email Us</div><div class="orb-desc">testmaster.helpdesk@gmail.com</div></a>
+                    <a href="https://t.me/cuet007_bot" target="_blank" class="support-orb telegram"><div class="orb-icon orb-telegram"><i class="fab fa-telegram-plane"></i></div><div class="orb-title">Telegram</div><div class="orb-desc">@cuet007_bot</div></a>
+                    <a href="chat.html" class="support-orb chat"><div class="orb-icon orb-chat"><i class="fas fa-comments"></i></div><div class="orb-title">Community Chat</div><div class="orb-desc">Join the discussion</div></a>
+                </div>
+            </section>
+        </div>
     </div>
 
     <!-- Avatar Modal -->
@@ -553,6 +599,10 @@
         let user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
+        // ---------- Guest Detection ----------
+        const isGuest = user && (user.isGuest === true || user.guest === true ||
+                                 user.userId === 'guest' || user.username === 'guest');
+
         // ---------- Helper Functions ----------
         function showToast(m,t='info',d=3000){ const c=document.getElementById('toastContainer'),o=document.createElement('div'); o.className=`toast-item ${t}`; const i={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'}; o.innerHTML=`<i class="fas ${i[t]}"></i> ${m}`; c.appendChild(o);c.classList.add('show'); setTimeout(()=>{o.style.opacity='0';o.style.transform='translateY(-10px)';o.style.transition='0.3s';setTimeout(()=>{o.remove();if(!c.children.length)c.classList.remove('show')},300)},d); }
         function navigate(u){window.location.href=u;}
@@ -562,6 +612,10 @@
         function sidebarNavigate(action){
             closeSidebarDirect();
             setTimeout(()=>{
+                if (isGuest && ['profile','logout','instructions','streak','premium'].indexOf(action)===-1) {
+                    showToast('Login required for this feature', 'warning');
+                    return;
+                }
                 const map={dashboard:'dashboard.html',mocks:'exam.html',aimock:'aimock.html',books:'book.html',study:'book.html',results:'allresult.html',leaderboard:'leaderboard.html',chat:'chat.html',aichat:'aichat.html',streak:'streak.html','daily-challenge':'challenge.html',referral:'referral.html',favorites:'favorites.html',coins:'coin-history.html','coin-use':'usecoin.html',reviews:'reviews.html',premium:'payment.html',profile:'profile.html',instructions:'instructions',logout:'logout'};
                 if(action==='logout')handleLogout();
                 else if(action==='instructions')Swal.fire({title:'How to Use',html:'<p>Choose a category, attempt tests, and track your progress.</p>',confirmButtonColor:'#243748'});
@@ -599,16 +653,43 @@
             c.innerHTML=fb.map(e=>`<li><a onclick="showToast('${e.name} – ${e.date}','info')">${e.name}</a></li>`).join('');
         }
 
-        // ---------- Profile Logic ----------
+        // ---------- Guest Mode Handler ----------
+        function applyGuestMode() {
+            document.getElementById('profileContent').classList.add('hidden');
+            document.getElementById('guestProfile').style.display = 'block';
+            document.getElementById('sidebarUserName').textContent = 'Guest';
+            document.getElementById('sidebarUserTag').textContent = 'Login required';
+            document.getElementById('sidebarStreak').style.display = 'none';
+            const userInitial = document.getElementById('userInitial');
+            userInitial.innerHTML = '<i class="fas fa-user"></i>';
+            // Clear storage and redirect when avatar clicked
+            userInitial.onclick = () => { localStorage.removeItem('user'); window.location.href='index.html'; };
+            const premium = document.getElementById('premiumBadge');
+            if (premium) premium.style.display = 'none';
+            // Bottom nav Profile: clear and redirect
+            document.querySelectorAll('.bottom-nav-item').forEach(b => {
+                if (b.querySelector('span')?.textContent.trim() === 'Profile') {
+                    b.classList.remove('active');
+                    b.onclick = () => { localStorage.removeItem('user'); window.location.href='index.html'; };
+                }
+            });
+            // Override functions to block actions
+            window.toggleEditSection = () => showToast('Login to edit profile', 'warning');
+            window.openAvatarGrid = () => showToast('Login to change avatar', 'warning');
+            window.saveAvatarSelection = () => showToast('Login required', 'warning');
+            // Hide edit/password forms
+            const editSec = document.getElementById('editSection');
+            if (editSec) editSec.style.display = 'none';
+            const passForm = document.getElementById('passwordForm');
+            if (passForm) passForm.style.display = 'none';
+        }
+
+        // ---------- Profile Logic (real users only) ----------
         function setAvatarWithPic(elId,u){
             const el=document.getElementById(elId);if(!el)return;
             if(u?.avatarUrl)el.innerHTML=`<img src="${u.avatarUrl}" alt="Avatar">`;
             else el.innerHTML=`<span class="avatar-initials">${(u?.name||'S').charAt(0).toUpperCase()}</span>`;
         }
-        setAvatarWithPic('userInitial',user);setAvatarWithPic('sidebarAvatar',user);
-        document.getElementById('sidebarUserName').textContent=user.name||'Student';
-        document.getElementById('sidebarUserTag').textContent=user.preparingFor||'Learner';
-
         function calculateCompletion(){
             let score=0;
             if(user.name)score+=20;if(user.mobile)score+=20;if(user.email)score+=15;
@@ -649,6 +730,7 @@
             try{const res=await fetch(`${API_URL}?action=getAvatars`);const d=await res.json();if(d.success&&d.avatars)availableAvatars=d.avatars;}catch(e){}
         }
         function openAvatarGrid(){
+            if (isGuest) { showToast('Login to change avatar', 'warning'); return; }
             document.getElementById('avatarOverlay').classList.add('show');
             document.getElementById('avatarConfirmPassword').value='';
             document.getElementById('avatarAlert').classList.remove('show');
@@ -667,6 +749,7 @@
             document.getElementById('selectedAvatarName').textContent=name;
         }
         async function saveAvatarSelection(){
+            if (isGuest) { showToast('Login required', 'warning'); return; }
             const pass=document.getElementById('avatarConfirmPassword').value;
             if(!pass){showAlert('avatarAlert','error','Enter password.');return;}
             const btn=event.target.closest('button');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-pulse"></i> Updating...';
@@ -681,6 +764,7 @@
         }
 
         function toggleEditSection(){
+            if (isGuest) { showToast('Login to edit profile', 'warning'); return; }
             const sec=document.getElementById('editSection');
             if(sec.style.display==='block'){sec.style.display='none';}
             else{
@@ -693,6 +777,7 @@
         }
         document.getElementById('editProfileForm').addEventListener('submit',async function(e){
             e.preventDefault();
+            if (isGuest) { showToast('Login required', 'warning'); return; }
             const btn=document.getElementById('saveProfileBtn');
             btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-pulse"></i> Updating...';
             const name=document.getElementById('editName').value.trim(),mobile=document.getElementById('editMobile').value.trim();
@@ -714,6 +799,7 @@
 
         document.getElementById('passwordForm').addEventListener('submit',async function(e){
             e.preventDefault();
+            if (isGuest) { showToast('Login required', 'warning'); return; }
             const btn=document.getElementById('passwordBtn');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-pulse"></i> Updating...';
             const cur=document.getElementById('currentPassword').value,newP=document.getElementById('newPassword').value;
             if(!cur||!newP){showAlert('passwordAlert','error','Both fields required.');btn.disabled=false;btn.innerHTML='<i class="fas fa-rotate"></i> Update Password';return;}
@@ -761,14 +847,20 @@
 
         // Init
         (async function(){
-            loadAvatars();renderProfile();updateAvatarDisplay();renderCompletion();renderHeroBadges();
-            renderFooterExamCategories();renderFooterUpcoming();
-            // Streak display
-            const streakData=JSON.parse(localStorage.getItem('loginStreak')||'{}');
-            const today=new Date().toISOString().slice(0,10);
-            if(streakData.lastDate===today){
-                const s=streakData.count||1;
-                if(s>1){document.getElementById('sidebarStreak').style.display='flex';document.getElementById('streakCount').textContent=s;}
+            if (isGuest) {
+                applyGuestMode();
+            } else {
+                setAvatarWithPic('userInitial',user);setAvatarWithPic('sidebarAvatar',user);
+                document.getElementById('sidebarUserName').textContent=user.name||'Student';
+                document.getElementById('sidebarUserTag').textContent=user.preparingFor||'Learner';
+                loadAvatars();renderProfile();updateAvatarDisplay();renderCompletion();renderHeroBadges();
+                renderFooterExamCategories();renderFooterUpcoming();
+                const streakData=JSON.parse(localStorage.getItem('loginStreak')||'{}');
+                const today=new Date().toISOString().slice(0,10);
+                if(streakData.lastDate===today){
+                    const s=streakData.count||1;
+                    if(s>1){document.getElementById('sidebarStreak').style.display='flex';document.getElementById('streakCount').textContent=s;}
+                }
             }
         })();
     </script>
