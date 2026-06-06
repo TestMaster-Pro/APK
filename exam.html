@@ -1494,6 +1494,7 @@
             display: flex;
             gap: 8px;
             margin-top: 2px;
+            align-items: center;
         }
         .btn-attempt {
             flex: 2;
@@ -1544,6 +1545,27 @@
         }
         .btn-rank:active {
             transform: scale(0.96);
+        }
+        .btn-share {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            border: 1px solid rgba(36, 55, 72, 0.1);
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-xs);
+            flex-shrink: 0;
+        }
+        .btn-share:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.05);
         }
 
         .empty-selection {
@@ -2186,9 +2208,9 @@
         let sortOrder = 'oldest';
         let isRefreshing = false;
 
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) window.location.href = 'index.html';
-        const savedCategory = localStorage.getItem('selectedCategory') || user?.targetExam || '';
+        // Removed forced redirect; allow guest browsing
+        let user = JSON.parse(localStorage.getItem('user'));
+        const savedCategory = localStorage.getItem('selectedCategory') || (user?.targetExam || '');
 
         // ---------- Local Storage Caching ----------
         function cacheAllData(data) {
@@ -2198,7 +2220,6 @@
                 console.log('✅ Cached ' + data.length + ' mock tests to localStorage');
             } catch (e) {
                 console.warn('⚠️ Failed to cache data to localStorage:', e.message);
-                // Try clearing old cache and retrying
                 try {
                     localStorage.removeItem(CACHE_KEY);
                     localStorage.setItem(CACHE_KEY, JSON.stringify(data));
@@ -2269,12 +2290,13 @@
             if (!el) return;
             if (userObj?.avatarUrl) el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar">`;
             else if (userObj?.profilePicUrl) el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar">`;
-            else el.textContent = (userObj?.name) ? userObj.name.charAt(0).toUpperCase() : 'S';
+            else el.textContent = (userObj?.name) ? userObj.name.charAt(0).toUpperCase() : 'G';
         }
+        // Initialize UI for guest or logged in
         setAvatarWithPic('userInitial', user);
         setAvatarWithPic('sidebarAvatar', user);
-        document.getElementById('sidebarUserName').textContent = user?.name || 'Student';
-        document.getElementById('sidebarUserTag').textContent = user?.preparingFor || 'Learner';
+        document.getElementById('sidebarUserName').textContent = user?.name || 'Guest';
+        document.getElementById('sidebarUserTag').textContent = user?.preparingFor || 'Visitor';
 
         function openSidebar() { const overlay = document.getElementById('sidebarOverlay');
             overlay.classList.remove('hidden');
@@ -2426,7 +2448,6 @@
             }
             isRefreshing = true;
 
-            // Determine which view is active to show the correct loading indicator
             const isTestView = document.getElementById('testView').classList.contains('active');
             showRefreshIndicator(true, isTestView ? 'test' : 'category');
 
@@ -2434,7 +2455,6 @@
                 const fresh = await fetchAllMocks();
                 if (fresh.length > 0) {
                     allMocks = fresh;
-                    // Always cache to localStorage after successful fetch
                     cacheAllData(fresh);
                     extractCategories();
                     buildCategoryImageMap();
@@ -2452,7 +2472,6 @@
                 }
             } catch (err) {
                 console.warn('Background refresh failed:', err);
-                // Keep using cached/current data
             } finally {
                 isRefreshing = false;
                 showRefreshIndicator(false, document.getElementById('testView').classList.contains('active') ? 'test' :
@@ -2465,14 +2484,12 @@
             const cachedData = getAllCachedData();
             const online = navigator.onLine;
 
-            // STEP 1: Always try to show cached data IMMEDIATELY
             if (cachedData && cachedData.length > 0) {
                 console.log('🚀 Loading from cache for instant display...');
                 allMocks = cachedData.map((m, i) => ({ ...m, _seq: m._seq ?? i }));
                 extractCategories();
                 buildCategoryImageMap();
 
-                // Render immediately from cache
                 if (savedCategory && allCategories.includes(savedCategory)) {
                     selectedCategory = savedCategory;
                     showTestViewInstant();
@@ -2480,7 +2497,6 @@
                     showCategoryViewInstant();
                 }
 
-                // STEP 2: Background refresh for fresh data
                 if (online) {
                     setTimeout(() => {
                         console.log('🔄 Starting background refresh...');
@@ -2493,7 +2509,6 @@
                 return;
             }
 
-            // STEP 3: No cache available - must fetch from network
             console.log('📡 No cache found - fetching from network...');
             showLoadingLine(true);
             const isTestView = savedCategory && allCategories.length === 0;
@@ -2526,7 +2541,6 @@
             }
         }
 
-        // Quick render functions for instant cache display
         function showCategoryViewInstant() {
             document.getElementById('categoryView').classList.remove('hidden');
             document.getElementById('testView').classList.remove('active');
@@ -2553,7 +2567,6 @@
             openExamAccordion();
         }
 
-        // ---------- Views ----------
         function showCategoryView() {
             document.getElementById('categoryView').classList.remove('hidden');
             document.getElementById('testView').classList.remove('active');
@@ -2741,9 +2754,7 @@
         }
 
         function closeExamAccordion() { document.getElementById('examAccordionItem').classList.remove('open'); }
-
         function closeSubjectAccordion() { document.getElementById('subjectAccordionItem').classList.remove('open'); }
-
         function closeChapterAccordion() { document.getElementById('chapterAccordionItem').classList.remove('open'); }
 
         function toggleYearBar() {
@@ -2902,8 +2913,9 @@
                         </div>
                         <button class="premium-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" onclick="event.stopPropagation(); toggleBookmark('${test.testCode}')"><i class="fas fa-bookmark"></i></button>
                         <div class="premium-action-buttons">
-                            <button class="btn-attempt" onclick="startTest('${test.testCode}','${test.file || ''}','${test.source || 'api'}')"><i class="fas fa-play"></i> Attempt</button>
+                            <button class="btn-attempt" onclick="handleAttempt('${test.testCode}','${test.file || ''}','${test.source || 'api'}')"><i class="fas fa-play"></i> Attempt</button>
                             <button class="btn-rank" onclick="viewLeaderboard('${test.testCode}')"><i class="fas fa-trophy"></i> Rank</button>
+                            <button class="btn-share" onclick="shareTestLink('${test.testCode}')"><i class="fas fa-share-alt"></i></button>
                         </div>
                     </div>
                 </div>`;
@@ -2926,6 +2938,66 @@
             applyFilters();
         }
 
+        // Guest handling for attempt
+        function handleAttempt(testCode, file, source) {
+            if (!user) {
+                showGuestAttemptPopup(() => {
+                    startTest(testCode, file, source);
+                });
+                return;
+            }
+            startTest(testCode, file, source);
+        }
+
+        function showGuestAttemptPopup(callback) {
+            Swal.fire({
+                title: '👋 Welcome Guest!',
+                html: '<p style="font-size:14px;">You can attempt as a guest or login for full features.</p>',
+                showDenyButton: true,
+                confirmButtonText: '<i class="fas fa-user"></i> Login / Sign Up',
+                denyButtonText: '<i class="fas fa-user-friends"></i> Guest Login',
+                confirmButtonColor: '#243748',
+                denyButtonColor: '#4cd38a',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                cancelButtonColor: '#a0a0a0'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'index.html';
+                } else if (result.isDenied) {
+                    Swal.fire({
+                        title: 'Enter Your Name',
+                        input: 'text',
+                        inputLabel: 'Name',
+                        inputPlaceholder: 'Your name',
+                        showCancelButton: true,
+                        confirmButtonText: 'Start Test',
+                        confirmButtonColor: '#243748',
+                        preConfirm: (name) => {
+                            if (!name || name.trim().length < 2) {
+                                Swal.showValidationMessage('Please enter a valid name');
+                                return false;
+                            }
+                            return name.trim();
+                        }
+                    }).then((nameResult) => {
+                        if (nameResult.isConfirmed) {
+                            const guestName = nameResult.value;
+                            const guestUser = { name: guestName, isGuest: true, username: 'guest_' + Date.now() };
+                            localStorage.setItem('user', JSON.stringify(guestUser));
+                            user = guestUser;
+                            setAvatarWithPic('userInitial', guestUser);
+                            setAvatarWithPic('sidebarAvatar', guestUser);
+                            document.getElementById('sidebarUserName').textContent = guestUser.name;
+                            document.getElementById('sidebarUserTag').textContent = 'Guest';
+                            showToast(`Welcome, ${guestName}!`, 'success');
+                            callback();
+                        }
+                    });
+                }
+            });
+        }
+
         function startTest(testCode, file, source) {
             if (!testCode) return showToast('Test code missing.', 'error');
             if (source === 'json' && file) {
@@ -2936,11 +3008,25 @@
             }
         }
 
+        function shareTestLink(testCode) {
+            const link = `${window.location.origin}/exam2.html?testCode=${encodeURIComponent(testCode)}`;
+            if (navigator.share) {
+                navigator.share({ title: 'TestMasterPro Mock Test', url: link }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(link).then(() => {
+                    showToast('🔗 Link copied! Share with friends.', 'success');
+                }).catch(() => {
+                    showToast('Link: ' + link, 'info', 5000);
+                });
+            }
+        }
+
         function viewLeaderboard(code) { window.location.href =
                 `leaderboard.html?testCode=${encodeURIComponent(code)}`; }
 
         // ---------- User / Footer ----------
         async function loadUserResults() {
+            if (!user) return;
             try {
                 const r = await fetch(
                     `${API_URL}?action=getUserResults&username=${encodeURIComponent(user?.username || '')}`);
@@ -3011,8 +3097,6 @@
             searchDebounceTimer = setTimeout(applyFilters, 300);
         });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebarDirect(); } });
-
-        // Also allow clicking on the brand to go to dashboard
         document.querySelector('.nav-brand').addEventListener('click', () => navigate('dashboard.html'));
 
         // Init
