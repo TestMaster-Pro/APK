@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Login · TestMasterPro.space</title>
+    <link rel="icon" type="image/jpeg" href="image/favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --primary-dark: #020617;
+            --primary-light: #e2e8f0;
+            --blue: #3b82f6;
+            --blue-light: #dbeafe;
+            --green: #10b981;
+            --red: #ef4444;
+            --red-light: #fef2f2;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --accent: #f59e0b;
+            --radius-2xl: 32px;
+            --font: 'Poppins', sans-serif;
+            --bottom-nav-height: 68px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: var(--font);
+            background: #f1f5f9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 16px);
+        }
+
+        /* Animated blobs */
+        .bg-blobs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.45;
+            animation: float 12s ease-in-out infinite;
+        }
+        .blob:nth-child(1) {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            top: -60px;
+            right: -80px;
+        }
+        .blob:nth-child(2) {
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            bottom: -40px;
+            left: -70px;
+            animation-delay: -4s;
+        }
+        .blob:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -8s;
+            opacity: 0.3;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(30px, -40px) scale(1.08);
+            }
+            50% {
+                transform: translate(-20px, 30px) scale(0.94);
+            }
+            75% {
+                transform: translate(-35px, -20px) scale(1.05);
+            }
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            padding-top: calc(24px + env(safe-area-inset-top));
+        }
+
+        /* Logo */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 16px;
+            animation: fadeDown 0.6s ease-out;
+        }
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 22px;
+            object-fit: cover;
+            box-shadow: 0 8px 28px rgba(15, 23, 42, 0.3);
+            background: #fff;
+        }
+        .logo-fallback {
+            width: 80px;
+            height: 80px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #0f172a, #1e3a5f);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 34px;
+            box-shadow: 0 8px 28px rgba(15, 23, 42, 0.3);
+        }
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glass card */
+        .auth-glass {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: var(--radius-2xl);
+            padding: 28px 20px 24px;
+            box-shadow: 0 8px 40px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes cardPop {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 5px;
+            margin-bottom: 24px;
+            gap: 4px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 12px 16px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--gray-500);
+            border-radius: 11px;
+            border: none;
+            background: transparent;
+            font-family: var(--font);
+            transition: all 0.3s;
+        }
+        .auth-tab.active {
+            background: #fff;
+            color: var(--gray-900);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transform: scale(1.02);
+        }
+
+        .auth-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .auth-panel.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form elements */
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrap i.input-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--gray-400);
+            font-size: 14px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+        .input-wrap input,
+        .input-wrap select {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: var(--font);
+            font-weight: 500;
+            color: var(--gray-800);
+            background: #f8fafc;
+            outline: none;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .input-wrap input:focus,
+        .input-wrap select:focus {
+            border-color: #3b82f6;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        .input-wrap input:focus~i.input-icon {
+            color: #3b82f6;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .password-toggle:hover {
+            color: var(--gray-700);
+            background: #f1f5f9;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0f172a, #1e3a5f);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all 0.3s;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+        }
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 13px;
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-top: 10px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .alert-msg {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 16px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-msg.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: flex;
+        }
+        .alert-msg.error {
+            background: #fef2f2;
+            color: #991b1b;
+            display: flex;
+        }
+
+        .forgot-row {
+            text-align: right;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+        .forgot-row a {
+            color: #3b82f6;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .forgot-row a:hover {
+            text-decoration: underline;
+        }
+
+        /* Register specific */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 10px 0 16px;
+        }
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.25s;
+            position: relative;
+        }
+        .avatar-option.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+        .avatar-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-check {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: #3b82f6;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-option.selected .avatar-check {
+            display: flex;
+        }
+
+        .password-strength {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+        .strength-text {
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 55px;
+            text-align: right;
+        }
+
+        .tc-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+        .tc-check input {
+            width: 18px;
+            height: 18px;
+            accent-color: #3b82f6;
+            margin-top: 2px;
+        }
+        .tc-check a {
+            color: #3b82f6;
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--bottom-nav-height) + var(--safe-bottom));
+            background: #fff;
+            border-top: 1px solid #e8ecf0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 8px;
+            padding-bottom: var(--safe-bottom);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: 0.15s;
+            font-family: var(--font);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            position: relative;
+        }
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+        .bottom-nav-item i {
+            font-size: 20px;
+        }
+        .bottom-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        .bottom-nav-item.login-active {
+            color: var(--primary);
+        }
+        .bottom-nav-item.login-active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .home-link-text {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+        .home-link-text a {
+            color: var(--blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .home-link-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 24px;
+            padding: 24px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalPop 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-content.modal-wide {
+            max-width: 520px;
+            max-height: 85vh;
+        }
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-content h1 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--gray-900);
+        }
+        .modal-content h2 {
+            font-size: 16px;
+            margin: 16px 0 8px;
+            color: var(--gray-800);
+        }
+        .modal-content h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+        }
+        .modal-content p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+        .modal-content ul {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        .modal-content ul li {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        .modal-content .btn-primary {
+            margin-top: 12px;
+        }
+        .modal-content .btn-outline {
+            margin-top: 8px;
+        }
+
+        .modal-content strong {
+            color: var(--gray-800);
+        }
+
+        /* Scrollbar for modals */
+        .modal-content::-webkit-scrollbar {
+            width: 5px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        @media (min-width: 600px) {
+            .bottom-nav {
+                display: none;
+            }
+            body {
+                padding-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-blobs">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <div class="page-wrapper">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="image/appicon.jpg" alt="TestMasterPro" class="logo-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+            <div class="logo-fallback" style="display:none;"><i class="fas fa-graduation-cap"></i></div>
+        </div>
+
+        <!-- Auth Card -->
+        <div class="auth-glass">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">🔑 Login</button>
+                <button class="auth-tab" onclick="switchTab('register')">📝 Register</button>
+            </div>
+
+            <!-- Login Panel -->
+            <div class="auth-panel active" id="loginPanel">
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group"><label>Username</label><div class="input-wrap"><i class="fas fa-user input-icon"></i><input type="text" id="loginUser" placeholder="Enter username" required></div></div>
+                    <div class="input-group"><label>Password</label><div class="input-wrap"><i class="fas fa-lock input-icon"></i><input type="password" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePass('loginPass',this)"><i class="fas fa-eye"></i></button></div></div>
+                    <div class="forgot-row"><a onclick="openForgotUsername()">Forgot Username?</a> &nbsp;|&nbsp; <a onclick="openForgotPassword()">Forgot Password?</a></div>
+                    <button type="submit" class="btn-primary">🚀 Login</button>
+                </form>
+            </div>
+
+            <!-- Register Panel -->
+            <div class="auth-panel" id="registerPanel">
+                <form id="registerForm" onsubmit="return false;">
+                    <div id="regStep1">
+                        <div class="input-group"><label>Full Name *</label><div class="input-wrap"><i class="fas fa-id-card input-icon"></i><input type="text" id="regName" placeholder="John Doe" required></div></div>
+                        <div class="input-group"><label>Username *</label><div class="input-wrap"><i class="fas fa-user input-icon"></i><input type="text" id="regUsername" placeholder="johndoe123" required></div></div>
+                        <div class="input-group"><label>Email *</label><div class="input-wrap"><i class="fas fa-envelope input-icon"></i><input type="email" id="regEmail" placeholder="john@example.com" required></div></div>
+                        <div class="input-group"><label>Mobile *</label><div class="input-wrap"><i class="fas fa-phone input-icon"></i><input type="tel" id="regMobile" pattern="[0-9]{10}" placeholder="9876543210" required></div></div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+       <div class="input-group">
+  <label>State</label>
+  <div class="input-wrap">
+    <select id="regState">
+      <option value="">Select State</option>
+      <option>Andhra Pradesh</option>
+      <option>Arunachal Pradesh</option>
+      <option>Assam</option>
+      <option>Bihar</option>
+      <option>Chhattisgarh</option>
+      <option>Goa</option>
+      <option>Gujarat</option>
+      <option>Haryana</option>
+      <option>Himachal Pradesh</option>
+      <option>Jharkhand</option>
+      <option>Karnataka</option>
+      <option>Kerala</option>
+      <option>Madhya Pradesh</option>
+      <option>Maharashtra</option>
+      <option>Manipur</option>
+      <option>Meghalaya</option>
+      <option>Mizoram</option>
+      <option>Nagaland</option>
+      <option>Odisha</option>
+      <option>Punjab</option>
+      <option>Rajasthan</option>
+      <option>Sikkim</option>
+      <option>Tamil Nadu</option>
+      <option>Telangana</option>
+      <option>Tripura</option>
+      <option>Uttar Pradesh</option>
+      <option>Uttarakhand</option>
+      <option>West Bengal</option>
+
+      <!-- Union Territories -->
+      <option>Andaman and Nicobar Islands</option>
+      <option>Chandigarh</option>
+      <option>Dadra and Nagar Haveli and Daman and Diu</option>
+      <option>Delhi</option>
+      <option>Jammu and Kashmir</option>
+      <option>Ladakh</option>
+      <option>Lakshadweep</option>
+      <option>Puducherry</option>
+    </select>
+  </div>
+</div>
+                            <div class="input-group"><label>Education</label><div class="input-wrap"><select id="regEducation"><option value="">Select</option><option>10th Pass</option><option>12th Pass</option><option>Graduate</option><option>Post Graduate</option></select></div></div>
+                        </div>
+                        <div class="input-group"><label>Preparing For</label><div class="input-wrap"><select id="regPreparing"><option value="">Select</option><option>SSC</option><option>UPSC</option><option>Banking</option><option>Railway</option><option>CUET</option><option>JEE</option><option>NEET</option><option>Other</option></select></div></div>
+                        <div class="input-group"><label>Referral Code (optional)</label><div class="input-wrap"><i class="fas fa-gift input-icon"></i><input type="text" id="regReferral" placeholder="REF123"></div></div>
+                        <div class="input-group"><label>Password *</label><div class="input-wrap"><i class="fas fa-lock input-icon"></i><input type="password" id="regPass" minlength="6" placeholder="Min 6 chars" required oninput="checkStrength()"><button type="button" class="password-toggle" onclick="togglePass('regPass',this)"><i class="fas fa-eye"></i></button></div></div>
+                        <div class="password-strength" id="strengthWrap" style="display:none;">
+                            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                            <span class="strength-text" id="strengthLabel"></span>
+                        </div>
+                        <label style="font-weight:600;font-size:12px;color:var(--gray-700);display:block;margin-bottom:6px;">Choose Avatar</label>
+                        <div class="avatar-grid" id="avatarGrid"></div>
+                        <div class="tc-check">
+                            <input type="checkbox" id="tcCheckbox" required>
+                            <span>I agree to the <a onclick="openTerms()">Terms</a> & <a onclick="openPrivacy()">Privacy Policy</a>.</span>
+                        </div>
+                        <button type="button" class="btn-primary" id="regBtn1" onclick="registerStep1()">📩 Send OTP</button>
+                    </div>
+                    <div id="regStep2" style="display:none;">
+                        <h3 style="margin-bottom:16px;">🔐 Verify Email</h3>
+                        <p style="margin-bottom:16px;font-size:14px;">We sent a code to <strong id="otpEmail"></strong></p>
+                        <div class="input-group"><label>OTP</label><div class="input-wrap"><i class="fas fa-shield-alt input-icon"></i><input type="text" id="regOTP" maxlength="6" placeholder="123456" required></div></div>
+                        <button type="button" class="btn-primary" onclick="registerStep2()">✅ Complete Registration</button>
+                        <button type="button" class="btn-outline" onclick="resetReg()">⬅ Back</button>
+                    </div>
+                </form>
+            </div>
+            <div class="alert-msg" id="alertBox"></div>
+        </div>
+
+        <div class="home-link-text">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="index.html" class="bottom-nav-item"><i class="fas fa-file-alt"></i><span>Tests</span></a>
+        <a href="index.html" class="bottom-nav-item"><i class="fas fa-newspaper"></i><span>Blog</span></a>
+        <a href="login.html" class="bottom-nav-item login-active"><i class="fas fa-user"></i><span>Profile</span></a>
+    </nav>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotPassModal">
+        <div class="modal-content">
+            <h3>Reset Password</h3>
+            <div id="pwdStep1"><input type="text" id="pwdInput" placeholder="Username or Email" style="width:100%;padding:12px;margin-bottom:12px;border:2px solid #e2e8f0;border-radius:12px;"><button class="btn-primary" onclick="forgotPassStep1()">Send OTP</button></div>
+            <div id="pwdStep2" style="display:none;"><input type="text" id="pwdOTP" placeholder="OTP" style="width:100%;padding:12px;margin-bottom:12px;border:2px solid #e2e8f0;border-radius:12px;"><button class="btn-primary" onclick="forgotPassStep2()">Verify</button></div>
+            <div id="pwdStep3" style="display:none;"><input type="password" id="pwdNewPass" placeholder="New Password" style="width:100%;padding:12px;margin-bottom:12px;border:2px solid #e2e8f0;border-radius:12px;"><button class="btn-primary" onclick="forgotPassStep3()">Reset Password</button></div>
+            <div class="alert-msg" id="pwdAlert"></div>
+            <button class="btn-outline" onclick="closeModal('forgotPassModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Forgot Username Modal -->
+    <div class="modal-overlay" id="forgotUserModal">
+        <div class="modal-content">
+            <h3>Forgot Username</h3>
+            <input type="email" id="forgotUserEmail" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:12px;border:2px solid #e2e8f0;border-radius:12px;">
+            <button class="btn-primary" onclick="forgotUsername()">Find</button>
+            <div class="alert-msg" id="userAlert"></div>
+            <button class="btn-outline" onclick="closeModal('forgotUserModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal-content modal-wide">
+            <h1>📜 Terms & Conditions</h1>
+            <p><strong>Last Updated:</strong> June 2026</p>
+            <p>Welcome to TestMasterPro. By accessing or using our website, application, mock tests, study materials, and related services, you agree to be bound by these Terms & Conditions.</p>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By registering, accessing, or using TestMasterPro, you agree to comply with these Terms & Conditions. If you do not agree with any part of these terms, please discontinue using our services.</p>
+            <h2>2. Educational Purpose</h2>
+            <p>TestMasterPro provides mock tests, quizzes, study materials, and performance analysis solely for educational and practice purposes. We do not guarantee success in any examination, recruitment process, or interview.</p>
+            <h2>3. User Account</h2>
+            <p>Users are responsible for maintaining the confidentiality of their account credentials. Any activity conducted through your account shall be deemed your responsibility.</p>
+            <h2>4. Accuracy of Information</h2>
+            <p>Users must provide accurate and complete information during registration. Providing false or misleading information may result in account suspension or termination.</p>
+            <h2>5. Intellectual Property</h2>
+            <p>All content available on TestMasterPro, including mock tests, questions, explanations, graphics, logos, designs, and study materials, is the intellectual property of TestMasterPro and is protected by applicable laws. Unauthorized copying, reproduction, distribution, or resale is strictly prohibited.</p>
+            <h2>6. Prohibited Activities</h2>
+            <ul>
+                <li>Copying or redistributing platform content without permission.</li>
+                <li>Using bots, scripts, or automated tools to access services.</li>
+                <li>Attempting to hack, disrupt, or damage the platform.</li>
+                <li>Sharing account credentials with others.</li>
+                <li>Uploading harmful, malicious, or unlawful content.</li>
+                <li>Engaging in fraudulent or deceptive activities.</li>
+            </ul>
+            <h2>7. Mock Test Results</h2>
+            <p>Scores, rankings, percentile calculations, and performance analytics are provided for self-assessment purposes only and do not represent official examination results.</p>
+            <h2>8. Content Disclaimer</h2>
+            <p>While we make every effort to provide accurate and updated content, TestMasterPro does not guarantee that all questions, answers, explanations, or materials are completely error-free. Users should verify important information from official sources.</p>
+            <h2>9. Service Modifications</h2>
+            <p>TestMasterPro reserves the right to add, modify, suspend, or discontinue any feature, content, mock test, or service at any time without prior notice.</p>
+            <h2>10. Limitation of Liability</h2>
+            <p>TestMasterPro shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use the platform, including technical failures, service interruptions, or examination outcomes.</p>
+            <h2>11. Account Suspension</h2>
+            <p>We reserve the right to suspend, restrict, or permanently terminate user accounts that violate these Terms & Conditions or engage in activities harmful to the platform, its content, or other users.</p>
+            <h2>12. Updates to Terms</h2>
+            <p>TestMasterPro may revise these Terms & Conditions at any time. Continued use of the platform after updates are posted constitutes acceptance of the revised terms.</p>
+            <p><strong>By using TestMasterPro, you acknowledge that you have read, understood, and agreed to these Terms & Conditions.</strong></p>
+            <button class="btn-outline" onclick="closeModal('termsModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div class="modal-overlay" id="privacyModal">
+        <div class="modal-content modal-wide">
+            <h1>🔒 Privacy Policy</h1>
+            <p><strong>Last Updated:</strong> June 2026</p>
+            <p>Welcome to TestMasterPro. Your privacy is important to us. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website, mobile application, mock tests, and related services.</p>
+            <h2>1. Information We Collect</h2>
+            <ul>
+                <li>Name and profile information provided during registration.</li>
+                <li>Email address and login credentials.</li>
+                <li>Exam preferences and test activity.</li>
+                <li>Performance data such as scores, rankings, and test history.</li>
+                <li>Device information, browser type, IP address, and usage analytics.</li>
+            </ul>
+            <h2>2. How We Use Your Information</h2>
+            <ul>
+                <li>To provide and improve our services.</li>
+                <li>To create and manage user accounts.</li>
+                <li>To generate test results, rankings, and performance analytics.</li>
+                <li>To personalize content and recommendations.</li>
+                <li>To detect fraud, abuse, or unauthorized activity.</li>
+                <li>To communicate important updates and service notifications.</li>
+            </ul>
+            <h2>3. Cookies and Analytics</h2>
+            <p>TestMasterPro may use cookies, analytics tools, and similar technologies to improve user experience, understand platform usage, and enhance service performance.</p>
+            <h2>4. Data Security</h2>
+            <p>We implement reasonable security measures to protect user information from unauthorized access, disclosure, alteration, or destruction. However, no method of electronic transmission or storage is completely secure.</p>
+            <h2>5. Information Sharing</h2>
+            <p>We do not sell, rent, or trade personal information to third parties. Information may be shared only when required by law, legal process, or to protect the rights, safety, and security of TestMasterPro and its users.</p>
+            <h2>6. Third-Party Services</h2>
+            <p>Our platform may use third-party services such as analytics providers, advertising networks, authentication providers, or payment processors. These services may collect information according to their own privacy policies.</p>
+            <h2>7. User Rights</h2>
+            <ul>
+                <li>Access your account information.</li>
+                <li>Update or correct your profile details.</li>
+                <li>Request deletion of your account, subject to applicable legal requirements.</li>
+            </ul>
+            <h2>8. Children's Privacy</h2>
+            <p>TestMasterPro is intended for educational purposes. Users below the applicable age of digital consent should use the platform under parental or guardian supervision.</p>
+            <h2>9. Data Retention</h2>
+            <p>We may retain account information, test history, and performance records for as long as necessary to provide services, comply with legal obligations, and improve the platform.</p>
+            <h2>10. Policy Updates</h2>
+            <p>We may update this Privacy Policy from time to time. Any changes will be effective immediately upon posting on the platform.</p>
+            <p><strong>By using TestMasterPro, you consent to the collection and use of information as described in this Privacy Policy.</strong></p>
+            <button class="btn-outline" onclick="closeModal('privacyModal')">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // ---- Configuration ----
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
+        let availableAvatars = [],
+            selectedAvatarCode = '',
+            regData = null,
+            forgotPwdUser = '';
+
+        // ---- Init ----
+        if (localStorage.getItem('user')) window.location.href = 'dashboard.html';
+
+        // ---- UI Helpers ----
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+            if (tab === 'login') {
+                document.getElementById('loginPanel').classList.add('active');
+                document.querySelector('.auth-tab:nth-child(1)').classList.add('active');
+            } else {
+                document.getElementById('registerPanel').classList.add('active');
+                document.querySelector('.auth-tab:nth-child(2)').classList.add('active');
+                if (availableAvatars.length === 0) loadAvatars();
+                resetReg();
+            }
+            hideAlert();
+        }
+
+        function togglePass(id, btn) {
+            const inp = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                inp.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function showAlert(type, msg) {
+            const box = document.getElementById('alertBox');
+            box.className = `alert-msg ${type}`;
+            box.innerHTML =
+                `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+            box.style.display = 'flex';
+            setTimeout(() => box.style.display = 'none', 5000);
+        }
+
+        function hideAlert() { document.getElementById('alertBox').style.display = 'none'; }
+
+        function openModal(id) { document.getElementById(id).classList.add('show'); }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+        function showModalAlert(boxId, type, msg) {
+            const box = document.getElementById(boxId);
+            box.className = `alert-msg ${type}`;
+            box.innerHTML = msg;
+            box.style.display = 'flex';
+        }
+
+        // ---- Avatars ----
+        async function loadAvatars() {
+            try {
+                const r = await fetch(API_URL + '?action=getAvatars');
+                const d = await r.json();
+                if (d.success && d.avatars?.length) availableAvatars = d.avatars;
+                else throw new Error();
+            } catch {
+                availableAvatars = [
+                    { code: 'AVATAR001', url: 'https://ui-avatars.com/api/?name=A1&background=0f172a&color=fff&size=128' },
+                    { code: 'AVATAR002', url: 'https://ui-avatars.com/api/?name=A2&background=3b82f6&color=fff&size=128' },
+                    { code: 'AVATAR003', url: 'https://ui-avatars.com/api/?name=A3&background=8b5cf6&color=fff&size=128' },
+                    { code: 'AVATAR004', url: 'https://ui-avatars.com/api/?name=A4&background=10b981&color=fff&size=128' },
+                    { code: 'AVATAR005', url: 'https://ui-avatars.com/api/?name=A5&background=f59e0b&color=fff&size=128' }
+                ];
+            }
+            renderAvatars();
+        }
+
+        function renderAvatars() {
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = availableAvatars.map((a, i) => `
+                <div class="avatar-option ${i === 0 ? 'selected' : ''}" onclick="selectAvatar('${a.code}', this)">
+                    <img src="${a.url}" alt="avatar"><div class="avatar-check"><i class="fas fa-check"></i></div>
+                </div>`).join('');
+            if (availableAvatars.length) selectAvatar(availableAvatars[0].code, grid.querySelector('.avatar-option'));
+        }
+
+        function selectAvatar(code, el) {
+            document.querySelectorAll('.avatar-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedAvatarCode = code;
+        }
+
+        function checkStrength() {
+            const pwd = document.getElementById('regPass').value;
+            const wrap = document.getElementById('strengthWrap');
+            const fill = document.getElementById('strengthFill');
+            const label = document.getElementById('strengthLabel');
+            if (!pwd) { wrap.style.display = 'none';
+                return; }
+            wrap.style.display = 'flex';
+            let score = 0;
+            if (pwd.length >= 6) score++;
+            if (pwd.length >= 10) score++;
+            if (/[A-Z]/.test(pwd)) score++;
+            if (/[a-z]/.test(pwd)) score++;
+            if (/[0-9]/.test(pwd)) score++;
+            if (/[^A-Za-z0-9]/.test(pwd)) score++;
+            let width, color, text;
+            if (score <= 2) { width = '25%';
+                color = '#ef4444';
+                text = 'Weak'; } else if (score <= 3) { width = '50%';
+                color = '#f59e0b';
+                text = 'Fair'; } else if (score <= 5) { width = '75%';
+                color = '#3b82f6';
+                text = 'Good'; } else { width = '100%';
+                color = '#10b981';
+                text = 'Strong'; }
+            fill.style.width = width;
+            fill.style.background = color;
+            label.textContent = text;
+        }
+
+        // ---- Login ----
+        async function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value;
+            if (!u || !p) return showAlert('error', 'Please fill all fields');
+            const btn = document.querySelector('#loginPanel .btn-primary');
+            btn.disabled = true;
+            btn.textContent = 'Logging in…';
+            try {
+                const r = await fetch(
+                    `${API_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`);
+                const d = await r.json();
+                if (d.success) {
+                    localStorage.setItem('user', JSON.stringify(d.user));
+                    sessionStorage.setItem('userPassword', p);
+                    showAlert('success', '✅ Welcome!');
+                    setTimeout(() => window.location.href = 'dashboard.html', 800);
+                } else showAlert('error', d.error || 'Invalid credentials');
+            } catch { showAlert('error', 'Connection error'); } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Login';
+            }
+        }
+
+        // ---- Register ----
+        async function registerStep1() {
+            const btn = document.getElementById('regBtn1');
+            const fields = {
+                name: document.getElementById('regName').value.trim(),
+                username: document.getElementById('regUsername').value.trim(),
+                email: document.getElementById('regEmail').value.trim(),
+                mobile: document.getElementById('regMobile').value.trim(),
+                password: document.getElementById('regPass').value,
+                state: document.getElementById('regState').value,
+                education: document.getElementById('regEducation').value,
+                preparingFor: document.getElementById('regPreparing').value,
+                referral: document.getElementById('regReferral').value.trim(),
+                tc: document.getElementById('tcCheckbox').checked
+            };
+            if (!fields.name || !fields.username || !fields.email || !fields.mobile || !fields.password)
+                return showAlert('error', 'Fill required fields');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) return showAlert('error', 'Invalid email');
+            if (!/^[a-zA-Z]/.test(fields.username)) return showAlert('error', 'Username must start with letter');
+            if (fields.password.length < 6) return showAlert('error', 'Password too short');
+            if (fields.mobile.length !== 10) return showAlert('error', 'Invalid mobile');
+            if (!fields.tc) return showAlert('error', 'Please agree to Terms & Privacy');
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+            try {
+                const params = new URLSearchParams({
+                    action: 'register',
+                    name: fields.name,
+                    username: fields.username,
+                    email: fields.email,
+                    mobile: fields.mobile,
+                    password: fields.password,
+                    state: fields.state,
+                    education: fields.education,
+                    preparingFor: fields.preparingFor,
+                    avatarCode: selectedAvatarCode,
+                    referralCode: fields.referral
+                });
+                const r = await fetch(API_URL + '?' + params);
+                const d = await r.json();
+                if (d.otpRequired) {
+                    regData = fields;
+                    document.getElementById('otpEmail').textContent = fields.email;
+                    document.getElementById('regStep1').style.display = 'none';
+                    document.getElementById('regStep2').style.display = 'block';
+                    showAlert('success', 'OTP sent to your email');
+                } else if (d.success) {
+                    showAlert('success', 'Registered! Please login.');
+                    switchTab('login');
+                    document.getElementById('loginUser').value = fields.username;
+                    resetReg();
+                } else showAlert('error', d.error || 'Registration failed');
+            } catch { showAlert('error', 'Connection error'); } finally {
+                btn.disabled = false;
+                btn.textContent = '📩 Send OTP';
+            }
+        }
+
+        async function registerStep2() {
+            const btn = document.querySelector('#regStep2 .btn-primary');
+            const otp = document.getElementById('regOTP').value.trim();
+            if (!regData || otp.length !== 6) return showAlert('error', 'Enter valid OTP');
+            btn.disabled = true;
+            btn.textContent = 'Verifying…';
+            try {
+                const params = new URLSearchParams({ action: 'register', ...regData, otp });
+                const r = await fetch(API_URL + '?' + params);
+                const d = await r.json();
+                if (d.success) {
+                    showAlert('success', '✅ Registered!');
+                    switchTab('login');
+                    document.getElementById('loginUser').value = regData.username;
+                    resetReg();
+                } else showAlert('error', d.error || 'OTP failed');
+            } catch { showAlert('error', 'Connection error'); } finally {
+                btn.disabled = false;
+                btn.textContent = '✅ Complete';
+            }
+        }
+
+        function resetReg() {
+            regData = null;
+            document.getElementById('regStep1').style.display = 'block';
+            document.getElementById('regStep2').style.display = 'none';
+            document.getElementById('regOTP').value = '';
+            document.getElementById('tcCheckbox').checked = false;
+            document.getElementById('regPass').value = '';
+            document.getElementById('strengthWrap').style.display = 'none';
+            selectedAvatarCode = '';
+            document.querySelectorAll('.avatar-option').forEach(e => e.classList.remove('selected'));
+        }
+
+        // ---- Forgot Password ----
+        function openForgotPassword() { openModal('forgotPassModal');
+            resetPwdSteps(); }
+
+        function resetPwdSteps() {
+            document.getElementById('pwdStep1').style.display = 'block';
+            document.getElementById('pwdStep2').style.display = 'none';
+            document.getElementById('pwdStep3').style.display = 'none';
+            document.getElementById('pwdAlert').style.display = 'none';
+        }
+        async function forgotPassStep1() {
+            const input = document.getElementById('pwdInput').value.trim();
+            if (!input) return showModalAlert('pwdAlert', 'error', 'Enter username or email');
+            try {
+                const r = await fetch(API_URL + '?action=sendPasswordResetOTP&usernameOrEmail=' + encodeURIComponent(
+                    input));
+                const d = await r.json();
+                if (d.success) {
+                    forgotPwdUser = d.username;
+                    showModalAlert('pwdAlert', 'success', 'OTP sent');
+                    document.getElementById('pwdStep1').style.display = 'none';
+                    document.getElementById('pwdStep2').style.display = 'block';
+                } else showModalAlert('pwdAlert', 'error', d.error);
+            } catch { showModalAlert('pwdAlert', 'error', 'Connection error'); }
+        }
+        async function forgotPassStep2() {
+            const otp = document.getElementById('pwdOTP').value.trim();
+            if (otp.length !== 6) return showModalAlert('pwdAlert', 'error', 'Enter 6‑digit OTP');
+            document.getElementById('pwdStep2').style.display = 'none';
+            document.getElementById('pwdStep3').style.display = 'block';
+        }
+        async function forgotPassStep3() {
+            const np = document.getElementById('pwdNewPass').value;
+            if (np.length < 6) return showModalAlert('pwdAlert', 'error', 'Password too short');
+            const otp = document.getElementById('pwdOTP').value.trim();
+            try {
+                const r = await fetch(
+                    `${API_URL}?action=resetPasswordWithOTP&username=${encodeURIComponent(forgotPwdUser)}&otp=${encodeURIComponent(otp)}&newPassword=${encodeURIComponent(np)}`
+                    );
+                const d = await r.json();
+                if (d.success) {
+                    showModalAlert('pwdAlert', 'success', 'Password reset!');
+                    setTimeout(() => closeModal('forgotPassModal'), 2000);
+                } else {
+                    showModalAlert('pwdAlert', 'error', d.error);
+                    resetPwdSteps();
+                }
+            } catch { showModalAlert('pwdAlert', 'error', 'Connection error'); }
+        }
+
+        // ---- Forgot Username ----
+        function openForgotUsername() { openModal('forgotUserModal'); }
+        async function forgotUsername() {
+            const email = document.getElementById('forgotUserEmail').value.trim();
+            if (!email) return showModalAlert('userAlert', 'error', 'Enter email');
+            try {
+                const r = await fetch(API_URL + '?action=forgotUsername&email=' + encodeURIComponent(email));
+                const d = await r.json();
+                if (d.success) {
+                    showModalAlert('userAlert', 'success', d.message);
+                    setTimeout(() => closeModal('forgotUserModal'), 3000);
+                } else showModalAlert('userAlert', 'error', d.error);
+            } catch { showModalAlert('userAlert', 'error', 'Connection error'); }
+        }
+
+        // ---- Terms & Privacy ----
+        function openTerms() { openModal('termsModal'); }
+
+        function openPrivacy() { openModal('privacyModal'); }
+
+        // ---- Modal overlay click ----
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+                e.target.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
