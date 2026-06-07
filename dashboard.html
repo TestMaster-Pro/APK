@@ -78,12 +78,42 @@
             body.sidebar-open, body.sheet-open { overflow: auto; position: static; width: auto; height: auto; }
             .app-layout { display: flex; min-height: 100vh; }
             .main-content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-            .sidebar-overlay { position: static; width: var(--desktop-sidebar-width); flex-shrink: 0; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; visibility: visible; opacity: 1; z-index: auto; transform: none; box-shadow: none; border-radius: 0; }
-            .sidebar-overlay .sidebar { transform: translateX(0); position: relative; height: 100vh; max-width: none; width: 100%; border-radius: 0; box-shadow: 1px 0 20px rgba(0,0,0,0.05); border-right: 1px solid var(--border-light); }
+            .sidebar-overlay {
+                position: static; width: var(--desktop-sidebar-width); flex-shrink: 0; background: transparent;
+                backdrop-filter: none; -webkit-backdrop-filter: none; visibility: visible; opacity: 1; z-index: auto;
+                transform: none; box-shadow: none; border-radius: 0;
+                transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+            }
+            .sidebar-overlay .sidebar {
+                transform: translateX(0); position: relative; height: 100vh; max-width: none; width: 100%;
+                border-radius: 0; box-shadow: 1px 0 20px rgba(0,0,0,0.05); border-right: 1px solid var(--border-light);
+                transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+            }
             .sidebar-overlay .sidebar-close-btn { display: none; }
+            .sidebar-collapse-btn { display: flex; }
             .hamburger-btn { display: none; }
             .floating-ai-btn { bottom: 24px; right: 24px; }
             .bottom-nav { display: none; }
+
+            /* Collapsed state: sidebar hidden */
+            body.desktop-sidebar-closed .sidebar-overlay {
+                width: 0;
+                overflow: hidden;
+            }
+            body.desktop-sidebar-closed .sidebar {
+                transform: translateX(-100%);
+            }
+            body.desktop-sidebar-closed .hamburger-btn {
+                display: flex;
+            }
+            body.desktop-sidebar-closed .sidebar-collapse-btn {
+                display: none;
+            }
+        }
+
+        /* Mobile: hide collapse button, show close button */
+        @media (max-width: 1023px) {
+            .sidebar-collapse-btn { display: none; }
         }
 
         .toast-container { position:fixed; top:calc(12px + var(--safe-top)); left:50%; transform:translateX(-50%) translateY(-120%); z-index:1000; display:flex; flex-direction:column; gap:8px; width:92%; max-width:400px; pointer-events:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
@@ -116,8 +146,9 @@
         .sidebar-logo { width:40px; height:40px; background:rgba(255,255,255,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; flex-shrink:0; }
         .sidebar-brand-text { color:#fff; font-weight:700; font-size:14px; letter-spacing:-0.3px; }
         .sidebar-brand-text small { display:block; font-weight:400; font-size:9px; opacity:0.8; }
-        .sidebar-close-btn { position:absolute; top:14px; right:12px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); }
-        .sidebar-close-btn:hover { background:rgba(255,255,255,0.25); transform:rotate(90deg) scale(1.1); }
+        .sidebar-close-btn, .sidebar-collapse-btn { position:absolute; top:14px; right:12px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); }
+        .sidebar-close-btn:hover, .sidebar-collapse-btn:hover { background:rgba(255,255,255,0.25); transform:rotate(90deg) scale(1.1); }
+        .sidebar-collapse-btn:hover { transform: scale(1.1); }
         .sidebar-user-card { padding:14px 16px; background:#fafbfc; border-bottom:1px solid #eee; display:flex; align-items:center; gap:10px; flex-shrink:0; }
         .sidebar-avatar { width:44px; height:44px; border-radius:14px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:var(--primary); flex-shrink:0; overflow:hidden; border:2px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
         .sidebar-avatar img { width:100%; height:100%; object-fit:cover; }
@@ -443,6 +474,7 @@
                     <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
                     <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
                     <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
+                    <button class="sidebar-collapse-btn" onclick="toggleDesktopSidebar()"><i class="fas fa-chevron-left"></i></button>
                 </div>
                 <div class="sidebar-user-card">
                     <div class="sidebar-avatar" id="sidebarAvatar">S</div>
@@ -496,7 +528,7 @@
 
             <nav class="navbar">
                 <div class="nav-left">
-                    <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                    <button class="hamburger-btn" id="hamburgerBtn" onclick="handleHamburgerClick()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
                     <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
                 </div>
                 <div class="nav-right">
@@ -558,7 +590,7 @@
                 </section>
 
                 <div class="feedback-section">
-                    <h3>✨ What Our Students Say</h3>
+                    <h3>💬 What Our Students Say</h3>
                     <div class="feedback-marquee">
                         <div class="feedback-marquee-inner">
                             <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
@@ -615,9 +647,53 @@
         const TEST_API_URL = API_URL;
         const STREAK_API_URL = API_URL;
         const MOCKS_CACHE_KEY = 'cachedAllMocks';
+        const DESKTOP_BREAKPOINT = 1024;
+        const SIDEBAR_STATE_KEY = 'desktopSidebarState';
 
         let isOffline = false;
         const user = JSON.parse(localStorage.getItem('user'));
+
+        // ---------- Desktop Sidebar Toggle ----------
+        function isDesktop() {
+            return window.innerWidth >= DESKTOP_BREAKPOINT;
+        }
+        function getDesktopSidebarState() {
+            return localStorage.getItem(SIDEBAR_STATE_KEY) || 'open'; // first time → open
+        }
+        function setDesktopSidebarState(state) {
+            localStorage.setItem(SIDEBAR_STATE_KEY, state);
+        }
+        function applyDesktopSidebarState() {
+            if (!isDesktop()) {
+                document.body.classList.remove('desktop-sidebar-closed');
+                document.getElementById('sidebarOverlay').classList.remove('active'); // ensure overlay hidden on mobile
+                return;
+            }
+            const state = getDesktopSidebarState();
+            if (state === 'closed') {
+                document.body.classList.add('desktop-sidebar-closed');
+            } else {
+                document.body.classList.remove('desktop-sidebar-closed');
+            }
+        }
+        function toggleDesktopSidebar() {
+            if (!isDesktop()) return;
+            const currentlyClosed = document.body.classList.contains('desktop-sidebar-closed');
+            if (currentlyClosed) {
+                document.body.classList.remove('desktop-sidebar-closed');
+                setDesktopSidebarState('open');
+            } else {
+                document.body.classList.add('desktop-sidebar-closed');
+                setDesktopSidebarState('closed');
+            }
+        }
+        function handleHamburgerClick() {
+            if (isDesktop()) {
+                toggleDesktopSidebar();
+            } else {
+                openSidebar();
+            }
+        }
 
         // ---------- Mock Data Caching ----------
         function saveMocksToCache(data) {
@@ -653,7 +729,7 @@
                 showCancelButton: true,
                 cancelButtonText: 'Maybe Later',
                 cancelButtonColor: '#94a3b8',
-                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions ↗</a>'
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions 🔧</a>'
             }).then((result) => {
                 if (result.isConfirmed) {
                     const link = document.createElement('a');
@@ -692,18 +768,24 @@
         window.addEventListener('online',updateOnlineStatus); window.addEventListener('offline',updateOnlineStatus);
         function navigate(u){window.location.href=u;}
         function openSidebar(){
-            if (window.innerWidth >= 1024) return; // sidebar already visible on desktop
+            if (isDesktop()) {
+                // On desktop, if sidebar is closed we open it via toggle.
+                if (document.body.classList.contains('desktop-sidebar-closed')) {
+                    toggleDesktopSidebar();
+                }
+                return;
+            }
             const o=document.getElementById('sidebarOverlay');
             o.classList.remove('hidden');
             requestAnimationFrame(()=>o.classList.add('active'));
             document.body.classList.add('sidebar-open');
         }
         function closeSidebar(e){
-            if (window.innerWidth >= 1024) return;
+            if (isDesktop()) return;
             if(e.target===document.getElementById('sidebarOverlay')) closeSidebarDirect();
         }
         function closeSidebarDirect(){
-            if (window.innerWidth >= 1024) return;
+            if (isDesktop()) return;
             const o=document.getElementById('sidebarOverlay');
             o.classList.remove('active');
             document.body.classList.remove('sidebar-open');
@@ -713,6 +795,9 @@
         }
         function sidebarNavigate(action){
             closeSidebarDirect();
+            if (isDesktop() && document.body.classList.contains('desktop-sidebar-closed')) {
+                // If sidebar is collapsed on desktop, we keep it collapsed but still navigate
+            }
             setTimeout(()=>{
                 const map={dashboard:'dashboard.html',mocks:'exam.html',aimock:'aimock.html',books:'book.html',study:'book.html',results:'allresult.html',leaderboard:'leaderboard.html',chat:'chat.html',aichat:'aichat.html',streak:'streak.html','daily-challenge':'challenge.html',referral:'referral.html',favorites:'favorites.html',coins:'coin-history.html','coin-use':'usecoin.html',reviews:'reviews.html',premium:'payment.html',profile:'profile.html',instructions:'instructions',logout:'logout'};
                 if(action==='logout')logoutUser();
@@ -817,7 +902,7 @@
             c.innerHTML = grouped.map((cat, idx) => `
                 <div class="mock-accordion-item" id="mockItem${idx}">
                     <button class="mock-accordion-header" onclick="toggleMockAccordion(${idx})">
-                        <div class="ma-left"><span>📂 ${cat.category}</span></div>
+                        <div class="ma-left"><span>📋 ${cat.category}</span></div>
                         <span class="ma-count">${cat.exams.length}</span>
                         <i class="fas fa-chevron-down ma-arrow" id="mockArrow${idx}"></i>
                     </button>
@@ -902,11 +987,7 @@
 
         // ---------- Desktop Sidebar Initialization ----------
         function initDesktopSidebar() {
-            if (window.innerWidth >= 1024) {
-                const overlay = document.getElementById('sidebarOverlay');
-                overlay.classList.remove('hidden');
-                overlay.classList.add('active'); // ensure visible
-            }
+            applyDesktopSidebarState();
         }
 
         // ---------- Initialization ----------
@@ -931,8 +1012,10 @@
             renderPopularSlider();
             renderFooterUpcoming();
         }
-        window.addEventListener('resize', initDesktopSidebar);
-        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active')&&window.innerWidth<1024)closeSidebarDirect();});
+        window.addEventListener('resize', () => {
+            initDesktopSidebar();
+        });
+        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sidebarOverlay').classList.contains('active')&&!isDesktop())closeSidebarDirect();});
         document.addEventListener('DOMContentLoaded',init);
     </script>
     <script>
