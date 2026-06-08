@@ -10,6 +10,7 @@
     <link rel="icon" type="image/jpeg" href="image/favicon.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #0f172a;
@@ -30,29 +31,337 @@
             --gray-800: #1e293b;
             --gray-900: #0f172a;
             --accent: #f59e0b;
+            --accent-hover: #f59e0b;
+            --secondary: #1f3140;
+            --text-muted: rgba(255, 255, 255, 0.45);
+            --text-light: rgba(255, 255, 255, 0.85);
+            --border-light: rgba(255, 255, 255, 0.06);
             --radius-2xl: 32px;
             --font: 'Poppins', sans-serif;
             --bottom-nav-height: 68px;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --navbar-height: 56px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        html,
-        body {
+        html, body {
             height: 100%;
             font-family: var(--font);
             background: #f1f5f9;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 16px);
         }
 
-        /* Animated blobs */
+        /* ======================= SIDEBAR & NAVBAR ======================= */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 250;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            height: 100dvh;
+            width: 290px;
+            max-width: 82vw;
+            background: #fff;
+            z-index: 251;
+            transform: translateX(-110%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.18);
+            border-radius: 0 22px 22px 0;
+            overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .sidebar-overlay.active .sidebar {
+            transform: translateX(0);
+        }
+        .sidebar-brand {
+            background: linear-gradient(135deg, #243748, #1f3140);
+            padding: 20px 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .sidebar-brand-text {
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: -0.3px;
+        }
+        .sidebar-brand-text small {
+            display: block;
+            font-weight: 400;
+            font-size: 9px;
+            opacity: 0.8;
+        }
+        .sidebar-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s;
+        }
+        .sidebar-close-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: rotate(90deg) scale(1.1);
+        }
+        .sidebar-user-card {
+            padding: 14px 16px;
+            background: #fafbfc;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .sidebar-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .sidebar-user-info .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--gray-800);
+        }
+        .sidebar-user-info .tag {
+            font-size: 10px;
+            color: var(--primary);
+            font-weight: 600;
+            background: var(--primary-light);
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--gray-400);
+            font-weight: 700;
+            padding: 14px 8px 6px;
+        }
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--gray-600);
+            transition: 0.15s;
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font);
+        }
+        .sidebar-nav-item:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+            transform: translateX(3px);
+        }
+        .sidebar-nav-item:active {
+            transform: scale(0.97);
+        }
+        .sidebar-nav-item i {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+        .sidebar-nav-item.active-nav {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .sidebar-nav-item.active-nav i {
+            background: var(--primary);
+            color: #fff;
+        }
+        .sidebar-version {
+            text-align: center;
+            font-size: 10px;
+            color: var(--gray-300);
+            padding: 10px;
+            flex-shrink: 0;
+        }
+
+        .navbar {
+            background: #fff;
+            padding: calc(10px + var(--safe-top)) 14px 10px 14px; /* safe area at top */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 16px rgba(0, 0, 0, 0.04);
+            gap: 8px;
+            flex-wrap: nowrap;
+            min-height: var(--navbar-height);
+            border-bottom: 1px solid #eee;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .hamburger-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--gray-100);
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s;
+            flex-shrink: 0;
+        }
+        .hamburger-btn:hover {
+            background: var(--gray-200);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--primary);
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: -0.3px;
+        }
+        .nav-brand i {
+            font-size: 17px;
+            color: var(--blue);
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .btn-register-nav {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 22px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font);
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(36, 55, 72, 0.25);
+        }
+        .btn-register-nav:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(36, 55, 72, 0.35);
+        }
+        .hidden {
+            display: none !important;
+        }
+        body.sidebar-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ======================= LOGIN PAGE CONTENT ======================= */
         .bg-blobs {
             position: fixed;
             inset: 0;
@@ -93,34 +402,25 @@
             opacity: 0.3;
         }
         @keyframes float {
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-            25% {
-                transform: translate(30px, -40px) scale(1.08);
-            }
-            50% {
-                transform: translate(-20px, 30px) scale(0.94);
-            }
-            75% {
-                transform: translate(-35px, -20px) scale(1.05);
-            }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.08); }
+            50% { transform: translate(-20px, 30px) scale(0.94); }
+            75% { transform: translate(-35px, -20px) scale(1.05); }
         }
 
         .page-wrapper {
             position: relative;
             z-index: 1;
-            min-height: 100vh;
+            min-height: calc(100vh - var(--navbar-height) - var(--bottom-nav-height));
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 24px 16px;
-            padding-top: calc(24px + env(safe-area-inset-top));
+            padding-top: 40px;
+            padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 40px);
         }
 
-        /* Logo */
         .logo-container {
             text-align: center;
             margin-bottom: 16px;
@@ -147,17 +447,10 @@
             box-shadow: 0 8px 28px rgba(15, 23, 42, 0.3);
         }
         @keyframes fadeDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Glass card */
         .auth-glass {
             width: 100%;
             max-width: 420px;
@@ -171,14 +464,8 @@
             animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         @keyframes cardPop {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .auth-tabs {
@@ -218,17 +505,10 @@
             display: block;
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Form elements */
         .input-group {
             margin-bottom: 16px;
         }
@@ -374,7 +654,6 @@
             text-decoration: underline;
         }
 
-        /* Register specific */
         .avatar-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -466,7 +745,7 @@
             cursor: pointer;
         }
 
-        /* Bottom Navigation */
+        /* ======================= BOTTOM NAVIGATION ======================= */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -516,35 +795,8 @@
             background: var(--primary);
             border-radius: 2px;
         }
-        .bottom-nav-item.login-active {
-            color: var(--primary);
-        }
-        .bottom-nav-item.login-active::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            width: 20px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
 
-        .home-link-text {
-            text-align: center;
-            margin-top: 16px;
-            font-size: 14px;
-            color: var(--gray-500);
-        }
-        .home-link-text a {
-            color: var(--blue);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .home-link-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* Modals */
+        /* ======================= MODALS ======================= */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -575,103 +827,285 @@
             max-height: 85vh;
         }
         @keyframes modalPop {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .modal-content h1 {
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: var(--gray-900);
+        .modal-content h1 { font-size: 20px; margin-bottom: 12px; color: var(--gray-900); }
+        .modal-content h2 { font-size: 16px; margin: 16px 0 8px; color: var(--gray-800); }
+        .modal-content h3 { font-size: 18px; margin-bottom: 16px; color: var(--gray-900); }
+        .modal-content p { font-size: 13px; line-height: 1.7; color: var(--gray-600); margin-bottom: 8px; }
+        .modal-content ul { padding-left: 20px; margin-bottom: 12px; }
+        .modal-content ul li { font-size: 13px; line-height: 1.7; color: var(--gray-600); margin-bottom: 4px; }
+        .modal-content .btn-primary { margin-top: 12px; }
+        .modal-content .btn-outline { margin-top: 8px; }
+        .modal-content strong { color: var(--gray-800); }
+        .modal-content::-webkit-scrollbar { width: 5px; }
+        .modal-content::-webkit-scrollbar-track { background: transparent; border-radius: 10px; }
+        .modal-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* ======================= FOOTER (same as dashboard) ======================= */
+        .pro-footer {
+            background: var(--secondary);
+            color: var(--text-light);
+            padding: 40px 20px 100px;
+            position: relative;
+            margin-top: 24px;
+            border-radius: 0;
         }
-        .modal-content h2 {
-            font-size: 16px;
-            margin: 16px 0 8px;
-            color: var(--gray-800);
+        .pro-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24);
         }
-        .modal-content h3 {
-            font-size: 18px;
-            margin-bottom: 16px;
-            color: var(--gray-900);
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 600px;
+            margin: 0 auto 30px;
         }
-        .modal-content p {
+        .footer-col h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 11px;
+            line-height: 1.4;
+        }
+        .footer-col a {
+            color: var(--accent);
             font-size: 13px;
-            line-height: 1.7;
-            color: var(--gray-600);
-            margin-bottom: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
         }
-        .modal-content ul {
-            padding-left: 20px;
-            margin-bottom: 12px;
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
         }
-        .modal-content ul li {
-            font-size: 13px;
-            line-height: 1.7;
-            color: var(--gray-600);
+        .footer-col a:hover {
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+        .footer-email {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .footer-email a {
+            color: #38bdf8;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-email a:hover {
+            color: var(--accent);
+        }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+            padding-top: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .footer-bottom p {
+            font-size: 12px;
+            color: var(--text-muted);
             margin-bottom: 4px;
+            font-weight: 500;
         }
-        .modal-content .btn-primary {
-            margin-top: 12px;
+        .footer-bottom a {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
         }
-        .modal-content .btn-outline {
-            margin-top: 8px;
+        .footer-bottom a:hover {
+            color: var(--accent);
+        }
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+        .footer-social a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+        .footer-install-section {
+            text-align: center;
+            margin: 20px 0 24px;
+        }
+        .footer-install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 32px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.45);
+            text-decoration: none;
+        }
+        .footer-install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.6);
+            color: #fff;
+        }
+        .footer-install-btn:active {
+            transform: scale(0.95);
+            transition: 0.06s;
         }
 
-        .modal-content strong {
-            color: var(--gray-800);
-        }
-
-        /* Scrollbar for modals */
-        .modal-content::-webkit-scrollbar {
-            width: 5px;
-        }
-        .modal-content::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 10px;
-        }
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
+        @media (max-width: 480px) {
+            .footer-grid {
+                gap: 24px;
+            }
+            .footer-col h3 {
+                font-size: 15px;
+            }
+            .footer-col a {
+                font-size: 12px;
+            }
+            .footer-install-btn {
+                padding: 14px 22px;
+                font-size: 14px;
+                border-radius: 28px;
+            }
         }
 
         @media (min-width: 600px) {
-            .bottom-nav {
-                display: none;
+            .bottom-nav { display: none; }
+            .pro-footer {
+                padding-bottom: 30px;
             }
-            body {
-                padding-bottom: 0;
+            .page-wrapper {
+                padding-bottom: 40px; /* no need for bottom nav offset */
             }
         }
     </style>
 </head>
 <body>
+    <!-- Sidebar Overlay & Sidebar -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="sidebar-user-card">
+                <div class="sidebar-avatar" id="sidebarAvatar">G</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebarUserName">Guest</div>
+                    <span class="tag" id="sidebarUserTag">Visitor</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-label">Main Menu</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('index.html')"><i class="fas fa-home"></i> Home</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('exam.html')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('blog.html')"><i class="fas fa-newspaper"></i> Blog</button>
+                <div class="sidebar-nav-label">Quick Links</div>
+                <a href="TestMasterPro.apk" download class="sidebar-nav-item"><i class="fas fa-download"></i> Get APK</a>
+                <a href="https://t.me/MOCK_2026" target="_blank" class="sidebar-nav-item"><i class="fab fa-telegram-plane"></i> Telegram</a>
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="sidebar-nav-item"><i class="fas fa-headset"></i> Support</a>
+                <div class="sidebar-nav-label">Account</div>
+                <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('login.html')"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </nav>
+            <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
+        </aside>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand" onclick="window.location.href='index.html'"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
+        </div>
+        <div class="nav-right">
+            <button class="btn-register-nav" onclick="switchTab('register')"><i class="fas fa-user-plus"></i> Register</button>
+        </div>
+    </nav>
+
+    <!-- Background blobs -->
     <div class="bg-blobs">
         <div class="blob"></div>
         <div class="blob"></div>
         <div class="blob"></div>
     </div>
 
+    <!-- Main content -->
     <div class="page-wrapper">
-        <!-- Logo -->
         <div class="logo-container">
             <img src="image/appicon.jpg" alt="TestMasterPro" class="logo-img"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
             <div class="logo-fallback" style="display:none;"><i class="fas fa-graduation-cap"></i></div>
         </div>
 
-        <!-- Auth Card -->
         <div class="auth-glass">
             <div class="auth-tabs">
                 <button class="auth-tab active" onclick="switchTab('login')">🔑 Login</button>
                 <button class="auth-tab" onclick="switchTab('register')">📝 Register</button>
             </div>
 
-            <!-- Login Panel -->
             <div class="auth-panel active" id="loginPanel">
                 <form onsubmit="handleLogin(event)">
                     <div class="input-group"><label>Username</label><div class="input-wrap"><i class="fas fa-user input-icon"></i><input type="text" id="loginUser" placeholder="Enter username" required></div></div>
@@ -681,7 +1115,6 @@
                 </form>
             </div>
 
-            <!-- Register Panel -->
             <div class="auth-panel" id="registerPanel">
                 <form id="registerForm" onsubmit="return false;">
                     <div id="regStep1">
@@ -764,21 +1197,36 @@
             </div>
             <div class="alert-msg" id="alertBox"></div>
         </div>
-
-        <div class="home-link-text">
-            <a href="index.html">← Back to Home</a>
-        </div>
     </div>
+
+    <!-- Footer (same as dashboard) -->
+    <footer class="pro-footer">
+        <div class="footer-grid">
+            <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
+            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+        </div>
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
+        </div>
+        <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
+        <div class="footer-social">
+            <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+            <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
+    </footer>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-nav-item"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="index.html" class="bottom-nav-item"><i class="fas fa-file-alt"></i><span>Tests</span></a>
         <a href="index.html" class="bottom-nav-item"><i class="fas fa-newspaper"></i><span>Blog</span></a>
-        <a href="login.html" class="bottom-nav-item login-active"><i class="fas fa-user"></i><span>Profile</span></a>
+        <a href="login.html" class="bottom-nav-item active"><i class="fas fa-user"></i><span>Profile</span></a>
     </nav>
 
-    <!-- Forgot Password Modal -->
+    <!-- Modals (Forgot Password, Forgot Username, Terms, Privacy) -->
     <div class="modal-overlay" id="forgotPassModal">
         <div class="modal-content">
             <h3>Reset Password</h3>
@@ -790,7 +1238,6 @@
         </div>
     </div>
 
-    <!-- Forgot Username Modal -->
     <div class="modal-overlay" id="forgotUserModal">
         <div class="modal-content">
             <h3>Forgot Username</h3>
@@ -801,7 +1248,6 @@
         </div>
     </div>
 
-    <!-- Terms Modal -->
     <div class="modal-overlay" id="termsModal">
         <div class="modal-content modal-wide">
             <h1>📜 Terms & Conditions</h1>
@@ -818,14 +1264,7 @@
             <h2>5. Intellectual Property</h2>
             <p>All content available on TestMasterPro, including mock tests, questions, explanations, graphics, logos, designs, and study materials, is the intellectual property of TestMasterPro and is protected by applicable laws. Unauthorized copying, reproduction, distribution, or resale is strictly prohibited.</p>
             <h2>6. Prohibited Activities</h2>
-            <ul>
-                <li>Copying or redistributing platform content without permission.</li>
-                <li>Using bots, scripts, or automated tools to access services.</li>
-                <li>Attempting to hack, disrupt, or damage the platform.</li>
-                <li>Sharing account credentials with others.</li>
-                <li>Uploading harmful, malicious, or unlawful content.</li>
-                <li>Engaging in fraudulent or deceptive activities.</li>
-            </ul>
+            <ul><li>Copying or redistributing platform content without permission.</li><li>Using bots, scripts, or automated tools to access services.</li><li>Attempting to hack, disrupt, or damage the platform.</li><li>Sharing account credentials with others.</li><li>Uploading harmful, malicious, or unlawful content.</li><li>Engaging in fraudulent or deceptive activities.</li></ul>
             <h2>7. Mock Test Results</h2>
             <p>Scores, rankings, percentile calculations, and performance analytics are provided for self-assessment purposes only and do not represent official examination results.</p>
             <h2>8. Content Disclaimer</h2>
@@ -843,29 +1282,15 @@
         </div>
     </div>
 
-    <!-- Privacy Modal -->
     <div class="modal-overlay" id="privacyModal">
         <div class="modal-content modal-wide">
             <h1>🔒 Privacy Policy</h1>
             <p><strong>Last Updated:</strong> June 2026</p>
             <p>Welcome to TestMasterPro. Your privacy is important to us. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website, mobile application, mock tests, and related services.</p>
             <h2>1. Information We Collect</h2>
-            <ul>
-                <li>Name and profile information provided during registration.</li>
-                <li>Email address and login credentials.</li>
-                <li>Exam preferences and test activity.</li>
-                <li>Performance data such as scores, rankings, and test history.</li>
-                <li>Device information, browser type, IP address, and usage analytics.</li>
-            </ul>
+            <ul><li>Name and profile information provided during registration.</li><li>Email address and login credentials.</li><li>Exam preferences and test activity.</li><li>Performance data such as scores, rankings, and test history.</li><li>Device information, browser type, IP address, and usage analytics.</li></ul>
             <h2>2. How We Use Your Information</h2>
-            <ul>
-                <li>To provide and improve our services.</li>
-                <li>To create and manage user accounts.</li>
-                <li>To generate test results, rankings, and performance analytics.</li>
-                <li>To personalize content and recommendations.</li>
-                <li>To detect fraud, abuse, or unauthorized activity.</li>
-                <li>To communicate important updates and service notifications.</li>
-            </ul>
+            <ul><li>To provide and improve our services.</li><li>To create and manage user accounts.</li><li>To generate test results, rankings, and performance analytics.</li><li>To personalize content and recommendations.</li><li>To detect fraud, abuse, or unauthorized activity.</li><li>To communicate important updates and service notifications.</li></ul>
             <h2>3. Cookies and Analytics</h2>
             <p>TestMasterPro may use cookies, analytics tools, and similar technologies to improve user experience, understand platform usage, and enhance service performance.</p>
             <h2>4. Data Security</h2>
@@ -875,11 +1300,7 @@
             <h2>6. Third-Party Services</h2>
             <p>Our platform may use third-party services such as analytics providers, advertising networks, authentication providers, or payment processors. These services may collect information according to their own privacy policies.</p>
             <h2>7. User Rights</h2>
-            <ul>
-                <li>Access your account information.</li>
-                <li>Update or correct your profile details.</li>
-                <li>Request deletion of your account, subject to applicable legal requirements.</li>
-            </ul>
+            <ul><li>Access your account information.</li><li>Update or correct your profile details.</li><li>Request deletion of your account, subject to applicable legal requirements.</li></ul>
             <h2>8. Children's Privacy</h2>
             <p>TestMasterPro is intended for educational purposes. Users below the applicable age of digital consent should use the platform under parental or guardian supervision.</p>
             <h2>9. Data Retention</h2>
@@ -894,13 +1315,34 @@
     <script>
         // ---- Configuration ----
         const API_URL = 'https://script.google.com/macros/s/AKfycbzD8UPfQDqm5yh16ncD0RASuRAYfLhrAjCSZc04Tceia2uZfY_uKrEC5CffaUfsJLvyAQ/exec';
-        let availableAvatars = [],
-            selectedAvatarCode = '',
-            regData = null,
-            forgotPwdUser = '';
+        let availableAvatars = [], selectedAvatarCode = '', regData = null, forgotPwdUser = '';
 
-        // ---- Init ----
+        // Redirect if already logged in
         if (localStorage.getItem('user')) window.location.href = 'dashboard.html';
+
+        // ---- SIDEBAR FUNCTIONS ----
+        function openSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('hidden');
+            requestAnimationFrame(() => overlay.classList.add('active'));
+            document.body.classList.add('sidebar-open');
+        }
+        function closeSidebar(e) {
+            if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect();
+        }
+        function closeSidebarDirect() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            setTimeout(() => {
+                if (!overlay.classList.contains('active')) overlay.classList.add('hidden');
+            }, 400);
+        }
+        function sidebarNavigate(url) {
+            closeSidebarDirect();
+            setTimeout(() => window.location.href = url, 300);
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebarDirect(); });
 
         // ---- UI Helpers ----
         function switchTab(tab) {
@@ -922,29 +1364,22 @@
             const inp = document.getElementById(id);
             const icon = btn.querySelector('i');
             if (inp.type === 'password') {
-                inp.type = 'text';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
+                inp.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
-                inp.type = 'password';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
+                inp.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
 
         function showAlert(type, msg) {
             const box = document.getElementById('alertBox');
             box.className = `alert-msg ${type}`;
-            box.innerHTML =
-                `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+            box.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
             box.style.display = 'flex';
             setTimeout(() => box.style.display = 'none', 5000);
         }
-
         function hideAlert() { document.getElementById('alertBox').style.display = 'none'; }
-
         function openModal(id) { document.getElementById(id).classList.add('show'); }
-
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
         function showModalAlert(boxId, type, msg) {
             const box = document.getElementById(boxId);
             box.className = `alert-msg ${type}`;
@@ -991,8 +1426,7 @@
             const wrap = document.getElementById('strengthWrap');
             const fill = document.getElementById('strengthFill');
             const label = document.getElementById('strengthLabel');
-            if (!pwd) { wrap.style.display = 'none';
-                return; }
+            if (!pwd) { wrap.style.display = 'none'; return; }
             wrap.style.display = 'flex';
             let score = 0;
             if (pwd.length >= 6) score++;
@@ -1002,15 +1436,10 @@
             if (/[0-9]/.test(pwd)) score++;
             if (/[^A-Za-z0-9]/.test(pwd)) score++;
             let width, color, text;
-            if (score <= 2) { width = '25%';
-                color = '#ef4444';
-                text = 'Weak'; } else if (score <= 3) { width = '50%';
-                color = '#f59e0b';
-                text = 'Fair'; } else if (score <= 5) { width = '75%';
-                color = '#3b82f6';
-                text = 'Good'; } else { width = '100%';
-                color = '#10b981';
-                text = 'Strong'; }
+            if (score <= 2) { width = '25%'; color = '#ef4444'; text = 'Weak'; }
+            else if (score <= 3) { width = '50%'; color = '#f59e0b'; text = 'Fair'; }
+            else if (score <= 5) { width = '75%'; color = '#3b82f6'; text = 'Good'; }
+            else { width = '100%'; color = '#10b981'; text = 'Strong'; }
             fill.style.width = width;
             fill.style.background = color;
             label.textContent = text;
@@ -1023,11 +1452,9 @@
             const p = document.getElementById('loginPass').value;
             if (!u || !p) return showAlert('error', 'Please fill all fields');
             const btn = document.querySelector('#loginPanel .btn-primary');
-            btn.disabled = true;
-            btn.textContent = 'Logging in…';
+            btn.disabled = true; btn.textContent = 'Logging in…';
             try {
-                const r = await fetch(
-                    `${API_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`);
+                const r = await fetch(`${API_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`);
                 const d = await r.json();
                 if (d.success) {
                     localStorage.setItem('user', JSON.stringify(d.user));
@@ -1035,10 +1462,8 @@
                     showAlert('success', '✅ Welcome!');
                     setTimeout(() => window.location.href = 'dashboard.html', 800);
                 } else showAlert('error', d.error || 'Invalid credentials');
-            } catch { showAlert('error', 'Connection error'); } finally {
-                btn.disabled = false;
-                btn.textContent = '🚀 Login';
-            }
+            } catch { showAlert('error', 'Connection error'); }
+            finally { btn.disabled = false; btn.textContent = '🚀 Login'; }
         }
 
         // ---- Register ----
@@ -1063,22 +1488,9 @@
             if (fields.password.length < 6) return showAlert('error', 'Password too short');
             if (fields.mobile.length !== 10) return showAlert('error', 'Invalid mobile');
             if (!fields.tc) return showAlert('error', 'Please agree to Terms & Privacy');
-            btn.disabled = true;
-            btn.textContent = 'Sending…';
+            btn.disabled = true; btn.textContent = 'Sending…';
             try {
-                const params = new URLSearchParams({
-                    action: 'register',
-                    name: fields.name,
-                    username: fields.username,
-                    email: fields.email,
-                    mobile: fields.mobile,
-                    password: fields.password,
-                    state: fields.state,
-                    education: fields.education,
-                    preparingFor: fields.preparingFor,
-                    avatarCode: selectedAvatarCode,
-                    referralCode: fields.referral
-                });
+                const params = new URLSearchParams({ action:'register', name:fields.name, username:fields.username, email:fields.email, mobile:fields.mobile, password:fields.password, state:fields.state, education:fields.education, preparingFor:fields.preparingFor, avatarCode:selectedAvatarCode, referralCode:fields.referral });
                 const r = await fetch(API_URL + '?' + params);
                 const d = await r.json();
                 if (d.otpRequired) {
@@ -1093,20 +1505,17 @@
                     document.getElementById('loginUser').value = fields.username;
                     resetReg();
                 } else showAlert('error', d.error || 'Registration failed');
-            } catch { showAlert('error', 'Connection error'); } finally {
-                btn.disabled = false;
-                btn.textContent = '📩 Send OTP';
-            }
+            } catch { showAlert('error', 'Connection error'); }
+            finally { btn.disabled = false; btn.textContent = '📩 Send OTP'; }
         }
 
         async function registerStep2() {
             const btn = document.querySelector('#regStep2 .btn-primary');
             const otp = document.getElementById('regOTP').value.trim();
             if (!regData || otp.length !== 6) return showAlert('error', 'Enter valid OTP');
-            btn.disabled = true;
-            btn.textContent = 'Verifying…';
+            btn.disabled = true; btn.textContent = 'Verifying…';
             try {
-                const params = new URLSearchParams({ action: 'register', ...regData, otp });
+                const params = new URLSearchParams({ action:'register', ...regData, otp });
                 const r = await fetch(API_URL + '?' + params);
                 const d = await r.json();
                 if (d.success) {
@@ -1115,10 +1524,8 @@
                     document.getElementById('loginUser').value = regData.username;
                     resetReg();
                 } else showAlert('error', d.error || 'OTP failed');
-            } catch { showAlert('error', 'Connection error'); } finally {
-                btn.disabled = false;
-                btn.textContent = '✅ Complete';
-            }
+            } catch { showAlert('error', 'Connection error'); }
+            finally { btn.disabled = false; btn.textContent = '✅ Complete'; }
         }
 
         function resetReg() {
@@ -1134,9 +1541,7 @@
         }
 
         // ---- Forgot Password ----
-        function openForgotPassword() { openModal('forgotPassModal');
-            resetPwdSteps(); }
-
+        function openForgotPassword() { openModal('forgotPassModal'); resetPwdSteps(); }
         function resetPwdSteps() {
             document.getElementById('pwdStep1').style.display = 'block';
             document.getElementById('pwdStep2').style.display = 'none';
@@ -1147,8 +1552,7 @@
             const input = document.getElementById('pwdInput').value.trim();
             if (!input) return showModalAlert('pwdAlert', 'error', 'Enter username or email');
             try {
-                const r = await fetch(API_URL + '?action=sendPasswordResetOTP&usernameOrEmail=' + encodeURIComponent(
-                    input));
+                const r = await fetch(API_URL + '?action=sendPasswordResetOTP&usernameOrEmail=' + encodeURIComponent(input));
                 const d = await r.json();
                 if (d.success) {
                     forgotPwdUser = d.username;
@@ -1169,9 +1573,7 @@
             if (np.length < 6) return showModalAlert('pwdAlert', 'error', 'Password too short');
             const otp = document.getElementById('pwdOTP').value.trim();
             try {
-                const r = await fetch(
-                    `${API_URL}?action=resetPasswordWithOTP&username=${encodeURIComponent(forgotPwdUser)}&otp=${encodeURIComponent(otp)}&newPassword=${encodeURIComponent(np)}`
-                    );
+                const r = await fetch(`${API_URL}?action=resetPasswordWithOTP&username=${encodeURIComponent(forgotPwdUser)}&otp=${encodeURIComponent(otp)}&newPassword=${encodeURIComponent(np)}`);
                 const d = await r.json();
                 if (d.success) {
                     showModalAlert('pwdAlert', 'success', 'Password reset!');
@@ -1200,15 +1602,121 @@
 
         // ---- Terms & Privacy ----
         function openTerms() { openModal('termsModal'); }
-
         function openPrivacy() { openModal('privacyModal'); }
 
-        // ---- Modal overlay click ----
+        // ---- Close modals on overlay click ----
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
                 e.target.classList.remove('show');
             }
         });
+
+        // ---- FOOTER LOGIC (from dashboard) ----
+        const MOCKS_CACHE_KEY = 'cachedAllMocks';
+        const JSON_PATHS = {
+            upcomingfooter: './json/upcomingfooter.json'
+        };
+        const FALLBACK_MOCKS = [
+            { exam: 'SBI PO', category: 'Bank' }, { exam: 'IBPS Clerk', category: 'Bank' },
+            { exam: 'SSC CGL', category: 'SSC' }, { exam: 'SSC CHSL', category: 'SSC' },
+            { exam: 'RRB NTPC', category: 'Railway' }, { exam: 'CUET GAT', category: 'CUET' }
+        ];
+        const FALLBACK_UPCOMING_FOOTER = [
+            { name: 'ReNEET UG 2026', date: '15 May 2026' }, { name: 'CUET UG 2026', date: '20 May 2026' },
+            { name: 'UP Police Constable 2026', date: '10 June 2026' }, { name: 'SSC GD 2025-26', date: '5 July 2026' },
+            { name: 'RRB NTPC 2026', date: '25 July 2026' }, { name: 'SSC CGL Tier-I 2026', date: '12 June 2026' },
+            { name: 'SBI PO Prelims 2026', date: '18 August 2026' }, { name: 'IBPS PO Prelims 2026', date: '18 August 2026' }
+        ];
+
+        let allMocks = [];
+
+        function loadMocksFromCache() {
+            try {
+                const cached = localStorage.getItem(MOCKS_CACHE_KEY);
+                return cached ? JSON.parse(cached) : null;
+            } catch { return null; }
+        }
+
+        function groupByCategoryUniqueExams(arr) {
+            const map = {};
+            arr.forEach(item => {
+                const cat = item.category || 'Other';
+                if (!map[cat]) map[cat] = { exams: [], seen: new Set() };
+                if (!map[cat].seen.has(item.exam)) {
+                    map[cat].seen.add(item.exam);
+                    map[cat].exams.push(item);
+                }
+            });
+            return Object.keys(map).sort().map(cat => ({ category: cat, exams: map[cat].exams }));
+        }
+
+        async function renderFooterExamCategories() {
+            const c = document.getElementById('footerExamCategories');
+            const grouped = groupByCategoryUniqueExams(allMocks);
+            if (!grouped.length) { c.innerHTML = '<li><a>No exams</a></li>'; return; }
+            let html = '';
+            grouped.forEach(cat => {
+                html += `<li><a onclick="window.location.href='exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}'">${cat.category}</a></li>`;
+            });
+            html += `<li><a onclick="window.location.href='aimock.html'"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Mock Test</a></li>`;
+            html += `<li><a onclick="window.location.href='book.html'"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
+            html += `<li><a onclick="window.location.href='aichat.html'"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Chat</a></li>`;
+            html += `<li><a onclick="window.location.href='chat.html'"><i class="fas fa-comments" style="margin-right:6px;"></i>Support Chat</a></li>`;
+            html += `<li><a onclick="window.location.href='referral.html'">Refer & Earn</a></li>`;
+            html += `<li><a onclick="window.location.href='usecoin.html'">Coin Exchange</a></li>`;
+            html += `<li><a onclick="window.location.href='apk.html'">📱 Get APK</a></li>`;
+            c.innerHTML = html;
+        }
+
+        async function renderFooterUpcoming() {
+            const c = document.getElementById('footerUpcomingExams');
+            let data = [];
+            try {
+                const resp = await fetch(JSON_PATHS.upcomingfooter, { cache: 'no-store' });
+                if (resp.ok) data = await resp.json();
+            } catch {}
+            if (!data.length) data = FALLBACK_UPCOMING_FOOTER;
+            c.innerHTML = data.map(e => `<li><a onclick="alert('${e.name} – Expected Date: ${e.date}')">${e.name}</a></li>`).join('');
+        }
+
+        function openInstallPopup() {
+            Swal.fire({
+                title: '📲 Install TestMaster Pro',
+                html: `<div style="text-align:center;"><p style="font-size:14px;font-weight:600;color:#243748;">Get the App Experience!</p><p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file.</p><div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;"><i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i><p style="font-weight:700;">TestMasterPro.apk</p></div></div>`,
+                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
+                confirmButtonColor: '#4f46e5',
+                showCancelButton: true,
+                cancelButtonText: 'Maybe Later',
+                cancelButtonColor: '#94a3b8',
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const link = document.createElement('a');
+                    link.href = 'TestMasterPro.apk';
+                    link.download = 'TestMasterPro.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    Swal.fire('Downloading...', '', 'success');
+                }
+            });
+        }
+
+        // Initialize footer
+        (function initFooter() {
+            const cached = loadMocksFromCache();
+            allMocks = cached && cached.length ? cached : [...FALLBACK_MOCKS];
+            renderFooterExamCategories();
+            renderFooterUpcoming();
+            // Update in background
+            fetch('./mocks.json', { cache: 'no-store' }).then(resp => resp.json()).then(data => {
+                if (Array.isArray(data) && data.length) {
+                    allMocks = data;
+                    localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data));
+                    renderFooterExamCategories();
+                }
+            }).catch(() => {});
+        })();
     </script>
 </body>
 </html>
