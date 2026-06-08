@@ -618,6 +618,32 @@
             background: #f8fafc;
         }
 
+        /* Guest button */
+        .btn-guest {
+            width: 100%;
+            max-width: 420px;
+            margin-top: 16px;
+            padding: 14px;
+            background: transparent;
+            border: 2px dashed var(--gray-300);
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: var(--font);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-guest:hover {
+            border-color: var(--blue);
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
         .alert-msg {
             padding: 12px 16px;
             border-radius: 12px;
@@ -1129,7 +1155,18 @@
     <select id="regState">
       <option value="">Select State</option>
       <option>Andhra Pradesh</option>
-      <option>Arunachal Pradesh</option>
+
+
+      <!-- Union Territories -->
+      <option>Andaman and Nicobar Islands</option>
+      <option>Chandigarh</option>
+      <option>Dadra and Nagar Haveli and Daman and Diu</option>
+      <option>Delhi</option>
+      <option>Jammu and Kashmir</option>
+      <option>Ladakh</option>
+      <option>Lakshadweep</option>
+      <option>Puducherry</option>
+            <option>Arunachal Pradesh</option>
       <option>Assam</option>
       <option>Bihar</option>
       <option>Chhattisgarh</option>
@@ -1156,16 +1193,6 @@
       <option>Uttar Pradesh</option>
       <option>Uttarakhand</option>
       <option>West Bengal</option>
-
-      <!-- Union Territories -->
-      <option>Andaman and Nicobar Islands</option>
-      <option>Chandigarh</option>
-      <option>Dadra and Nagar Haveli and Daman and Diu</option>
-      <option>Delhi</option>
-      <option>Jammu and Kashmir</option>
-      <option>Ladakh</option>
-      <option>Lakshadweep</option>
-      <option>Puducherry</option>
     </select>
   </div>
 </div>
@@ -1197,6 +1224,12 @@
             </div>
             <div class="alert-msg" id="alertBox"></div>
         </div>
+
+        <!-- ★ CONTINUE AS GUEST BUTTON ★ -->
+        <button class="btn-guest" onclick="continueAsGuest()">
+            <i class="fas fa-user-friends"></i> Continue as Guest
+        </button>
+
     </div>
 
     <!-- Footer (same as dashboard) -->
@@ -1385,6 +1418,45 @@
             box.className = `alert-msg ${type}`;
             box.innerHTML = msg;
             box.style.display = 'flex';
+        }
+
+        // ★ CONTINUE AS GUEST ★
+        async function continueAsGuest() {
+            const { value: name } = await Swal.fire({
+                title: 'Enter Your Name',
+                input: 'text',
+                inputLabel: 'Your Name',
+                inputPlaceholder: 'e.g. Rahul',
+                confirmButtonText: 'Continue as Guest',
+                confirmButtonColor: '#243748',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                inputValidator: (value) => {
+                    if (!value || value.trim().length < 2) {
+                        return 'Please enter a valid name (at least 2 characters)';
+                    }
+                }
+            });
+
+            if (name) {
+                const guestName = name.trim();
+                const guestUser = {
+                    name: guestName,
+                    isGuest: true,
+                    username: 'guest_' + Date.now()
+                };
+                localStorage.setItem('user', JSON.stringify(guestUser));
+                Swal.fire({
+                    icon: 'success',
+                    title: `Welcome, ${guestName}!`,
+                    text: 'Redirecting to dashboard...',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 800);
+            }
         }
 
         // ---- Avatars ----
