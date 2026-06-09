@@ -262,7 +262,7 @@
             border-left: 4px solid #d32f2f;
         }
 
-        /* Dynamic selection area */
+        /* Dynamic selection area (only shown when file has Sub/Chap) */
         .dynamic-select-area {
             display: none;
             background: var(--bg);
@@ -521,7 +521,7 @@
             </div>
         </div>
 
-        <!-- Dynamic selection area (for JSON file) -->
+        <!-- Dynamic selection area (only shown when file has Sub/Chap) -->
         <div class="dynamic-select-area" id="dynamicArea">
             <h3><i class="fas fa-check-square"></i> Choose Subjects / Chapters</h3>
             <div class="subject-tree" id="subjectTree"></div>
@@ -539,7 +539,7 @@
             </p>
         </div>
 
-        <!-- Static breakdowns (hidden for dynamic) -->
+        <!-- Static breakdowns (shown in static mode or when file has no Sub/Chap) -->
         <div class="breakdown-section" id="subjectBreakdownArea" style="display:none;">
             <h3><i class="fas fa-book"></i> Subject Breakdown</h3>
             <table class="breakdown-table">
@@ -591,7 +591,6 @@
     </main>
 
     <script>
-        // ---------- CONFIG ----------
         const API_URL = 'https://script.google.com/macros/s/AKfycbxWm6fuSZcoWDBbSG2n-gpfzteRLgE7FpS9kIvOm-lKrparJ_4dd38vRg3cL8zs-lAn/exec';
         const urlParams = new URLSearchParams(window.location.search);
         const testCode = urlParams.get('testCode');
@@ -606,15 +605,15 @@
         }
 
         let testData = null;
-        let staticQuestions = [];
+        let staticQuestions = [];       // from sheet
         let dynamicQuestions = [];      // from JSON file
-        let dynamicMode = false;
-        let originalTotalQ = 0;        // sheet's totalQuestions
-        let baseDuration = 0;          // sheet's duration
+        let dynamicMode = false;        // true = will use dynamicQuestions, false = use sheet
+        let hasChapters = false;        // true if Sub/Chap exist in file → show selection tree
 
-        // Data structures for dynamic selection
-        let subjectMap = new Map();    // subject -> { count, chapters: Map(chapter -> count) }
-        let hasChapters = false;
+        let originalTotalQ = 0;         // sheet's totalQuestions
+        let baseDuration = 0;           // sheet's duration
+
+        let subjectMap = new Map();     // only used when hasChapters = true
 
         // ---------- FETCH TEST DATA ----------
         async function fetchTestData() {
@@ -627,11 +626,11 @@
                 originalTotalQ = testData.totalQuestions || 10;
                 baseDuration = testData.duration || 60;
 
-                // Check if file column contains a URL
+                // If a file URL is provided, ALWAYS load it
                 if (testData.file && testData.file.startsWith('http')) {
-                    dynamicMode = true;
                     await loadDynamicQuestions();
                 } else {
+                    // No file → use sheet questions only (static mode)
                     dynamicMode = false;
                     buildUI();
                 }
@@ -652,15 +651,24 @@
                 const json = await resp.json();
                 if (!Array.isArray(json)) throw new Error('Invalid JSON: expected an array');
                 dynamicQuestions = json;
-                // Check if any question has Sub or Chap fields
-                const hasSubOrChap = json.some(q => q.Sub || q.Chap);
+
+                // Check if any question contains Sub or Chap (any common casing)
+                const hasSubOrChap = dynamicQuestions.some(q =>
+                    q.Sub || q.Chap || q.subject || q.chapter || q.Subject || q.Chapter
+                );
+
                 if (!hasSubOrChap) {
-                    // No Sub/Chap → fallback to static mode
-                    dynamicMode = false;
-                    buildUI();
-                    return;
+                    // No subjects/chapters → still use file questions, but without selection tree
+                    dynamicMode = true;
+                    hasChapters = false;
+                    // No need to build subjectMap – it stays empty
+                } else {
+                    // Subjects/chapters exist → show selection tree
+                    dynamicMode = true;
+                    hasChapters = true;
+                    buildSubjectChapterMap(dynamicQuestions);
                 }
-                buildSubjectChapterMap(json);
+
                 buildUI();
             } catch (e) {
                 document.getElementById('loadingOverlay').style.display = 'none';
@@ -675,15 +683,13 @@
 
         function buildSubjectChapterMap(questions) {
             subjectMap.clear();
-            hasChapters = false;
             questions.forEach(q => {
-                const sub = (q.Sub || 'Unknown').trim();
-                const chap = (q.Chap || '').trim();
+                const sub = (q.Sub || q.subject || q.Subject || 'General').trim();
+                const chap = (q.Chap || q.chapter || q.Chapter || '').trim();
                 if (!subjectMap.has(sub)) subjectMap.set(sub, { count: 0, chapters: new Map() });
                 const subObj = subjectMap.get(sub);
                 subObj.count++;
                 if (chap) {
-                    hasChapters = true;
                     if (!subObj.chapters.has(chap)) subObj.chapters.set(chap, 0);
                     subObj.chapters.set(chap, subObj.chapters.get(chap) + 1);
                 }
@@ -736,24 +742,31 @@
                 langSelect.value = savedLang;
             }
 
-            if (dynamicMode) {
+            if (dynamicMode && hasChapters) {
+                // Dynamic mode with subjects/chapters → show selection tree
                 setupDynamicMode();
             } else {
-                setupStaticMode();
+                // Either static sheet mode, or dynamic file mode without subjects
+                setupStaticOrSimpleFileMode();
             }
         }
 
-        function setupStaticMode() {
-            const totalQ = staticQuestions.length || originalTotalQ;
-            const totalTime = baseDuration;
+        function setupStaticOrSimpleFileMode() {
+            // Hide dynamic selection area
+            document.getElementById('dynamicArea').style.display = 'none';
+
+            // Decide which questions to use
+            const questions = dynamicMode ? dynamicQuestions : staticQuestions;
+            const totalQ = Math.min(originalTotalQ, questions.length);
+
             document.getElementById('totalQVal').textContent = totalQ;
             document.getElementById('maxMarksVal').textContent = totalQ * (testData.marksPerQuestion || 1);
-            document.getElementById('durationVal').textContent = totalTime;
+            document.getElementById('durationVal').textContent = baseDuration;
             document.getElementById('instrTotalQ').textContent = totalQ;
-            document.getElementById('instrDuration').textContent = totalTime;
+            document.getElementById('instrDuration').textContent = baseDuration;
 
-            buildBreakdowns(staticQuestions);
-            document.getElementById('dynamicArea').style.display = 'none';
+            // Show breakdowns only if data exists (likely only for sheet mode)
+            buildBreakdowns(questions);
         }
 
         function setupDynamicMode() {
@@ -764,7 +777,6 @@
             const dynamicArea = document.getElementById('dynamicArea');
             dynamicArea.style.display = 'flex';
 
-            // Build tree
             const tree = document.getElementById('subjectTree');
             tree.innerHTML = '';
 
@@ -791,7 +803,7 @@
                 header.appendChild(cb);
                 header.appendChild(span);
 
-                if (hasChapters && subObj.chapters.size > 0) {
+                if (subObj.chapters.size > 0) {
                     header.appendChild(expandIcon);
                     header.addEventListener('click', (e) => {
                         if (e.target.tagName !== 'INPUT') {
@@ -799,7 +811,6 @@
                         }
                     });
                 } else {
-                    // Clicking header toggles checkbox
                     header.addEventListener('click', (e) => {
                         if (e.target.tagName !== 'INPUT') {
                             cb.checked = !cb.checked;
@@ -810,8 +821,7 @@
 
                 node.appendChild(header);
 
-                // Chapter list
-                if (hasChapters && subObj.chapters.size > 0) {
+                if (subObj.chapters.size > 0) {
                     const chapList = document.createElement('div');
                     chapList.className = 'chapter-list';
                     const sortedChaps = [...subObj.chapters.keys()].sort();
@@ -834,34 +844,33 @@
                 tree.appendChild(node);
             });
 
-            // Auto‑open the chapter list if there is exactly one subject with chapters
-            if (sortedSubjects.length === 1 && hasChapters && subjectMap.get(sortedSubjects[0]).chapters.size > 0) {
+            // If only one subject with chapters, open it automatically
+            if (sortedSubjects.length === 1 && subjectMap.get(sortedSubjects[0]).chapters.size > 0) {
                 const onlyNode = tree.querySelector('.subject-node');
                 if (onlyNode) onlyNode.classList.add('open');
             }
 
-            // Initialize slider: min = originalTotalQ, max = min(totalAvailable, 200)
+            // Slider setup
             const totalAvail = getSelectedQuestionsCount();
             const slider = document.getElementById('numQSlider');
             const display = document.getElementById('numQDisplay');
-
-            slider.min = originalTotalQ;
+            slider.min = Math.min(originalTotalQ, totalAvail);
             slider.max = Math.min(totalAvail, 200);
-            slider.value = originalTotalQ;
-            display.textContent = originalTotalQ;
+            slider.value = Math.min(originalTotalQ, slider.max);
+            display.textContent = slider.value;
 
             slider.addEventListener('input', () => {
                 display.textContent = slider.value;
                 updateDynamicTotals();
             });
 
-            updateDynamicTotals();   // set initial numbers
+            updateDynamicTotals();
         }
 
-        // ---------- DYNAMIC SELECTION LOGIC ----------
+        // ---------- DYNAMIC SELECTION LOGIC (only used when hasChapters = true) ----------
         function onSubjectCheckboxChange(sub, cb) {
             const node = cb.closest('.subject-node');
-            if (hasChapters && node) {
+            if (node) {
                 const chCbs = node.querySelectorAll('.chapter-item input[type="checkbox"]');
                 chCbs.forEach(ch => { ch.checked = cb.checked; });
             }
@@ -888,28 +897,24 @@
             updateSliderRangeAndSnapToMax();
         }
 
-        // Whenever the selection changes, adjust the slider range and snap the value to its maximum (i.e., all selected questions)
         function updateSliderRangeAndSnapToMax() {
             const totalAvail = getSelectedQuestionsCount();
             const slider = document.getElementById('numQSlider');
-            // Update min/max bounds
             slider.min = Math.min(originalTotalQ, totalAvail);
             slider.max = Math.min(totalAvail, 200);
-
-            // Always set the slider to the maximum (all available selected questions)
             slider.value = slider.max;
             document.getElementById('numQDisplay').textContent = slider.value;
             updateDynamicTotals();
         }
 
-        // Count selected questions: if nothing selected, return total of all questions
         function getSelectedQuestionsCount() {
-            if (!dynamicMode) return 0;
-            if (!hasChapters) {
+            if (!dynamicMode || !hasChapters) return 0;
+            const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
+            if (chCbs.length === 0) {
+                // No chapters at all? (shouldn't happen here)
                 const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
                 const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
                 if (checkedSubs.length === 0) {
-                    // All subjects
                     let total = 0;
                     subjectMap.forEach(obj => total += obj.count);
                     return total;
@@ -919,45 +924,42 @@
                     if (subjectMap.has(sub)) total += subjectMap.get(sub).count;
                 });
                 return total;
-            } else {
-                const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
-                const checkedChaps = [...chCbs].filter(cb => cb.checked);
-                if (checkedChaps.length === 0) {
-                    // All chapters
-                    let total = 0;
-                    subjectMap.forEach(obj => total += obj.count);
-                    return total;
-                }
-                const selectedSubChaps = new Map();
-                checkedChaps.forEach(cb => {
-                    const sub = cb.dataset.subject;
-                    const chap = cb.value;
-                    if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
-                    selectedSubChaps.get(sub).add(chap);
-                });
+            }
+
+            const checkedChaps = [...chCbs].filter(cb => cb.checked);
+            if (checkedChaps.length === 0) {
                 let total = 0;
-                dynamicQuestions.forEach(q => {
-                    const sub = (q.Sub || 'Unknown').trim();
-                    const chap = (q.Chap || '').trim();
-                    if (selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap)) {
-                        total++;
-                    }
-                });
+                subjectMap.forEach(obj => total += obj.count);
                 return total;
             }
+
+            const selectedSubChaps = new Map();
+            checkedChaps.forEach(cb => {
+                const sub = cb.dataset.subject;
+                const chap = cb.value;
+                if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
+                selectedSubChaps.get(sub).add(chap);
+            });
+
+            let total = 0;
+            dynamicQuestions.forEach(q => {
+                const sub = (q.Sub || q.subject || q.Subject || 'General').trim();
+                const chap = (q.Chap || q.chapter || q.Chapter || '').trim();
+                if (selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap)) {
+                    total++;
+                }
+            });
+            return total;
         }
 
         function updateDynamicTotals() {
             const slider = document.getElementById('numQSlider');
             const numQ = parseInt(slider.value);
             document.getElementById('numQDisplay').textContent = numQ;
-
-            // Update displayed question count & max marks
             document.getElementById('totalQVal').textContent = numQ;
             document.getElementById('maxMarksVal').textContent = numQ * (testData.marksPerQuestion || 1);
             document.getElementById('instrTotalQ').textContent = numQ;
 
-            // Time calculation: baseDuration + (numQ - originalTotalQ) * 2, only if extra > 0
             const extraQ = Math.max(0, numQ - originalTotalQ);
             const totalTime = baseDuration + extraQ * 2;
             document.getElementById('durationVal').textContent = totalTime;
@@ -972,14 +974,12 @@
             }
         }
 
-        // ---------- STATIC BREAKDOWNS ----------
+        // ---------- STATIC BREAKDOWNS (handles Sub/subject/Subject, Chap/chapter/Chapter) ----------
         function buildBreakdowns(questions) {
             const subMap = new Map();
             questions.forEach(q => {
-                if (q.subject) {
-                    const s = q.subject.trim();
-                    subMap.set(s, (subMap.get(s) || 0) + 1);
-                }
+                const s = (q.Sub || q.subject || q.Subject || '').trim();
+                if (s) subMap.set(s, (subMap.get(s) || 0) + 1);
             });
             const subArea = document.getElementById('subjectBreakdownArea');
             const subBody = document.getElementById('subjectTableBody');
@@ -999,10 +999,8 @@
 
             const chapMap = new Map();
             questions.forEach(q => {
-                if (q.chapter) {
-                    const c = q.chapter.trim();
-                    chapMap.set(c, (chapMap.get(c) || 0) + 1);
-                }
+                const c = (q.Chap || q.chapter || q.Chapter || '').trim();
+                if (c) chapMap.set(c, (chapMap.get(c) || 0) + 1);
             });
             const chapArea = document.getElementById('chapterBreakdownArea');
             const chapBody = document.getElementById('chapterTableBody');
@@ -1039,73 +1037,98 @@
             localStorage.setItem('mock_lang', lang);
 
             if (dynamicMode) {
-                const slider = document.getElementById('numQSlider');
-                const numQ = parseInt(slider.value);
-                const extraQ = Math.max(0, numQ - originalTotalQ);
-                const totalDuration = baseDuration + extraQ * 2;
+                if (hasChapters) {
+                    // Use tree selection (as before)
+                    const slider = document.getElementById('numQSlider');
+                    const numQ = parseInt(slider.value);
+                    const extraQ = Math.max(0, numQ - originalTotalQ);
+                    const totalDuration = baseDuration + extraQ * 2;
 
-                // Determine selected questions
-                let filtered = [];
-
-                if (!hasChapters) {
-                    const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
-                    const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
-                    if (checkedSubs.length === 0) {
-                        filtered = [...dynamicQuestions];
-                    } else {
-                        filtered = dynamicQuestions.filter(q => {
-                            const s = (q.Sub || 'Unknown').trim();
-                            return checkedSubs.includes(s);
-                        });
-                    }
-                } else {
+                    let filtered = [];
                     const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
-                    const checkedChaps = [...chCbs].filter(cb => cb.checked);
-                    if (checkedChaps.length === 0) {
-                        filtered = [...dynamicQuestions];
+                    if (chCbs.length === 0) {
+                        // Only subjects, no chapters
+                        const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
+                        const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
+                        if (checkedSubs.length === 0) {
+                            filtered = [...dynamicQuestions];
+                        } else {
+                            filtered = dynamicQuestions.filter(q => {
+                                const s = (q.Sub || q.subject || q.Subject || 'General').trim();
+                                return checkedSubs.includes(s);
+                            });
+                        }
                     } else {
-                        const selectedSubChaps = new Map();
-                        checkedChaps.forEach(cb => {
-                            const sub = cb.dataset.subject;
-                            const chap = cb.value;
-                            if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
-                            selectedSubChaps.get(sub).add(chap);
-                        });
-                        filtered = dynamicQuestions.filter(q => {
-                            const sub = (q.Sub || 'Unknown').trim();
-                            const chap = (q.Chap || '').trim();
-                            return selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap);
-                        });
+                        const checkedChaps = [...chCbs].filter(cb => cb.checked);
+                        if (checkedChaps.length === 0) {
+                            filtered = [...dynamicQuestions];
+                        } else {
+                            const selectedSubChaps = new Map();
+                            checkedChaps.forEach(cb => {
+                                const sub = cb.dataset.subject;
+                                const chap = cb.value;
+                                if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
+                                selectedSubChaps.get(sub).add(chap);
+                            });
+                            filtered = dynamicQuestions.filter(q => {
+                                const sub = (q.Sub || q.subject || q.Subject || 'General').trim();
+                                const chap = (q.Chap || q.chapter || q.Chapter || '').trim();
+                                return selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap);
+                            });
+                        }
                     }
+
+                    if (filtered.length === 0) {
+                        Swal.fire('Error', 'No questions match your selection.', 'warning');
+                        return;
+                    }
+
+                    const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+                    const selectedQuestions = shuffled.slice(0, Math.min(numQ, shuffled.length));
+
+                    const config = {
+                        testCode: testCode,
+                        exam: testData.exam,
+                        subject: testData.subject,
+                        testName: testData.testName,
+                        duration: totalDuration,
+                        marksPerQuestion: testData.marksPerQuestion,
+                        negativeMarking: testData.negativeMarking,
+                        language: testData.language,
+                        imageurl: testData.imageurl,
+                        questions: selectedQuestions
+                    };
+
+                    sessionStorage.setItem('dynamicTestData', JSON.stringify(config));
+                    sessionStorage.setItem('dynamicTestCode', testCode);
+                    window.location.href = 'test2.html?dynamic=1';
+                } else {
+                    // No chapters, no selection tree → use all file questions (up to originalTotalQ)
+                    const numQ = Math.min(originalTotalQ, dynamicQuestions.length);
+                    const totalDuration = baseDuration + Math.max(0, numQ - originalTotalQ) * 2;
+
+                    const shuffled = [...dynamicQuestions].sort(() => Math.random() - 0.5);
+                    const selectedQuestions = shuffled.slice(0, numQ);
+
+                    const config = {
+                        testCode: testCode,
+                        exam: testData.exam,
+                        subject: testData.subject,
+                        testName: testData.testName,
+                        duration: totalDuration,
+                        marksPerQuestion: testData.marksPerQuestion,
+                        negativeMarking: testData.negativeMarking,
+                        language: testData.language,
+                        imageurl: testData.imageurl,
+                        questions: selectedQuestions
+                    };
+
+                    sessionStorage.setItem('dynamicTestData', JSON.stringify(config));
+                    sessionStorage.setItem('dynamicTestCode', testCode);
+                    window.location.href = 'test2.html?dynamic=1';
                 }
-
-                if (filtered.length === 0) {
-                    Swal.fire('Error', 'No questions match your selection.', 'warning');
-                    return;
-                }
-
-                // Shuffle and pick exactly numQ questions
-                const shuffled = [...filtered].sort(() => Math.random() - 0.5);
-                const selectedQuestions = shuffled.slice(0, Math.min(numQ, shuffled.length));
-
-                const config = {
-                    testCode: testCode,
-                    exam: testData.exam,
-                    subject: testData.subject,
-                    testName: testData.testName,
-                    duration: totalDuration,
-                    marksPerQuestion: testData.marksPerQuestion,
-                    negativeMarking: testData.negativeMarking,
-                    language: testData.language,
-                    imageurl: testData.imageurl,
-                    questions: selectedQuestions
-                };
-
-                sessionStorage.setItem('dynamicTestData', JSON.stringify(config));
-                sessionStorage.setItem('dynamicTestCode', testCode);
-                window.location.href = 'test2.html?dynamic=1';
             } else {
-                // Static test – redirect as before
+                // Static sheet mode – redirect with testCode
                 window.location.href = `test2.html?testCode=${encodeURIComponent(testCode)}`;
             }
         }
