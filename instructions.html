@@ -22,8 +22,8 @@
             --text-heading: #0f172a;
             --text-secondary: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
             --radius: 12px;
             --font: 'Poppins', sans-serif;
         }
@@ -41,7 +41,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Header */
         .header {
             width: 100%;
             max-width: 900px;
@@ -86,7 +85,6 @@
             transform: translateY(-1px);
         }
 
-        /* Main Card */
         .card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -122,7 +120,6 @@
             word-break: break-word;
         }
 
-        /* Info grid */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -167,7 +164,6 @@
             color: var(--text-heading);
         }
 
-        /* Breakdown tables */
         .breakdown-section {
             background: var(--bg);
             border-radius: var(--radius);
@@ -209,7 +205,6 @@
         .col-name { font-weight: 600; }
         .col-count { text-align: center; font-weight: 700; color: var(--primary); }
 
-        /* Instructions */
         .instructions-heading {
             font-size: 24px;
             font-weight: 700;
@@ -225,7 +220,6 @@
             margin-bottom: 8px;
         }
 
-        /* Language selector */
         .lang-row {
             display: flex;
             align-items: center;
@@ -252,7 +246,7 @@
         }
         .lang-select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
         }
 
         .warning-note {
@@ -268,7 +262,104 @@
             border-left: 4px solid #d32f2f;
         }
 
-        /* Declaration */
+        /* Dynamic selection area */
+        .dynamic-select-area {
+            display: none;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .subject-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .subject-node {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            cursor: pointer;
+            background: #fff;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .subject-header:hover {
+            background: var(--primary-light);
+        }
+        .subject-header input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        .subject-header .expand-icon {
+            margin-left: auto;
+            transition: transform 0.3s;
+        }
+        .subject-node.open .subject-header .expand-icon {
+            transform: rotate(90deg);
+        }
+        .chapter-list {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            padding: 8px 16px 12px 36px;
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+        }
+        .subject-node.open .chapter-list {
+            display: flex;
+        }
+        .chapter-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            padding: 4px 0;
+        }
+        .chapter-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .slider-row label {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .slider-row input[type="range"] {
+            width: 200px;
+            max-width: 100%;
+        }
+        .slider-row span {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .time-calc {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #166534;
+            font-weight: 600;
+        }
+
         .declaration-box {
             display: flex;
             align-items: flex-start;
@@ -287,7 +378,6 @@
             accent-color: var(--primary);
         }
 
-        /* Buttons */
         .btn-row {
             display: flex;
             gap: 16px;
@@ -332,19 +422,18 @@
             gap: 8px;
             opacity: 0.5;
             pointer-events: none;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
         }
         .btn-start.active {
             opacity: 1;
             pointer-events: auto;
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 6px 18px rgba(37,99,235,0.4);
         }
         .btn-start.active:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 8px 22px rgba(37,99,235,0.5);
         }
 
-        /* Loading overlay */
         .loading-overlay {
             position: fixed;
             inset: 0;
@@ -380,7 +469,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <p>Please wait, loading...</p>
@@ -400,7 +488,7 @@
         <div class="exam-image-area" id="examImageArea"></div>
         <h1 class="test-title" id="testTitle"></h1>
 
-        <div class="info-grid">
+        <div class="info-grid" id="infoGrid">
             <div class="info-card">
                 <div class="info-icon"><i class="fas fa-clock"></i></div>
                 <div class="info-content">
@@ -431,31 +519,40 @@
             </div>
         </div>
 
-        <!-- Subject Breakdown Table -->
+        <!-- Dynamic selection area (for JSON file) -->
+        <div class="dynamic-select-area" id="dynamicArea">
+            <h3><i class="fas fa-check-square"></i> Choose Subjects / Chapters</h3>
+            <div class="subject-tree" id="subjectTree"></div>
+            <div class="slider-row">
+                <label for="numQSlider">Questions:</label>
+                <input type="range" id="numQSlider" min="1" max="100" value="10" step="1">
+                <span id="numQDisplay">10</span>
+            </div>
+            <div class="time-calc" id="timeCalc">
+                ⏱️ Total Time: <span id="calcDuration">--</span> min
+                <span id="extraTimeNote" style="font-size:12px; margin-left:8px;"></span>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary);">
+                <i class="fas fa-info-circle"></i> Each extra question beyond the default adds <strong>2 minutes</strong>.
+            </p>
+        </div>
+
+        <!-- Static breakdowns (hidden for dynamic) -->
         <div class="breakdown-section" id="subjectBreakdownArea" style="display:none;">
             <h3><i class="fas fa-book"></i> Subject Breakdown</h3>
             <table class="breakdown-table">
                 <thead>
-                    <tr>
-                        <th class="col-no">No.</th>
-                        <th>Subject</th>
-                        <th class="col-count">Questions</th>
-                    </tr>
+                    <tr><th class="col-no">No.</th><th>Subject</th><th class="col-count">Questions</th></tr>
                 </thead>
                 <tbody id="subjectTableBody"></tbody>
             </table>
         </div>
 
-        <!-- Chapter Breakdown Table -->
         <div class="breakdown-section" id="chapterBreakdownArea" style="display:none;">
             <h3><i class="fas fa-layer-group"></i> Chapter Breakdown</h3>
             <table class="breakdown-table">
                 <thead>
-                    <tr>
-                        <th class="col-no">No.</th>
-                        <th>Chapter</th>
-                        <th class="col-count">Questions</th>
-                    </tr>
+                    <tr><th class="col-no">No.</th><th>Chapter</th><th class="col-count">Questions</th></tr>
                 </thead>
                 <tbody id="chapterTableBody"></tbody>
             </table>
@@ -492,6 +589,7 @@
     </main>
 
     <script>
+        // ---------- CONFIG ----------
         const API_URL = 'https://script.google.com/macros/s/AKfycbxWm6fuSZcoWDBbSG2n-gpfzteRLgE7FpS9kIvOm-lKrparJ_4dd38vRg3cL8zs-lAn/exec';
         const urlParams = new URLSearchParams(window.location.search);
         const testCode = urlParams.get('testCode');
@@ -500,22 +598,41 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Test code missing',
-                text: 'No test specified. Please select a test first.',
+                text: 'No test specified.',
                 confirmButtonColor: '#2563eb'
             }).then(() => { window.location.href = 'exam.html'; });
         }
 
         let testData = null;
-        let questions = [];
+        let staticQuestions = [];
+        let dynamicQuestions = [];      // from JSON file
+        let dynamicMode = false;
+        let originalTotalQ = 0;        // sheet's totalQuestions
+        let baseDuration = 0;          // sheet's duration
 
+        // Data structures for dynamic selection
+        let subjectMap = new Map();    // subject -> { count, chapters: Map(chapter -> count) }
+        let hasChapters = false;
+
+        // ---------- FETCH TEST DATA ----------
         async function fetchTestData() {
             try {
                 const resp = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
                 const data = await resp.json();
                 if (!data.success) throw new Error(data.error || 'Test not found');
                 testData = data.test;
-                questions = Array.isArray(testData.questions) ? testData.questions : [];
-                buildUI();
+                staticQuestions = Array.isArray(testData.questions) ? testData.questions : [];
+                originalTotalQ = testData.totalQuestions || 10;
+                baseDuration = testData.duration || 60;
+
+                // Check if file column contains a URL
+                if (testData.file && testData.file.startsWith('http')) {
+                    dynamicMode = true;
+                    await loadDynamicQuestions();
+                } else {
+                    dynamicMode = false;
+                    buildUI();
+                }
             } catch (error) {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 Swal.fire({
@@ -527,10 +644,54 @@
             }
         }
 
+        async function loadDynamicQuestions() {
+            try {
+                const resp = await fetch(testData.file);
+                const json = await resp.json();
+                if (!Array.isArray(json)) throw new Error('Invalid JSON: expected an array');
+                dynamicQuestions = json;
+                // Check if any question has Sub or Chap fields
+                const hasSubOrChap = json.some(q => q.Sub || q.Chap);
+                if (!hasSubOrChap) {
+                    // No Sub/Chap → fallback to static mode
+                    dynamicMode = false;
+                    buildUI();
+                    return;
+                }
+                buildSubjectChapterMap(json);
+                buildUI();
+            } catch (e) {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to load question bank',
+                    text: e.message,
+                    confirmButtonColor: '#2563eb'
+                }).then(() => { window.location.href = 'exam.html'; });
+            }
+        }
+
+        function buildSubjectChapterMap(questions) {
+            subjectMap.clear();
+            hasChapters = false;
+            questions.forEach(q => {
+                const sub = (q.Sub || 'Unknown').trim();
+                const chap = (q.Chap || '').trim();
+                if (!subjectMap.has(sub)) subjectMap.set(sub, { count: 0, chapters: new Map() });
+                const subObj = subjectMap.get(sub);
+                subObj.count++;
+                if (chap) {
+                    hasChapters = true;
+                    if (!subObj.chapters.has(chap)) subObj.chapters.set(chap, 0);
+                    subObj.chapters.set(chap, subObj.chapters.get(chap) + 1);
+                }
+            });
+        }
+
+        // ---------- BUILD UI ----------
         function buildUI() {
             document.getElementById('loadingOverlay').style.display = 'none';
-            const mainCard = document.getElementById('mainCard');
-            mainCard.style.visibility = 'visible';
+            document.getElementById('mainCard').style.visibility = 'visible';
 
             // Exam image
             const imgArea = document.getElementById('examImageArea');
@@ -544,26 +705,16 @@
             document.getElementById('testTitle').textContent =
                 `${testData.exam || 'Exam'} – ${testData.testName || 'Mock Test'}`;
 
-            // Stats
-            const totalQ = questions.length || testData.totalQuestions || 0;
-            const duration = testData.duration || 60;
             const marksPerQ = testData.marksPerQuestion || 1;
-            const totalMarks = totalQ * marksPerQ;
             const negative = testData.negativeMarking || 0;
-
-            document.getElementById('durationVal').textContent = duration;
-            document.getElementById('totalQVal').textContent = totalQ;
-            document.getElementById('maxMarksVal').textContent = totalMarks;
             document.getElementById('negVal').textContent = negative.toFixed(2);
 
-            buildBreakdowns();
-
             // Instructions
-            const list = document.getElementById('instructionsList');
-            list.innerHTML = `
-                <li>The test contains <strong>${totalQ} questions</strong>.</li>
+            const instrList = document.getElementById('instructionsList');
+            instrList.innerHTML = `
+                <li>The test contains <strong><span id="instrTotalQ">--</span> questions</strong>.</li>
                 <li>Each question has <strong>4 options</strong>.</li>
-                <li>You have to complete the test in <strong>${duration} minutes</strong>.</li>
+                <li>You have to complete the test in <strong><span id="instrDuration">--</span> minutes</strong>.</li>
                 <li><strong>${marksPerQ} mark(s)</strong> for each correct answer.</li>
                 <li><strong>${negative} mark(s)</strong> will be deducted for each wrong answer.</li>
                 <li>No marks for unattempted questions.</li>
@@ -573,108 +724,301 @@
             // Language dropdown
             const langSelect = document.getElementById('langSelect');
             if (testData.language && testData.language.toLowerCase().includes('hindi')) {
-                const option = document.createElement('option');
-                option.value = 'hi';
-                option.textContent = 'हिन्दी (Hindi)';
-                langSelect.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = 'hi';
+                opt.textContent = 'हिन्दी (Hindi)';
+                langSelect.appendChild(opt);
             }
             const savedLang = localStorage.getItem('mock_lang');
-            if (savedLang && [...langSelect.options].some(opt => opt.value === savedLang)) {
+            if (savedLang && [...langSelect.options].some(o => o.value === savedLang)) {
                 langSelect.value = savedLang;
             }
-        }
 
-        function buildBreakdowns() {
-            // --- Subject breakdown ---
-            let subjectData = null;
-            if (
-                testData.subjectDetails &&
-                typeof testData.subjectDetails === 'object' &&
-                Object.keys(testData.subjectDetails).length > 0
-            ) {
-                // Check if all values are numeric
-                const vals = Object.values(testData.subjectDetails);
-                if (vals.every(v => !isNaN(parseFloat(v)) && isFinite(v))) {
-                    subjectData = testData.subjectDetails;
-                }
-            }
-            if (!subjectData) {
-                // Fallback: aggregate from questions
-                subjectData = new Map();
-                questions.forEach(q => {
-                    if (q.subject) {
-                        const s = q.subject.trim();
-                        subjectData.set(s, (subjectData.get(s) || 0) + 1);
-                    }
-                });
-            }
-
-            // Populate subject table
-            const subjectArea = document.getElementById('subjectBreakdownArea');
-            const subjectBody = document.getElementById('subjectTableBody');
-            const subjectEntries = subjectData instanceof Map
-                ? Array.from(subjectData.entries())
-                : Object.entries(subjectData);
-            if (subjectEntries.length > 0) {
-                subjectArea.style.display = 'block';
-                subjectBody.innerHTML = '';
-                subjectEntries.forEach(([name, count], idx) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td class="col-no">${idx + 1}</td>
-                                     <td class="col-name">${name}</td>
-                                     <td class="col-count">${count}</td>`;
-                    subjectBody.appendChild(row);
-                });
+            if (dynamicMode) {
+                setupDynamicMode();
             } else {
-                subjectArea.style.display = 'none';
-            }
-
-            // --- Chapter breakdown ---
-            let chapterData = null;
-            if (
-                testData.chapterDetails &&
-                typeof testData.chapterDetails === 'object' &&
-                Object.keys(testData.chapterDetails).length > 0
-            ) {
-                const vals = Object.values(testData.chapterDetails);
-                if (vals.every(v => !isNaN(parseFloat(v)) && isFinite(v))) {
-                    chapterData = testData.chapterDetails;
-                }
-            }
-            if (!chapterData) {
-                chapterData = new Map();
-                questions.forEach(q => {
-                    if (q.chapter) {
-                        const c = q.chapter.trim();
-                        chapterData.set(c, (chapterData.get(c) || 0) + 1);
-                    }
-                });
-            }
-
-            const chapterArea = document.getElementById('chapterBreakdownArea');
-            const chapterBody = document.getElementById('chapterTableBody');
-            const chapterEntries = chapterData instanceof Map
-                ? Array.from(chapterData.entries())
-                : Object.entries(chapterData);
-            if (chapterEntries.length > 0) {
-                chapterArea.style.display = 'block';
-                chapterBody.innerHTML = '';
-                chapterEntries.forEach(([name, count], idx) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td class="col-no">${idx + 1}</td>
-                                     <td class="col-name">${name}</td>
-                                     <td class="col-count">${count}</td>`;
-                    chapterBody.appendChild(row);
-                });
-            } else {
-                chapterArea.style.display = 'none';
+                setupStaticMode();
             }
         }
 
+        function setupStaticMode() {
+            const totalQ = staticQuestions.length || originalTotalQ;
+            const totalTime = baseDuration;
+            document.getElementById('totalQVal').textContent = totalQ;
+            document.getElementById('maxMarksVal').textContent = totalQ * (testData.marksPerQuestion || 1);
+            document.getElementById('durationVal').textContent = totalTime;
+            document.getElementById('instrTotalQ').textContent = totalQ;
+            document.getElementById('instrDuration').textContent = totalTime;
+
+            buildBreakdowns(staticQuestions);
+            document.getElementById('dynamicArea').style.display = 'none';
+        }
+
+        function setupDynamicMode() {
+            // Hide static breakdowns
+            document.getElementById('subjectBreakdownArea').style.display = 'none';
+            document.getElementById('chapterBreakdownArea').style.display = 'none';
+
+            const dynamicArea = document.getElementById('dynamicArea');
+            dynamicArea.style.display = 'flex';
+
+            // Build tree
+            const tree = document.getElementById('subjectTree');
+            tree.innerHTML = '';
+
+            const sortedSubjects = [...subjectMap.keys()].sort();
+            sortedSubjects.forEach(sub => {
+                const subObj = subjectMap.get(sub);
+                const node = document.createElement('div');
+                node.className = 'subject-node';
+
+                const header = document.createElement('div');
+                header.className = 'subject-header';
+
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.value = sub;
+                cb.addEventListener('change', () => onSubjectCheckboxChange(sub, cb));
+
+                const span = document.createElement('span');
+                span.textContent = `${sub} (${subObj.count})`;
+
+                const expandIcon = document.createElement('i');
+                expandIcon.className = 'fas fa-chevron-right expand-icon';
+
+                header.appendChild(cb);
+                header.appendChild(span);
+
+                if (hasChapters && subObj.chapters.size > 0) {
+                    header.appendChild(expandIcon);
+                    header.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'INPUT') {
+                            node.classList.toggle('open');
+                        }
+                    });
+                } else {
+                    // Clicking header toggles checkbox
+                    header.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'INPUT') {
+                            cb.checked = !cb.checked;
+                            onSubjectCheckboxChange(sub, cb);
+                        }
+                    });
+                }
+
+                node.appendChild(header);
+
+                // Chapter list
+                if (hasChapters && subObj.chapters.size > 0) {
+                    const chapList = document.createElement('div');
+                    chapList.className = 'chapter-list';
+                    const sortedChaps = [...subObj.chapters.keys()].sort();
+                    sortedChaps.forEach(chap => {
+                        const count = subObj.chapters.get(chap);
+                        const item = document.createElement('label');
+                        item.className = 'chapter-item';
+                        const chCb = document.createElement('input');
+                        chCb.type = 'checkbox';
+                        chCb.value = chap;
+                        chCb.dataset.subject = sub;
+                        chCb.addEventListener('change', () => onChapterCheckboxChange(sub, chap, chCb));
+                        item.appendChild(chCb);
+                        item.appendChild(document.createTextNode(`${chap} (${count})`));
+                        chapList.appendChild(item);
+                    });
+                    node.appendChild(chapList);
+                }
+
+                tree.appendChild(node);
+            });
+
+            // Initialize slider: min = originalTotalQ, max = min(totalAvailable, 200)
+            const totalAvail = getSelectedQuestionsCount();
+            const slider = document.getElementById('numQSlider');
+            const display = document.getElementById('numQDisplay');
+
+            slider.min = originalTotalQ;
+            slider.max = Math.min(totalAvail, 200);
+            slider.value = originalTotalQ;
+            display.textContent = originalTotalQ;
+
+            slider.addEventListener('input', () => {
+                display.textContent = slider.value;
+                updateDynamicTotals();
+            });
+
+            updateDynamicTotals();   // set initial numbers
+        }
+
+        // ---------- DYNAMIC SELECTION LOGIC ----------
+        function onSubjectCheckboxChange(sub, cb) {
+            const node = cb.closest('.subject-node');
+            if (hasChapters && node) {
+                const chCbs = node.querySelectorAll('.chapter-item input[type="checkbox"]');
+                chCbs.forEach(ch => { ch.checked = cb.checked; });
+            }
+            updateSliderRange();
+        }
+
+        function onChapterCheckboxChange(sub, chap, cb) {
+            const node = cb.closest('.subject-node');
+            if (!node) return;
+            const subCb = node.querySelector('.subject-header input[type="checkbox"]');
+            if (!subCb) return;
+            const allChCbs = node.querySelectorAll('.chapter-item input[type="checkbox"]');
+            const checkedCount = [...allChCbs].filter(c => c.checked).length;
+            if (checkedCount === 0) {
+                subCb.checked = false;
+                subCb.indeterminate = false;
+            } else if (checkedCount === allChCbs.length) {
+                subCb.checked = true;
+                subCb.indeterminate = false;
+            } else {
+                subCb.checked = false;
+                subCb.indeterminate = true;
+            }
+            updateSliderRange();
+        }
+
+        // Count selected questions: if nothing selected, return total of all questions
+        function getSelectedQuestionsCount() {
+            if (!dynamicMode) return 0;
+            if (!hasChapters) {
+                const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
+                const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
+                if (checkedSubs.length === 0) {
+                    // All subjects
+                    let total = 0;
+                    subjectMap.forEach(obj => total += obj.count);
+                    return total;
+                }
+                let total = 0;
+                checkedSubs.forEach(sub => {
+                    if (subjectMap.has(sub)) total += subjectMap.get(sub).count;
+                });
+                return total;
+            } else {
+                const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
+                const checkedChaps = [...chCbs].filter(cb => cb.checked);
+                if (checkedChaps.length === 0) {
+                    // All chapters
+                    let total = 0;
+                    subjectMap.forEach(obj => total += obj.count);
+                    return total;
+                }
+                const selectedSubChaps = new Map();
+                checkedChaps.forEach(cb => {
+                    const sub = cb.dataset.subject;
+                    const chap = cb.value;
+                    if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
+                    selectedSubChaps.get(sub).add(chap);
+                });
+                let total = 0;
+                dynamicQuestions.forEach(q => {
+                    const sub = (q.Sub || 'Unknown').trim();
+                    const chap = (q.Chap || '').trim();
+                    if (selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap)) {
+                        total++;
+                    }
+                });
+                return total;
+            }
+        }
+
+        function updateSliderRange() {
+            const totalAvail = getSelectedQuestionsCount();
+            const slider = document.getElementById('numQSlider');
+            // Keep min = originalTotalQ, but cap at totalAvail if needed
+            slider.min = Math.min(originalTotalQ, totalAvail);
+            slider.max = Math.min(totalAvail, 200);
+            if (parseInt(slider.value) < slider.min) {
+                slider.value = slider.min;
+                document.getElementById('numQDisplay').textContent = slider.min;
+            } else if (parseInt(slider.value) > slider.max) {
+                slider.value = slider.max;
+                document.getElementById('numQDisplay').textContent = slider.max;
+            }
+            updateDynamicTotals();
+        }
+
+        function updateDynamicTotals() {
+            const slider = document.getElementById('numQSlider');
+            const numQ = parseInt(slider.value);
+            document.getElementById('numQDisplay').textContent = numQ;
+
+            // Update displayed question count & max marks
+            document.getElementById('totalQVal').textContent = numQ;
+            document.getElementById('maxMarksVal').textContent = numQ * (testData.marksPerQuestion || 1);
+            document.getElementById('instrTotalQ').textContent = numQ;
+
+            // Time calculation: baseDuration + (numQ - originalTotalQ) * 2, only if extra > 0
+            const extraQ = Math.max(0, numQ - originalTotalQ);
+            const totalTime = baseDuration + extraQ * 2;
+            document.getElementById('durationVal').textContent = totalTime;
+            document.getElementById('calcDuration').textContent = totalTime;
+            document.getElementById('instrDuration').textContent = totalTime;
+
+            const extraNote = document.getElementById('extraTimeNote');
+            if (extraQ > 0) {
+                extraNote.textContent = `(+${extraQ * 2} min for ${extraQ} extra Qs)`;
+            } else {
+                extraNote.textContent = '';
+            }
+        }
+
+        // ---------- STATIC BREAKDOWNS ----------
+        function buildBreakdowns(questions) {
+            const subMap = new Map();
+            questions.forEach(q => {
+                if (q.subject) {
+                    const s = q.subject.trim();
+                    subMap.set(s, (subMap.get(s) || 0) + 1);
+                }
+            });
+            const subArea = document.getElementById('subjectBreakdownArea');
+            const subBody = document.getElementById('subjectTableBody');
+            if (subMap.size > 0) {
+                subArea.style.display = 'block';
+                subBody.innerHTML = '';
+                let idx = 1;
+                for (const [name, count] of subMap) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td class="col-no">${idx}</td><td class="col-name">${name}</td><td class="col-count">${count}</td>`;
+                    subBody.appendChild(row);
+                    idx++;
+                }
+            } else {
+                subArea.style.display = 'none';
+            }
+
+            const chapMap = new Map();
+            questions.forEach(q => {
+                if (q.chapter) {
+                    const c = q.chapter.trim();
+                    chapMap.set(c, (chapMap.get(c) || 0) + 1);
+                }
+            });
+            const chapArea = document.getElementById('chapterBreakdownArea');
+            const chapBody = document.getElementById('chapterTableBody');
+            if (chapMap.size > 0) {
+                chapArea.style.display = 'block';
+                chapBody.innerHTML = '';
+                let idx = 1;
+                for (const [name, count] of chapMap) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td class="col-no">${idx}</td><td class="col-name">${name}</td><td class="col-count">${count}</td>`;
+                    chapBody.appendChild(row);
+                    idx++;
+                }
+            } else {
+                chapArea.style.display = 'none';
+            }
+        }
+
+        // ---------- START BUTTON ----------
         function toggleStartButton() {
             const btn = document.getElementById('startBtn');
-            const checked = document.getElementById('agreeCheck').checked;
-            if (checked) {
+            if (document.getElementById('agreeCheck').checked) {
                 btn.classList.add('active');
                 btn.disabled = false;
             } else {
@@ -687,10 +1031,77 @@
             if (!document.getElementById('agreeCheck').checked) return;
             const lang = document.getElementById('langSelect').value;
             localStorage.setItem('mock_lang', lang);
-            const params = new URLSearchParams();
-            params.set('testCode', testCode);
-            if (lang !== 'en') params.set('lang', lang);
-            window.location.href = `test2.html?${params.toString()}`;
+
+            if (dynamicMode) {
+                const slider = document.getElementById('numQSlider');
+                const numQ = parseInt(slider.value);
+                const extraQ = Math.max(0, numQ - originalTotalQ);
+                const totalDuration = baseDuration + extraQ * 2;
+
+                // Determine selected questions
+                let filtered = [];
+
+                if (!hasChapters) {
+                    const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
+                    const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
+                    if (checkedSubs.length === 0) {
+                        filtered = [...dynamicQuestions];
+                    } else {
+                        filtered = dynamicQuestions.filter(q => {
+                            const s = (q.Sub || 'Unknown').trim();
+                            return checkedSubs.includes(s);
+                        });
+                    }
+                } else {
+                    const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
+                    const checkedChaps = [...chCbs].filter(cb => cb.checked);
+                    if (checkedChaps.length === 0) {
+                        filtered = [...dynamicQuestions];
+                    } else {
+                        const selectedSubChaps = new Map();
+                        checkedChaps.forEach(cb => {
+                            const sub = cb.dataset.subject;
+                            const chap = cb.value;
+                            if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
+                            selectedSubChaps.get(sub).add(chap);
+                        });
+                        filtered = dynamicQuestions.filter(q => {
+                            const sub = (q.Sub || 'Unknown').trim();
+                            const chap = (q.Chap || '').trim();
+                            return selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap);
+                        });
+                    }
+                }
+
+                if (filtered.length === 0) {
+                    Swal.fire('Error', 'No questions match your selection.', 'warning');
+                    return;
+                }
+
+                // Shuffle and pick exactly numQ questions
+                const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+                const selectedQuestions = shuffled.slice(0, Math.min(numQ, shuffled.length));
+
+                const config = {
+                    testCode: testCode,
+                    exam: testData.exam,
+                    subject: testData.subject,
+                    testName: testData.testName,
+                    duration: totalDuration,
+                    marksPerQuestion: testData.marksPerQuestion,
+                    negativeMarking: testData.negativeMarking,
+                    language: testData.language,
+                    imageurl: testData.imageurl,
+                    questions: selectedQuestions
+                };
+
+                sessionStorage.setItem('dynamicTestData', JSON.stringify(config));
+                sessionStorage.setItem('dynamicTestCode', testCode);
+                window.location.href = 'test2.html?dynamic=1';
+            } else {
+                // Static test – redirect as before
+                window.location.href = `test2.html?testCode=${encodeURIComponent(testCode)}`;
+            }
         }
 
         window.addEventListener('load', () => {
