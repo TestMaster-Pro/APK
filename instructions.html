@@ -291,6 +291,7 @@
             background: #fff;
             font-weight: 600;
             transition: background 0.2s;
+            user-select: none;
         }
         .subject-header:hover {
             background: var(--primary-light);
@@ -324,6 +325,7 @@
             gap: 6px;
             font-size: 14px;
             padding: 4px 0;
+            cursor: pointer;
         }
         .chapter-item input[type="checkbox"] {
             width: 16px;
@@ -832,6 +834,12 @@
                 tree.appendChild(node);
             });
 
+            // Auto‑open the chapter list if there is exactly one subject with chapters
+            if (sortedSubjects.length === 1 && hasChapters && subjectMap.get(sortedSubjects[0]).chapters.size > 0) {
+                const onlyNode = tree.querySelector('.subject-node');
+                if (onlyNode) onlyNode.classList.add('open');
+            }
+
             // Initialize slider: min = originalTotalQ, max = min(totalAvailable, 200)
             const totalAvail = getSelectedQuestionsCount();
             const slider = document.getElementById('numQSlider');
@@ -857,7 +865,7 @@
                 const chCbs = node.querySelectorAll('.chapter-item input[type="checkbox"]');
                 chCbs.forEach(ch => { ch.checked = cb.checked; });
             }
-            updateSliderRange();
+            updateSliderRangeAndSnapToMax();
         }
 
         function onChapterCheckboxChange(sub, chap, cb) {
@@ -877,7 +885,21 @@
                 subCb.checked = false;
                 subCb.indeterminate = true;
             }
-            updateSliderRange();
+            updateSliderRangeAndSnapToMax();
+        }
+
+        // Whenever the selection changes, adjust the slider range and snap the value to its maximum (i.e., all selected questions)
+        function updateSliderRangeAndSnapToMax() {
+            const totalAvail = getSelectedQuestionsCount();
+            const slider = document.getElementById('numQSlider');
+            // Update min/max bounds
+            slider.min = Math.min(originalTotalQ, totalAvail);
+            slider.max = Math.min(totalAvail, 200);
+
+            // Always set the slider to the maximum (all available selected questions)
+            slider.value = slider.max;
+            document.getElementById('numQDisplay').textContent = slider.value;
+            updateDynamicTotals();
         }
 
         // Count selected questions: if nothing selected, return total of all questions
@@ -923,22 +945,6 @@
                 });
                 return total;
             }
-        }
-
-        function updateSliderRange() {
-            const totalAvail = getSelectedQuestionsCount();
-            const slider = document.getElementById('numQSlider');
-            // Keep min = originalTotalQ, but cap at totalAvail if needed
-            slider.min = Math.min(originalTotalQ, totalAvail);
-            slider.max = Math.min(totalAvail, 200);
-            if (parseInt(slider.value) < slider.min) {
-                slider.value = slider.min;
-                document.getElementById('numQDisplay').textContent = slider.min;
-            } else if (parseInt(slider.value) > slider.max) {
-                slider.value = slider.max;
-                document.getElementById('numQDisplay').textContent = slider.max;
-            }
-            updateDynamicTotals();
         }
 
         function updateDynamicTotals() {
