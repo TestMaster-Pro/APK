@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Revenue • TestMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root { --primary: #6366f1; --dark: #1e293b; --danger: #ef4444; --success: #10b981; --warning: #f59e0b; --info: #3b82f6; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #0f172a; color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .login-screen { background:#1e293b; padding:36px; border-radius:20px; border:1px solid #334155; width:90%; max-width:420px; text-align:center; }
+        .login-screen h2 { margin-bottom:20px; }
+        .login-screen input, .login-screen select { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; background:#334155; color:white; border:1px solid #475569; font-family:'Poppins',sans-serif; font-size:14px; }
+        .login-screen button { width:100%; padding:13px; background:#6366f1; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:700; font-size:15px; }
+        .login-screen .error { color:#ef4444; font-size:13px; margin-top:8px; }
+        .dashboard { width:100%; max-width:1100px; padding:20px; margin:auto; display:none; }
+        .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+        .header h2 { display:flex; align-items:center; gap:8px; }
+        .stats-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap:14px; margin-bottom:20px; }
+        .stat-card { background:#1e293b; border:1px solid #334155; border-radius:14px; padding:18px; text-align:center; }
+        .stat-card .count { font-size:28px; font-weight:800; }
+        .stat-card .label { font-size:11px; color:#94a3b8; margin-top:4px; }
+        .stat-card.pending .count { color:#f59e0b; }
+        .stat-card.paid .count { color:#10b981; }
+        .table-wrapper { background:#1e293b; border-radius:14px; overflow-x:auto; border:1px solid #334155; margin-bottom:20px; }
+        table { width:100%; border-collapse:collapse; min-width:700px; }
+        th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #334155; font-size:12px; white-space:nowrap; }
+        th { background:#334155; font-weight:700; }
+        .badge { padding:3px 8px; border-radius:8px; font-size:10px; font-weight:700; }
+        .badge-success { background:#065f46; color:#6ee7b7; }
+        .badge-warning { background:#78350f; color:#fbbf24; }
+        .badge-danger { background:#7f1d1d; color:#fca5a5; }
+        .btn { padding:6px 12px; border:none; border-radius:6px; cursor:pointer; font-size:10px; font-weight:600; font-family:'Poppins'; }
+        .btn-mark-paid { background:#f59e0b; color:white; }
+        .btn-logout { background:#dc2626; color:white; padding:8px 16px; border-radius:8px; }
+        @media (max-width:600px) { .stats-cards { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <h2><i class="fas fa-hand-holding-usd" style="color:#fbbf24;"></i> Influencer / Admin Login</h2>
+        <select id="loginRole">
+            <option value="influencer">Influencer</option>
+            <option value="admin">Admin</option>
+        </select>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <p class="error" id="loginError"></p>
+    </div>
+
+    <!-- Dashboard (hidden initially) -->
+    <div id="dashboard" class="dashboard">
+        <div class="header">
+            <h2><i class="fas fa-chart-line"></i> <span id="dashboardTitle">Revenue Dashboard</span></h2>
+            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <!-- Influencer Stats (only if logged in as influencer) -->
+        <div id="influencerStats" style="display:none;">
+            <div class="stats-cards">
+                <div class="stat-card"><div class="count" id="totalReferred">0</div><div class="label">Total Referred Users</div></div>
+                <div class="stat-card"><div class="count" id="discountUsers">0</div><div class="label">Used Discount Code</div></div>
+                <div class="stat-card"><div class="count" id="purchasedUsers">0</div><div class="label">Purchased</div></div>
+                <div class="stat-card pending"><div class="count" id="pendingCommission">₹0</div><div class="label">Pending Commission</div></div>
+                <div class="stat-card paid"><div class="count" id="paidCommission">₹0</div><div class="label">Paid Commission</div></div>
+            </div>
+        </div>
+
+        <!-- Commission Table -->
+        <h3 style="margin-bottom:10px;"><i class="fas fa-coins"></i> Commission History</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Commission ID</th><th>Customer</th><th>Payment ID</th><th>Order Amt</th><th>Disc Amt</th><th>Comm Amt</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody id="commissionsBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Admin Commissions (if logged in as admin) – will show all with filters and mark paid -->
+        <div id="adminCommissionSection" style="display:none;">
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+                <select id="adminStatusFilter" onchange="loadAdminCommissions()" style="padding:8px;border-radius:8px;background:#334155;color:white;border:1px solid #475569;">
+                    <option value="">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                </select>
+                <button class="btn" style="background:#6366f1;color:white;" onclick="loadAdminCommissions()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Commission ID</th><th>Influencer</th><th>Customer</th><th>Payment ID</th><th>Order Amt</th><th>Disc Amt</th><th>Comm Amt</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+                    <tbody id="adminCommissionsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Influencer User List -->
+        <div id="influencerUserList" style="display:none;">
+            <h3 style="margin-bottom:10px;"><i class="fas fa-users"></i> Referred Users</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Username</th><th>Name</th><th>Registered</th><th>Used Discount</th><th>Purchased</th><th>Commissions</th></tr></thead>
+                    <tbody id="userListBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyMT8CDc3D8r55NdK_vaJ9uwSArxVkT7s9RkS5CPxehCh0evlH1C71gWm425_zAAdLBog/exec';
+        let currentUser = null;  // { role: 'influencer'/'admin', username, data }
+
+        async function handleLogin() {
+            const role = document.getElementById('loginRole').value;
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!username || !password) {
+                document.getElementById('loginError').textContent = 'Fill all fields';
+                return;
+            }
+            try {
+                let res, data;
+                if (role === 'influencer') {
+                    res = await fetch(`${API_URL}?action=influencerLogin&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+                    data = await res.json();
+                } else {
+                    res = await fetch(`${API_URL}?action=adminLogin&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+                    data = await res.json();
+                }
+                if (data.success) {
+                    currentUser = {
+                        role: role,
+                        username: role === 'admin' ? 'admin' : data.influencer.username,
+                        data: data.influencer || data.admin
+                    };
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    if (role === 'influencer') {
+                        document.getElementById('dashboardTitle').textContent = `Influencer: ${currentUser.data.name || currentUser.username}`;
+                        document.getElementById('influencerStats').style.display = 'block';
+                        document.getElementById('influencerUserList').style.display = 'block';
+                        document.getElementById('adminCommissionSection').style.display = 'none';
+                        loadInfluencerData();
+                    } else {
+                        document.getElementById('dashboardTitle').textContent = 'Admin Commission Management';
+                        document.getElementById('influencerStats').style.display = 'none';
+                        document.getElementById('influencerUserList').style.display = 'none';
+                        document.getElementById('adminCommissionSection').style.display = 'block';
+                        loadAdminCommissions();
+                    }
+                } else {
+                    document.getElementById('loginError').textContent = data.error || 'Invalid credentials';
+                }
+            } catch (e) {
+                document.getElementById('loginError').textContent = 'Connection error';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        // ==================== INFLUENCER FUNCTIONS ====================
+        async function loadInfluencerData() {
+            if (!currentUser || currentUser.role !== 'influencer') return;
+            const influencerUsername = currentUser.username;
+
+            // 1. Load commissions (pending & paid)
+            try {
+                const res = await fetch(`${API_URL}?action=getInfluencerData&influencerUsername=${encodeURIComponent(influencerUsername)}`);
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('pendingCommission').textContent = '₹' + data.totalPending;
+                    document.getElementById('paidCommission').textContent = '₹' + data.totalPaid;
+
+                    const commissions = data.commissions || [];
+                    document.getElementById('commissionsBody').innerHTML = commissions.map(c => {
+                        const badgeClass = c.status === 'Paid' ? 'badge-success' : 'badge-warning';
+                        return `<tr>
+                            <td style="font-size:10px;">${c.commissionId}</td>
+                            <td>@${c.customerUsername}</td>
+                            <td>${c.paymentId}</td>
+                            <td>₹${c.orderAmount}</td>
+                            <td>₹${c.discountedAmount}</td>
+                            <td>₹${c.commissionAmount}</td>
+                            <td><span class="badge ${badgeClass}">${c.status}</span></td>
+                            <td>${new Date(c.dateCreated).toLocaleDateString('en-IN')}</td>
+                        </tr>`;
+                    }).join('');
+                }
+            } catch(e) { console.error(e); }
+
+            // 2. Load user stats
+            try {
+                const res2 = await fetch(`${API_URL}?action=getInfluencerUserStats&influencerUsername=${encodeURIComponent(influencerUsername)}`);
+                const data2 = await res2.json();
+                if (data2.success) {
+                    document.getElementById('totalReferred').textContent = data2.totalReferredUsers;
+                    document.getElementById('discountUsers').textContent = data2.usersWhoUsedDiscountCode;
+                    document.getElementById('purchasedUsers').textContent = data2.usersWhoPurchased;
+
+                    const users = data2.userList || [];
+                    document.getElementById('userListBody').innerHTML = users.map(u => {
+                        const hasBought = u.purchased;
+                        const used = u.usedDiscountCode;
+                        const comms = u.commissions || [];
+                        const commList = comms.map(c => `${c.status} ₹${c.commission}`).join(', ') || 'None';
+                        return `<tr>
+                            <td>@${u.username}</td>
+                            <td>${u.name}</td>
+                            <td>${new Date(u.registeredAt).toLocaleDateString('en-IN')}</td>
+                            <td><span class="badge ${used ? 'badge-success' : 'badge-danger'}">${used ? 'Yes' : 'No'}</span></td>
+                            <td><span class="badge ${hasBought ? 'badge-success' : 'badge-danger'}">${hasBought ? 'Yes' : 'No'}</span></td>
+                            <td>${commList}</td>
+                        </tr>`;
+                    }).join('');
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        // ==================== ADMIN COMMISSION FUNCTIONS ====================
+        async function loadAdminCommissions() {
+            const statusFilter = document.getElementById('adminStatusFilter').value;
+            try {
+                const res = await fetch(`${API_URL}?action=adminGetAllInfluencerCommissions&status=${encodeURIComponent(statusFilter)}`);
+                const data = await res.json();
+                if (data.success) {
+                    const commissions = data.commissions || [];
+                    document.getElementById('adminCommissionsBody').innerHTML = commissions.map(c => {
+                        const badgeClass = c.status === 'Paid' ? 'badge-success' : 'badge-warning';
+                        const action = c.status === 'Pending' ? 
+                            `<button class="btn btn-mark-paid" onclick="markCommissionPaid('${c.commissionId}')">Mark Paid</button>` : '';
+                        return `<tr>
+                            <td style="font-size:10px;">${c.commissionId}</td>
+                            <td>@${c.influencerUsername}</td>
+                            <td>@${c.customerUsername}</td>
+                            <td>${c.paymentId}</td>
+                            <td>₹${c.orderAmount}</td>
+                            <td>₹${c.discountedAmount}</td>
+                            <td>₹${c.commissionAmount}</td>
+                            <td><span class="badge ${badgeClass}">${c.status}</span></td>
+                            <td>${new Date(c.dateCreated).toLocaleDateString('en-IN')}</td>
+                            <td>${action}</td>
+                        </tr>`;
+                    }).join('');
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        async function markCommissionPaid(commissionId) {
+            const res = await fetch(`${API_URL}?action=adminMarkCommissionPaid&commissionId=${encodeURIComponent(commissionId)}`);
+            const data = await res.json();
+            if (data.success) {
+                Swal.fire('Marked as Paid!', '', 'success');
+                loadAdminCommissions();
+            } else {
+                Swal.fire('Error', data.error, 'error');
+            }
+        }
+
+        // Optional: if admin wants to switch to an influencer view (not implemented, but could be added)
+    </script>
+</body>
+</html>
