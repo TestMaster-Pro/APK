@@ -682,9 +682,9 @@
     </nav>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbylIcwDrbWkXSwx0wUFAJ7SEji6o0agUyXz3Hu2sD8_PDYktvrjeo-gO5CC5xXHrt0V/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyB8x80iQRROrRKcAhbTEQszOx2-CqDEbTjWkxb-kQZd_GqzHKJxhnzoQXUS0-MxeE3jQ/exec';
         const TEST_SERIES_JSON = './json/testseries.json';
-        const CACHE_KEY = 'cachedSeriesTests';
+        let CACHE_KEY; // will be set after testSeriesCode is known
 
         let allMocks = [];
         let seriesInfo = null;
@@ -703,6 +703,8 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         testSeriesCode = urlParams.get('testSeriesCode') || '';
+        // Unique cache key per series code
+        CACHE_KEY = `cachedSeriesTests_${testSeriesCode}`;
 
         // ---------- Helpers ----------
         function showToast(msg, type='info', dur=3000) {
@@ -833,8 +835,17 @@
                 const resp = await fetch(url);
                 const data = await resp.json();
                 if (data.success && Array.isArray(data.tests)) {
-                    allMocks = data.tests.map((t,i) => ({...t, _seq:i}));
-                    try { localStorage.setItem(CACHE_KEY, JSON.stringify(allMocks)); } catch(e) {}
+                    const freshMocks = data.tests.map((t,i) => ({...t, _seq:i}));
+                    // Only update if different, to avoid unnecessary re-renders
+                    if (JSON.stringify(freshMocks) !== JSON.stringify(allMocks)) {
+                        allMocks = freshMocks;
+                        try { localStorage.setItem(CACHE_KEY, JSON.stringify(allMocks)); } catch(e) {}
+                        document.getElementById('testCountDisplay').textContent = `(${allMocks.length} tests)`;
+                        document.getElementById('filterAccordion').classList.remove('hidden');
+                        resetFilters();
+                        renderFilterAccordions();
+                        applyFilters();
+                    }
                     return true;
                 }
             } catch(e) {
@@ -861,16 +872,9 @@
                     applyFilters();
                 }
             }
+            // Silent background refresh if online
             if (navigator.onLine) {
-                fetchTestsFromAPI().then(success => {
-                    if (success) {
-                        document.getElementById('testCountDisplay').textContent = `(${allMocks.length} tests)`;
-                        document.getElementById('filterAccordion').classList.remove('hidden');
-                        resetFilters();
-                        renderFilterAccordions();
-                        applyFilters();
-                    }
-                });
+                fetchTestsFromAPI();
             }
         }
 
@@ -948,8 +952,6 @@
                 chapterContainer.innerHTML = '<div style="padding:12px;color:var(--gray-400);text-align:center;">No chapters available</div>';
             }
             document.getElementById('chapterBadge').textContent = selectedChapter || 'All';
-
-            // No year bar anymore
         }
 
         function selectExamFilter(exam) {
@@ -1010,6 +1012,7 @@
                 (m.testName && m.testName.toLowerCase().includes(search)) ||
                 (m.testCode && m.testCode.toLowerCase().includes(search))
             );
+            // Remove duplicates based on testCode
             const seen = new Set();
             filtered = filtered.filter(t => { if (seen.has(t.testCode)) return false; seen.add(t.testCode); return true; });
             filtered.sort((a,b) => sortOrder === 'oldest' ? (a._seq||0)-(b._seq||0) : (b._seq||0)-(a._seq||0));
@@ -1202,7 +1205,31 @@
             window.location.href = `leaderboard.html?testCode=${encodeURIComponent(code)}`;
         }
 
-        // Footer helpers
+        // ---------- Footer Caching Helpers ----------
+        const FOOTER_EXAMS_CACHE = 'cachedFooterExams';
+        const FOOTER_UPCOMING_CACHE = 'cachedFooterUpcoming';
+
+        function getCachedFooterExams() {
+            try {
+                const cached = localStorage.getItem(FOOTER_EXAMS_CACHE);
+                if (cached) return JSON.parse(cached);
+            } catch(e) {}
+            return null;
+        }
+        function setCachedFooterExams(data) {
+            try { localStorage.setItem(FOOTER_EXAMS_CACHE, JSON.stringify(data)); } catch(e) {}
+        }
+        function getCachedFooterUpcoming() {
+            try {
+                const cached = localStorage.getItem(FOOTER_UPCOMING_CACHE);
+                if (cached) return JSON.parse(cached);
+            } catch(e) {}
+            return null;
+        }
+        function setCachedFooterUpcoming(data) {
+            try { localStorage.setItem(FOOTER_UPCOMING_CACHE, JSON.stringify(data)); } catch(e) {}
+        }
+
         function groupByCategoryUniqueExams(arr) {
             const map = {};
             arr.forEach(item => {
@@ -1216,15 +1243,9 @@
             return Object.keys(map).sort().map(cat => ({ category: cat, exams: map[cat].exams }));
         }
 
-        async function fetchJSON(p, fb) {
-            try { const r = await fetch(p); if (!r.ok) throw new Error(); return await r.json(); }
-            catch(e) { return fb; }
-        }
-
-        async function renderFooterExamCategories() {
-            const c = document.getElementById('footerExamCategories');
-            const data = await fetchJSON('./mocks.json', []);
-            const grouped = groupByCategoryUniqueExams(data);
+        // Render footer exam list from given mocks array
+        function renderFooterExamsHTML(mocksArray) {
+            const grouped = groupByCategoryUniqueExams(mocksArray);
             let html = grouped.map(cat =>
                 `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}')">${cat.category}</a></li>`
             ).join('');
@@ -1235,12 +1256,43 @@
             html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             html += `<li><a onclick="navigate('apk.html')">📱 Get APK</a></li>`;
-            c.innerHTML = html;
+            return html;
+        }
+
+        async function renderFooterExamCategories() {
+            const container = document.getElementById('footerExamCategories');
+            // 1. Try cached data first
+            const cachedMocks = getCachedFooterExams();
+            if (cachedMocks && Array.isArray(cachedMocks) && cachedMocks.length) {
+                container.innerHTML = renderFooterExamsHTML(cachedMocks);
+                showToast('Footer loaded from cache', 'info', 1000);
+            }
+            // 2. Fetch fresh in background
+            try {
+                const resp = await fetch('./mocks.json');
+                if (resp.ok) {
+                    const freshMocks = await resp.json();
+                    if (Array.isArray(freshMocks) && freshMocks.length) {
+                        // Update cache and UI if changed
+                        const cachedStr = JSON.stringify(cachedMocks);
+                        const freshStr = JSON.stringify(freshMocks);
+                        if (freshStr !== cachedStr) {
+                            setCachedFooterExams(freshMocks);
+                            container.innerHTML = renderFooterExamsHTML(freshMocks);
+                        }
+                    }
+                }
+            } catch(e) {
+                // If fetch fails and no cache, use fallback
+                if (!cachedMocks || !cachedMocks.length) {
+                    container.innerHTML = '<li><a>No exams</a></li>';
+                }
+            }
         }
 
         async function renderFooterUpcoming() {
-            const c = document.getElementById('footerUpcomingExams');
-            const d = await fetchJSON('./json/upcomingfooter.json', [
+            const container = document.getElementById('footerUpcomingExams');
+            const defaultUpcoming = [
                 { id:1, name:'ReNEET UG 2026', date:'15 May 2026' },
                 { id:2, name:'CUET UG 2026', date:'20 May 2026' },
                 { id:3, name:'UP Police Constable 2026', date:'10 June 2026' },
@@ -1251,8 +1303,32 @@
                 { id:8, name:'SSC JE 2026', date:'18 August 2026' },
                 { id:9, name:'UPSC (CSE) 2026', date:'28 May 2026' },
                 { id:10, name:'SBI PO Prelims 2026', date:'18 August 2026' }
-            ]);
-            c.innerHTML = d.map(e => `<li><a>${e.name}</a></li>`).join('');
+            ];
+            // 1. Try cache
+            const cached = getCachedFooterUpcoming();
+            if (cached && Array.isArray(cached) && cached.length) {
+                container.innerHTML = cached.map(e => `<li><a>${e.name}</a></li>`).join('');
+            }
+            // 2. Fetch fresh
+            try {
+                const resp = await fetch('./json/upcomingfooter.json', { cache: 'no-store' });
+                if (resp.ok) {
+                    const fresh = await resp.json();
+                    if (Array.isArray(fresh) && fresh.length) {
+                        const cachedStr = JSON.stringify(cached);
+                        const freshStr = JSON.stringify(fresh);
+                        if (freshStr !== cachedStr) {
+                            setCachedFooterUpcoming(fresh);
+                            container.innerHTML = fresh.map(e => `<li><a>${e.name}</a></li>`).join('');
+                        }
+                    }
+                }
+            } catch(e) {
+                // Use default if no cache
+                if (!cached || !cached.length) {
+                    container.innerHTML = defaultUpcoming.map(e => `<li><a>${e.name}</a></li>`).join('');
+                }
+            }
         }
 
         function openInstallPopup() {
@@ -1307,7 +1383,9 @@
             }
             await loadUserPremium();
             await loadSeriesInfo();
+            // Initialize cache key & load tests (with background refresh)
             await renderInitialView();
+            // Footer with cache-first strategy
             renderFooterExamCategories();
             renderFooterUpcoming();
         })();
