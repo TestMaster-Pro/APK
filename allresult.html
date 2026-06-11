@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* --- ALL YOUR EXISTING CSS (UNCHANGED) --- */
         :root {
             --primary: #243748;
             --primary-dark: #1a2a36;
@@ -74,7 +73,6 @@
         }
         body.sidebar-open, body.sheet-open { overflow:hidden; position:fixed; width:100%; height:100%; }
 
-        /* Toast & offline */
         .toast-container { position:fixed; top:calc(12px + var(--safe-top)); left:50%; transform:translateX(-50%) translateY(-120%); z-index:1000; display:flex; flex-direction:column; gap:8px; width:92%; max-width:400px; pointer-events:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
         .toast-container.show { transform:translateX(-50%) translateY(0); }
         .toast-item { background:var(--gray-800); color:#fff; padding:12px 16px; border-radius:var(--radius); font-size:13px; font-weight:600; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-lg); animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1); pointer-events:all; border-left:3px solid var(--blue); }
@@ -85,13 +83,11 @@
         .offline-banner { position:fixed; top:0; left:0; width:100%; background:var(--red); color:#fff; text-align:center; padding:6px; font-size:11px; font-weight:700; z-index:999; transform:translateY(-100%); transition:transform 0.3s ease; }
         .offline-banner.show { transform:translateY(0); }
 
-        /* Top sync progress bar */
         .sync-progress {
             position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg, var(--primary), var(--green));
             z-index:1001; width:0%; transition:width 0.4s ease; box-shadow:0 1px 4px rgba(0,0,0,0.1);
         }
 
-        /* Sidebar */
         .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250; opacity:0; visibility:hidden; transition:opacity 0.35s ease,visibility 0.35s; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
         .sidebar-overlay.active { opacity:1; visibility:visible; }
         .sidebar { position:fixed; top:0; left:0; height:100%; height:100dvh; width:290px; max-width:82vw; background:#fff; z-index:251; transform:translateX(-110%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.18); border-radius:0 22px 22px 0; overflow:hidden; border-right:1px solid rgba(0,0,0,0.04); }
@@ -125,7 +121,6 @@
         .sidebar-nav-item.logout-item:hover { background:var(--red-light); color:var(--red); }
         .sidebar-version { text-align:center; font-size:10px; color:var(--gray-300); padding:10px; flex-shrink:0; }
 
-        /* Navbar */
         .navbar { background:#fff; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 1px 16px rgba(0,0,0,0.04); gap:8px; flex-wrap:nowrap; min-height:54px; border-bottom:1px solid #eee; }
         .nav-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
         .hamburger-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:15px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); flex-shrink:0; }
@@ -142,14 +137,11 @@
         .bell-icon-btn:hover, .chat-icon-btn:hover { background:var(--gray-200); color:var(--primary); }
         .bell-icon-btn .badge { position:absolute; top:4px; right:6px; width:8px; height:8px; border-radius:50%; background:var(--red); display:none; }
 
-        /* Container */
         .container { max-width:var(--max-width); margin:0 auto; padding:14px 14px calc(20px + var(--bottom-nav-height)); position:relative; z-index:5; width:100%; flex:1; }
 
-        /* Page header */
         .page-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; }
         .page-header h1 { font-size:clamp(20px, 4.5vw, 24px); font-weight:800; color:var(--gray-800); display:flex; align-items:center; gap:8px; }
 
-        /* Stats cards (4 cards now) */
         .stats-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:10px; margin-bottom:16px; animation:cardSlideIn 0.5s ease-out; }
         @media (min-width:600px) { .stats-grid { grid-template-columns: repeat(2,1fr); gap:14px; } }
         @media (min-width:900px) { .stats-grid { grid-template-columns: repeat(4,1fr); gap:16px; margin-bottom:24px; } }
@@ -160,7 +152,6 @@
         .stat-info h3 { font-size:clamp(17px,3.8vw,22px); font-weight:800; letter-spacing:-0.3px; color:var(--gray-800); }
         .stat-info p { color:var(--gray-400); font-size:clamp(10px,2.2vw,12px); font-weight:600; }
 
-        /* Filter section */
         .filter-section { background:var(--white); border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:14px; box-shadow:var(--shadow-xs); display:flex; flex-wrap:wrap; align-items:center; gap:10px; border:1px solid #e8ecf0; }
         .date-range-row { display:flex; align-items:center; gap:8px; width:100%; flex-wrap:wrap; }
         .date-range-row .label { font-weight:700; color:var(--gray-700); white-space:nowrap; font-size:clamp(12px,2.6vw,14px); }
@@ -196,7 +187,6 @@
         .reset-btn { background:var(--gray-100); border:1.5px solid var(--gray-200); color:var(--gray-600); padding:10px 16px; border-radius:40px; font-weight:600; font-size:clamp(11px,2.3vw,13px); cursor:pointer; display:flex; align-items:center; gap:5px; white-space:nowrap; transition:var(--transition-fast); }
         .reset-btn:hover { background:var(--gray-200); }
 
-        /* Loading quotes */
         .loading-quote-container {
             background: var(--primary-light);
             border-radius: var(--radius);
@@ -234,7 +224,6 @@
             white-space: nowrap;
         }
 
-        /* Results panel */
         .results-panel { background:var(--white); border-radius:var(--radius-xl); box-shadow:var(--shadow-sm); overflow:hidden; border:1px solid #e8ecf0; animation:cardSlideIn 0.5s ease-out; }
         .results-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
         .results-table { width:100%; border-collapse:collapse; min-width:750px; }
@@ -265,7 +254,6 @@
         .row-checkbox { width:17px; height:17px; cursor:pointer; accent-color:var(--primary); border-radius:4px; }
         .checkbox-col { width:40px; text-align:center; }
 
-        /* Mobile result cards – professional thin top border */
         .mobile-cards-container { display:none; flex-direction:column; gap:14px; padding:10px 4px; }
         @media (max-width:639px) {
             .results-table-wrap { display:none !important; }
@@ -283,7 +271,6 @@
             overflow: hidden;
         }
         .result-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); transform:translateY(-2px); }
-        /* Thin, professional top glow */
         .result-top-glow {
             position: absolute;
             top: 0;
@@ -306,7 +293,6 @@
             overflow:hidden;
             padding-top: 10px;
         }
-        /* Subtle app icon watermark */
         .card-inner::after {
             content: '';
             position: absolute;
@@ -481,21 +467,18 @@
         .card-action-btn.btn-view-result { color:var(--blue); border-color:rgba(0,102,255,0.2); }
         .card-action-btn.btn-view-result:hover { background:var(--blue-light); }
 
-        /* Empty state */
         .empty-state { text-align:center; padding:50px 20px; color:var(--gray-500); font-size:clamp(12px,2.6vw,14px); animation:cardSlideIn 0.4s ease-out; }
         .empty-state i { font-size:clamp(32px,7vw,48px); margin-bottom:10px; display:block; opacity:0.45; color:var(--gray-300); }
         .empty-state h3 { font-weight:700; color:var(--gray-700); margin-bottom:6px; font-size:clamp(15px,3vw,18px); }
         .empty-state .btn-start-mock { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; background:var(--primary); color:white; border-radius:40px; font-weight:700; font-size:14px; text-decoration:none; box-shadow:0 4px 14px rgba(36,55,72,0.25); transition:var(--transition-smooth); cursor:pointer; border:none; font-family:var(--font); }
         .empty-state .btn-start-mock:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(36,55,72,0.4); }
 
-        /* Pagination */
         .pagination { display:flex; justify-content:center; align-items:center; gap:8px; padding:14px; flex-wrap:wrap; }
         .pagination button { background:white; border:1.5px solid #e2e8f0; color:#334155; padding:8px 16px; border-radius:40px; font-weight:600; font-size:13px; cursor:pointer; transition:var(--transition-fast); font-family:var(--font); }
         .pagination button:hover { background:var(--gray-100); border-color:var(--gray-300); }
         .pagination button:disabled { opacity:0.5; cursor:default; }
         .pagination span { font-weight:600; color:#475569; }
 
-        /* Skeleton loading */
         .skeleton-row { display:flex; gap:16px; padding:16px 18px; border-bottom:1px solid #f1f5f9; align-items:center; }
         .skeleton-cell { height:14px; border-radius:8px; background:linear-gradient(90deg, #e8ecf1 25%, #f1f5f9 50%, #e8ecf1 75%); background-size:200% 100%; animation:shimmer 1.6s ease-in-out infinite; flex:1; min-width:40px; }
         .skeleton-cell.short { flex:0.5; } .skeleton-cell.medium { flex:0.7; } .skeleton-cell.long { flex:1.3; }
@@ -506,7 +489,6 @@
             .skeleton-cell { height:12px; }
         }
 
-        /* Modal (analysis) */
         .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:200; display:flex; align-items:center; justify-content:center; animation:fadeSlideIn 0.25s ease-out; padding:16px; }
         .modal-overlay.closing { animation:fadeOut 0.2s ease-in forwards; }
         @keyframes fadeOut { to { opacity:0; } }
@@ -518,7 +500,6 @@
         .modal-close:hover { background:var(--gray-200); color:var(--gray-700); }
         .modal-body { padding:20px; display:flex; flex-direction:column; gap:18px; }
 
-        /* Footer */
         .pro-footer { background:var(--secondary); color:var(--text-light); padding:40px 20px 100px; position:relative; margin-top:24px; border-radius:0; }
         .pro-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),#f59e0b,#fbbf24); }
         .footer-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; max-width:600px; margin:0 auto 30px; }
@@ -550,7 +531,6 @@
         .footer-social a { width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:16px; transition:all 0.3s ease; border:1px solid var(--border-light); }
         .footer-social a:hover { background:rgba(255,255,255,0.1); color:var(--accent); transform:translateY(-3px); border-color:var(--accent); }
 
-        /* Bottom nav */
         .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:calc(var(--bottom-nav-height) + var(--safe-bottom)); background:#fff; border-top:1px solid #e8ecf0; z-index:95; display:flex; justify-content:space-around; align-items:flex-start; padding-top:8px; padding-bottom:var(--safe-bottom); box-shadow:0 -4px 20px rgba(0,0,0,0.05); }
         .bottom-nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px; border:none; background:transparent; cursor:pointer; color:var(--gray-400); transition:var(--transition-fast); font-family:var(--font); text-decoration:none; position:relative; }
         .bottom-nav-item.active { color:var(--primary); }
@@ -603,7 +583,8 @@
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-label">Main Menu</div>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
-                <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <!-- ✅ UPDATED: now uses getTestsPageUrl() -->
+                <button class="sidebar-nav-item" onclick="navigate(getTestsPageUrl())"><i class="fas fa-file-alt"></i> Mock Tests</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
@@ -740,7 +721,7 @@
         </div>
     </div>
 
-    <!-- FOOTER – now exactly matches Dashboard design and links -->
+    <!-- FOOTER – now matches dashboard design exactly -->
     <footer class="pro-footer">
         <div class="footer-grid">
             <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"><li><i class="fas fa-spinner fa-pulse"></i> Loading categories…</li></ul></div>
@@ -761,15 +742,21 @@
         <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
     </footer>
 
-    <!-- Bottom navigation -->
+    <!-- ✅ UPDATED bottom navigation -->
     <nav class="bottom-nav" id="bottomNav">
         <button class="bottom-nav-item" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
-        <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
+        <button class="bottom-nav-item" onclick="navigate(getTestsPageUrl())"><i class="fas fa-file-alt"></i><span>Tests</span></button>
         <button class="bottom-nav-item active"><i class="fas fa-chart-bar"></i><span>Results</span></button>
         <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
     </nav>
 
     <script>
+        // ✅ NEW: Returns the last visited exam page URL, or defaults to exam.html
+        function getTestsPageUrl() {
+            const saved = localStorage.getItem('lastExamPage');
+            return (saved && saved.trim()) ? saved.trim() : 'exam.html';
+        }
+
         const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
         const STREAK_API_URL = API_URL;
 
@@ -1037,7 +1024,8 @@
             if (!results.length) {
                 const totalAll = filteredResults.length;
                 if (totalAll === 0 && allUserResults.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><i class="fas fa-rocket"></i><h3>No Results Yet!</h3><p>Start your first mock test and track your progress here.</p><button class="btn-start-mock" onclick="navigate(\'exam.html\')"><i class="fas fa-play-circle"></i> Start Your First Mock Now</button></div></td></tr>';
+                    // ✅ UPDATED empty state: button uses getTestsPageUrl()
+                    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><i class="fas fa-rocket"></i><h3>No Results Yet!</h3><p>Start your first mock test and track your progress here.</p><button class="btn-start-mock" onclick="navigate(getTestsPageUrl())"><i class="fas fa-play-circle"></i> Start Your First Mock Now</button></div></td></tr>`;
                 } else if (totalAll === 0) {
                     tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><i class="fas fa-search"></i><h3>No Matching Results</h3><p>Try adjusting your filters.</p></div></td></tr>';
                 } else {
@@ -1086,7 +1074,8 @@
             if (!results.length) {
                 const totalAll = filteredResults.length;
                 if (totalAll === 0 && allUserResults.length === 0) {
-                    container.innerHTML = '<div class="empty-state"><i class="fas fa-rocket"></i><h3>No Results Yet!</h3><p>Start your first mock test.</p><button class="btn-start-mock" onclick="navigate(\'exam.html\')">Start Now</button></div>';
+                    // ✅ UPDATED empty state: button uses getTestsPageUrl()
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-rocket"></i><h3>No Results Yet!</h3><p>Start your first mock test.</p><button class="btn-start-mock" onclick="navigate(getTestsPageUrl())">Start Now</button></div>`;
                 } else if (totalAll === 0) {
                     container.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h3>No Matching Results</h3><p>Adjust filters.</p></div>';
                 } else {
@@ -1355,7 +1344,7 @@
             }
         }
 
-        /* ---------- footer content (mocks.json + sheet, exactly like dashboard) ---------- */
+        /* ---------- footer content (mocks.json + sheet, with categories) ---------- */
         const JSON_PATHS = { mocks: './mocks.json', upcomingfooter: './json/upcomingfooter.json' };
         async function fetchJSON(p, fb) { try { const r = await fetch(p, { cache:'no-store' }); if (!r.ok) throw new Error(`HTTP ${r.status}`); const d = await r.json(); if (!Array.isArray(d) || !d.length) throw new Error('Empty'); return d; } catch(e) { if(fb) return fb; throw e; } }
         function groupByCategoryUniqueExams(arr) { const map={}; arr.forEach(item=>{ const cat=item.category||'Other'; if(!map[cat]) map[cat]={exams:[],seen:new Set()}; if(!map[cat].seen.has(item.exam)) { map[cat].seen.add(item.exam); map[cat].exams.push(item); } }); return Object.keys(map).sort().map(cat=>({category:cat,exams:map[cat].exams})); }
@@ -1368,13 +1357,17 @@
             grouped.forEach(cat => {
                 html += `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(cat.exams[0]?.exam||'')}')">${cat.category}</a></li>`;
             });
-            // Extra links – identical to dashboard
-            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Mock Test</a></li>`;
-            html += `<li><a onclick="navigate('book.html')"><i class="fas fa-book" style="margin-right:6px;"></i>Books & PYQ</a></li>`;
-            html += `<li><a onclick="navigate('aichat.html')"><i class="fas fa-robot" style="margin-right:6px;"></i>AI Chat</a></li>`;
-            html += `<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Support Chat</a></li>`;
+            if (allSheetDefs.length) {
+                const uniqueExams = [...new Set(allSheetDefs.map(t => t.exam).filter(Boolean))];
+                if (uniqueExams.length) {
+                    html += `<li style="margin-top:8px;"><strong style="color:#fbbf24;font-size:12px;">Practice Tests</strong></li>`;
+                    uniqueExams.forEach(exam => {
+                        html += `<li><a onclick="navigate('exam2.html?exam=${encodeURIComponent(exam)}')">${exam}</a></li>`;
+                    });
+                }
+            }
+            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
             html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
-            html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
             c.innerHTML = html || '<li><a>No exams</a></li>';
         }
         async function renderFooterUpcoming() {
