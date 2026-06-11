@@ -1,903 +1,1138 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#243748">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Test Series · TestMasterPro.space</title>
-  <link rel="manifest" href="./json/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    :root {
-      --primary: #243748; --primary-dark: #1a2a36; --primary-light: #e8edf2;
-      --secondary: #1f3140; --blue: #0066ff; --blue-light: #e6f0ff;
-      --green: #4cd38a; --green-light: #edfaf3; --red: #ff4d5a; --red-light: #fff0f1;
-      --light: #f7f7f7; --white: #ffffff; --gray-50: #f8f9fa;
-      --gray-100: #f5f5f5; --gray-200: #e8e8e8; --gray-300: #d4d4d4;
-      --gray-400: #a0a0a0; --gray-500: #737373; --gray-600: #525252;
-      --gray-700: #404040; --gray-800: #262626; --gray-900: #171717;
-      --accent: #fbbf24; --accent-hover: #f59e0b;
-      --text-muted: rgba(255,255,255,0.45); --text-light: rgba(255,255,255,0.85);
-      --border-light: rgba(255,255,255,0.06);
-      --radius-xs: 6px; --radius-sm: 10px; --radius: 14px; --radius-md: 18px; --radius-lg: 22px; --radius-xl: 28px;
-      --shadow-xs: 0 1px 3px rgba(0,0,0,0.04); --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-      --shadow-md: 0 6px 20px rgba(0,0,0,0.08); --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
-      --font: 'Poppins', sans-serif;
-      --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
-      --transition-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
-      --transition-smooth: 0.35s cubic-bezier(0.4,0,0.2,1);
-      --bottom-nav-height: 68px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-top: env(safe-area-inset-top, 0px);
-      --max-width: 1200px;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    html { scroll-behavior:smooth; height:100%; }
-    body {
-      font-family:var(--font); background:var(--gray-50); min-height:100dvh;
-      color:var(--gray-800); display:flex; flex-direction:column; overflow-x:hidden;
-      overflow-y:auto; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain;
-      max-width:100vw; padding-bottom:calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
-    }
-    body.sidebar-open { overflow:hidden; position:fixed; width:100%; height:100%; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#243748">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Test Series · TestMasterPro.space</title>
+    <link rel="manifest" href="./json/manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #243748; --primary-dark: #1a2a36; --primary-light: #e8edf2;
+            --secondary: #1f3140; --blue: #0066ff; --blue-light: #e6f0ff;
+            --green: #4cd38a; --green-light: #edfaf3; --red: #ff4d5a; --red-light: #fff0f1;
+            --light: #f7f7f7; --white: #ffffff; --gray-50: #f8f9fa;
+            --gray-100: #f5f5f5; --gray-200: #e8e8e8; --gray-300: #d4d4d4;
+            --gray-400: #a0a0a0; --gray-500: #737373; --gray-600: #525252;
+            --gray-700: #404040; --gray-800: #262626; --gray-900: #171717;
+            --accent: #fbbf24; --accent-hover: #f59e0b;
+            --text-muted: rgba(255,255,255,0.45); --text-light: rgba(255,255,255,0.85);
+            --border-light: rgba(255,255,255,0.06);
+            --radius-xs: 6px; --radius-sm: 10px; --radius: 14px; --radius-md: 18px; --radius-lg: 22px; --radius-xl: 28px;
+            --shadow-xs: 0 1px 3px rgba(0,0,0,0.04); --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 6px 20px rgba(0,0,0,0.08); --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+            --font: 'Poppins', sans-serif;
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+            --transition-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
+            --transition-smooth: 0.35s cubic-bezier(0.4,0,0.2,1);
+            --bottom-nav-height: 68px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --max-width: 1200px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior:smooth; height:100%; }
+        body {
+            font-family:var(--font); background:var(--gray-50); min-height:100dvh;
+            color:var(--gray-800); display:flex; flex-direction:column; overflow-x:hidden;
+            overflow-y:auto; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain;
+            max-width:100vw; padding-bottom:calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
+        }
+        body.sidebar-open { overflow:hidden; position:fixed; width:100%; height:100%; }
 
-    /* ---------- Sidebar ---------- */
-    .sidebar-overlay {
-      position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250;
-      opacity:0; visibility:hidden; transition:opacity 0.35s, visibility 0.35s;
-      backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
-    }
-    .sidebar-overlay.active { opacity:1; visibility:visible; }
-    .sidebar {
-      position:fixed; top:0; left:0; height:100%; height:100dvh;
-      width:290px; max-width:82vw; background:#fff; z-index:251;
-      transform:translateX(-110%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);
-      display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.18);
-      border-radius:0 22px 22px 0; overflow:hidden; border-right:1px solid rgba(0,0,0,0.04);
-    }
-    .sidebar-overlay.active .sidebar { transform:translateX(0); }
-    .sidebar-brand {
-      background:linear-gradient(135deg,#243748,#1f3140); padding:20px 16px 16px;
-      display:flex; align-items:center; gap:10px; flex-shrink:0; position:relative;
-    }
-    .sidebar-logo { width:40px; height:40px; background:rgba(255,255,255,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; flex-shrink:0; }
-    .sidebar-brand-text { color:#fff; font-weight:700; font-size:14px; letter-spacing:-0.3px; }
-    .sidebar-brand-text small { display:block; font-weight:400; font-size:9px; opacity:0.8; }
-    .sidebar-close-btn {
-      position:absolute; top:14px; right:12px; width:30px; height:30px;
-      border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
-      color:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center;
-      justify-content:center; transition:var(--transition-fast);
-    }
-    .sidebar-close-btn:hover { background:rgba(255,255,255,0.25); transform:rotate(90deg) scale(1.1); }
-    .sidebar-user-card {
-      padding:14px 16px; background:#fafbfc; border-bottom:1px solid #eee;
-      display:flex; align-items:center; gap:10px; flex-shrink:0;
-    }
-    .sidebar-avatar {
-      width:44px; height:44px; border-radius:14px; background:var(--primary-light);
-      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;
-      color:var(--primary); flex-shrink:0; overflow:hidden; border:2px solid #fff;
-      box-shadow:0 2px 8px rgba(0,0,0,0.06);
-    }
-    .sidebar-avatar img { width:100%; height:100%; object-fit:cover; }
-    .sidebar-user-info .name { font-weight:600; font-size:13px; color:var(--gray-800); }
-    .sidebar-user-info .tag {
-      font-size:10px; color:var(--primary); font-weight:600; background:var(--primary-light);
-      padding:2px 8px; border-radius:12px; display:inline-block; margin-top:2px;
-    }
-    .sidebar-nav {
-      flex:1; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column;
-      gap:2px; -webkit-overflow-scrolling:touch;
-    }
-    .sidebar-nav-label {
-      font-size:10px; text-transform:uppercase; letter-spacing:1.2px; color:var(--gray-400);
-      font-weight:700; padding:14px 8px 6px; font-family:var(--font);
-    }
-    .sidebar-nav-item {
-      display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:12px;
-      cursor:pointer; font-weight:500; font-size:13px; color:var(--gray-600);
-      transition:var(--transition-fast); text-decoration:none; border:none; background:transparent;
-      width:100%; text-align:left; font-family:var(--font);
-    }
-    .sidebar-nav-item:hover { background:var(--gray-100); color:var(--gray-800); transform:translateX(3px); }
-    .sidebar-nav-item:active { transform:scale(0.97); }
-    .sidebar-nav-item.active-nav { background:var(--primary-light); color:var(--primary); font-weight:700; }
-    .sidebar-nav-item i {
-      width:32px; height:32px; border-radius:10px; display:flex; align-items:center;
-      justify-content:center; font-size:14px; flex-shrink:0; background:var(--gray-100); color:var(--gray-500);
-    }
-    .sidebar-nav-item.active-nav i { background:var(--primary); color:#fff; }
-    .sidebar-nav-item.logout-item:hover { background:var(--red-light); color:var(--red); }
-    .sidebar-version { text-align:center; font-size:10px; color:var(--gray-300); padding:10px; flex-shrink:0; }
+        /* Toast */
+        .toast-container {
+            position:fixed; top:20px; right:20px; z-index:9999; display:flex;
+            flex-direction:column; gap:8px; pointer-events:none;
+        }
+        .toast-item {
+            background:white; color:var(--gray-800); padding:12px 18px; border-radius:14px;
+            box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:10px;
+            font-size:13px; font-weight:600; pointer-events:auto;
+            transform:translateY(0); opacity:1; transition:all 0.3s ease; max-width:320px;
+        }
+        .toast-item.success { border-left:4px solid var(--green); }
+        .toast-item.error { border-left:4px solid var(--red); }
+        .toast-item.warning { border-left:4px solid var(--accent); }
+        .toast-item.info { border-left:4px solid var(--blue); }
 
-    /* Navbar */
-    .navbar {
-      background:#fff; padding:10px 14px; display:flex; justify-content:space-between;
-      align-items:center; position:sticky; top:0; z-index:100;
-      box-shadow:0 1px 16px rgba(0,0,0,0.04); gap:8px; flex-wrap:nowrap; min-height:54px;
-      border-bottom:1px solid #eee;
-    }
-    .nav-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    .hamburger-btn {
-      width:36px; height:36px; border-radius:10px; background:var(--gray-100);
-      border:none; cursor:pointer; font-size:15px; color:var(--gray-600);
-      display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); flex-shrink:0;
-    }
-    .hamburger-btn:hover { background:var(--gray-200); }
-    .nav-brand {
-      display:flex; align-items:center; gap:6px; font-weight:700; font-size:15px;
-      color:var(--primary); cursor:pointer; white-space:nowrap; letter-spacing:-0.3px;
-    }
-    .nav-brand i { font-size:17px; color:var(--blue); }
-    .nav-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    .user-avatar {
-      width:34px; height:34px; border-radius:10px; background:var(--primary-light);
-      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;
-      color:var(--primary); cursor:pointer; flex-shrink:0; overflow:hidden; border:2px solid #fff;
-      box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:var(--transition-fast);
-    }
-    .user-avatar img { width:100%; height:100%; object-fit:cover; }
-    .user-avatar:hover { transform:scale(1.08); }
-    .btn-chat-nav {
-      background:var(--primary-light); color:var(--primary); border:none; padding:7px 12px;
-      border-radius:22px; font-weight:700; font-size:12px; cursor:pointer; display:flex;
-      align-items:center; gap:5px; font-family:var(--font); transition:0.2s; text-decoration:none;
-    }
-    .btn-chat-nav:hover { background:var(--primary); color:#fff; transform:translateY(-1px); box-shadow:0 4px 12px rgba(36,55,72,0.2); }
-    .btn-logout-nav {
-      background:var(--red-light); color:var(--red); border:none; padding:7px 12px;
-      border-radius:22px; font-weight:600; font-size:11px; cursor:pointer;
-      display:flex; align-items:center; gap:5px; font-family:var(--font);
-    }
+        /* Sidebar (unchanged) */
+        .sidebar-overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250;
+            opacity:0; visibility:hidden; transition:opacity 0.35s, visibility 0.35s;
+            backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+        }
+        .sidebar-overlay.active { opacity:1; visibility:visible; }
+        .sidebar {
+            position:fixed; top:0; left:0; height:100%; height:100dvh;
+            width:290px; max-width:82vw; background:#fff; z-index:251;
+            transform:translateX(-110%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);
+            display:flex; flex-direction:column; box-shadow:8px 0 40px rgba(0,0,0,0.18);
+            border-radius:0 22px 22px 0; overflow:hidden; border-right:1px solid rgba(0,0,0,0.04);
+        }
+        .sidebar-overlay.active .sidebar { transform:translateX(0); }
+        .sidebar-brand {
+            background:linear-gradient(135deg,#243748,#1f3140); padding:20px 16px 16px;
+            display:flex; align-items:center; gap:10px; flex-shrink:0; position:relative;
+        }
+        .sidebar-logo { width:40px; height:40px; background:rgba(255,255,255,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; flex-shrink:0; }
+        .sidebar-brand-text { color:#fff; font-weight:700; font-size:14px; letter-spacing:-0.3px; }
+        .sidebar-brand-text small { display:block; font-weight:400; font-size:9px; opacity:0.8; }
+        .sidebar-close-btn {
+            position:absolute; top:14px; right:12px; width:30px; height:30px;
+            border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+            color:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center;
+            justify-content:center; transition:var(--transition-fast);
+        }
+        .sidebar-close-btn:hover { background:rgba(255,255,255,0.25); transform:rotate(90deg) scale(1.1); }
+        .sidebar-user-card {
+            padding:14px 16px; background:#fafbfc; border-bottom:1px solid #eee;
+            display:flex; align-items:center; gap:10px; flex-shrink:0;
+        }
+        .sidebar-avatar {
+            width:44px; height:44px; border-radius:14px; background:var(--primary-light);
+            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;
+            color:var(--primary); flex-shrink:0; overflow:hidden; border:2px solid #fff;
+            box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .sidebar-avatar img { width:100%; height:100%; object-fit:cover; }
+        .sidebar-user-info .name { font-weight:600; font-size:13px; color:var(--gray-800); }
+        .sidebar-user-info .tag {
+            font-size:10px; color:var(--primary); font-weight:600; background:var(--primary-light);
+            padding:2px 8px; border-radius:12px; display:inline-block; margin-top:2px;
+        }
+        .sidebar-nav {
+            flex:1; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column;
+            gap:2px; -webkit-overflow-scrolling:touch;
+        }
+        .sidebar-nav-label {
+            font-size:10px; text-transform:uppercase; letter-spacing:1.2px; color:var(--gray-400);
+            font-weight:700; padding:14px 8px 6px; font-family:var(--font);
+        }
+        .sidebar-nav-item {
+            display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:12px;
+            cursor:pointer; font-weight:500; font-size:13px; color:var(--gray-600);
+            transition:var(--transition-fast); text-decoration:none; border:none; background:transparent;
+            width:100%; text-align:left; font-family:var(--font);
+        }
+        .sidebar-nav-item:hover { background:var(--gray-100); color:var(--gray-800); transform:translateX(3px); }
+        .sidebar-nav-item:active { transform:scale(0.97); }
+        .sidebar-nav-item.active-nav { background:var(--primary-light); color:var(--primary); font-weight:700; }
+        .sidebar-nav-item i {
+            width:32px; height:32px; border-radius:10px; display:flex; align-items:center;
+            justify-content:center; font-size:14px; flex-shrink:0; background:var(--gray-100); color:var(--gray-500);
+        }
+        .sidebar-nav-item.active-nav i { background:var(--primary); color:#fff; }
+        .sidebar-nav-item.logout-item:hover { background:var(--red-light); color:var(--red); }
+        .sidebar-version { text-align:center; font-size:10px; color:var(--gray-300); padding:10px; flex-shrink:0; }
 
-    .container {
-      max-width:var(--max-width); margin:0 auto;
-      padding:14px 14px calc(20px + var(--bottom-nav-height));
-      position:relative; z-index:5; width:100%; flex:1;
-    }
+        /* Navbar (unchanged) */
+        .navbar {
+            background:#fff; padding:10px 14px; display:flex; justify-content:space-between;
+            align-items:center; position:sticky; top:0; z-index:100;
+            box-shadow:0 1px 16px rgba(0,0,0,0.04); gap:8px; flex-wrap:nowrap; min-height:54px;
+            border-bottom:1px solid #eee;
+        }
+        .nav-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .hamburger-btn {
+            width:36px; height:36px; border-radius:10px; background:var(--gray-100);
+            border:none; cursor:pointer; font-size:15px; color:var(--gray-600);
+            display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); flex-shrink:0;
+        }
+        .hamburger-btn:hover { background:var(--gray-200); }
+        .nav-brand {
+            display:flex; align-items:center; gap:6px; font-weight:700; font-size:15px;
+            color:var(--primary); cursor:pointer; white-space:nowrap; letter-spacing:-0.3px;
+        }
+        .nav-brand i { font-size:17px; color:var(--blue); }
+        .nav-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .user-avatar {
+            width:34px; height:34px; border-radius:10px; background:var(--primary-light);
+            display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;
+            color:var(--primary); cursor:pointer; flex-shrink:0; overflow:hidden; border:2px solid #fff;
+            box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:var(--transition-fast);
+        }
+        .user-avatar img { width:100%; height:100%; object-fit:cover; }
+        .user-avatar:hover { transform:scale(1.08); }
+        .btn-chat-nav {
+            background:var(--primary-light); color:var(--primary); border:none; padding:7px 12px;
+            border-radius:22px; font-weight:700; font-size:12px; cursor:pointer; display:flex;
+            align-items:center; gap:5px; font-family:var(--font); transition:0.2s; text-decoration:none;
+        }
+        .btn-chat-nav:hover { background:var(--primary); color:#fff; transform:translateY(-1px); box-shadow:0 4px 12px rgba(36,55,72,0.2); }
+        .btn-logout-nav {
+            background:var(--red-light); color:var(--red); border:none; padding:7px 12px;
+            border-radius:22px; font-weight:600; font-size:11px; cursor:pointer;
+            display:flex; align-items:center; gap:5px; font-family:var(--font);
+        }
 
-    .section-header { display:flex; align-items:center; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
-    .section-header h2 { font-size:clamp(16px,3vw,20px); font-weight:700; color:var(--gray-800); }
-    .badge-tag { background:var(--green-light); color:#065f46; padding:3px 10px; border-radius:14px; font-size:10px; font-weight:700; }
+        .container {
+            max-width:var(--max-width); margin:0 auto;
+            padding:14px 14px calc(20px + var(--bottom-nav-height));
+            position:relative; z-index:5; width:100%; flex:1;
+        }
 
-    .category-grid {
-      display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:30px;
-    }
-    @media(min-width:500px){ .category-grid{grid-template-columns:repeat(3,1fr);} }
-    @media(min-width:768px){ .category-grid{grid-template-columns:repeat(4,1fr);} }
-    @media(min-width:1024px){ .category-grid{grid-template-columns:repeat(5,1fr);} }
-    .cat-card {
-      background:#fff; border-radius:20px; padding:20px 10px; text-align:center;
-      border:1px solid #e8ecf0; cursor:pointer; transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow:var(--shadow-xs); display:flex; flex-direction:column; align-items:center; gap:10px; user-select:none;
-    }
-    .cat-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-md); border-color:var(--primary-light); }
-    .cat-card:active { transform:scale(0.95); }
-    .cat-img { width:56px; height:56px; border-radius:16px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .cat-img img { width:100%; height:100%; object-fit:cover; }
-    .cat-img i { font-size:28px; color:var(--primary); }
-    .cat-name { font-weight:600; font-size:14px; }
+        /* ========== HERO ========== */
+        .hero-section {
+            background: linear-gradient(135deg, #243748 0%, #3b5a75 100%);
+            color: white; padding: 24px 18px; border-radius: 24px;
+            margin-bottom: 20px; text-align: center;
+            box-shadow: 0 10px 30px rgba(36,55,72,0.25);
+            position: relative; overflow: hidden;
+        }
+        .hero-section::after {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 200px; height: 200px; background: rgba(255,255,255,0.05);
+            border-radius: 50%; pointer-events: none;
+        }
+        .hero-title {
+            font-size: clamp(20px, 5vw, 26px); font-weight: 800;
+            letter-spacing: -0.5px; margin-bottom: 6px;
+        }
+        .hero-subtitle { font-size: 13px; font-weight: 500; opacity: 0.9; margin-bottom: 18px; }
+        .hero-search { width: 100%; max-width: 500px; margin: 0 auto; }
+        .hero-search input {
+            width: 100%; padding: 14px 20px; border-radius: 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            color: white; font-family: var(--font); font-size: 14px; outline: none; transition: 0.2s;
+        }
+        .hero-search input::placeholder { color: rgba(255,255,255,0.7); }
+        .hero-search input:focus {
+            border-color: white; background: rgba(255,255,255,0.25);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
+        }
 
-    .series-grid { display:grid; grid-template-columns:1fr; gap:20px; }
-    @media(min-width:640px){ .series-grid{grid-template-columns:repeat(2,1fr);} }
-    @media(min-width:1024px){ .series-grid{grid-template-columns:repeat(3,1fr);} }
-    .series-card {
-      background:#fff; border-radius:22px; overflow:hidden; box-shadow:var(--shadow-sm);
-      border:1px solid #e8ecf0; display:flex; flex-direction:column; transition:var(--transition); height:100%; position:relative;
-    }
-    .series-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
-    .series-card img { width:100%; height:200px; object-fit:cover; display:block; border-bottom:1px solid #eee; }
-    .card-body { padding:16px 18px; display:flex; flex-direction:column; flex:1; }
-    .series-card h3 { font-size:18px; font-weight:700; margin-bottom:6px; color:var(--gray-800); line-height:1.3; }
-    .series-card p { font-size:13px; color:var(--gray-500); margin-bottom:12px; flex:1; line-height:1.5; }
-    .badge { display:inline-block; padding:4px 12px; border-radius:14px; font-size:11px; font-weight:700; margin-bottom:8px; width:fit-content; }
-    .badge-free { background:var(--green-light); color:#065f46; }
-    .badge-premium { background:#fef3c7; color:#a16207; }
-    .series-actions { display:flex; gap:10px; margin-top:auto; flex-wrap:wrap; }
-    .btn {
-      flex:1; min-width:90px; padding:11px 12px; border-radius:12px; border:none; font-weight:700;
-      font-size:13px; cursor:pointer; font-family:var(--font); display:flex; align-items:center;
-      justify-content:center; gap:6px; transition:all 0.2s ease; white-space:nowrap;
-    }
-    .btn-primary { background:linear-gradient(135deg,#243748,#1a2a36); color:white; box-shadow:0 4px 12px rgba(36,55,72,0.2); }
-    .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(36,55,72,0.3); }
-    .btn-outline { background:#fff; color:var(--primary); border:2px solid var(--primary); }
-    .btn-outline:hover { background:var(--primary-light); }
-    .btn-buy { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#1e293b; box-shadow:0 4px 12px rgba(245,158,11,0.25); }
-    .btn-buy:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(245,158,11,0.35); }
-    .btn-details { background:#e8edf2; color:var(--primary); }
-    .btn-details:hover { background:#d0dae5; transform:translateY(-1px); }
-    .share-btn-absolute {
-      position:absolute; top:12px; right:12px; width:36px; height:36px; border-radius:10px;
-      background:rgba(255,255,255,0.9); backdrop-filter:blur(4px); border:none; cursor:pointer;
-      display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--gray-600);
-      box-shadow:0 2px 8px rgba(0,0,0,0.1); z-index:2; transition:var(--transition-fast);
-    }
-    .share-btn-absolute:hover { background:#fff; color:var(--primary); transform:scale(1.1); }
+        /* Stats */
+        .stats-row {
+            display: flex; justify-content: space-around; background: white;
+            border-radius: 20px; padding: 14px 8px; margin-bottom: 24px;
+            box-shadow: var(--shadow-sm); border: 1px solid #eef0f2;
+        }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-number { font-size: 22px; font-weight: 800; color: var(--primary); display: block; line-height: 1.2; }
+        .stat-label { font-size: 11px; color: var(--gray-500); font-weight: 500; }
 
-    .empty-state { text-align:center; padding:60px 20px; color:var(--gray-500); }
+        /* Continue Learning */
+        .continue-section { margin-bottom: 28px; }
+        .continue-section h2 {
+            font-size: 17px; font-weight: 700; margin-bottom: 12px;
+            color: var(--gray-800); display: flex; align-items: center; gap: 8px;
+        }
+        .continue-scroll {
+            display: flex; overflow-x: auto; gap: 14px; padding-bottom: 8px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        }
+        .continue-scroll::-webkit-scrollbar { height: 4px; }
+        .continue-scroll::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+        .continue-card {
+            min-width: 200px; max-width: 260px; flex-shrink: 0;
+            scroll-snap-align: start; background: white; border-radius: 18px;
+            overflow: hidden; border: 1px solid #e8ecf0;
+            box-shadow: var(--shadow-xs); transition: transform 0.2s;
+            position: relative; cursor: pointer;
+        }
+        .continue-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .continue-card:active { transform: scale(0.97); }
+        .continue-card img { width: 100%; height: 110px; object-fit: cover; display: block; }
+        .continue-card-body { padding: 10px 12px; }
+        .continue-card-body h4 {
+            font-size: 13px; font-weight: 700; margin-bottom: 3px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .continue-card-body .badge-owned {
+            background: var(--blue-light); color: var(--blue);
+            font-size: 10px; padding: 2px 10px; border-radius: 12px;
+            font-weight: 600; display: inline-block; margin-bottom: 4px;
+        }
 
-    /* Footer (same as dashboard) */
-    .pro-footer {
-      background: var(--secondary); color: var(--text-light); padding: 40px 20px 100px;
-      position: relative; margin-top: 24px; border-radius: 0;
-    }
-    .pro-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24); }
-    .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 600px; margin: 0 auto 30px; }
-    .footer-col h3 { font-size: 17px; font-weight: 700; margin-bottom: 18px; color: #ffffff; letter-spacing: -0.2px; position: relative; padding-bottom: 8px; }
-    .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--accent); border-radius: 2px; }
-    .footer-col ul { list-style: none; }
-    .footer-col li { margin-bottom: 11px; line-height: 1.4; }
-    .footer-col a { color: var(--accent); font-size: 13px; font-weight: 500; text-decoration: none; display: inline-block; transition: all 0.25s ease; cursor: pointer; position: relative; }
-    .footer-col a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
-    .footer-col a:hover { color: #ffffff; transform: translateX(3px); }
-    .footer-col a:hover::after { width: 100%; }
-    .footer-install-section { text-align: center; margin: 20px 0 24px; }
-    .footer-install-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff; border: none; padding: 16px 28px; border-radius: 32px;
-      font-weight: 700; font-size: 16px; cursor: pointer; font-family: var(--font);
-      transition: all 0.25s ease; box-shadow: 0 8px 24px rgba(79,70,229,0.45); text-decoration: none;
-    }
-    .footer-install-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(79,70,229,0.6); color: #fff; }
-    .footer-install-btn:active { transform: scale(0.95); transition: 0.06s; }
-    .footer-email { text-align: center; margin-bottom: 24px; }
-    .footer-email a { color: #38bdf8; font-size: 14px; font-weight: 600; text-decoration: none; transition: color 0.2s; }
-    .footer-email a:hover { color: var(--accent); }
-    .footer-bottom { text-align: center; border-top: 1px solid var(--border-light); padding-top: 20px; max-width: 600px; margin: 0 auto; }
-    .footer-bottom p { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
-    .footer-bottom a { font-size: 12px; color: var(--text-light); font-weight: 500; text-decoration: none; transition: color 0.2s; }
-    .footer-bottom a:hover { color: var(--accent); }
-    .footer-social { display: flex; justify-content: center; gap: 16px; margin: 20px 0; }
-    .footer-social a { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 16px; transition: all 0.3s ease; border: 1px solid var(--border-light); }
-    .footer-social a:hover { background: rgba(255,255,255,0.1); color: var(--accent); transform: translateY(-3px); border-color: var(--accent); }
+        /* Trending Section (carousel when >1) */
+        .trending-section { margin-bottom: 28px; }
+        .trending-section h2 {
+            font-size: 17px; font-weight: 700; margin-bottom: 12px;
+            color: var(--gray-800); display: flex; align-items: center; gap: 8px;
+        }
+        .trending-badge {
+            background: linear-gradient(135deg, #ff4d5a, #ff6b6b);
+            color: white; font-size: 10px; padding: 3px 10px;
+            border-radius: 14px; font-weight: 700; display: inline-flex;
+            align-items: center; gap: 4px; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .trending-carousel {
+            display: flex; overflow-x: auto; gap: 14px; padding-bottom: 8px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        }
+        .trending-carousel::-webkit-scrollbar { height: 4px; }
+        .trending-carousel::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+        .trending-carousel .series-card {
+            min-width: 260px; max-width: 320px; flex-shrink: 0; scroll-snap-align: start;
+        }
 
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: calc(var(--bottom-nav-height) + var(--safe-bottom));
-      background: #fff; border-top: 1px solid #e8ecf0;
-      z-index: 95; display: flex; justify-content: space-around;
-      align-items: flex-start; padding-top: 8px; padding-bottom: var(--safe-bottom);
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-    }
-    .bottom-nav-item {
-      flex: 1; display: flex; flex-direction: column; align-items: center;
-      gap: 3px; padding: 4px; border: none; background: transparent;
-      cursor: pointer; color: var(--gray-400); transition: var(--transition-fast);
-      font-family: var(--font); text-decoration: none; position: relative;
-    }
-    .bottom-nav-item.active { color: var(--primary); }
-    .bottom-nav-item:active { transform: scale(0.9); }
-    .bottom-nav-item i { font-size: 20px; transition: transform 0.2s; }
-    .bottom-nav-item:hover i { transform: translateY(-2px); }
-    .bottom-nav-item span { font-size: 10px; font-weight: 600; }
-    .bottom-nav-item.active::before { content: ''; position: absolute; top: -8px; width: 20px; height: 3px; background: var(--primary); border-radius: 2px; }
+        /* Filter Chips */
+        .filter-chips {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
+            overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch;
+        }
+        .filter-chip {
+            padding: 8px 16px; border-radius: 30px; background: white;
+            border: 1px solid var(--gray-200); font-family: var(--font);
+            font-weight: 600; font-size: 12px; cursor: pointer;
+            white-space: nowrap; transition: 0.2s; color: var(--gray-600); flex-shrink: 0;
+        }
+        .filter-chip.active, .filter-chip:hover {
+            background: var(--primary); color: white; border-color: var(--primary);
+        }
+        .filter-chip:active { transform: scale(0.95); }
 
-    .hidden { display: none !important; }
-    @media (min-width:600px) { .bottom-nav { display: none; } body { padding-bottom: 0; } .container { padding: 18px 18px calc(24px + var(--safe-bottom)); } .pro-footer { padding-bottom: 30px; } }
-  </style>
+        /* Category Grid */
+        .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+        .section-header h2 { font-size: clamp(15px, 3vw, 18px); font-weight: 700; color: var(--gray-800); }
+        .category-grid {
+            display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-bottom: 30px;
+        }
+        @media(min-width:500px){ .category-grid{grid-template-columns:repeat(3,1fr);} }
+        @media(min-width:768px){ .category-grid{grid-template-columns:repeat(4,1fr);} }
+        @media(min-width:1024px){ .category-grid{grid-template-columns:repeat(5,1fr);} }
+        .cat-card {
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); border-radius: 18px;
+            padding: 18px 8px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06); cursor: pointer;
+            transition: all 0.25s ease; display: flex;
+            flex-direction: column; align-items: center; gap: 8px;
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+        .cat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); border-color: var(--primary-light); }
+        .cat-card:active { transform: scale(0.95); }
+        .cat-card .cat-img {
+            width: 50px; height: 50px; border-radius: 14px;
+            background: var(--primary-light); display: flex;
+            align-items: center; justify-content: center; overflow: hidden;
+        }
+        .cat-card .cat-img img { width: 100%; height: 100%; object-fit: cover; }
+        .cat-card .cat-img i { font-size: 24px; color: var(--primary); }
+        .cat-card .cat-name { font-weight: 700; font-size: 13px; }
+        .cat-card .cat-count {
+            font-size: 11px; background: var(--primary-light);
+            padding: 2px 10px; border-radius: 14px; font-weight: 600; color: var(--primary);
+        }
+
+        /* Series Cards (grid & carousel) */
+        .series-grid {
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+        }
+        @media(min-width:640px){ .series-grid{grid-template-columns:repeat(2,1fr);} }
+        @media(min-width:1024px){ .series-grid{grid-template-columns:repeat(3,1fr);} }
+
+        .series-card {
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border-radius: 22px;
+            overflow: visible; /* changed to allow ribbon outside */
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.07);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative; display: flex; flex-direction: column; height: 100%;
+        }
+        .series-card:hover { transform: translateY(-5px); box-shadow: 0 18px 38px rgba(0,0,0,0.11); }
+        .series-card:active { transform: scale(0.98); }
+
+        /* Ribbon for Premium badge */
+        .premium-ribbon {
+            position: absolute; top: -4px; right: 16px; z-index: 3;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #1e293b; font-weight: 700; font-size: 11px;
+            padding: 6px 14px 7px; border-radius: 0 0 12px 12px;
+            box-shadow: 0 6px 18px rgba(245,158,11,0.4);
+            display: flex; align-items: center; gap: 5px;
+            letter-spacing: 0.3px;
+            transform: translateY(-2px);
+        }
+        .premium-ribbon i { font-size: 10px; }
+
+        .series-card img {
+            width: 100%; height: 200px; object-fit: cover; display: block;
+            border-radius: 22px 22px 0 0;
+        }
+        @media(min-width:500px){ .series-card img { height: 220px; } }
+        .series-card .card-img-wrapper { position: relative; }
+        .series-card .card-img-wrapper::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.65), transparent);
+            pointer-events: none; border-radius: 0 0 0 0;
+        }
+
+        .share-btn-absolute {
+            position: absolute; top: 10px; left: 10px; width: 32px; height: 32px;
+            border-radius: 8px; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(4px); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; color: var(--gray-600);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 2;
+            transition: var(--transition-fast);
+        }
+        .share-btn-absolute:hover { background: #fff; color: var(--primary); transform: scale(1.1); }
+
+        .card-body {
+            padding: 14px 16px; display: flex; flex-direction: column; flex: 1;
+        }
+        .series-card h3 {
+            font-size: 16px; font-weight: 700; margin-bottom: 4px;
+            color: var(--gray-800); line-height: 1.3; margin-top: 0;
+        }
+        .series-card p {
+            font-size: 12px; color: var(--gray-500); margin-bottom: 10px;
+            flex: 1; line-height: 1.5;
+        }
+        .feature-chips {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+        }
+        .chip {
+            display: inline-flex; align-items: center; gap: 3px;
+            background: var(--gray-100); color: var(--gray-700);
+            padding: 3px 10px; border-radius: 16px; font-size: 10px; font-weight: 600;
+        }
+        .chip i { font-size: 9px; }
+
+        /* Badges inside card (only Free now) */
+        .badge-free-inside {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 12px; font-size: 10px;
+            font-weight: 700; margin-bottom: 6px; width: fit-content;
+            background: var(--green-light); color: #065f46;
+        }
+
+        .series-actions { display: flex; gap: 8px; margin-top: auto; flex-wrap: wrap; }
+        .btn {
+            flex: 1; min-width: 80px; padding: 10px 10px; border-radius: 10px;
+            border: none; font-weight: 700; font-size: 12px; cursor: pointer;
+            font-family: var(--font); display: flex; align-items: center;
+            justify-content: center; gap: 5px; transition: all 0.2s ease; white-space: nowrap;
+        }
+        .btn-primary { background: linear-gradient(135deg,#243748,#1a2a36); color: white; box-shadow: 0 4px 12px rgba(36,55,72,0.2); }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(36,55,72,0.3); }
+        .btn-primary:active { transform: scale(0.96); }
+        .btn-outline { background: #fff; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-outline:hover { background: var(--primary-light); }
+        .btn-buy { background: linear-gradient(135deg,#f59e0b,#fbbf24); color: #1e293b; box-shadow: 0 4px 12px rgba(245,158,11,0.25); }
+        .btn-buy:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245,158,11,0.35); }
+        .btn-details { background: #e8edf2; color: var(--primary); }
+        .btn-details:hover { background: #d0dae5; transform: translateY(-1px); }
+
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--gray-500); font-size: 13px; }
+
+        /* Footer (unchanged) */
+        .pro-footer {
+            background: var(--secondary); color: var(--text-light); padding: 40px 20px 100px;
+            position: relative; margin-top: 24px; border-radius: 0;
+        }
+        .pro-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24); }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 600px; margin: 0 auto 30px; }
+        .footer-col h3 { font-size: 17px; font-weight: 700; margin-bottom: 18px; color: #ffffff; letter-spacing: -0.2px; position: relative; padding-bottom: 8px; }
+        .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--accent); border-radius: 2px; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 11px; line-height: 1.4; }
+        .footer-col a { color: var(--accent); font-size: 13px; font-weight: 500; text-decoration: none; display: inline-block; transition: all 0.25s ease; cursor: pointer; position: relative; }
+        .footer-col a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+        .footer-col a:hover { color: #ffffff; transform: translateX(3px); }
+        .footer-col a:hover::after { width: 100%; }
+        .footer-install-section { text-align: center; margin: 20px 0 24px; }
+        .footer-install-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; padding: 16px 28px; border-radius: 32px; font-weight: 700; font-size: 16px; cursor: pointer; font-family: var(--font); transition: all 0.25s ease; box-shadow: 0 8px 24px rgba(79,70,229,0.45); text-decoration: none; }
+        .footer-install-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(79,70,229,0.6); color: #fff; }
+        .footer-install-btn:active { transform: scale(0.95); transition: 0.06s; }
+        .footer-email { text-align: center; margin-bottom: 24px; }
+        .footer-email a { color: #38bdf8; font-size: 14px; font-weight: 600; text-decoration: none; transition: color 0.2s; }
+        .footer-email a:hover { color: var(--accent); }
+        .footer-bottom { text-align: center; border-top: 1px solid var(--border-light); padding-top: 20px; max-width: 600px; margin: 0 auto; }
+        .footer-bottom p { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+        .footer-bottom a { font-size: 12px; color: var(--text-light); font-weight: 500; text-decoration: none; transition: color 0.2s; }
+        .footer-bottom a:hover { color: var(--accent); }
+        .footer-social { display: flex; justify-content: center; gap: 16px; margin: 20px 0; }
+        .footer-social a { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 16px; transition: all 0.3s ease; border: 1px solid var(--border-light); }
+        .footer-social a:hover { background: rgba(255,255,255,0.1); color: var(--accent); transform: translateY(-3px); border-color: var(--accent); }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            height: calc(var(--bottom-nav-height) + var(--safe-bottom));
+            background: #fff; border-top: 1px solid #e8ecf0;
+            z-index: 95; display: flex; justify-content: space-around;
+            align-items: flex-start; padding-top: 8px; padding-bottom: var(--safe-bottom);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px; border: none; background: transparent; cursor: pointer; color: var(--gray-400); transition: var(--transition-fast); font-family: var(--font); text-decoration: none; position: relative; }
+        .bottom-nav-item.active { color: var(--primary); }
+        .bottom-nav-item:active { transform: scale(0.9); }
+        .bottom-nav-item i { font-size: 20px; transition: transform 0.2s; }
+        .bottom-nav-item:hover i { transform: translateY(-2px); }
+        .bottom-nav-item span { font-size: 10px; font-weight: 600; }
+        .bottom-nav-item.active::before { content: ''; position: absolute; top: -8px; width: 20px; height: 3px; background: var(--primary); border-radius: 2px; }
+
+        .hidden { display: none !important; }
+
+        @media (min-width:600px) {
+            .bottom-nav { display: none; }
+            body { padding-bottom: 0; }
+            .container { padding: 18px 18px calc(24px + var(--safe-bottom)); }
+            .pro-footer { padding-bottom: 30px; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Toast container -->
-  <div class="toast-container" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Sidebar -->
-  <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
-    <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
-      <div class="sidebar-brand">
-        <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
-        <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
-        <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="sidebar-user-card">
-        <div class="sidebar-avatar" id="sidebarAvatar">S</div>
-        <div class="sidebar-user-info">
-          <div class="name" id="sidebarUserName">Student</div>
-          <span class="tag" id="sidebarUserTag">Learner</span>
+    <!-- Sidebar -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="sidebar-user-card">
+                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebarUserName">Student</div>
+                    <span class="tag" id="sidebarUserTag">Learner</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-label">Main Menu</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('testseries')"><i class="fas fa-layer-group"></i> Test Series</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
+                <button class="sidebar-nav-item" onclick="goToResults()"><i class="fas fa-chart-bar"></i> My Results</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
+                <div class="sidebar-nav-label">Features</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('referral')"><i class="fas fa-gift"></i> Referral Rewards</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('favorites')"><i class="fas fa-heart"></i> My Favorites</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('coins')"><i class="fas fa-coins"></i> Coin History</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('coin-use')"><i class="fas fa-exchange-alt"></i> Coin Use Request</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
+                <div class="sidebar-nav-label">Premium</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
+                <div class="sidebar-nav-label">Account</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
+                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </nav>
+            <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
+        </aside>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand" onclick="goHome()"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
         </div>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="sidebar-nav-label">Main Menu</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
-        <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('testseries')"><i class="fas fa-layer-group"></i> Test Series</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
-        <!-- ✅ Modified: My Results now saves page before navigating -->
-        <button class="sidebar-nav-item" onclick="goToResults()"><i class="fas fa-chart-bar"></i> My Results</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
-        <div class="sidebar-nav-label">Features</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('referral')"><i class="fas fa-gift"></i> Referral Rewards</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('favorites')"><i class="fas fa-heart"></i> My Favorites</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('coins')"><i class="fas fa-coins"></i> Coin History</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('coin-use')"><i class="fas fa-exchange-alt"></i> Coin Use Request</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
-        <div class="sidebar-nav-label">Premium</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
-        <div class="sidebar-nav-label">Account</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
-        <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </nav>
-      <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
-    </aside>
-  </div>
+        <div class="nav-right">
+            <button class="btn-chat-nav" onclick="navigate('chat.html')"><i class="fas fa-comments"></i> Chat</button>
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()">S</div>
+            <button class="btn-logout-nav" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <button class="hamburger-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
-      <div class="nav-brand" onclick="goHome()"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
-    </div>
-    <div class="nav-right">
-      <button class="btn-chat-nav" onclick="navigate('chat.html')"><i class="fas fa-comments"></i> Chat</button>
-      <div class="user-avatar" id="userInitial" onclick="openSidebar()">S</div>
-      <button class="btn-logout-nav" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
-    </div>
-  </nav>
-
-  <div class="container">
-    <!-- Your Test Series Section (hidden by default, toggle with button) -->
-    <div style="margin-bottom:24px;">
-      <button class="btn btn-outline" style="width:100%; padding:14px; font-size:14px;" onclick="toggleMySeries()">
-        <i class="fas fa-box-open"></i> Your Test Series <span class="badge-tag" id="mySeriesCountInline" style="margin-left:8px;">0</span>
-        <i class="fas fa-chevron-down" id="mySeriesToggleIcon" style="margin-left:auto;"></i>
-      </button>
-      <div class="series-grid hidden" id="mySeriesGrid" style="margin-top:14px;"></div>
-    </div>
-
-    <!-- Single Series View (from share link) -->
-    <div id="singleSeriesView" class="hidden">
-      <div id="singleSeriesContent"></div>
-      <div style="margin-top:24px;">
-        <div class="section-header"><h2><i class="fas fa-thumbs-up"></i> More Series You May Like</h2></div>
-        <div class="series-grid" id="moreSeriesGrid"></div>
-      </div>
-    </div>
-
-    <!-- Category View -->
-    <div id="categoryView">
-      <div class="section-header"><h2><i class="fas fa-layer-group"></i> Choose a Category</h2></div>
-      <div class="category-grid" id="categoryGrid"></div>
-    </div>
-
-    <!-- Series View (after category selected) -->
-    <div id="seriesView" class="hidden">
-      <div class="section-header" style="cursor:pointer;" onclick="showCategoryView()">
-        <h2><i class="fas fa-arrow-left"></i> <span id="selectedCatName"></span></h2>
-      </div>
-      <div class="series-grid" id="seriesGrid"></div>
-    </div>
-  </div>
-
-  <!-- Pro Footer -->
-  <footer class="pro-footer">
-    <div class="footer-grid">
-      <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
-      <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
-    </div>
-    <div class="footer-install-section">
-      <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
-    </div>
-    <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
-    <div class="footer-social">
-      <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-      <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
-      <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
-    </div>
-    <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
-  </footer>
-
-  <!-- Bottom Nav -->
-  <nav class="bottom-nav">
-    <button class="bottom-nav-item" onclick="goHome()"><i class="fas fa-home"></i><span>Home</span></button>
-    <button class="bottom-nav-item active"><i class="fas fa-layer-group"></i><span>Test Series</span></button>
-    <!-- ✅ Modified: Results now saves page before navigating -->
-    <button class="bottom-nav-item" onclick="goToResults()"><i class="fas fa-chart-bar"></i><span>Results</span></button>
-    <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
-  </nav>
-
-  <script>
-    // ---------- Shared API & Config ----------
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyB8x80iQRROrRKcAhbTEQszOx2-CqDEbTjWkxb-kQZd_GqzHKJxhnzoQXUS0-MxeE3jQ/exec';
-    const TEST_SERIES_JSON = './json/testseries.json';
-    const TEST_SERIES_DETAILS_JSON = './json/testseriesdetails.json';
-    const MOCKS_CACHE_KEY = 'cachedAllMocks';
-    const SERIES_CACHE_KEY = 'cachedTestSeries';
-    const OWNED_SERIES_KEY = 'ownedSeries';
-    const SELECTED_CATEGORY_KEY = 'selectedTestSeriesCategory';
-
-    let allSeries = [];
-    let allMocks = [];
-    let categories = [];
-    let user = JSON.parse(localStorage.getItem('user'));
-    let userPremiumPlans = [];
-    let ownedSeriesSet = new Set(JSON.parse(localStorage.getItem(OWNED_SERIES_KEY) || '[]'));
-    let seriesDetailsCache = null;
-
-    // ---------- Helpers ----------
-    function showToast(msg, type='info', dur=3000) {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast-item ${type}`;
-      const icons = { success:'fa-check-circle', error:'fa-times-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle' };
-      toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
-      container.appendChild(toast);
-      container.classList.add('show');
-      setTimeout(() => {
-        toast.style.opacity='0'; toast.style.transform='translateY(-8px)'; toast.style.transition='0.3s';
-        setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.remove('show'); }, 300);
-      }, dur);
-    }
-
-    function setAvatarWithPic(elId, userObj) {
-      const el = document.getElementById(elId);
-      if (!el) return;
-      if (userObj?.avatarUrl) el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar">`;
-      else if (userObj?.profilePicUrl) el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar">`;
-      else el.textContent = (userObj?.name) ? userObj.name.charAt(0).toUpperCase() : 'G';
-    }
-
-    function goHome() { window.location.href = user ? 'dashboard.html' : 'index.html'; }
-    function navigate(url) { window.location.href = url; }
-
-    // ✅ New function: saves current page URL before navigating to results
-    function goToResults() {
-      localStorage.setItem('lastExamPage', window.location.href);
-      navigate('allresult.html');
-    }
-
-    // Sidebar & Logout
-    function openSidebar() {
-      const overlay = document.getElementById('sidebarOverlay');
-      overlay.classList.remove('hidden');
-      requestAnimationFrame(() => overlay.classList.add('active'));
-      document.body.classList.add('sidebar-open');
-    }
-    function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
-    function closeSidebarDirect() {
-      const overlay = document.getElementById('sidebarOverlay');
-      overlay.classList.remove('active');
-      document.body.classList.remove('sidebar-open');
-      setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400);
-    }
-    function sidebarNavigate(action) {
-      closeSidebarDirect();
-      setTimeout(() => {
-        const map = {
-          dashboard:'dashboard.html', mocks:'exam.html', aimock:'aimock.html',
-          books:'book.html', study:'book.html', results:'allresult.html',
-          leaderboard:'leaderboard.html', chat:'chat.html', aichat:'aichat.html',
-          streak:'streak.html', 'daily-challenge':'challenge.html',
-          referral:'referral.html', favorites:'favorites.html', coins:'coin-history.html',
-          'coin-use':'usecoin.html', reviews:'reviews.html', premium:'payment.html',
-          profile:'profile.html', instructions:'instructions', logout:'logout',
-          testseries:'testseries.html'
-        };
-        if (action === 'logout') logout();
-        else if (action === 'instructions') openHowToUse();
-        else if (map[action]) navigate(map[action]);
-      }, 300);
-    }
-    function openHowToUse() {
-      Swal.fire({
-        title:'How to Use',
-        html:`<div style="text-align:left;font-size:13px;line-height:1.9;"><p><b>1.</b> Select a Category.</p><p><b>2.</b> Pick a series.</p><p><b>3.</b> Click View Tests to start.</p></div>`,
-        confirmButtonText:'Got it!', confirmButtonColor:'#243748', icon:'info'
-      });
-    }
-    function logout() {
-      Swal.fire({
-        title:'Logout?', text:'Are you sure?', icon:'question',
-        showCancelButton:true, confirmButtonText:'Yes', cancelButtonText:'No',
-        confirmButtonColor:'#ff4d5a', cancelButtonColor:'#243748'
-      }).then(r => {
-        if (r.isConfirmed) {
-          localStorage.removeItem('user');
-          showToast('Logged out', 'success');
-          setTimeout(() => window.location.href='index.html', 800);
-        }
-      });
-    }
-
-    // ---------- User data ----------
-    function updateUserUI() {
-      if (user) {
-        setAvatarWithPic('userInitial', user);
-        setAvatarWithPic('sidebarAvatar', user);
-        document.getElementById('sidebarUserName').textContent = user.name || 'Student';
-        document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
-      }
-    }
-
-    // ---------- Fetch user premium plans ----------
-    async function loadUserPremium() {
-      if (!user || !user.username) { userPremiumPlans = []; return; }
-      try {
-        const r = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user.username)}`);
-        const d = await r.json();
-        if (d?.success && Array.isArray(d.premiumPlans)) {
-          userPremiumPlans = d.premiumPlans;
-          user.premiumPlans = d.premiumPlans;
-          localStorage.setItem('user', JSON.stringify(user));
-        } else {
-          userPremiumPlans = [];
-        }
-      } catch(e) { userPremiumPlans = []; }
-    }
-
-    // ---------- Manage owned series ----------
-    function updateOwnedSeries() {
-      allSeries.forEach(s => {
-        if (!s.plan || s.plan === 'free') {
-          ownedSeriesSet.add(s.code);
-        }
-      });
-      if (userPremiumPlans.length) {
-        allSeries.forEach(s => {
-          if (s.plan && s.plan !== 'free') {
-            if (userPremiumPlans.some(p => p.planType === s.plan || p.planType === 'ultimate')) {
-              ownedSeriesSet.add(s.code);
-            }
-          }
-        });
-      }
-      localStorage.setItem(OWNED_SERIES_KEY, JSON.stringify([...ownedSeriesSet]));
-    }
-
-    // ---------- Cache / load test series ----------
-    function cacheSeries(data) { try { localStorage.setItem(SERIES_CACHE_KEY, JSON.stringify(data)); } catch(e) {} }
-    function loadSeriesFromCache() {
-      try { const c = localStorage.getItem(SERIES_CACHE_KEY); if(c) { const p = JSON.parse(c); if(p?.series?.length) return p.series; } } catch(e) {}
-      return null;
-    }
-
-    async function loadSeries() {
-      let cachedSeries = loadSeriesFromCache();
-      if (cachedSeries) {
-        allSeries = cachedSeries;
-        postSeriesLoad();
-      }
-
-      // Fetch fresh in background
-      try {
-        const resp = await fetch(TEST_SERIES_JSON, { cache: 'no-store' });
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.series && Array.isArray(data.series)) {
-            if (JSON.stringify(data.series) !== JSON.stringify(allSeries)) {
-              allSeries = data.series;
-              cacheSeries(data);
-              postSeriesLoad();
-            }
-            return;
-          }
-        }
-      } catch(e) {}
-      if (!allSeries.length) {
-        showToast('Could not load test series', 'error');
-      }
-    }
-
-    function postSeriesLoad() {
-      updateOwnedSeries();
-      renderAll();
-    }
-
-    // ---------- Load mocks for footer ----------
-    async function loadMocksForFooter() {
-      const cached = localStorage.getItem(MOCKS_CACHE_KEY);
-      if (cached) {
-        allMocks = JSON.parse(cached);
-        renderFooterExamCategories();
-      }
-      try {
-        const resp = await fetch('./mocks.json', { cache: 'no-store' });
-        if (resp.ok) {
-          const data = await resp.json();
-          if (Array.isArray(data)) {
-            if (JSON.stringify(data) !== JSON.stringify(allMocks)) {
-              allMocks = data;
-              localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data));
-              renderFooterExamCategories();
-            }
-          }
-        }
-      } catch(e) {}
-    }
-
-    // ---------- Render functions ----------
-    function getCategoryImage(cat) {
-      const seriesInCat = allSeries.filter(s => s.category === cat);
-      const img = seriesInCat.find(s => s.category_img)?.category_img;
-      if (img) return `<img src="${img}" alt="${cat}">`;
-      return '<i class="fas fa-book-open"></i>';
-    }
-
-    function renderAll() {
-      categories = [...new Set(allSeries.map(s => s.category).filter(Boolean))].sort();
-      renderCategories();
-      renderMySeries();
-      handleShareLink();
-      const savedCat = localStorage.getItem(SELECTED_CATEGORY_KEY);
-      if (savedCat && categories.includes(savedCat)) {
-        selectCategory(savedCat);
-      }
-    }
-
-    function renderCategories() {
-      const grid = document.getElementById('categoryGrid');
-      if (!categories.length) { grid.innerHTML = '<div class="empty-state">No test series categories found.</div>'; return; }
-      grid.innerHTML = categories.map(cat => {
-        const count = allSeries.filter(s => s.category === cat).length;
-        return `
-          <div class="cat-card" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
-            <div class="cat-img">${getCategoryImage(cat)}</div>
-            <div class="cat-name">${cat}</div>
-            <div style="font-size:11px; color:var(--gray-500);">${count} series</div>
-          </div>`;
-      }).join('');
-    }
-
-    function renderMySeries() {
-      const mySeries = allSeries.filter(s => ownedSeriesSet.has(s.code));
-      document.getElementById('mySeriesCountInline').textContent = mySeries.length;
-      const grid = document.getElementById('mySeriesGrid');
-      if (!mySeries.length) {
-        grid.innerHTML = '<div class="empty-state" style="padding:20px;">You don\'t own any test series yet. Free series are added automatically.</div>';
-        return;
-      }
-      grid.innerHTML = mySeries.map(s => {
-        const image = s.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop';
-        return `
-          <div class="series-card">
-            <img src="${image}" alt="${s.name}" loading="lazy">
-            <div class="card-body">
-              <span class="badge badge-free"><i class="fas fa-check-circle"></i> Owned</span>
-              <h3>${s.name}</h3>
-              <p>${s.description || 'Complete test series for ' + s.category}</p>
-              <div class="series-actions">
-                <button class="btn btn-primary" onclick="attemptSeries('${s.code}')"><i class="fas fa-play"></i> View Tests</button>
-                <button class="btn btn-details" onclick="showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>
-              </div>
+    <div class="container">
+        <!-- HERO -->
+        <div class="hero-section">
+            <div class="hero-title">🎯 Crack Your Dream Exam</div>
+            <div class="hero-subtitle">500+ Mock Tests Available – Start Practicing Now</div>
+            <div class="hero-search">
+                <input type="text" id="searchInput" placeholder="🔍 Search test series or exam..." oninput="handleSearch()">
             </div>
-          </div>`;
-      }).join('');
-    }
+        </div>
 
-    function showCategoryView() {
-      document.getElementById('categoryView').classList.remove('hidden');
-      document.getElementById('seriesView').classList.add('hidden');
-      document.getElementById('singleSeriesView').classList.add('hidden');
-    }
+        <!-- STATS -->
+        <div class="stats-row">
+            <div class="stat-item"><span class="stat-number" id="statTests">500+</span><span class="stat-label">Tests</span></div>
+            <div class="stat-item"><span class="stat-number">50K+</span><span class="stat-label">Users</span></div>
+            <div class="stat-item"><span class="stat-number">95%</span><span class="stat-label">Success</span></div>
+        </div>
 
-    function selectCategory(category) {
-      localStorage.setItem(SELECTED_CATEGORY_KEY, category);
-      document.getElementById('categoryView').classList.add('hidden');
-      document.getElementById('seriesView').classList.remove('hidden');
-      document.getElementById('singleSeriesView').classList.add('hidden');
-      document.getElementById('selectedCatName').textContent = category;
-      const filtered = allSeries.filter(s => s.category === category);
-      const grid = document.getElementById('seriesGrid');
-      if (!filtered.length) { grid.innerHTML = '<div class="empty-state">No series in this category.</div>'; return; }
-      grid.innerHTML = filtered.map(s => renderSeriesCard(s)).join('');
-    }
+        <!-- CONTINUE LEARNING -->
+        <div class="continue-section" id="continueSection">
+            <h2><i class="fas fa-play-circle"></i> Continue Learning</h2>
+            <div class="continue-scroll" id="continueLearningGrid"></div>
+        </div>
 
-    function renderSeriesCard(s) {
-      const isPaid = (s.plan && s.plan !== 'free');
-      const userOwns = ownedSeriesSet.has(s.code);
-      const image = s.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop';
-      let actionsHtml = '';
-      if (userOwns) {
-        actionsHtml = `
-          <button class="btn btn-primary" onclick="attemptSeries('${s.code}')"><i class="fas fa-play"></i> View Tests</button>
-          <button class="btn btn-details" onclick="showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
-      } else if (isPaid) {
-        actionsHtml = `
-          <button class="btn btn-buy" onclick="unlockSeries('${s.code}')"><i class="fas fa-lock-open"></i> Unlock Now</button>
-          <button class="btn btn-outline" onclick="viewDemo('${s.code}')"><i class="fas fa-eye"></i> View Demo</button>
-          <button class="btn btn-details" onclick="showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
-      } else {
-        actionsHtml = `
-          <button class="btn btn-primary" onclick="attemptSeries('${s.code}')"><i class="fas fa-play"></i> View Tests</button>
-          <button class="btn btn-details" onclick="showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
-      }
-      return `
-        <div class="series-card">
-          <img src="${image}" alt="${s.name}" loading="lazy">
-          <button class="share-btn-absolute" onclick="event.stopPropagation();shareSeries('${s.code}')" title="Share"><i class="fas fa-share-alt"></i></button>
-          <div class="card-body">
-            <span class="badge ${isPaid ? 'badge-premium' : 'badge-free'}"><i class="fas ${isPaid ? 'fa-crown' : 'fa-check-circle'}"></i> ${isPaid ? 'Premium' : 'Free'}</span>
-            <h3>${s.name}</h3>
-            <p>${s.description || 'Complete test series for ' + s.category}</p>
-            <div class="series-actions">${actionsHtml}</div>
-          </div>
-        </div>`;
-    }
+        <!-- TRENDING (slides if >1) -->
+        <div class="trending-section" id="trendingSection">
+            <h2>
+                <i class="fas fa-fire" style="color:#ff4d5a;"></i> Trending Test Series
+                <span class="trending-badge"><i class="fas fa-chart-line"></i> HOT</span>
+            </h2>
+            <div id="trendingContainer"></div>
+        </div>
 
-    function toggleMySeries() {
-      const grid = document.getElementById('mySeriesGrid');
-      const icon = document.getElementById('mySeriesToggleIcon');
-      const isHidden = grid.classList.contains('hidden');
-      if (isHidden) {
-        grid.classList.remove('hidden');
-        icon.className = 'fas fa-chevron-up';
-      } else {
-        grid.classList.add('hidden');
-        icon.className = 'fas fa-chevron-down';
-      }
-    }
+        <!-- FILTER CHIPS -->
+        <div class="filter-chips" id="filterChips"></div>
 
-    // ---------- Actions ----------
-    function attemptSeries(code) {
-      window.location.href = `exam3.html?testSeriesCode=${encodeURIComponent(code)}`;
-    }
-    function viewDemo(code) {
-      window.location.href = `exam3.html?testSeriesCode=${encodeURIComponent(code)}`;
-    }
-    function unlockSeries(code) {
-      const series = allSeries.find(s => s.code === code);
-      if (!series) return;
-      window.location.href = `payment.html?planType=${encodeURIComponent(series.plan)}&seriesCode=${encodeURIComponent(code)}&planName=${encodeURIComponent(series.name)}`;
-    }
+        <!-- CATEGORY VIEW -->
+        <div id="categoryView">
+            <div class="section-header"><h2><i class="fas fa-layer-group"></i> Choose a Category</h2></div>
+            <div class="category-grid" id="categoryGrid"></div>
+        </div>
 
-    function shareSeries(code) {
-      const shareUrl = `${window.location.origin}${window.location.pathname}?series=${encodeURIComponent(code)}`;
-      if (navigator.share) {
-        navigator.share({ title: 'TestMasterPro Test Series', url: shareUrl }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showToast('Link copied! Share it with friends.', 'success');
-        }).catch(() => {
-          Swal.fire({ title:'Share Link', text:shareUrl, confirmButtonText:'Copy', confirmButtonColor:'#243748' }).then(r => {
-            if (r.isConfirmed) navigator.clipboard.writeText(shareUrl);
-          });
-        });
-      }
-    }
-
-    // ---------- Series Details Modal ----------
-    async function showSeriesDetails(seriesCode) {
-      try {
-        if (!seriesDetailsCache) {
-          const resp = await fetch(TEST_SERIES_DETAILS_JSON);
-          if (resp.ok) seriesDetailsCache = await resp.json();
-          else throw new Error('Failed');
-        }
-        const detail = seriesDetailsCache?.[seriesCode];
-        if (!detail) {
-          showToast('Detailed information not available for this series.', 'info');
-          return;
-        }
-        let html = `<div style="text-align:left;font-size:14px;line-height:1.6;">`;
-        if (detail.description) html += `<p><strong>Description:</strong> ${detail.description}</p>`;
-        if (detail.syllabus) html += `<p><strong>Syllabus:</strong> ${detail.syllabus}</p>`;
-        if (detail.totalTests) html += `<p><strong>Total Tests:</strong> ${detail.totalTests}</p>`;
-        if (detail.language) html += `<p><strong>Language:</strong> ${detail.language}</p>`;
-        if (detail.validity) html += `<p><strong>Validity:</strong> ${detail.validity}</p>`;
-        if (detail.features && Array.isArray(detail.features)) {
-          html += `<p><strong>Features:</strong></p><ul>`;
-          detail.features.forEach(f => html += `<li>${f}</li>`);
-          html += `</ul>`;
-        }
-        html += `</div>`;
-        Swal.fire({
-          title: detail.name || 'Series Details',
-          html: html,
-          confirmButtonText: 'Close',
-          confirmButtonColor: '#243748',
-          width: '90%',
-          maxWidth: '600px'
-        });
-      } catch(e) {
-        showToast('Could not load series details.', 'error');
-      }
-    }
-
-    // ---------- Share link handling ----------
-    function handleShareLink() {
-      const params = new URLSearchParams(window.location.search);
-      const seriesCode = params.get('series');
-      if (!seriesCode) return;
-      const series = allSeries.find(s => s.code === seriesCode);
-      if (!series) return;
-      document.getElementById('categoryView').classList.add('hidden');
-      document.getElementById('seriesView').classList.add('hidden');
-      document.getElementById('singleSeriesView').classList.remove('hidden');
-      document.getElementById('singleSeriesContent').innerHTML = `
-        <div class="section-header"><h2><i class="fas fa-link"></i> Shared Test Series</h2></div>
-        <div class="series-grid">${renderSeriesCard(series)}</div>`;
-      const otherSeries = allSeries.filter(s => s.code !== seriesCode).slice(0, 6);
-      document.getElementById('moreSeriesGrid').innerHTML = otherSeries.map(s => renderSeriesCard(s)).join('');
-    }
-
-    // ---------- Footer ----------
-    function renderFooterExamCategories() {
-      const container = document.getElementById('footerExamCategories');
-      if (!allMocks.length) { container.innerHTML = '<li><a>No exams</a></li>'; return; }
-      const grouped = {};
-      allMocks.forEach(m => { if (!grouped[m.category]) grouped[m.category] = m; });
-      const categories = Object.keys(grouped).sort();
-      let html = categories.map(cat => `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}')">${cat}</a></li>`).join('');
-      html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
-      html += `<li><a onclick="navigate('book.html')"><i class="fas fa-book"></i> Books & PYQ</a></li>`;
-      html += `<li><a onclick="navigate('aichat.html')"><i class="fas fa-robot"></i> AI Chat</a></li>`;
-      html += `<li><a onclick="navigate('chat.html')"><i class="fas fa-comments"></i> Support Chat</a></li>`;
-      html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
-      html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
-      html += `<li><a onclick="navigate('apk.html')">📱 Get APK</a></li>`;
-      container.innerHTML = html;
-    }
-    async function renderFooterUpcoming() {
-      const container = document.getElementById('footerUpcomingExams');
-      try {
-        const resp = await fetch('./json/upcomingfooter.json', { cache: 'no-store' });
-        if (resp.ok) {
-          const data = await resp.json();
-          if (Array.isArray(data) && data.length) {
-            container.innerHTML = data.map(e => `<li><a>${e.name}</a></li>`).join('');
-            return;
-          }
-        }
-      } catch(e) {}
-      container.innerHTML = '<li><a>Loading upcoming exams...</a></li>';
-    }
-    function openInstallPopup() {
-      Swal.fire({
-        title: '📲 Install TestMaster Pro',
-        html: `<div style="text-align:center;">
-            <p style="font-size:14px;font-weight:600;color:#243748;">Get the App Experience!</p>
-            <p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file.</p>
-            <div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;">
-                <i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i>
-                <p style="font-weight:700;">TestMasterPro.apk</p>
+        <!-- SERIES VIEW (after category selected) -->
+        <div id="seriesView" class="hidden">
+            <div class="section-header" style="cursor:pointer;" onclick="showCategoryView()">
+                <h2><i class="fas fa-arrow-left"></i> <span id="selectedCatName"></span></h2>
             </div>
-        </div>`,
-        confirmButtonText: '<i class="fas fa-download"></i> Download APK',
-        confirmButtonColor: '#4f46e5',
-        showCancelButton: true,
-        cancelButtonText: 'Maybe Later',
-        cancelButtonColor: '#94a3b8',
-        footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions</a>'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const link = document.createElement('a');
-          link.href = 'TestMasterPro.apk';
-          link.download = 'TestMasterPro.apk';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          showToast('Downloading TestMasterPro.apk...', 'success', 4000);
-        }
-      });
-    }
+            <div class="series-grid" id="seriesGrid"></div>
+        </div>
 
-    // Init – show cached data immediately, then update in background
-    (async function init() {
-      updateUserUI();
-      loadSeries(); // will use cache first, then refresh
-      loadUserPremium().then(() => {
-        // update owned series after premium status loaded
-        updateOwnedSeries();
-        renderAll();
-      });
-      loadMocksForFooter();
-      renderFooterUpcoming();
-    })();
-  </script>
+        <!-- SINGLE SERIES (share link) -->
+        <div id="singleSeriesView" class="hidden">
+            <div id="singleSeriesContent"></div>
+            <div style="margin-top:24px;">
+                <div class="section-header"><h2><i class="fas fa-thumbs-up"></i> More Series You May Like</h2></div>
+                <div class="series-grid" id="moreSeriesGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="pro-footer">
+        <div class="footer-grid">
+            <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
+            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+        </div>
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
+        </div>
+        <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
+        <div class="footer-social">
+            <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+            <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 TestMasterPro.space</p>
+            <a href="mailto:testmasterpro.space">testmasterpro.space</a>
+        </div>
+    </footer>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item" onclick="goHome()"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="bottom-nav-item active"><i class="fas fa-layer-group"></i><span>Test Series</span></button>
+        <button class="bottom-nav-item" onclick="goToResults()"><i class="fas fa-chart-bar"></i><span>Results</span></button>
+        <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
+    </nav>
+
+    <script>
+        // ========== CONFIG ==========
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyB8x80iQRROrRKcAhbTEQszOx2-CqDEbTjWkxb-kQZd_GqzHKJxhnzoQXUS0-MxeE3jQ/exec';
+        const TEST_SERIES_JSON = './json/testseries.json';
+        const TEST_SERIES_DETAILS_JSON = './json/testseriesdetails.json';
+        const MOCKS_CACHE_KEY = 'cachedAllMocks';
+        const SERIES_CACHE_KEY = 'cachedTestSeries';
+        const OWNED_SERIES_KEY = 'ownedSeries';
+        const SELECTED_CATEGORY_KEY = 'selectedTestSeriesCategory';
+
+        let allSeries = [];
+        let allMocks = [];
+        let categories = [];
+        let user = JSON.parse(localStorage.getItem('user'));
+        let userPremiumPlans = [];
+        let ownedSeriesSet = new Set(JSON.parse(localStorage.getItem(OWNED_SERIES_KEY) || '[]'));
+        let seriesDetailsCache = null;
+        let searchTimeout;
+        let currentFilter = 'all';
+
+        // ========== HELPERS ==========
+        function showToast(msg, type='info', dur=3000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-item ${type}`;
+            const icons = { success:'fa-check-circle', error:'fa-times-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle' };
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity='0'; toast.style.transform='translateY(-8px)'; toast.style.transition='0.3s';
+                setTimeout(() => { toast.remove(); }, 300);
+            }, dur);
+        }
+
+        function setAvatarWithPic(elId, userObj) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            if (userObj?.avatarUrl) el.innerHTML = `<img src="${userObj.avatarUrl}" alt="Avatar">`;
+            else if (userObj?.profilePicUrl) el.innerHTML = `<img src="${userObj.profilePicUrl}" alt="Avatar">`;
+            else el.textContent = (userObj?.name) ? userObj.name.charAt(0).toUpperCase() : 'G';
+        }
+
+        function goHome() { window.location.href = user ? 'dashboard.html' : 'index.html'; }
+        function navigate(url) { window.location.href = url; }
+        function goToResults() { localStorage.setItem('lastExamPage', window.location.href); navigate('allresult.html'); }
+
+        // ========== SIDEBAR ==========
+        function openSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('hidden');
+            requestAnimationFrame(() => overlay.classList.add('active'));
+            document.body.classList.add('sidebar-open');
+        }
+        function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+        function closeSidebarDirect() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400);
+        }
+        function sidebarNavigate(action) {
+            closeSidebarDirect();
+            setTimeout(() => {
+                const map = {
+                    dashboard:'dashboard.html', mocks:'exam.html', aimock:'aimock.html',
+                    books:'book.html', study:'book.html', results:'allresult.html',
+                    leaderboard:'leaderboard.html', chat:'chat.html', aichat:'aichat.html',
+                    streak:'streak.html', 'daily-challenge':'challenge.html',
+                    referral:'referral.html', favorites:'favorites.html', coins:'coin-history.html',
+                    'coin-use':'usecoin.html', reviews:'reviews.html', premium:'payment.html',
+                    profile:'profile.html', instructions:'instructions', logout:'logout',
+                    testseries:'testseries.html'
+                };
+                if (action === 'logout') logout();
+                else if (action === 'instructions') openHowToUse();
+                else if (map[action]) navigate(map[action]);
+            }, 300);
+        }
+        function openHowToUse() {
+            Swal.fire({
+                title:'How to Use',
+                html:`<div style="text-align:left;font-size:13px;line-height:1.9;">
+                    <p><b>1.</b> Use the search bar or filter chips.</p>
+                    <p><b>2.</b> Pick a test series.</p>
+                    <p><b>3.</b> Click <b>View Tests</b> to start.</p>
+                </div>`,
+                confirmButtonText:'Got it!', confirmButtonColor:'#243748', icon:'info'
+            });
+        }
+        function logout() {
+            Swal.fire({
+                title:'Logout?', text:'Are you sure?', icon:'question',
+                showCancelButton:true, confirmButtonText:'Yes', cancelButtonText:'No',
+                confirmButtonColor:'#ff4d5a', cancelButtonColor:'#243748'
+            }).then(r => {
+                if (r.isConfirmed) {
+                    localStorage.removeItem('user');
+                    showToast('Logged out', 'success');
+                    setTimeout(() => window.location.href='index.html', 800);
+                }
+            });
+        }
+
+        function updateUserUI() {
+            if (user) {
+                setAvatarWithPic('userInitial', user);
+                setAvatarWithPic('sidebarAvatar', user);
+                document.getElementById('sidebarUserName').textContent = user.name || 'Student';
+                document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
+            }
+        }
+
+        // ========== DATA LOADING ==========
+        async function loadUserPremium() {
+            if (!user || !user.username) { userPremiumPlans = []; return; }
+            try {
+                const r = await fetch(`${API_URL}?action=getUserPremiumStatus&username=${encodeURIComponent(user.username)}`);
+                const d = await r.json();
+                if (d?.success && Array.isArray(d.premiumPlans)) {
+                    userPremiumPlans = d.premiumPlans;
+                    user.premiumPlans = d.premiumPlans;
+                    localStorage.setItem('user', JSON.stringify(user));
+                } else { userPremiumPlans = []; }
+            } catch(e) { userPremiumPlans = []; }
+        }
+
+        function updateOwnedSeries() {
+            allSeries.forEach(s => { if (!s.plan || s.plan === 'free') ownedSeriesSet.add(s.code); });
+            if (userPremiumPlans.length) {
+                allSeries.forEach(s => {
+                    if (s.plan && s.plan !== 'free') {
+                        if (userPremiumPlans.some(p => p.planType === s.plan || p.planType === 'ultimate')) {
+                            ownedSeriesSet.add(s.code);
+                        }
+                    }
+                });
+            }
+            localStorage.setItem(OWNED_SERIES_KEY, JSON.stringify([...ownedSeriesSet]));
+        }
+
+        function cacheSeries(data) { try { localStorage.setItem(SERIES_CACHE_KEY, JSON.stringify(data)); } catch(e) {} }
+        function loadSeriesFromCache() {
+            try { const c = localStorage.getItem(SERIES_CACHE_KEY); if(c) { const p = JSON.parse(c); if(p?.series?.length) return p.series; } } catch(e) {}
+            return null;
+        }
+
+        async function loadSeries() {
+            let cachedSeries = loadSeriesFromCache();
+            if (cachedSeries) { allSeries = cachedSeries; postSeriesLoad(); }
+            try {
+                const resp = await fetch(TEST_SERIES_JSON, { cache: 'no-store' });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.series && Array.isArray(data.series)) {
+                        if (JSON.stringify(data.series) !== JSON.stringify(allSeries)) {
+                            allSeries = data.series;
+                            cacheSeries(data);
+                            postSeriesLoad();
+                        }
+                        return;
+                    }
+                }
+            } catch(e) {}
+            if (!allSeries.length) {
+                document.getElementById('categoryGrid').innerHTML = '<div class="empty-state">⚠️ Could not load test series.</div>';
+                showToast('Could not load test series', 'error');
+            }
+        }
+
+        function postSeriesLoad() {
+            updateOwnedSeries();
+            renderAll();
+        }
+
+        async function loadMocksForFooter() {
+            const cached = localStorage.getItem(MOCKS_CACHE_KEY);
+            if (cached) { allMocks = JSON.parse(cached); renderFooterExamCategories(); }
+            try {
+                const resp = await fetch('./mocks.json', { cache: 'no-store' });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (Array.isArray(data) && JSON.stringify(data) !== JSON.stringify(allMocks)) {
+                        allMocks = data;
+                        localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data));
+                        renderFooterExamCategories();
+                    }
+                }
+            } catch(e) {}
+        }
+
+        // ========== SEARCH ==========
+        function handleSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = document.getElementById('searchInput').value.trim().toLowerCase();
+                if (!query) { resetToDefaultView(); return; }
+                const filtered = allSeries.filter(s => s.name.toLowerCase().includes(query) || s.category.toLowerCase().includes(query) || (s.description && s.description.toLowerCase().includes(query)));
+                showFilteredSeries(filtered, `🔍 Search results for "${query}"`);
+            }, 300);
+        }
+
+        function resetToDefaultView() {
+            document.getElementById('categoryView').classList.remove('hidden');
+            document.getElementById('seriesView').classList.add('hidden');
+            document.getElementById('singleSeriesView').classList.add('hidden');
+            currentFilter = 'all';
+            updateFilterChips();
+            renderCategories(categories);
+        }
+
+        function showFilteredSeries(seriesList, title) {
+            document.getElementById('categoryView').classList.add('hidden');
+            document.getElementById('seriesView').classList.remove('hidden');
+            document.getElementById('singleSeriesView').classList.add('hidden');
+            document.getElementById('selectedCatName').textContent = title;
+            const grid = document.getElementById('seriesGrid');
+            grid.innerHTML = seriesList.length ? seriesList.map(s => renderSeriesCard(s)).join('') : '<div class="empty-state">😔 No series found.</div>';
+        }
+
+        // ========== FILTER CHIPS ==========
+        function renderFilterChips() {
+            const container = document.getElementById('filterChips');
+            const chips = ['All', ...categories];
+            container.innerHTML = chips.map(cat => {
+                const val = cat === 'All' ? 'all' : cat;
+                return `<button class="filter-chip${currentFilter === val ? ' active' : ''}" onclick="applyFilter('${val.replace(/'/g, "\\'")}')">${cat}</button>`;
+            }).join('');
+        }
+
+        function applyFilter(filter) {
+            currentFilter = filter;
+            updateFilterChips();
+            filter === 'all' ? showCategoryView() : selectCategory(filter);
+        }
+
+        function updateFilterChips() {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                const val = chip.textContent === 'All' ? 'all' : chip.textContent;
+                chip.classList.toggle('active', val === currentFilter);
+            });
+        }
+
+        // ========== RENDER ALL ==========
+        function renderAll() {
+            categories = [...new Set(allSeries.map(s => s.category).filter(Boolean))].sort();
+            renderFilterChips();
+            renderCategories(categories);
+            renderContinueLearning();
+            renderTrending();
+            handleShareLink();
+            document.getElementById('statTests').textContent = `${allSeries.length}+`;
+            const savedCat = localStorage.getItem(SELECTED_CATEGORY_KEY);
+            if (!window.location.search.includes('series') && savedCat && categories.includes(savedCat)) {
+                selectCategory(savedCat);
+            }
+        }
+
+        function getCategoryImage(cat) {
+            const img = allSeries.find(s => s.category === cat && s.category_img)?.category_img;
+            return img ? `<img src="${img}" alt="${cat}" loading="lazy">` : '<i class="fas fa-book-open"></i>';
+        }
+
+        function renderCategories(cats) {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = cats.length ? cats.map(cat => {
+                const count = allSeries.filter(s => s.category === cat).length;
+                return `<div class="cat-card" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
+                    <div class="cat-img">${getCategoryImage(cat)}</div>
+                    <div class="cat-name">${cat}</div>
+                    <div class="cat-count">${count} series</div>
+                </div>`;
+            }).join('') : '<div class="empty-state">📭 No categories found.</div>';
+        }
+
+        function renderContinueLearning() {
+            const mySeries = allSeries.filter(s => ownedSeriesSet.has(s.code));
+            const section = document.getElementById('continueSection');
+            const container = document.getElementById('continueLearningGrid');
+            if (!mySeries.length) { section.classList.add('hidden'); return; }
+            section.classList.remove('hidden');
+            container.innerHTML = mySeries.map(s => {
+                const img = s.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=200&fit=crop';
+                return `<div class="continue-card" onclick="attemptSeries('${s.code}')">
+                    <img src="${img}" alt="${s.name}" loading="lazy">
+                    <div class="continue-card-body">
+                        <span class="badge-owned"><i class="fas fa-check-circle"></i> Owned</span>
+                        <h4>${s.name}</h4>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderTrending() {
+            const trendingSeries = allSeries.filter(s => s.Trending === 'yes' || s.trending === 'yes');
+            const section = document.getElementById('trendingSection');
+            const container = document.getElementById('trendingContainer');
+
+            if (!trendingSeries.length) { section.classList.add('hidden'); return; }
+            section.classList.remove('hidden');
+
+            // If more than 1, use carousel; else single card grid
+            if (trendingSeries.length > 1) {
+                container.innerHTML = `<div class="trending-carousel">${trendingSeries.map(s => renderSeriesCard(s, true)).join('')}</div>`;
+            } else {
+                container.innerHTML = `<div class="series-grid">${trendingSeries.map(s => renderSeriesCard(s, true)).join('')}</div>`;
+            }
+        }
+
+        function showCategoryView() {
+            document.getElementById('categoryView').classList.remove('hidden');
+            document.getElementById('seriesView').classList.add('hidden');
+            document.getElementById('singleSeriesView').classList.add('hidden');
+            document.getElementById('searchInput').value = '';
+            currentFilter = 'all';
+            updateFilterChips();
+            renderCategories(categories);
+        }
+
+        function selectCategory(category) {
+            localStorage.setItem(SELECTED_CATEGORY_KEY, category);
+            document.getElementById('categoryView').classList.add('hidden');
+            document.getElementById('seriesView').classList.remove('hidden');
+            document.getElementById('singleSeriesView').classList.add('hidden');
+            document.getElementById('selectedCatName').textContent = category;
+            currentFilter = category;
+            updateFilterChips();
+            const filtered = allSeries.filter(s => s.category === category);
+            document.getElementById('seriesGrid').innerHTML = filtered.length
+                ? filtered.map(s => renderSeriesCard(s)).join('')
+                : '<div class="empty-state">📭 No series in this category yet.</div>';
+        }
+
+        function renderSeriesCard(s, isTrending = false) {
+            const isPaid = (s.plan && s.plan !== 'free');
+            const userOwns = ownedSeriesSet.has(s.code);
+            const image = s.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop';
+
+            // Premium ribbon (only if paid, sits at top right of card)
+            const premiumRibbon = isPaid ? `<div class="premium-ribbon"><i class="fas fa-crown"></i> PREMIUM</div>` : '';
+
+            // Feature chips
+            let chipsHtml = '';
+            if (s.language) chipsHtml += `<span class="chip"><i class="fas fa-language"></i> ${s.language}</span>`;
+            if (s.containsPYQ || s.PYQ) chipsHtml += `<span class="chip"><i class="fas fa-history"></i> PYQ</span>`;
+            if (s.isLatest || s.Latest) chipsHtml += `<span class="chip"><i class="fas fa-star"></i> Latest</span>`;
+            if (s.totalTests) chipsHtml += `<span class="chip"><i class="fas fa-list-ol"></i> ${s.totalTests} Tests</span>`;
+
+            // Free badge inside card body
+            const freeBadge = !isPaid ? `<span class="badge-free-inside"><i class="fas fa-check-circle"></i> Free</span>` : '';
+
+            // Actions
+            let actionsHtml = '';
+            if (userOwns) {
+                actionsHtml = `<button class="btn btn-primary" onclick="event.stopPropagation();attemptSeries('${s.code}')"><i class="fas fa-play"></i> View Tests</button>
+                               <button class="btn btn-details" onclick="event.stopPropagation();showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
+            } else if (isPaid) {
+                actionsHtml = `<button class="btn btn-buy" onclick="event.stopPropagation();unlockSeries('${s.code}')"><i class="fas fa-lock-open"></i> Unlock Now</button>
+                               <button class="btn btn-outline" onclick="event.stopPropagation();viewDemo('${s.code}')"><i class="fas fa-eye"></i> View Demo</button>
+                               <button class="btn btn-details" onclick="event.stopPropagation();showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
+            } else {
+                actionsHtml = `<button class="btn btn-primary" onclick="event.stopPropagation();attemptSeries('${s.code}')"><i class="fas fa-play"></i> View Tests</button>
+                               <button class="btn btn-details" onclick="event.stopPropagation();showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
+            }
+
+            return `<div class="series-card">
+                ${premiumRibbon}
+                <div class="card-img-wrapper">
+                    <img src="${image}" alt="${s.name}" loading="lazy">
+                    <button class="share-btn-absolute" onclick="event.stopPropagation();shareSeries('${s.code}')"><i class="fas fa-share-alt"></i></button>
+                </div>
+                <div class="card-body">
+                    ${freeBadge}
+                    <h3>${s.name}</h3>
+                    <p>${s.description || 'Complete test series for ' + s.category}</p>
+                    ${chipsHtml ? `<div class="feature-chips">${chipsHtml}</div>` : ''}
+                    <div class="series-actions">${actionsHtml}</div>
+                </div>
+            </div>`;
+        }
+
+        // ========== ACTIONS ==========
+        function attemptSeries(code) { window.location.href = `exam3.html?testSeriesCode=${encodeURIComponent(code)}`; }
+        function viewDemo(code) { window.location.href = `exam3.html?testSeriesCode=${encodeURIComponent(code)}`; }
+        function unlockSeries(code) {
+            const series = allSeries.find(s => s.code === code);
+            if (!series) return;
+            window.location.href = `payment.html?planType=${encodeURIComponent(series.plan)}&seriesCode=${encodeURIComponent(code)}&planName=${encodeURIComponent(series.name)}`;
+        }
+        function shareSeries(code) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?series=${encodeURIComponent(code)}`;
+            if (navigator.share) { navigator.share({ title: 'TestMasterPro Test Series', url: shareUrl }).catch(() => {}); }
+            else {
+                navigator.clipboard.writeText(shareUrl).then(() => showToast('🔗 Link copied!', 'success')).catch(() => {
+                    Swal.fire({ title:'Share Link', text:shareUrl, confirmButtonText:'Copy', confirmButtonColor:'#243748' }).then(r => { if (r.isConfirmed) navigator.clipboard.writeText(shareUrl); });
+                });
+            }
+        }
+        async function showSeriesDetails(seriesCode) {
+            try {
+                if (!seriesDetailsCache) {
+                    const resp = await fetch(TEST_SERIES_DETAILS_JSON);
+                    if (resp.ok) seriesDetailsCache = await resp.json(); else throw new Error('Failed');
+                }
+                const detail = seriesDetailsCache?.[seriesCode];
+                if (!detail) { showToast('No details available.', 'info'); return; }
+                let html = `<div style="text-align:left;font-size:14px;line-height:1.6;">`;
+                if (detail.description) html += `<p><strong>Description:</strong> ${detail.description}</p>`;
+                if (detail.syllabus) html += `<p><strong>Syllabus:</strong> ${detail.syllabus}</p>`;
+                if (detail.totalTests) html += `<p><strong>Total Tests:</strong> ${detail.totalTests}</p>`;
+                if (detail.language) html += `<p><strong>Language:</strong> ${detail.language}</p>`;
+                if (detail.validity) html += `<p><strong>Validity:</strong> ${detail.validity}</p>`;
+                if (detail.features && Array.isArray(detail.features)) {
+                    html += `<p><strong>Features:</strong></p><ul>${detail.features.map(f => `<li>${f}</li>`).join('')}</ul>`;
+                }
+                html += `</div>`;
+                Swal.fire({ title: detail.name || 'Series Details', html, confirmButtonText: 'Close', confirmButtonColor: '#243748', width: '90%', maxWidth: '600px' });
+            } catch(e) { showToast('Could not load details.', 'error'); }
+        }
+
+        function handleShareLink() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('series');
+            if (!code) return;
+            const series = allSeries.find(s => s.code === code);
+            if (!series) return;
+            document.getElementById('categoryView').classList.add('hidden');
+            document.getElementById('seriesView').classList.add('hidden');
+            document.getElementById('singleSeriesView').classList.remove('hidden');
+            document.getElementById('singleSeriesContent').innerHTML = `<div class="section-header"><h2><i class="fas fa-link"></i> Shared Test Series</h2></div><div class="series-grid">${renderSeriesCard(series)}</div>`;
+            document.getElementById('moreSeriesGrid').innerHTML = allSeries.filter(s => s.code !== code).slice(0,6).map(s => renderSeriesCard(s)).join('');
+        }
+
+        // ========== FOOTER ==========
+        function renderFooterExamCategories() {
+            const container = document.getElementById('footerExamCategories');
+            if (!allMocks.length) { container.innerHTML = '<li><a>No exams</a></li>'; return; }
+            const grouped = {};
+            allMocks.forEach(m => { if (!grouped[m.category]) grouped[m.category] = m; });
+            let html = Object.keys(grouped).sort().map(cat => `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}')">${cat}</a></li>`).join('');
+            html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
+            html += `<li><a onclick="navigate('book.html')"><i class="fas fa-book"></i> Books & PYQ</a></li>`;
+            html += `<li><a onclick="navigate('aichat.html')"><i class="fas fa-robot"></i> AI Chat</a></li>`;
+            html += `<li><a onclick="navigate('chat.html')"><i class="fas fa-comments"></i> Support Chat</a></li>`;
+            html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
+            html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
+            html += `<li><a onclick="navigate('apk.html')">📱 Get APK</a></li>`;
+            container.innerHTML = html;
+        }
+        async function renderFooterUpcoming() {
+            const container = document.getElementById('footerUpcomingExams');
+            try {
+                const resp = await fetch('./json/upcomingfooter.json', { cache: 'no-store' });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (Array.isArray(data) && data.length) { container.innerHTML = data.map(e => `<li><a>${e.name}</a></li>`).join(''); return; }
+                }
+            } catch(e) {}
+            container.innerHTML = '<li><a>Loading upcoming exams...</a></li>';
+        }
+        function openInstallPopup() {
+            Swal.fire({
+                title: '📲 Install TestMaster Pro',
+                html: `<div style="text-align:center;">
+                    <p style="font-size:14px;font-weight:600;color:#243748;">Get the App Experience!</p>
+                    <p style="font-size:12px;color:#64748b;">Download <strong>TestMasterPro.apk</strong></p>
+                    <div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;">
+                        <i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i>
+                        <p style="font-weight:700;">TestMasterPro.apk</p>
+                    </div>
+                </div>`,
+                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
+                confirmButtonColor: '#4f46e5',
+                showCancelButton: true,
+                cancelButtonText: 'Maybe Later',
+                cancelButtonColor: '#94a3b8',
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const link = document.createElement('a');
+                    link.href = 'TestMasterPro.apk';
+                    link.download = 'TestMasterPro.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Downloading APK...', 'success', 4000);
+                }
+            });
+        }
+
+        // ========== INIT ==========
+        (async function init() {
+            updateUserUI();
+            loadSeries();
+            loadUserPremium().then(() => { updateOwnedSeries(); renderAll(); });
+            loadMocksForFooter();
+            renderFooterUpcoming();
+            renderFilterChips();
+        })();
+    </script>
 </body>
 </html>
