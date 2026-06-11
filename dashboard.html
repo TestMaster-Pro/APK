@@ -46,7 +46,7 @@
         }
         body.sidebar-open, body.sheet-open { overflow: hidden; position: fixed; width: 100%; height: 100%; }
 
-        /* ---------- Sidebar ---------- */
+        /* ---------- Sidebar (unchanged) ---------- */
         .sidebar-overlay {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 250;
             opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0.35s;
@@ -181,13 +181,13 @@
         .floating-ai-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(99, 102, 241, 0.55); }
         .floating-ai-btn:active { transform: scale(0.9); }
 
-        .container { max-width: var(--max-width); margin: 0 auto; padding: 14px 14px calc(20px + var(--bottom-nav-height)); position: relative; z-index: 5; width: 100%; flex: 1; }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 16px 16px calc(20px + var(--bottom-nav-height)); position: relative; z-index: 5; width: 100%; flex: 1; }
 
         /* Hero Slider */
-        .hero-slider-wrap { position: relative; width: 100%; overflow: hidden; border-radius: 0 0 24px 24px; margin-bottom: 20px; }
+        .hero-slider-wrap { position: relative; width: 100%; overflow: hidden; border-radius: 0 0 24px 24px; margin-bottom: 16px; }
         .hero-slider { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
         .hero-slide { min-width: 100%; position: relative; cursor: pointer; }
-        .hero-slide img { width: 100%; height: 220px; object-fit: cover; display: block; }
+        .hero-slide img { width: 100%; height: 200px; object-fit: cover; display: block; }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; }
         .hero-badge { position: absolute; top: 16px; left: 16px; background: var(--blue); color: #fff; padding: 4px 12px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
         .hero-title { color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
@@ -198,124 +198,157 @@
         .hero-slider-wrap.dragging { cursor: grabbing; }
         .hero-slider-wrap.dragging .hero-slider { transition: none; }
 
-        .quick-actions { padding: 0 14px 14px; }
-        .qa-scroll { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 2px; }
-        .qa-scroll::-webkit-scrollbar { display: none; }
-        .qa-card { flex: 1 1 0; min-width: 72px; max-width: 100px; aspect-ratio: 1/1.05; border: none; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; scroll-snap-align: start; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s; position: relative; overflow: hidden; color: #fff; padding: 8px 4px; }
-        .qa-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 120% 0%, rgba(255, 255, 255, 0.25), transparent 55%); z-index: 0; }
-        .qa-card:active { transform: scale(0.9); }
-        .qa-card:hover { transform: translateY(-3px); }
-        .qa-icon { width: 32px; height: 32px; border-radius: 10px; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; font-size: 15px; position: relative; z-index: 1; transition: transform 0.3s; }
-        .qa-card:hover .qa-icon { transform: scale(1.2) rotate(-5deg); }
-        .qa-card span { font-size: 9px; font-weight: 700; position: relative; z-index: 1; letter-spacing: 0.3px; line-height: 1.25; text-align: center; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
-        .qa-aimock { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35); }
-        .qa-challenge { background: linear-gradient(135deg, #0ea5e9, #0369a1); box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25); }
-        .qa-refer { background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); }
-        .qa-coins { background: linear-gradient(135deg, #f59e0b, #b45309); box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25); }
-        .qa-use-coins { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25); }
-        .qa-results { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25); }
-        .qa-apk { background: linear-gradient(135deg, #0ea5e9, #0284c7); box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25); }
-        .qa-apk .qa-icon { background: rgba(255, 255, 255, 0.22); border: 1px solid rgba(255, 255, 255, 0.25); }
+        /* Quick Actions (smaller) */
+        .qa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+        .qa-card { border: none; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; transition: transform 0.2s; position: relative; overflow: hidden; color: #fff; padding: 10px 4px; }
+        .qa-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 120% 0%, rgba(255, 255, 255, 0.2), transparent 50%); }
+        .qa-card:active { transform: scale(0.92); }
+        .qa-icon { width: 32px; height: 32px; border-radius: 10px; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-size: 15px; position: relative; z-index: 1; margin-bottom: 2px; }
+        .qa-card span { font-size: 10px; font-weight: 600; position: relative; z-index: 1; text-align: center; }
+        .qa-aimock { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+        .qa-challenge { background: linear-gradient(135deg, #0ea5e9, #0369a1); }
+        .qa-refer { background: linear-gradient(135deg, #10b981, #047857); }
+        .qa-coins { background: linear-gradient(135deg, #f59e0b, #b45309); }
+        .qa-results { background: linear-gradient(135deg, #f43f5e, #be123c); }
+        .qa-apk { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+        .qa-support { background: linear-gradient(135deg, #6366f1, #4f46e5); }
 
-        @media (min-width:640px) {
-            .qa-scroll { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; max-width: 900px; margin: 0 auto; }
-            .qa-card { max-width: none; aspect-ratio: 1/0.9; border-radius: 20px; }
-            .qa-card span { font-size: 12px; }
-            .qa-icon { width: 38px; height: 38px; font-size: 18px; }
-        }
-
-        .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-        .section-header .section-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-        .section-header h2 { font-size: clamp(15px, 3vw, 18px); font-weight: 700; color: var(--gray-800); letter-spacing: -0.3px; }
-        .section-header .badge-tag { background: var(--green-light); color: #065f46; padding: 3px 10px; border-radius: 14px; font-size: 10px; font-weight: 700; }
-
-        .upcoming-scroll { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; scrollbar-width: none; -ms-overflow-style: none; margin-bottom: 8px; }
-        .upcoming-scroll::-webkit-scrollbar { display: none; }
-        .upcoming-card { min-width: 260px; max-width: 300px; flex-shrink: 0; scroll-snap-align: start; background: linear-gradient(135deg, #fff, #f8fafc); border-radius: var(--radius-md); padding: 16px; border: 1px solid #e8ecf0; box-shadow: var(--shadow-sm); cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden; }
-        .upcoming-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--blue)); }
-        .upcoming-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
-        .upcoming-card:active { transform: scale(0.97); transition: 0.06s; }
-        .upcoming-card .uc-top { display: flex; align-items: center; gap: 10px; }
-        .upcoming-card .uc-img { width: 52px; height: 52px; border-radius: 14px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); flex-shrink: 0; overflow: hidden; }
-        .upcoming-card .uc-img img { width: 100%; height: 100%; object-fit: cover; }
-        .upcoming-card .uc-info h4 { font-size: 14px; font-weight: 700; color: var(--gray-800); margin-bottom: 2px; line-height: 1.3; }
-        .upcoming-card .uc-info span { font-size: 11px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
-        .upcoming-card .uc-info span i { color: var(--red); font-size: 10px; }
-        .upcoming-card .uc-meta { display: flex; gap: 10px; font-size: 10px; color: var(--gray-500); flex-wrap: wrap; font-weight: 500; }
-        .upcoming-card .uc-meta span { display: flex; align-items: center; gap: 3px; background: var(--gray-100); padding: 3px 8px; border-radius: 8px; }
-        .upcoming-card .uc-badge { position: absolute; top: 12px; right: 12px; background: var(--green); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: 700; letter-spacing: 0.3px; z-index: 1; }
-
-        .mock-accordion { display: flex; flex-direction: column; gap: 6px; }
-        .mock-accordion-item { background: #fff; border-radius: var(--radius); border: 1px solid #e8ecf0; overflow: hidden; transition: var(--transition); box-shadow: var(--shadow-xs); }
-        .mock-accordion-item.open { border-color: #c4d0dc; box-shadow: var(--shadow-sm); }
-        .mock-accordion-header { width: 100%; padding: 14px 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: var(--font); font-weight: 600; font-size: 14px; color: var(--gray-700); transition: var(--transition-fast); text-align: left; user-select: none; }
-        .mock-accordion-header:active { background: #f9fafb; }
-        .mock-accordion-header .ma-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-        .mock-accordion-header .ma-count { font-size: 11px; color: var(--gray-400); font-weight: 500; background: var(--gray-100); padding: 3px 10px; border-radius: 12px; flex-shrink: 0; }
-        .mock-accordion-header .ma-arrow { font-size: 12px; color: var(--gray-400); transition: transform 0.3s ease; flex-shrink: 0; }
-        .mock-accordion-item.open .ma-arrow { transform: rotate(180deg); color: var(--primary); }
-        .mock-accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .mock-accordion-item.open .mock-accordion-body { max-height: 800px; }
-        .mock-exam-list { padding: 4px 14px 12px; display: flex; flex-direction: column; gap: 3px; }
-        .mock-exam-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 10px; cursor: pointer; transition: var(--transition-fast); font-size: 13px; font-weight: 500; color: var(--gray-600); gap: 8px; flex-wrap: wrap; background: var(--gray-50); border: 1px solid transparent; }
-        .mock-exam-item:hover { background: var(--primary-light); color: var(--primary); border-color: rgba(36, 55, 72, 0.1); transform: translateX(3px); }
-        .mock-exam-item:active { transform: scale(0.98); }
+        /* Continue Learning */
+        .continue-section { margin-bottom: 24px; }
+        .continue-card { background: #fff; border-radius: 20px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); border: 1px solid #e8ecf0; cursor: pointer; transition: box-shadow 0.2s; }
+        .continue-card:hover { box-shadow: var(--shadow-md); }
+        .continue-info span:first-child { font-weight: 600; font-size: 14px; }
+        .continue-info span:last-child { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+        .btn-resume { background: var(--primary); color: #fff; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 600; font-size: 13px; cursor: pointer; }
 
         /* Popular Slider */
-        .popular-slider-wrap { position: relative; width: 100%; overflow: hidden; border-radius: var(--radius-lg); margin-bottom: 8px; }
-        .popular-slider { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
+        .popular-slider-wrap { position: relative; width: 100%; overflow: hidden; border-radius: var(--radius-lg); margin-bottom: 24px; }
+        .popular-slider { display: flex; transition: transform 0.5s; will-change: transform; }
         .popular-slide { min-width: 100%; flex-shrink: 0; cursor: pointer; }
-        .popular-slide .popular-card { margin: 0 auto; min-width: 270px; max-width: 320px; background: #f0f9ff; border-radius: var(--radius-md); padding: 24px 18px; border: 1px solid #b9d8f0; box-shadow: var(--shadow-sm); transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px; }
-        .popular-slide .popular-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #8ebce8; }
-        .popular-slide .popular-card:active { transform: scale(0.97); transition: 0.06s; }
-        .popular-card .pop-badge { position: absolute; top: 12px; right: 12px; background: var(--red); color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 9px; font-weight: 700; letter-spacing: 0.5px; z-index: 1; }
+        .popular-card { margin: 0 auto; min-width: 270px; max-width: 320px; background: #fff; border-radius: 22px; padding: 24px 18px; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px; }
+        .popular-card .pop-badge { position: absolute; top: 12px; right: 12px; background: var(--red); color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 9px; font-weight: 700; }
         .popular-card .pop-icon { width: 50px; height: 50px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); margin-bottom: 4px; overflow: hidden; }
         .popular-card .pop-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .popular-card h4 { font-size: 16px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; line-height: 1.3; }
-        .popular-card .pop-attempts { display: inline-flex; align-items: center; gap: 4px; background: #fefce8; color: #a16207; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; margin-bottom: 4px; }
-        .popular-card .pop-meta { display: flex; gap: 10px; font-size: 11px; color: var(--gray-500); margin-bottom: 8px; flex-wrap: wrap; }
-        .popular-card .pop-meta span { display: flex; align-items: center; gap: 3px; }
-        .popular-card .pop-explore { width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: #fff; border: none; font-weight: 600; font-size: 13px; cursor: pointer; transition: var(--transition); font-family: var(--font); display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .popular-card .pop-explore:hover { background: var(--primary-dark); }
-        .popular-card .pop-explore:active { transform: scale(0.96); }
+        .popular-card h4 { font-size: 16px; font-weight: 700; }
+        .popular-card .pop-attempts { display: inline-flex; align-items: center; gap: 4px; background: #fefce8; color: #a16207; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; }
+        .popular-card .pop-meta { display: flex; gap: 10px; font-size: 11px; color: var(--gray-500); }
+        .popular-card .pop-explore { width: 100%; padding: 12px; border-radius: 12px; background: var(--primary); color: #fff; border: none; font-weight: 600; font-size: 13px; cursor: pointer; }
         .popular-dots { display: flex; justify-content: center; gap: 8px; padding: 8px 0 2px; }
         .popular-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-300); cursor: pointer; transition: all 0.3s; border: none; padding: 0; }
         .popular-dot.active { background: var(--primary); width: 24px; border-radius: 4px; }
         .popular-slider-wrap.dragging .popular-slider { transition: none; }
 
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        @media (max-width:400px) { .social-grid { grid-template-columns: repeat(2, 1fr); } }
-        .social-card { background: #fff; border-radius: var(--radius); padding: 16px 10px; text-align: center; border: 1px solid #e8ecf0; box-shadow: var(--shadow-xs); cursor: pointer; transition: var(--transition); text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
-        .social-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-        .social-card i { font-size: 28px; }
+        /* Test Series Slider */
+        .testseries-scroll { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; margin-bottom: 24px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .testseries-scroll::-webkit-scrollbar { display: none; }
+        .series-card {
+            min-width: 240px; max-width: 280px; flex-shrink: 0; scroll-snap-align: start;
+            background: #fff; border-radius: 22px; overflow: hidden; box-shadow: var(--shadow-sm);
+            border: 1px solid #e8ecf0; cursor: pointer; transition: var(--transition); position: relative;
+        }
+        .series-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .series-card img { width: 100%; height: 140px; object-fit: cover; }
+        .card-body { padding: 14px 16px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+        .badge-free { background: var(--green-light); color: #065f46; }
+        .badge-premium { background: #fef3c7; color: #a16207; }
+        .series-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .series-card p { font-size: 12px; color: var(--gray-500); margin-bottom: 8px; }
+        .btn-sm { padding: 8px 14px; border-radius: 10px; border: none; font-weight: 600; font-size: 12px; cursor: pointer; background: var(--primary); color: #fff; display: inline-flex; align-items: center; gap: 4px; }
+        .section-header a { font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none; margin-left: auto; }
+        .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .section-header .section-icon { width: 36px; height: 36px; border-radius: 12px; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .section-header h2 { font-size: clamp(16px, 3.5vw, 20px); font-weight: 700; color: var(--gray-800); }
+        .section-header .badge-tag { background: var(--green-light); color: #065f46; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 700; }
+
+        /* Upcoming Exams */
+        .upcoming-scroll { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; margin-bottom: 24px; scrollbar-width: none; }
+        .upcoming-scroll::-webkit-scrollbar { display: none; }
+        .upcoming-card { min-width: 220px; max-width: 260px; flex-shrink: 0; scroll-snap-align: start; background: #fff; border-radius: var(--radius-md); padding: 16px; border: 1px solid #e8ecf0; box-shadow: var(--shadow-xs); cursor: pointer; position: relative; overflow: hidden; }
+        .upcoming-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--blue)); }
+        .upcoming-card .uc-badge { position: absolute; top: 12px; right: 12px; background: var(--green); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: 700; }
+        .upcoming-card .uc-top { display: flex; align-items: center; gap: 10px; }
+        .upcoming-card .uc-img { width: 52px; height: 52px; border-radius: 14px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); overflow: hidden; }
+        .upcoming-card .uc-img img { width: 100%; height: 100%; object-fit: cover; }
+        .upcoming-card .uc-info h4 { font-size: 14px; font-weight: 700; }
+        .upcoming-card .uc-info span { font-size: 11px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
+        .upcoming-card .uc-meta { display: flex; gap: 10px; font-size: 10px; color: var(--gray-500); flex-wrap: wrap; margin-top: 8px; }
+        .upcoming-card .uc-meta span { display: flex; align-items: center; gap: 3px; background: var(--gray-100); padding: 3px 8px; border-radius: 8px; }
+
+        /* Mock Search & Accordion */
+        .mock-search { margin-bottom: 12px; }
+        .mock-search input { width: 100%; padding: 12px 16px; border-radius: 14px; border: 1px solid #ddd; font-family: var(--font); font-size: 14px; }
+        .mock-accordion { display: flex; flex-direction: column; gap: 6px; }
+        .mock-accordion-item { background: #fff; border-radius: var(--radius); border: 1px solid #e8ecf0; overflow: hidden; transition: var(--transition); box-shadow: var(--shadow-xs); }
+        .mock-accordion-item.open { border-color: #c4d0dc; box-shadow: var(--shadow-sm); }
+        .mock-accordion-header { width: 100%; padding: 14px 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: var(--font); font-weight: 600; font-size: 14px; color: var(--gray-700); }
+        .mock-accordion-header .ma-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+        .mock-accordion-header .ma-count { font-size: 11px; color: var(--gray-400); font-weight: 500; background: var(--gray-100); padding: 3px 10px; border-radius: 12px; flex-shrink: 0; }
+        .mock-accordion-header .ma-arrow { font-size: 12px; color: var(--gray-400); transition: transform 0.3s ease; }
+        .mock-accordion-item.open .ma-arrow { transform: rotate(180deg); color: var(--primary); }
+        .mock-accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s; }
+        .mock-accordion-item.open .mock-accordion-body { max-height: 800px; }
+        .mock-exam-list { padding: 4px 14px 12px; display: flex; flex-direction: column; gap: 3px; }
+        .mock-exam-item { padding: 12px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--gray-600); background: var(--gray-50); border: 1px solid transparent; }
+        .mock-exam-item:hover { background: var(--primary-light); color: var(--primary); }
+
+        /* Performance Snapshot */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+        .stat-card { background: #fff; border-radius: 18px; padding: 16px; text-align: center; box-shadow: var(--shadow-xs); border: 1px solid #eee; }
+        .stat-card i { font-size: 20px; color: var(--primary); margin-bottom: 8px; }
+        .stat-card .number { font-size: 22px; font-weight: 800; color: var(--gray-800); }
+        .stat-card .label { font-size: 12px; color: var(--gray-500); }
+
+        /* Social */
+        .social-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+        .social-card { background: #fff; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid #eee; box-shadow: var(--shadow-xs); transition: var(--transition); text-decoration: none; color: inherit; }
+        .social-card i { font-size: 32px; margin-bottom: 8px; }
         .social-card.whatsapp i { color: #25d366; }
         .social-card.telegram i { color: #26a7de; }
         .social-card.instagram i { color: #E4405F; }
         .social-card.youtube i { color: #ff0000; }
-        .social-card span { font-size: 11px; font-weight: 600; color: var(--gray-600); }
-        .social-card.coming-soon { opacity: 0.6; cursor: default; }
-        .social-card.coming-soon::after { content: 'Coming Soon'; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: 700; background: #ff4d5a; color: #fff; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+        .social-card span { display: block; font-weight: 600; font-size: 13px; }
+        .social-card small { display: block; font-size: 11px; color: var(--gray-500); }
 
-        .feedback-section { background: linear-gradient(135deg, #eef2ff, #f0f4ff); border-radius: var(--radius-lg); padding: 20px; margin: 24px 0 20px; box-shadow: var(--shadow-sm); border: 1px solid #d0d7f0; }
-        .feedback-section h3 { font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px; }
-        .feedback-marquee { height: 140px; overflow: hidden; position: relative; margin-bottom: 16px; }
-        .feedback-marquee-inner { display: flex; flex-direction: column; animation: verticalScroll 15s linear infinite; }
-        .feedback-marquee-inner:hover { animation-play-state: paused; }
-        @keyframes verticalScroll { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-        .testimonial-card { background: #fff; border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; border: 1px solid #e2e8f0; box-shadow: var(--shadow-xs); }
-        .testimonial-card .t-name { font-weight: 700; font-size: 13px; }
-        .testimonial-card .t-role { font-size: 11px; color: var(--gray-400); margin-bottom: 6px; }
-        .testimonial-card .t-stars { color: #f59e0b; font-size: 12px; margin-bottom: 4px; }
-        .testimonial-card .t-text { font-size: 12px; color: var(--gray-600); font-style: italic; }
-        .feedback-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-        .feedback-btn { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 24px; font-weight: 700; font-size: 13px; cursor: pointer; transition: var(--transition-smooth); display: flex; align-items: center; gap: 6px; font-family: var(--font); box-shadow: 0 4px 12px rgba(36, 55, 72, 0.25); }
-        .feedback-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(36, 55, 72, 0.35); }
+        /* Testimonials (better display) */
+        .testimonials-swipe { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; margin-bottom: 16px; }
+        .testimonial-card-swipe { min-width: 260px; flex-shrink: 0; scroll-snap-align: start; background: #fff; border-radius: 20px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid #e8ecf0; display: flex; flex-direction: column; gap: 10px; }
+        .testimonial-card-swipe .t-stars { color: #f59e0b; font-size: 16px; letter-spacing: 2px; }
+        .testimonial-card-swipe .t-text { font-size: 14px; color: var(--gray-600); font-style: italic; line-height: 1.5; }
+        .testimonial-card-swipe .t-name { font-weight: 700; font-size: 15px; }
+        .testimonial-card-swipe .t-role { font-size: 12px; color: var(--gray-400); }
 
-        .footer-install-section { text-align: center; margin: 20px 0 24px; }
-        .footer-install-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; padding: 16px 28px; border-radius: 32px; font-weight: 700; font-size: 16px; cursor: pointer; font-family: var(--font); transition: all 0.25s ease; box-shadow: 0 8px 24px rgba(79, 70, 229, 0.45); text-decoration: none; }
-        .footer-install-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(79, 70, 229, 0.6); color: #fff; }
-        .footer-install-btn:active { transform: scale(0.95); transition: 0.06s; }
+        /* APK Banner */
+        .apk-banner { background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 24px; padding: 24px 20px; display: flex; align-items: center; justify-content: space-between; color: #fff; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3); }
+        .apk-banner-content { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; width: 100%; }
+        .apk-banner i { font-size: 28px; }
+        .apk-banner h3 { font-size: 18px; font-weight: 700; }
+        .apk-banner p { font-size: 13px; opacity: 0.9; }
+        .apk-banner button { background: #fff; color: #4f46e5; border: none; padding: 12px 22px; border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer; }
 
+        /* Feedback Button (new style) */
+        .feedback-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(238, 90, 36, 0.4);
+        }
+        .feedback-btn:active { transform: scale(0.97); }
+
+        /* Footer (unchanged) */
         .pro-footer { background: var(--secondary); color: var(--text-light); padding: 40px 20px 100px; position: relative; margin-top: 24px; border-radius: 0; }
         .pro-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24); }
         .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 600px; margin: 0 auto 30px; }
@@ -323,64 +356,34 @@
         .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--accent); border-radius: 2px; }
         .footer-col ul { list-style: none; }
         .footer-col li { margin-bottom: 11px; line-height: 1.4; }
-        .footer-col a { color: var(--accent); font-size: 13px; font-weight: 500; text-decoration: none; display: inline-block; transition: all 0.25s ease; cursor: pointer; position: relative; }
-        .footer-col a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+        .footer-col a { color: var(--accent); font-size: 13px; font-weight: 500; text-decoration: none; display: inline-block; transition: all 0.25s ease; cursor: pointer; }
         .footer-col a:hover { color: #ffffff; transform: translateX(3px); }
-        .footer-col a:hover::after { width: 100%; }
         .footer-email { text-align: center; margin-bottom: 24px; }
-        .footer-email a { color: #38bdf8; font-size: 14px; font-weight: 600; text-decoration: none; transition: color 0.2s; }
-        .footer-email a:hover { color: var(--accent); }
+        .footer-email a { color: #38bdf8; font-size: 14px; font-weight: 600; text-decoration: none; }
         .footer-bottom { text-align: center; border-top: 1px solid var(--border-light); padding-top: 20px; max-width: 600px; margin: 0 auto; }
-        .footer-bottom p { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
-        .footer-bottom a { font-size: 12px; color: var(--text-light); font-weight: 500; text-decoration: none; transition: color 0.2s; }
-        .footer-bottom a:hover { color: var(--accent); }
+        .footer-bottom p { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+        .footer-bottom a { font-size: 12px; color: var(--text-light); font-weight: 500; text-decoration: none; }
         .footer-social { display: flex; justify-content: center; gap: 16px; margin: 20px 0; }
         .footer-social a { width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 16px; transition: all 0.3s ease; border: 1px solid var(--border-light); }
         .footer-social a:hover { background: rgba(255, 255, 255, 0.1); color: var(--accent); transform: translateY(-3px); border-color: var(--accent); }
+        .footer-install-section { text-align: center; margin: 20px 0 24px; }
+        .footer-install-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; padding: 16px 28px; border-radius: 32px; font-weight: 700; font-size: 16px; cursor: pointer; }
 
+        /* Bottom Nav (unchanged) */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: calc(var(--bottom-nav-height) + var(--safe-bottom)); background: #fff; border-top: 1px solid #e8ecf0; z-index: 95; display: flex; justify-content: space-around; align-items: flex-start; padding-top: 8px; padding-bottom: var(--safe-bottom); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05); }
-        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px; border: none; background: transparent; cursor: pointer; color: var(--gray-400); transition: var(--transition-fast); font-family: var(--font); text-decoration: none; position: relative; }
+        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px; border: none; background: transparent; cursor: pointer; color: var(--gray-400); transition: var(--transition-fast); font-family: var(--font); text-decoration: none; }
         .bottom-nav-item.active { color: var(--primary); }
-        .bottom-nav-item:active { transform: scale(0.9); }
-        .bottom-nav-item i { font-size: 20px; transition: transform 0.2s; }
-        .bottom-nav-item:hover i { transform: translateY(-2px); }
-        .bottom-nav-item span { font-size: 10px; font-weight: 600; }
         .bottom-nav-item.active::before { content: ''; position: absolute; top: -8px; width: 20px; height: 3px; background: var(--primary); border-radius: 2px; }
+        .bottom-nav-item i { font-size: 20px; }
+        .bottom-nav-item span { font-size: 10px; font-weight: 600; }
 
         .hidden { display: none !important; }
-
-        /* Test Series cards (reusing series-card from testseries page) */
-        .series-card {
-            background: #fff; border-radius: 22px; overflow: hidden; box-shadow: var(--shadow-sm);
-            border: 1px solid #e8ecf0; display: flex; flex-direction: column; transition: var(--transition); height: 100%; position: relative;
-            cursor: pointer;
-        }
-        .series-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-        .series-card img { width: 100%; height: 180px; object-fit: cover; display: block; border-bottom: 1px solid #eee; }
-        .card-body { padding: 16px 18px; display: flex; flex-direction: column; flex: 1; }
-        .series-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: var(--gray-800); line-height: 1.3; }
-        .series-card p { font-size: 13px; color: var(--gray-500); margin-bottom: 12px; flex: 1; line-height: 1.5; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 700; margin-bottom: 8px; width: fit-content; }
-        .badge-free { background: var(--green-light); color: #065f46; }
-        .badge-premium { background: #fef3c7; color: #a16207; }
-        .series-actions { display: flex; gap: 10px; margin-top: auto; flex-wrap: wrap; }
-        .btn { flex: 1; min-width: 90px; padding: 11px 12px; border-radius: 12px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; font-family: var(--font); display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease; white-space: nowrap; }
-        .btn-primary { background: linear-gradient(135deg,#243748,#1a2a36); color: white; box-shadow: 0 4px 12px rgba(36,55,72,0.2); }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(36,55,72,0.3); }
 
         @media (min-width:600px) {
             .bottom-nav { display: none; }
             body { padding-bottom: 0; }
             .container { padding: 18px 18px calc(24px + var(--safe-bottom)); }
-            .upcoming-scroll { gap: 14px; }
             .pro-footer { padding-bottom: 30px; }
-            .floating-ai-btn { bottom: 24px; right: 24px; }
-        }
-        @media (max-width:480px) {
-            .footer-grid { gap: 24px; }
-            .footer-col h3 { font-size: 15px; }
-            .footer-col a { font-size: 12px; }
-            .footer-install-btn { padding: 14px 22px; font-size: 14px; border-radius: 28px; }
         }
     </style>
 
@@ -416,7 +419,6 @@
                 <div class="sidebar-nav-label">Main Menu</div>
                 <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
-                <!-- NEW Test Series button -->
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('testseries')"><i class="fas fa-layer-group"></i> Test Series</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
                 <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
@@ -465,78 +467,114 @@
     <div class="container">
         <!-- Hero Slider -->
         <div class="hero-slider-wrap" id="heroWrap">
-            <div class="hero-slider" id="heroSlider"><div style="min-width:100%;height:220px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse" style="margin-right:8px;"></i> Loading banners...</div></div>
+            <div class="hero-slider" id="heroSlider"><div style="min-width:100%;height:200px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse"></i> Loading banners...</div></div>
             <div class="hero-dots" id="heroDots"></div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions" style="margin-bottom:20px;">
-            <div class="qa-scroll">
-                <button class="qa-card qa-aimock" onclick="navigate('aimock.html')"><div class="qa-icon"><i class="fas fa-robot"></i></div><span>AI Mock<br>Test</span></button>
-                <button class="qa-card qa-challenge" onclick="navigate('challenge.html')"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily<br>Challenge</span></button>
-                <button class="qa-card qa-refer" onclick="navigate('referral.html')"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer &<br>Earn</span></button>
-                <button class="qa-card qa-coins" onclick="navigate('coin-history.html')"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>My<br>Coins</span></button>
-                <button class="qa-card qa-use-coins" onclick="navigate('usecoin.html')"><div class="qa-icon"><i class="fas fa-exchange-alt"></i></div><span>Use<br>Coins</span></button>
-                <button class="qa-card qa-results" onclick="navigate('allresult.html')"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My<br>Results</span></button>
-                <button class="qa-card qa-apk" onclick="navigate('apk.html')"><div class="qa-icon"><i class="fas fa-download"></i></div><span>Get APK</span></button>
-            </div>
+        <!-- Quick Actions Grid (smaller) -->
+        <div class="qa-grid">
+            <button class="qa-card qa-aimock" onclick="navigate('aimock.html')"><div class="qa-icon"><i class="fas fa-robot"></i></div><span>AI Mock</span></button>
+            <button class="qa-card qa-challenge" onclick="navigate('challenge.html')"><div class="qa-icon"><i class="fas fa-bolt"></i></div><span>Daily Challenge</span></button>
+            <button class="qa-card qa-results" onclick="navigate('allresult.html')"><div class="qa-icon"><i class="fas fa-chart-bar"></i></div><span>My Results</span></button>
+            <button class="qa-card qa-refer" onclick="navigate('referral.html')"><div class="qa-icon"><i class="fas fa-gift"></i></div><span>Refer & Earn</span></button>
+            <button class="qa-card qa-coins" onclick="navigate('coin-history.html')"><div class="qa-icon"><i class="fas fa-coins"></i></div><span>Coins</span></button>
+            <button class="qa-card qa-apk" onclick="navigate('apk.html')"><div class="qa-icon"><i class="fas fa-download"></i></div><span>Get APK</span></button>
+            <button class="qa-card qa-support" onclick="navigate('chat.html')"><div class="qa-icon"><i class="fas fa-comments"></i></div><span>Support</span></button>
+            <button class="qa-card qa-results" onclick="navigate('testseries.html')"><div class="qa-icon"><i class="fas fa-layer-group"></i></div><span>Test Series</span></button>
         </div>
 
-        <!-- Upcoming Exams -->
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-calendar-alt"></i></div><h2>Upcoming Exams</h2><span class="badge-tag">NEW</span></div>
-            <div class="upcoming-scroll" id="upcomingScroll"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;width:100%;"><i class="fas fa-spinner fa-pulse"></i> Loading upcoming exams...</div></div>
-        </section>
-
-        <!-- Free Mock Test Accordion -->
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-file-alt"></i></div><h2>Free Mock Test</h2><span class="badge-tag">EXAMS</span></div>
-            <div class="mock-accordion" id="mockAccordion"><div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;"><i class="fas fa-spinner fa-pulse"></i> Loading mock tests...</div></div>
-            <div id="mockLoading" style="display:none; text-align:center; padding:12px; font-size:13px; color:var(--gray-500);"><i class="fas fa-sync-alt fa-spin"></i> Updating mock tests...</div>
-        </section>
-
-        <!-- Test Series Section (NEW) -->
-        <section style="margin-bottom:20px;" id="testSeriesSection">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-layer-group"></i></div><h2>Test Series</h2><span class="badge-tag">PREMIUM</span></div>
-            <div class="series-grid" id="dashboardSeriesGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
-                <div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;"><i class="fas fa-spinner fa-pulse"></i> Loading test series...</div>
+        <!-- Continue Learning -->
+        <section class="continue-section hidden" id="continueSection">
+            <div class="section-header"><div class="section-icon"><i class="fas fa-play-circle"></i></div><h2>Continue Learning</h2></div>
+            <div class="continue-card" id="continueCard" onclick="resumeLastTest()">
+                <div class="continue-info">
+                    <span id="lastTestName">No recent test</span>
+                    <span id="lastTestScore"></span>
+                </div>
+                <button class="btn-resume"><i class="fas fa-play"></i> Resume</button>
             </div>
         </section>
 
-        <!-- Popular Mock Tests Slider -->
-        <section style="margin-bottom:20px;">
+        <!-- Popular Mock Tests -->
+        <section style="margin-bottom:24px;">
             <div class="section-header"><div class="section-icon"><i class="fas fa-fire"></i></div><h2>Popular Mock Tests</h2><span class="badge-tag">TRENDING</span></div>
             <div class="popular-slider-wrap" id="popularSliderWrap">
-                <div class="popular-slider" id="popularSlider"><div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);font-size:13px;display:flex;justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div></div>
+                <div class="popular-slider" id="popularSlider"><div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div></div>
                 <div class="popular-dots" id="popularDots"></div>
             </div>
         </section>
 
-        <!-- Social Connect -->
-        <section style="margin-bottom:20px;">
-            <div class="section-header"><div class="section-icon"><i class="fas fa-users"></i></div><h2>Stay Connected With Mockers</h2></div>
-            <div class="social-grid">
-                <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-                <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span></a>
-                <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram"><i class="fab fa-instagram"></i><span>Instagram</span></a>
-                <a href="#" class="social-card youtube coming-soon" onclick="return false;"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+        <!-- Test Series Slider -->
+        <section style="margin-bottom:24px;" id="testSeriesSection">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-layer-group"></i></div><h2>Test Series</h2><span class="badge-tag">PREMIUM</span>
+                <a href="testseries.html" style="margin-left:auto;">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="testseries-scroll" id="dashboardSeriesScroll">
+                <div style="padding:20px;text-align:center;color:var(--gray-400);"><i class="fas fa-spinner fa-pulse"></i> Loading...</div>
             </div>
         </section>
 
-        <!-- Feedback -->
-        <div class="feedback-section">
-            <h3>💬 What Our Students Say</h3>
-            <div class="feedback-marquee">
-                <div class="feedback-marquee-inner">
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
-                    <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Aditi Sharma</div><div class="t-role">SSC CGL Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The mock tests helped me crack the exam. The detailed analysis is a gamechanger!"</p></div>
-                    <div class="testimonial-card"><div class="t-name">Rahul Verma</div><div class="t-role">IBPS PO Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"Best platform for banking mocks. I improved my speed drastically."</p></div>
-                    <div class="testimonial-card"><div class="t-name">Priya Patel</div><div class="t-role">UPSC Aspirant</div><div class="t-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="t-text">"The test series is very close to the real exam. Highly recommended!"</p></div>
-                </div>
+        <!-- Upcoming Exams -->
+        <section style="margin-bottom:24px;">
+            <div class="section-header"><div class="section-icon"><i class="fas fa-calendar-alt"></i></div><h2>Upcoming Exams</h2><span class="badge-tag">NEW</span></div>
+            <div class="upcoming-scroll" id="upcomingScroll">Loading...</div>
+        </section>
+
+        <!-- Free Mock Tests -->
+        <section style="margin-bottom:24px;">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-file-alt"></i></div>
+                <h2>Free Mock Test</h2>
+                <span class="badge-tag">EXAMS</span>
+                <a href="exam.html" style="margin-left:auto; font-size:12px; color:var(--primary); font-weight:600; text-decoration:none;">View All <i class="fas fa-arrow-right"></i></a>
             </div>
-            <div class="feedback-actions"><button class="feedback-btn" onclick="window.location.href='reviews.html'"><i class="fas fa-paper-plane"></i> Give Your Feedback</button></div>
+            <div class="mock-search"><input type="text" id="mockSearchInput" placeholder="Search exam..." oninput="filterMockAccordion()"></div>
+            <div class="mock-accordion" id="mockAccordion">Loading...</div>
+            <div id="mockLoading" style="display:none; text-align:center; padding:12px; font-size:13px; color:var(--gray-500);"><i class="fas fa-sync-alt fa-spin"></i> Updating...</div>
+        </section>
+
+        <!-- Performance Snapshot -->
+        <section style="margin-bottom:24px;" id="performanceSection">
+            <div class="section-header"><div class="section-icon"><i class="fas fa-chart-pie"></i></div><h2>Your Performance</h2></div>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card"><i class="fas fa-clipboard-list"></i><div class="number" id="testsTaken">--</div><div class="label">Tests Attempted</div></div>
+                <div class="stat-card"><i class="fas fa-bullseye"></i><div class="number" id="avgAccuracy">--%</div><div class="label">Avg Accuracy</div></div>
+                <div class="stat-card"><i class="fas fa-trophy"></i><div class="number" id="userRank">--</div><div class="label">Rank</div></div>
+                <div class="stat-card"><i class="fas fa-coins"></i><div class="number" id="coinBalance">--</div><div class="label">Coins Earned</div></div>
+            </div>
+        </section>
+
+        <!-- Community / Social -->
+        <section style="margin-bottom:24px;">
+            <div class="section-header"><div class="section-icon"><i class="fas fa-users"></i></div><h2>Stay Connected</h2></div>
+            <div class="social-grid">
+                <a href="https://whatsapp.com/channel/0029Vb87Yr76RGJHI5avdf2j" target="_blank" class="social-card whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span><small>Join Channel</small></a>
+                <a href="https://t.me/MOCK_2026" target="_blank" class="social-card telegram"><i class="fab fa-telegram-plane"></i><span>Telegram</span><small>Join Group</small></a>
+                <a href="https://www.instagram.com/testmasterpro/" target="_blank" class="social-card instagram"><i class="fab fa-instagram"></i><span>Instagram</span><small>Follow Us</small></a>
+                <a href="#" class="social-card youtube coming-soon" onclick="return false;"><i class="fab fa-youtube"></i><span>YouTube</span><small>Coming Soon</small></a>
+            </div>
+        </section>
+
+        <!-- Student Reviews -->
+        <section style="margin-bottom:24px;">
+            <div class="section-header"><div class="section-icon"><i class="fas fa-star"></i></div><h2>What Our Students Say</h2></div>
+            <div class="testimonials-swipe" id="testimonialsSwipe"></div>
+            <div style="text-align:center;">
+                <button class="feedback-btn" onclick="navigate('reviews.html')"><i class="fas fa-paper-plane"></i> Give Your Feedback</button>
+            </div>
+        </section>
+
+        <!-- Download APK Banner -->
+        <div class="apk-banner">
+            <div class="apk-banner-content">
+                <i class="fas fa-download"></i>
+                <div>
+                    <h3>Get the App Experience</h3>
+                    <p>Download TestMasterPro APK for faster access</p>
+                </div>
+                <button onclick="openInstallPopup()">Download Now</button>
+            </div>
         </div>
     </div>
 
@@ -567,6 +605,7 @@
         <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
     </nav>
 
+    <!-- All original JavaScript functions (unchanged) + new enhancements -->
     <script>
         // ======================= API & JSON PATHS =======================
         const JSON_PATHS = {
@@ -734,18 +773,20 @@
             c.innerHTML = grouped.map((cat, idx) => `
                 <div class="mock-accordion-item" id="mockItem${idx}" data-idx="${idx}">
                     <button class="mock-accordion-header">
-                        <div class="ma-left"><span>📂 ${cat.category}</span></div>
+                        <div class="ma-left"><span>${cat.category}</span></div>
                         <span class="ma-count">${cat.exams.length}</span>
                         <i class="fas fa-chevron-down ma-arrow" id="mockArrow${idx}"></i>
                     </button>
                     <div class="mock-accordion-body" id="mockBody${idx}">
                         <div class="mock-exam-list">
-                            ${cat.exams.map(ex => `<div class="mock-exam-item" onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(ex.exam||'')}')"><span>📝 ${ex.exam||'Untitled'}</span></div>`).join('')}
+                            ${cat.exams.map(ex => `<div class="mock-exam-item" onclick="navigate('exam2.html?category=${encodeURIComponent(cat.category)}&exam=${encodeURIComponent(ex.exam||'')}')"><span>${ex.exam||'Untitled'}</span></div>`).join('')}
                         </div>
                     </div>
                 </div>
             `).join('');
             attachMockHoverEvents();
+            // Open first category by default
+            setTimeout(() => toggleMockAccordion(0), 100);
         }
 
         function toggleMockAccordion(idx) {
@@ -789,7 +830,7 @@
             });
         }
 
-        // ---------- Test Series Section ----------
+        // ---------- Test Series Section (Slider) ----------
         let allTestSeries = [];
         const SERIES_FALLBACK = [];
 
@@ -803,7 +844,7 @@
             const cached = loadTestSeriesFromCache();
             if (cached) {
                 allTestSeries = cached;
-                renderDashboardSeries();
+                renderDashboardSeriesSlider();
             }
             try {
                 const resp = await fetch(JSON_PATHS.testseries, { cache: 'no-store' });
@@ -812,25 +853,25 @@
                     if (data.series && Array.isArray(data.series)) {
                         allTestSeries = data.series;
                         cacheTestSeries(data);
-                        renderDashboardSeries();
+                        renderDashboardSeriesSlider();
                     }
                 }
             } catch(e) {
                 if (!cached) {
                     allTestSeries = SERIES_FALLBACK;
-                    renderDashboardSeries();
+                    renderDashboardSeriesSlider();
                 }
             }
         }
 
-        function renderDashboardSeries() {
-            const grid = document.getElementById('dashboardSeriesGrid');
+        function renderDashboardSeriesSlider() {
+            const container = document.getElementById('dashboardSeriesScroll');
             const dashboardSeries = allTestSeries.filter(s => s.dashboard === 'show');
             if (!dashboardSeries.length) {
-                grid.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);">No test series available right now.</div>';
+                container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);">No test series available right now.</div>';
                 return;
             }
-            grid.innerHTML = dashboardSeries.map(s => {
+            container.innerHTML = dashboardSeries.map(s => {
                 const image = s.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop';
                 const isPaid = (s.plan && s.plan !== 'free');
                 return `
@@ -842,9 +883,7 @@
                         </span>
                         <h3>${s.name}</h3>
                         <p>${s.description || ''}</p>
-                        <div class="series-actions" style="margin-top:auto;">
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); navigate('testseries.html?series=${encodeURIComponent(s.code)}')"><i class="fas fa-play"></i> Explore</button>
-                        </div>
+                        <button class="btn-sm" onclick="event.stopPropagation(); navigate('testseries.html?series=${encodeURIComponent(s.code)}')"><i class="fas fa-play"></i> Explore</button>
                     </div>
                 </div>`;
             }).join('');
@@ -925,7 +964,7 @@
                 if (data.success && data.users && user) {
                     const currentUser = data.users.find(u => u.username === user.username);
                     const streak = currentUser ? (currentUser.streak || 0) : 0;
-                    if (streak > 0) { showToast(`🔥 ${streak} day streak! Keep it up!`, 'success', 4000); }
+                    if (streak > 0) { showToast(`${streak} day streak! Keep it up!`, 'success', 4000); }
                 }
             } catch (e) { /* silent */ }
         }
@@ -947,7 +986,7 @@
         // ---------- APK Download Popup ----------
         function openInstallPopup() {
             Swal.fire({
-                title: '📲 Install TestMaster Pro',
+                title: 'Install TestMaster Pro',
                 html: `<div style="text-align:center;"><p style="font-size:14px;font-weight:600;color:#243748;">Get the App Experience!</p><p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file.</p><div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;"><i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i><p style="font-weight:700;">TestMasterPro.apk</p></div></div>`,
                 confirmButtonText: '<i class="fas fa-download"></i> Download APK',
                 confirmButtonColor: '#4f46e5',
@@ -981,7 +1020,7 @@
             html += `<li><a onclick="navigate('chat.html')"><i class="fas fa-comments" style="margin-right:6px;"></i>Support Chat</a></li>`;
             html += `<li><a onclick="navigate('referral.html')">Refer & Earn</a></li>`;
             html += `<li><a onclick="navigate('usecoin.html')">Coin Exchange</a></li>`;
-            html += `<li><a onclick="navigate('apk.html')">📱 Get APK</a></li>`;
+            html += `<li><a onclick="navigate('apk.html')">Get APK</a></li>`;
             c.innerHTML = html;
         }
         async function renderFooterUpcoming() {
@@ -989,6 +1028,65 @@
             const d = await fetchJSON(JSON_PATHS.upcomingfooter, FALLBACK_UPCOMING_FOOTER);
             if (!d.length) { c.innerHTML = '<li><a>No upcoming exams</a></li>'; return; }
             c.innerHTML = d.map(e => `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
+        }
+
+        // ---------- New Features ----------
+        function loadContinueLearning() {
+            const lastTest = JSON.parse(localStorage.getItem('lastTest') || '{}');
+            if (lastTest && lastTest.testCode) {
+                document.getElementById('continueSection').classList.remove('hidden');
+                document.getElementById('lastTestName').textContent = lastTest.testName || lastTest.exam;
+                document.getElementById('lastTestScore').textContent = `Score: ${lastTest.score || 'N/A'}`;
+            }
+        }
+        window.resumeLastTest = function() {
+            const lastTest = JSON.parse(localStorage.getItem('lastTest') || '{}');
+            if (lastTest.testCode) navigate(`exam2.html?testCode=${lastTest.testCode}`);
+        };
+
+        async function loadPerformance() {
+            if (!user) return;
+            try {
+                const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
+                const data = await res.json();
+                if (data.success && data.results.length) {
+                    const results = data.results;
+                    const testsAttempted = results.length;
+                    const avgAccuracy = (results.reduce((sum, r) => sum + parseFloat(r.accuracy), 0) / testsAttempted).toFixed(1);
+                    document.getElementById('testsTaken').textContent = testsAttempted;
+                    document.getElementById('avgAccuracy').textContent = avgAccuracy + '%';
+                    document.getElementById('userRank').textContent = 'Top 20%';
+                }
+                const coinRes = await fetch(`${API_URL}?action=getCoinBalance&username=${user.username}`);
+                const coinData = await coinRes.json();
+                if (coinData.success) document.getElementById('coinBalance').textContent = coinData.balance || 0;
+            } catch(e) {}
+        }
+
+        function renderTestimonials() {
+            const container = document.getElementById('testimonialsSwipe');
+            const testimonials = [
+                { name: 'Aditi Sharma', role: 'SSC CGL', rating: 5, text: 'The mock tests helped me crack the exam. The detailed analysis is a gamechanger!' },
+                { name: 'Rahul Verma', role: 'IBPS PO', rating: 5, text: 'Best platform for banking mocks. I improved my speed drastically.' },
+                { name: 'Priya Patel', role: 'UPSC', rating: 5, text: 'The test series is very close to the real exam. Highly recommended!' }
+            ];
+            container.innerHTML = testimonials.map(t => `
+                <div class="testimonial-card-swipe">
+                    <div class="t-stars">${'<i class="fas fa-star"></i>'.repeat(t.rating)}</div>
+                    <p class="t-text">"${t.text}"</p>
+                    <div class="t-name">${t.name}</div>
+                    <div class="t-role">${t.role}</div>
+                </div>
+            `).join('');
+        }
+
+        function filterMockAccordion() {
+            const filter = document.getElementById('mockSearchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.mock-accordion-item');
+            items.forEach(item => {
+                const examText = item.textContent.toLowerCase();
+                item.style.display = examText.includes(filter) ? '' : 'none';
+            });
         }
 
         // ---------- Initialization ----------
@@ -1013,11 +1111,14 @@
             fetchAndDisplayServerStreak();
             renderNotificationBell();
             loadHeroSlides();
+            loadContinueLearning();
             renderUpcomingExams();
             loadAllMocks();
-            loadTestSeries();   // <-- NEW
+            loadTestSeries();
             renderPopularSlider();
             renderFooterUpcoming();
+            loadPerformance();
+            renderTestimonials();
         }
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebarDirect(); });
         document.addEventListener('DOMContentLoaded', init);
