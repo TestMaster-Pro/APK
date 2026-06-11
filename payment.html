@@ -1,1097 +1,2665 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#243748">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Premium Plans · TestMaster Pro</title>
-  <link rel="manifest" href="./json/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
-  <style>
-    :root {
-      --primary: #243748; --primary-dark: #1a2a36; --primary-light: #e8edf2;
-      --secondary: #1f3140; --blue: #0066ff; --blue-light: #e6f0ff;
-      --green: #4cd38a; --green-light: #edfaf3; --red: #ff4d5a; --red-light: #fff0f1;
-      --light: #f7f7f7; --white: #ffffff; --gray-100: #f5f5f5; --gray-200: #e8e8e8;
-      --gray-300: #d4d4d4; --gray-400: #a0a0a0; --gray-500: #737373; --gray-600: #525252;
-      --gray-700: #404040; --gray-800: #262626; --gray-900: #171717;
-      --accent: #fbbf24; --accent-hover: #f59e0b;
-      --text-muted: rgba(255,255,255,0.45); --text-light: rgba(255,255,255,0.85);
-      --border-light: rgba(255,255,255,0.06);
-      --radius-xs: 6px; --radius-sm: 10px; --radius: 14px; --radius-md: 18px; --radius-lg: 22px; --radius-xl: 28px;
-      --shadow-xs: 0 1px 3px rgba(0,0,0,0.04); --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-      --shadow-md: 0 6px 20px rgba(0,0,0,0.08); --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
-      --font: 'Poppins', sans-serif;
-      --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
-      --transition-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
-      --transition-smooth: 0.35s cubic-bezier(0.4,0,0.2,1);
-      --bottom-nav-height: 68px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-top: env(safe-area-inset-top, 0px);
-      --max-width: 1200px;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    html { scroll-behavior:smooth; height:100%; }
-    body {
-      font-family:var(--font); background:var(--light); min-height:100dvh;
-      color:var(--gray-800); display:flex; flex-direction:column; overflow-x:hidden;
-      overflow-y:auto; -webkit-font-smoothing:antialiased; -webkit-overflow-scrolling:touch;
-      padding-bottom:calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
-    }
-    body.sidebar-open { overflow:hidden; position:fixed; width:100%; height:100%; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#243748">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Buy Plan · TestMaster Pro</title>
+    <link rel="manifest" href="./json/manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1">
+    </script>
+    <style>
+        :root {
+            --primary: #243748;
+            --primary-dark: #1a2a36;
+            --primary-light: #e8edf2;
+            --secondary: #1f3140;
+            --blue: #0066ff;
+            --blue-light: #e6f0ff;
+            --green: #4cd38a;
+            --green-light: #edfaf3;
+            --red: #ff4d5a;
+            --red-light: #fff0f1;
+            --light: #f7f7f7;
+            --white: #ffffff;
+            --gray-100: #f5f5f5;
+            --gray-200: #e8e8e8;
+            --gray-300: #d4d4d4;
+            --gray-400: #a0a0a0;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --accent: #fbbf24;
+            --accent-hover: #f59e0b;
+            --text-muted: rgba(255, 255, 255, 0.45);
+            --text-light: rgba(255, 255, 255, 0.85);
+            --border-light: rgba(255, 255, 255, 0.06);
+            --radius-xs: 6px;
+            --radius-sm: 10px;
+            --radius: 14px;
+            --radius-md: 18px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+            --font: 'Poppins', sans-serif;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --bottom-nav-height: 68px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --max-width: 1200px;
+            --navbar-height: 54px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--light);
+            min-height: 100dvh;
+            color: var(--gray-800);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-font-smoothing: antialiased;
+            -webkit-overflow-scrolling: touch;
+            padding-top: var(--navbar-height);
+            padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 12px);
+        }
+        body.sidebar-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
 
-    /* Sidebar */
-    .sidebar-overlay {
-      position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:250; opacity:0;
-      visibility:hidden; transition:opacity 0.35s, visibility 0.35s; backdrop-filter:blur(6px);
-    }
-    .sidebar-overlay.active { opacity:1; visibility:visible; }
-    .sidebar {
-      position:fixed; top:0; left:0; height:100%; height:100dvh; width:290px; max-width:82vw;
-      background:#fff; z-index:251; transform:translateX(-110%);
-      transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); display:flex; flex-direction:column;
-      box-shadow:8px 0 40px rgba(0,0,0,0.18); border-radius:0 22px 22px 0; overflow:hidden;
-      border-right:1px solid rgba(0,0,0,0.04);
-    }
-    .sidebar-overlay.active .sidebar { transform:translateX(0); }
-    .sidebar-brand { background:linear-gradient(135deg,#243748,#1f3140); padding:20px 16px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0; position:relative; }
-    .sidebar-logo { width:40px; height:40px; background:rgba(255,255,255,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; flex-shrink:0; }
-    .sidebar-brand-text { color:#fff; font-weight:700; font-size:14px; letter-spacing:-0.3px; }
-    .sidebar-brand-text small { display:block; font-weight:400; font-size:9px; opacity:0.8; }
-    .sidebar-close-btn { position:absolute; top:14px; right:12px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); }
-    .sidebar-close-btn:hover { background:rgba(255,255,255,0.25); transform:rotate(90deg) scale(1.1); }
-    .sidebar-user-card { padding:14px 16px; background:#fafbfc; border-bottom:1px solid #eee; display:flex; align-items:center; gap:10px; flex-shrink:0; }
-    .sidebar-avatar { width:44px; height:44px; border-radius:14px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:var(--primary); flex-shrink:0; overflow:hidden; border:2px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-    .sidebar-avatar img { width:100%; height:100%; object-fit:cover; }
-    .sidebar-user-info .name { font-weight:600; font-size:13px; color:var(--gray-800); }
-    .sidebar-user-info .tag { font-size:10px; color:var(--primary); font-weight:600; background:var(--primary-light); padding:2px 8px; border-radius:12px; display:inline-block; margin-top:2px; }
-    .sidebar-nav { flex:1; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column; gap:2px; -webkit-overflow-scrolling:touch; }
-    .sidebar-nav-label { font-size:10px; text-transform:uppercase; letter-spacing:1.2px; color:var(--gray-400); font-weight:700; padding:14px 8px 6px; }
-    .sidebar-nav-item { display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:12px; cursor:pointer; font-weight:500; font-size:13px; color:var(--gray-600); transition:var(--transition-fast); text-decoration:none; border:none; background:transparent; width:100%; text-align:left; font-family:var(--font); }
-    .sidebar-nav-item:hover { background:var(--gray-100); color:var(--gray-800); transform:translateX(3px); }
-    .sidebar-nav-item:active { transform:scale(0.97); }
-    .sidebar-nav-item.active-nav { background:var(--primary-light); color:var(--primary); font-weight:700; }
-    .sidebar-nav-item i { width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; background:var(--gray-100); color:var(--gray-500); }
-    .sidebar-nav-item.active-nav i { background:var(--primary); color:#fff; }
-    .sidebar-nav-item.logout-item:hover { background:var(--red-light); color:var(--red); }
-    .sidebar-version { text-align:center; font-size:10px; color:var(--gray-300); padding:10px; flex-shrink:0; }
+        /* Fixed Navbar */
+        .navbar {
+            background: #fff;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 110;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid #eee;
+            gap: 8px;
+            flex-wrap: nowrap;
+            min-height: var(--navbar-height);
+            height: var(--navbar-height);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.92);
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .hamburger-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--gray-100);
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            flex-shrink: 0;
+        }
+        .hamburger-btn:hover {
+            background: var(--gray-200);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--primary);
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: -0.3px;
+        }
+        .nav-brand i {
+            font-size: 17px;
+            color: var(--blue);
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            transition: var(--transition-fast);
+            position: relative;
+        }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-avatar:hover {
+            transform: scale(1.08);
+        }
+        .premium-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #1e293b;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            border: 1px solid #fff;
+        }
 
-    /* Toast */
-    .toast-container {
-      position:fixed; top:calc(12px + var(--safe-top)); left:50%; transform:translateX(-50%) translateY(-120%);
-      z-index:1000; display:flex; flex-direction:column; gap:8px; width:92%; max-width:400px;
-      pointer-events:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    .toast-container.show { transform:translateX(-50%) translateY(0); }
-    .toast-item {
-      background:var(--gray-800); color:#fff; padding:12px 16px; border-radius:var(--radius);
-      font-size:13px; font-weight:600; display:flex; align-items:center; gap:10px;
-      box-shadow:var(--shadow-lg); animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      pointer-events:all; border-left:3px solid var(--blue);
-    }
-    .toast-item.success { border-left-color:var(--green); }
-    .toast-item.error { border-left-color:var(--red); }
-    .toast-item.warning { border-left-color:#f59e0b; }
-    @keyframes toastIn { from{opacity:0;transform:translateY(-16px) scale(0.95);} to{opacity:1;transform:translateY(0) scale(1);} }
+        /* Sidebar */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 250;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s, visibility 0.35s;
+            backdrop-filter: blur(6px);
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            height: 100dvh;
+            width: 290px;
+            max-width: 82vw;
+            background: #fff;
+            z-index: 251;
+            transform: translateX(-110%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.18);
+            border-radius: 0 22px 22px 0;
+            overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .sidebar-overlay.active .sidebar {
+            transform: translateX(0);
+        }
+        .sidebar-brand {
+            background: linear-gradient(135deg, #243748, #1f3140);
+            padding: 20px 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .sidebar-brand-text {
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: -0.3px;
+        }
+        .sidebar-brand-text small {
+            display: block;
+            font-weight: 400;
+            font-size: 9px;
+            opacity: 0.8;
+        }
+        .sidebar-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+        .sidebar-close-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: rotate(90deg) scale(1.1);
+        }
+        .sidebar-user-card {
+            padding: 14px 16px;
+            background: #fafbfc;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .sidebar-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .sidebar-user-info .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--gray-800);
+        }
+        .sidebar-user-info .tag {
+            font-size: 10px;
+            color: var(--primary);
+            font-weight: 600;
+            background: var(--primary-light);
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--gray-400);
+            font-weight: 700;
+            padding: 14px 8px 6px;
+        }
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--gray-600);
+            transition: var(--transition-fast);
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font);
+        }
+        .sidebar-nav-item:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+            transform: translateX(3px);
+        }
+        .sidebar-nav-item:active {
+            transform: scale(0.97);
+        }
+        .sidebar-nav-item.active-nav {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .sidebar-nav-item i {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+        .sidebar-nav-item.active-nav i {
+            background: var(--primary);
+            color: #fff;
+        }
+        .sidebar-nav-item.logout-item:hover {
+            background: var(--red-light);
+            color: var(--red);
+        }
+        .sidebar-version {
+            text-align: center;
+            font-size: 10px;
+            color: var(--gray-300);
+            padding: 10px;
+            flex-shrink: 0;
+        }
 
-    .offline-banner { position:fixed; top:0; left:0; width:100%; background:var(--red); color:#fff; text-align:center; padding:6px; font-size:11px; font-weight:700; z-index:999; transform:translateY(-100%); transition:transform 0.3s; }
-    .offline-banner.show { transform:translateY(0); }
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: calc(var(--navbar-height) + 12px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-120%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 92%;
+            max-width: 400px;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .toast-container.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast-item {
+            background: var(--gray-800);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-lg);
+            animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: all;
+            border-left: 3px solid var(--blue);
+        }
+        .toast-item.success {
+            border-left-color: var(--green);
+        }
+        .toast-item.error {
+            border-left-color: var(--red);
+        }
+        .toast-item.warning {
+            border-left-color: #f59e0b;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(-16px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
-    /* Navbar */
-    .navbar {
-      background:#fff; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;
-      position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.04);
-      border-bottom:1px solid #eee; gap:8px; flex-wrap:nowrap; min-height:54px;
-    }
-    .nav-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    .hamburger-btn { width:36px; height:36px; border-radius:10px; background:var(--gray-100); border:none; cursor:pointer; font-size:15px; color:var(--gray-600); display:flex; align-items:center; justify-content:center; transition:var(--transition-fast); flex-shrink:0; }
-    .hamburger-btn:hover { background:var(--gray-200); }
-    .nav-brand { display:flex; align-items:center; gap:6px; font-weight:700; font-size:15px; color:var(--primary); cursor:pointer; white-space:nowrap; letter-spacing:-0.3px; }
-    .nav-brand i { font-size:17px; color:var(--blue); }
-    .nav-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    .user-avatar { width:34px; height:34px; border-radius:10px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:var(--primary); cursor:pointer; flex-shrink:0; overflow:hidden; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:var(--transition-fast); position:relative; }
-    .user-avatar img { width:100%; height:100%; object-fit:cover; }
-    .user-avatar:hover { transform:scale(1.08); }
-    .premium-badge { position:absolute; top:-4px; right:-4px; background:linear-gradient(135deg,#f59e0b,#fbbf24); width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; color:#1e293b; box-shadow:0 2px 6px rgba(0,0,0,0.2); border:1px solid #fff; }
+        .offline-banner {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            width: 100%;
+            background: var(--red);
+            color: #fff;
+            text-align: center;
+            padding: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 99;
+            transform: translateY(-100%);
+            transition: transform 0.3s;
+        }
+        .offline-banner.show {
+            transform: translateY(0);
+        }
 
-    /* Payment Styles */
-    .container { max-width:var(--max-width); margin:0 auto; padding:20px 14px; width:100%; flex:1; }
-    .hero-section { text-align:center; padding:20px 16px 28px; }
-    .hero-section .crown-icon { font-size:clamp(44px,9vw,60px); display:block; margin-bottom:10px; animation:crownFloat 3s ease-in-out infinite; background:linear-gradient(135deg,#f59e0b,#d97706,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 12px rgba(245,158,11,0.3)); }
-    @keyframes crownFloat { 0%,100%{transform:translateY(0) rotate(-4deg);} 50%{transform:translateY(-14px) rotate(4deg);} }
-    .hero-section h1 { font-size:clamp(22px,5vw,34px); font-weight:800; margin-bottom:6px; line-height:1.2; }
-    .gradient-text { background:linear-gradient(135deg,#f59e0b,#d97706,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .subtitle { font-size:clamp(12px,2.6vw,15px); color:var(--gray-600); font-weight:500; max-width:520px; margin:0 auto 14px; }
-    .sale-timer { display:inline-flex; align-items:center; background:#fff1f2; color:#e11d48; padding:8px 18px; border-radius:50px; font-weight:700; font-size:13px; margin-bottom:14px; border:1.5px solid #ffe4e6; gap:8px; box-shadow:0 2px 12px rgba(225,29,72,0.08); }
-    .pulse-dot { height:9px; width:9px; background-color:#e11d48; border-radius:50%; animation:pulse 1.5s infinite; flex-shrink:0; }
-    @keyframes pulse { 0%{transform:scale(0.9); box-shadow:0 0 0 0 rgba(225,29,72,0.7);} 70%{transform:scale(1); box-shadow:0 0 0 10px rgba(225,29,72,0);} 100%{transform:scale(0.9); box-shadow:0 0 0 0 rgba(225,29,72,0);} }
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 20px 14px;
+            width: 100%;
+            flex: 1;
+        }
 
-    .trust-bar { display:flex; justify-content:center; gap:14px; margin-bottom:20px; flex-wrap:wrap; }
-    .trust-item { font-size:11px; font-weight:600; color:var(--gray-600); display:flex; align-items:center; gap:6px; background:white; padding:7px 14px; border-radius:50px; box-shadow:var(--shadow-sm); border:1px solid var(--gray-200); transition:var(--transition-smooth); }
-    .trust-item:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
-    .trust-item i { color:var(--green); font-size:13px; }
+        /* Hero */
+        .hero-section {
+            text-align: center;
+            padding: 20px 16px 28px;
+        }
+        .hero-section .crown-icon {
+            font-size: clamp(44px, 9vw, 60px);
+            display: block;
+            margin-bottom: 10px;
+            animation: crownFloat 3s ease-in-out infinite;
+            background: linear-gradient(135deg, #f59e0b, #d97706, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.3));
+        }
+        @keyframes crownFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-4deg);
+            }
+            50% {
+                transform: translateY(-14px) rotate(4deg);
+            }
+        }
+        .hero-section h1 {
+            font-size: clamp(22px, 5vw, 34px);
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f59e0b, #d97706, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            font-size: clamp(12px, 2.6vw, 15px);
+            color: var(--gray-600);
+            font-weight: 500;
+            max-width: 520px;
+            margin: 0 auto 14px;
+        }
 
-    .active-plan-banner { background:linear-gradient(135deg,#ecfdf5,#d1fae5); border:2px solid rgba(16,185,129,0.3); border-radius:var(--radius-lg); padding:14px 18px; margin-bottom:20px; display:none; align-items:center; gap:12px; flex-wrap:wrap; box-shadow:var(--shadow-sm); }
-    .active-plan-banner .plan-icon { width:44px; height:44px; background:linear-gradient(135deg,#10b981,#059669); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; flex-shrink:0; }
-    .active-plan-banner .plan-info { flex:1; min-width:150px; }
-    .active-plan-banner .plan-name { font-weight:700; font-size:15px; color:#065f46; }
-    .active-plan-banner .plan-expiry { font-size:12px; color:#059669; }
-    .active-plan-banner .active-badge { background:#10b981; color:white; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; white-space:nowrap; }
+        /* All Plans Grid */
+        .all-plans-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 960px;
+            margin: 0 auto;
+            animation: gridFadeIn 0.5s ease-out;
+        }
+        @keyframes gridFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media(min-width: 600px) {
+            .all-plans-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media(min-width: 900px) {
+            .all-plans-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .all-plans-section-title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
 
-    .plans-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:20px; }
-    @media(min-width:580px){ .plans-grid{grid-template-columns:repeat(2,1fr);} }
-    @media(min-width:920px){ .plans-grid{grid-template-columns:repeat(3,1fr);} }
+        /* Plan card */
+        .plan-card {
+            background: #fff;
+            border-radius: var(--radius-xl);
+            padding: 22px 20px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-smooth);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            animation: cardSlideIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .plan-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+        }
+        .plan-card.best-value {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+        }
+        .best-value-ribbon {
+            position: absolute;
+            top: 16px;
+            right: -30px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 32px;
+            transform: rotate(45deg);
+            letter-spacing: 0.4px;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+            z-index: 1;
+        }
+        .plan-header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .plan-icon-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s;
+        }
+        .plan-card:hover .plan-icon-circle {
+            transform: scale(1.08) rotate(-5deg);
+        }
+        .plan-name {
+            font-size: clamp(16px, 3.2vw, 19px);
+            font-weight: 700;
+        }
+        .plan-price {
+            font-size: clamp(30px, 5.5vw, 38px);
+            font-weight: 800;
+            margin: 6px 0 0;
+        }
+        .plan-price .original-price {
+            font-size: 14px;
+            color: #94a3b8;
+            text-decoration: line-through;
+            margin-right: 6px;
+            font-weight: 500;
+        }
+        .plan-price .sale-badge {
+            font-size: 11px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+        .plan-duration {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+        .features-list {
+            list-style: none;
+            margin: 16px 0;
+            flex: 1;
+        }
+        .features-list li {
+            padding: 8px 0;
+            font-size: clamp(12px, 2.3vw, 13px);
+            color: var(--gray-600);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .features-list li i {
+            color: var(--green);
+            margin-top: 2px;
+            font-size: 12px;
+        }
+        .select-plan-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+            letter-spacing: -0.1px;
+        }
+        .select-plan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(16, 185, 129, 0.45);
+        }
+        .select-plan-btn:active {
+            transform: scale(0.94);
+            transition: 0.08s;
+        }
+        .select-plan-btn.btn-guest {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+        }
+        .select-plan-btn.btn-guest:hover {
+            box-shadow: 0 10px 26px rgba(99, 102, 241, 0.45);
+        }
+        .btn-disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .active-plan-indicator {
+            color: #10b981;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
 
-    .plan-card {
-      background:#fff; border-radius:var(--radius-xl); padding:22px 20px; box-shadow:var(--shadow-sm);
-      transition:var(--transition-smooth); border:2px solid transparent; display:flex; flex-direction:column; position:relative; overflow:hidden;
-      animation:cardSlideIn 0.5s ease-out; animation-fill-mode:both;
-    }
-    @keyframes cardSlideIn { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
-    .plan-card:hover { transform:translateY(-8px); box-shadow:var(--shadow-lg); }
+        /* Other plans section */
+        .other-plans-section {
+            background: #fff;
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin: 20px auto;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            max-width: 960px;
+        }
+        .other-plans-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .other-plans-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        @media(min-width:500px) {
+            .other-plans-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .mini-plan-card {
+            background: var(--gray-50);
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .mini-plan-card:hover {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+        .mini-plan-card .mini-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+        .mini-plan-info {
+            flex: 1;
+        }
+        .mini-plan-info .mini-name {
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .mini-plan-info .mini-price {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .mini-plan-card .mini-arrow {
+            color: var(--gray-400);
+        }
 
-    .plan-header { text-align:center; margin-bottom:16px; }
-    .plan-icon-circle {
-      width:56px; height:56px; border-radius:50%; display:flex; align-items:center;
-      justify-content:center; margin:0 auto 10px; font-size:24px; color:white;
-      box-shadow:0 6px 18px rgba(0,0,0,0.12);
-    }
-    .plan-name { font-size:clamp(16px,3.2vw,19px); font-weight:700; }
-    .plan-price { font-size:clamp(30px,5.5vw,38px); font-weight:800; margin:6px 0 0; }
-    .plan-price .original-price { font-size:14px; color:#94a3b8; text-decoration:line-through; margin-right:6px; font-weight:500; display:inline-block; }
-    .plan-price .sale-badge { font-size:11px; background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:8px; font-weight:700; vertical-align:middle; margin-left:4px; }
-    .plan-duration { font-size:12px; color:var(--gray-500); margin-top:2px; }
+        .active-plan-banner {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .active-plan-banner .plan-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .active-plan-banner .plan-info {
+            flex: 1;
+        }
+        .active-plan-banner .plan-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #065f46;
+        }
+        .active-plan-banner .plan-expiry {
+            font-size: 12px;
+            color: #059669;
+        }
+        .active-plan-banner .active-badge {
+            background: #10b981;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
 
-    .features-list { list-style:none; margin:16px 0; flex:1; }
-    .features-list li { padding:8px 0; font-size:clamp(12px,2.3vw,13px); color:var(--gray-600); display:flex; align-items:flex-start; gap:8px; border-bottom:1px solid var(--gray-100); }
-    .features-list li i { color:var(--green); margin-top:2px; font-size:12px; }
+        .history-section {
+            background: #fff;
+            border-radius: var(--radius-xl);
+            padding: 18px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            display: none;
+            margin-top: 16px;
+        }
+        .history-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            transition: var(--transition-smooth);
+        }
+        .history-item:hover {
+            background: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .status-badge-mini {
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-verified {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-    .select-plan-btn {
-      width:100%; padding:13px; border:none; border-radius:14px; font-weight:700;
-      font-size:14px; cursor:pointer; transition:var(--transition-smooth);
-      font-family:var(--font); letter-spacing:-0.1px; box-shadow:0 6px 18px rgba(0,0,0,0.12);
-      background:var(--primary); color:white;
-    }
-    .select-plan-btn:hover { transform:translateY(-2px); box-shadow:0 10px 26px rgba(36,55,72,0.4); }
-    .select-plan-btn:active { transform:scale(0.94); transition:0.08s; }
-    .btn-disabled { background:#e2e8f0; color:#94a3b8; cursor:not-allowed; box-shadow:none; }
-    .btn-disabled:hover { transform:none; box-shadow:none; }
-    .active-plan-indicator { color:#10b981; font-size:12px; font-weight:600; text-align:center; margin-top:4px; display:flex; align-items:center; justify-content:center; gap:4px; }
+        .support-section {
+            background: #fff;
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+        .support-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .support-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .support-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-700);
+            transition: var(--transition-smooth);
+        }
+        .support-link:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .telegram-link {
+            color: #26a7de;
+            border-color: #26a7de30;
+        }
+        .telegram-link:hover {
+            background: #e6f7ff;
+            border-color: #26a7de;
+            color: #26a7de;
+        }
+        .email-link {
+            color: #ea4335;
+            border-color: #ea433530;
+        }
+        .email-link:hover {
+            background: #fef2f2;
+            border-color: #ea4335;
+            color: #ea4335;
+        }
 
-    .comparison-section { background:#fff; border-radius:var(--radius-xl); padding:22px 18px; margin-bottom:20px; border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); display:none; }
-    .comparison-section h3 { font-size:clamp(16px,3vw,19px); font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
-    .comparison-table { width:100%; border-collapse:collapse; font-size:clamp(11px,2.3vw,13px); }
-    .comparison-table th { text-align:left; padding:12px 10px; background:#f8fafc; font-weight:700; color:#1e293b; border-bottom:2px solid #e2e8f0; }
-    .comparison-table td { padding:12px 10px; border-bottom:1px solid var(--gray-100); color:var(--gray-600); }
-    .comparison-table .feature-col { font-weight:600; color:var(--gray-700); min-width:140px; }
-    .check-green { color:var(--green); font-size:14px; }
-    .cross-gray { color:var(--gray-300); font-size:14px; }
+        /* Payment Modal */
+        .payment-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .payment-modal-overlay.hidden {
+            display: none;
+        }
+        .payment-modal {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 22px 20px;
+            max-width: 460px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(34px) scale(0.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .payment-modal h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-plan-summary {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin: 12px 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            border-left: 4px solid var(--accent);
+        }
+        .amount-display {
+            text-align: center;
+            padding: 16px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            margin-bottom: 14px;
+            position: relative;
+        }
+        .big-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1e293b;
+            transition: all 0.3s;
+        }
+        .big-amount .original-amount {
+            font-size: 16px;
+            color: #94a3b8;
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+        .savings-flash {
+            display: inline-block;
+            background: #ecfdf5;
+            color: #059669;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 6px;
+            animation: savingsPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes savingsPop {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
 
-    .verification-progress { display:flex; align-items:center; justify-content:center; gap:0; margin:10px 0; flex-wrap:wrap; }
-    .progress-step { display:flex; align-items:center; gap:6px; padding:8px 12px; border-radius:20px; font-size:10px; font-weight:600; color:#94a3b8; background:#f8fafc; transition:var(--transition-smooth); }
-    .progress-step.completed { color:#10b981; background:#ecfdf5; }
-    .progress-step.completed i { color:#10b981; }
-    .progress-step.active { color:#f59e0b; background:#fef3c7; animation:pulseStep 2s ease-in-out infinite; }
-    .progress-step i { font-size:12px; }
-    @keyframes pulseStep { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
-    .progress-arrow { color:var(--gray-300); font-size:10px; margin:0 2px; }
+        /* Beautiful Discount Section */
+        .discount-section {
+            background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 50%, #fff7ed 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1.5px dashed #e9d5ff;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .discount-section::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(168, 85, 247, 0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .discount-section.has-discount {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #fefce8 100%);
+            border-style: solid;
+            animation: discountGlow 2s ease-in-out infinite;
+        }
+        @keyframes discountGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+        }
+        .discount-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.2px;
+        }
+        .discount-label i {
+            font-size: 16px;
+            background: rgba(124, 58, 237, 0.1);
+            padding: 6px;
+            border-radius: 8px;
+        }
+        .discount-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+        .discount-input-group input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px 14px;
+            border: 2px solid #e9d5ff;
+            border-radius: 12px;
+            font-size: 13px;
+            font-family: var(--font);
+            background: white;
+            transition: all 0.25s;
+            letter-spacing: 0.3px;
+        }
+        .discount-input-group input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.07);
+        }
+        .discount-input-group input::placeholder {
+            color: #c4b5fd;
+            font-style: italic;
+        }
+        .discount-input-group button {
+            padding: 11px 18px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.25s;
+            font-family: var(--font);
+            letter-spacing: -0.2px;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .discount-input-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(124, 58, 237, 0.4);
+            background: linear-gradient(135deg, #6d28d9, #9333ea);
+        }
+        .discount-input-group button:active {
+            transform: scale(0.94);
+            transition: 0.08s;
+        }
+        .discount-input-group button.checking {
+            animation: btnPulse 1s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes btnPulse {
+            0%,
+            100% {
+                box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+            }
+            50% {
+                box-shadow: 0 4px 24px rgba(124, 58, 237, 0.55);
+            }
+        }
+        .discount-message {
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+            min-height: 18px;
+            transition: all 0.3s;
+        }
+        .discount-message.success {
+            color: #059669;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .discount-message.error {
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .discount-applied-badge {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: #ecfdf5;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #059669;
+            align-items: center;
+            gap: 8px;
+            animation: badgeSlideIn 0.3s ease-out;
+        }
+        @keyframes badgeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .discount-applied-badge.show {
+            display: flex;
+        }
+        .discount-applied-badge .remove-discount {
+            margin-left: auto;
+            cursor: pointer;
+            color: #ef4444;
+            font-size: 15px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fef2f2;
+            transition: all 0.2s;
+            border: none;
+            font-family: var(--font);
+            line-height: 1;
+        }
+        .discount-applied-badge .remove-discount:hover {
+            background: #fee2e2;
+            transform: rotate(90deg);
+        }
 
-    .history-section { background:#fff; border-radius:var(--radius-xl); padding:18px; border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); display:none; margin-top:16px; }
-    .history-section h3 { font-size:16px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-    .history-item { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--gray-100); border-radius:12px; margin-bottom:6px; flex-wrap:wrap; transition:var(--transition-smooth); }
-    .history-item:hover { background:white; box-shadow:var(--shadow-sm); }
-    .status-badge-mini { padding:4px 10px; border-radius:10px; font-size:10px; font-weight:700; white-space:nowrap; }
-    .status-pending { background:#fef3c7; color:#92400e; }
-    .status-verified { background:#d1fae5; color:#065f46; }
-    .status-rejected { background:#fee2e2; color:#991b1b; }
+        /* Mobile responsiveness for discount section */
+        @media (max-width: 380px) {
+            .discount-input-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .discount-input-group button {
+                width: 100%;
+                justify-content: center;
+                padding: 13px 18px;
+            }
+            .discount-input-group input {
+                padding: 13px 14px;
+            }
+        }
 
-    .support-section { background:#fff; border-radius:var(--radius-xl); padding:20px; margin-top:20px; border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); text-align:center; }
-    .support-section h3 { font-size:18px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:8px; }
-    .support-links { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }
-    .support-link { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; background:white; border:2px solid #e2e8f0; border-radius:50px; text-decoration:none; font-weight:600; font-size:14px; color:var(--gray-700); transition:var(--transition-smooth); }
-    .support-link:hover { background:var(--primary-light); border-color:var(--primary); color:var(--primary); transform:translateY(-2px); box-shadow:var(--shadow-md); }
-    .telegram-link { color:#26a7de; border-color:#26a7de30; }
-    .telegram-link:hover { background:#e6f7ff; border-color:#26a7de; color:#26a7de; }
-    .email-link { color:#ea4335; border-color:#ea433530; }
-    .email-link:hover { background:#fef2f2; border-color:#ea4335; color:#ea4335; }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--gray-700);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: var(--font);
+            background: var(--gray-50);
+            transition: var(--transition-fast);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(36, 55, 72, 0.06);
+        }
+        .form-group input[readonly] {
+            background: #f1f5f9;
+            color: var(--gray-500);
+        }
+        .upi-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .upi-btn {
+            padding: 10px 6px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            background: white;
+            transition: var(--transition-fast);
+            font-family: var(--font);
+        }
+        .upi-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        .upi-id-display {
+            text-align: center;
+            padding: 8px;
+            background: #fefce8;
+            border-radius: 10px;
+            margin: 8px 0;
+            font-size: 13px;
+            color: #92400e;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px dashed #fde68a;
+        }
+        .submit-payment-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            font-family: var(--font);
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+            transition: var(--transition-smooth);
+            letter-spacing: -0.1px;
+        }
+        .submit-payment-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .close-modal-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            transition: var(--transition-fast);
+        }
+        .close-modal-btn:hover {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            transform: rotate(90deg);
+        }
 
-    /* Payment Modal */
-    .payment-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.6); backdrop-filter:blur(6px); z-index:200; display:flex; align-items:center; justify-content:center; padding:16px; }
-    .payment-modal-overlay.hidden { display:none; }
-    .payment-modal { background:white; border-radius:var(--radius-xl); padding:22px 20px; max-width:460px; width:100%; box-shadow:var(--shadow-xl); max-height:90vh; overflow-y:auto; position:relative; animation:modalSlideUp 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-    @keyframes modalSlideUp { from{opacity:0;transform:translateY(34px) scale(0.94);} to{opacity:1;transform:translateY(0) scale(1);} }
-    .payment-modal h3 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
-    .modal-plan-name { color:var(--primary); font-weight:600; font-size:14px; margin-bottom:12px; }
-    .amount-display { text-align:center; padding:16px; background:var(--gray-100); border-radius:var(--radius); margin-bottom:14px; }
-    .big-amount { font-size:32px; font-weight:800; color:#1e293b; }
-    .big-amount .original-amount { font-size:16px; color:#94a3b8; text-decoration:line-through; margin-right:8px; }
-    .form-group { margin-bottom:14px; }
-    .form-group label { display:block; font-weight:600; font-size:11px; color:var(--gray-700); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px; }
-    .form-group input { width:100%; padding:11px 14px; border:2px solid #e2e8f0; border-radius:12px; font-size:14px; font-family:var(--font); background:var(--gray-50); transition:var(--transition-fast); }
-    .form-group input:focus { outline:none; border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(36,55,72,0.06); }
-    .upi-buttons { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
-    .upi-btn { padding:10px 6px; border:2px solid #e2e8f0; border-radius:12px; cursor:pointer; text-align:center; font-size:11px; font-weight:600; background:white; transition:var(--transition-fast); font-family:var(--font); }
-    .upi-btn:hover { border-color:var(--primary); background:var(--primary-light); transform:translateY(-1px); }
-    .upi-btn:active { transform:scale(0.95); transition:0.08s; }
-    .upi-id-display { text-align:center; padding:8px; background:#fefce8; border-radius:10px; margin:8px 0; font-size:13px; color:#92400e; font-weight:600; cursor:pointer; transition:var(--transition-fast); border:1px dashed #fde68a; }
-    .upi-id-display:hover { background:#fffbeb; }
-    .discount-area { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
-    .discount-area input { flex:1; }
-    .discount-area button { padding:10px 14px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer; font-weight:600; font-size:12px; }
-    .discount-message { font-size:11px; margin-bottom:8px; }
-    .discount-message.success { color:var(--green); }
-    .discount-message.error { color:var(--red); }
-    .submit-payment-btn { width:100%; padding:14px; background:linear-gradient(135deg,#10b981,#059669); color:white; border:none; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer; font-family:var(--font); box-shadow:0 6px 18px rgba(16,185,129,0.3); transition:var(--transition-smooth); letter-spacing:-0.1px; }
-    .submit-payment-btn:hover { transform:translateY(-2px); box-shadow:0 10px 26px rgba(16,185,129,0.45); }
-    .submit-payment-btn:disabled { background:#94a3b8; cursor:not-allowed; box-shadow:none; }
-    .close-modal-btn { position:absolute; top:12px; right:14px; width:32px; height:32px; border-radius:50%; background:var(--gray-100); border:none; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:var(--gray-500); transition:var(--transition-fast); }
-    .close-modal-btn:hover { background:var(--gray-200); color:var(--gray-800); transform:rotate(90deg); }
+        /* Guest info banner */
+        .guest-info-banner {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            text-align: left;
+        }
+        .guest-info-banner .guest-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .guest-info-banner .guest-info {
+            flex: 1;
+        }
+        .guest-info-banner .guest-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1e40af;
+        }
+        .guest-info-banner .guest-subtitle {
+            font-size: 12px;
+            color: #3b82f6;
+        }
 
-    /* Pro Footer (identical to dashboard) */
-    .footer-install-section { text-align:center; margin:20px 0 24px; }
-    .footer-install-btn { display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg, #4f46e5, #7c3aed); color:#fff; border:none; padding:16px 28px; border-radius:32px; font-weight:700; font-size:16px; cursor:pointer; font-family:var(--font); transition:all 0.25s ease; box-shadow:0 8px 24px rgba(79,70,229,0.45); text-decoration:none; }
-    .footer-install-btn:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(79,70,229,0.6); color:#fff; }
-    .footer-install-btn:active { transform:scale(0.95); transition:0.06s; }
-
-    .pro-footer { background:var(--secondary); color:var(--text-light); padding:40px 20px 100px; position:relative; margin-top:24px; border-radius:0; }
-    .pro-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),#f59e0b,#fbbf24); }
-    .footer-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; max-width:600px; margin:0 auto 30px; }
-    .footer-col h3 { font-size:17px; font-weight:700; margin-bottom:18px; color:#ffffff; letter-spacing:-0.2px; position:relative; padding-bottom:8px; }
-    .footer-col h3::after { content:''; position:absolute; bottom:0; left:0; width:30px; height:2px; background:var(--accent); border-radius:2px; }
-    .footer-col ul { list-style:none; }
-    .footer-col li { margin-bottom:11px; line-height:1.4; }
-    .footer-col a { color:var(--accent); font-size:13px; font-weight:500; text-decoration:none; display:inline-block; transition:all 0.25s ease; cursor:pointer; position:relative; }
-    .footer-col a::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px; background:var(--accent); transition:width 0.3s; }
-    .footer-col a:hover { color:#ffffff; transform:translateX(3px); }
-    .footer-col a:hover::after { width:100%; }
-    .footer-email { text-align:center; margin-bottom:24px; }
-    .footer-email a { color:#38bdf8; font-size:14px; font-weight:600; text-decoration:none; }
-    .footer-bottom { text-align:center; border-top:1px solid var(--border-light); padding-top:20px; max-width:600px; margin:0 auto; }
-    .footer-bottom p { font-size:12px; color:var(--text-muted); margin-bottom:4px; font-weight:500; }
-    .footer-social { display:flex; justify-content:center; gap:16px; margin:20px 0; }
-    .footer-social a { width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:16px; transition:all 0.3s; border:1px solid var(--border-light); }
-    .footer-social a:hover { background:rgba(255,255,255,0.1); color:var(--accent); transform:translateY(-3px); border-color:var(--accent); }
-
-    .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:calc(var(--bottom-nav-height) + var(--safe-bottom)); background:#fff; border-top:1px solid #e8ecf0; z-index:95; display:flex; justify-content:space-around; align-items:flex-start; padding-top:8px; padding-bottom:var(--safe-bottom); box-shadow:0 -4px 20px rgba(0,0,0,0.05); }
-    .bottom-nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px; border:none; background:transparent; cursor:pointer; color:var(--gray-400); transition:var(--transition-fast); font-family:var(--font); text-decoration:none; position:relative; }
-    .bottom-nav-item.active { color:var(--primary); }
-    .bottom-nav-item:active { transform:scale(0.9); }
-    .bottom-nav-item i { font-size:20px; transition:transform 0.2s; }
-    .bottom-nav-item:hover i { transform:translateY(-2px); }
-    .bottom-nav-item span { font-size:10px; font-weight:600; }
-    .bottom-nav-item.active::before { content:''; position:absolute; top:-8px; width:20px; height:3px; background:var(--primary); border-radius:2px; }
-    @media(min-width:600px){ .bottom-nav{display:none;} body{padding-bottom:0;} .pro-footer{padding-bottom:30px;} }
-    .hidden { display:none !important; }
-  </style>
+        /* Footer */
+        .pro-footer {
+            background: var(--secondary);
+            color: var(--text-light);
+            padding: 40px 20px 100px;
+            position: relative;
+            margin-top: 24px;
+            border-radius: 0;
+        }
+        .pro-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #f59e0b, #fbbf24);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .footer-col h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 11px;
+            line-height: 1.4;
+        }
+        .footer-col a {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+        .footer-col a:hover {
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+        .footer-install-section {
+            text-align: center;
+            margin: 20px 0 24px;
+        }
+        .footer-install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 32px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.45);
+            text-decoration: none;
+        }
+        .footer-install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.6);
+        }
+        .footer-email {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .footer-email a {
+            color: #38bdf8;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+            padding-top: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .footer-bottom p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 16px;
+            transition: all 0.3s;
+            border: 1px solid var(--border-light);
+        }
+        .footer-social a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--bottom-nav-height) + var(--safe-bottom));
+            background: #fff;
+            border-top: 1px solid #e8ecf0;
+            z-index: 95;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 8px;
+            padding-bottom: var(--safe-bottom);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: var(--transition-fast);
+            font-family: var(--font);
+            text-decoration: none;
+            position: relative;
+        }
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+        .bottom-nav-item:active {
+            transform: scale(0.9);
+        }
+        .bottom-nav-item i {
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+        .bottom-nav-item:hover i {
+            transform: translateY(-2px);
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .bottom-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        @media(min-width:600px) {
+            .bottom-nav {
+                display: none;
+            }
+            body {
+                padding-bottom: 0;
+            }
+            .pro-footer {
+                padding-bottom: 30px;
+            }
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
-  <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
-  <div class="toast-container" id="toastContainer"></div>
+    <div class="offline-banner" id="offlineBanner"><i class="fas fa-wifi"></i> You're offline. Some features may be limited.</div>
+    <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Sidebar -->
-  <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
-    <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
-      <div class="sidebar-brand">
-        <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
-        <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
-        <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="sidebar-user-card">
-        <div class="sidebar-avatar" id="sidebarAvatar">S</div>
-        <div class="sidebar-user-info">
-          <div class="name" id="sidebarUserName">Student</div>
-          <span class="tag" id="sidebarUserTag">Learner</span>
-        </div>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="sidebar-nav-label">Main Menu</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('testseries')"><i class="fas fa-layer-group"></i> Test Series</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
-        <div class="sidebar-nav-label">Features</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('referral')"><i class="fas fa-gift"></i> Referral Rewards</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('favorites')"><i class="fas fa-heart"></i> My Favorites</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('coins')"><i class="fas fa-coins"></i> Coin History</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('coin-use')"><i class="fas fa-exchange-alt"></i> Coin Use Request</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
-        <div class="sidebar-nav-label">Premium</div>
-        <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
-        <div class="sidebar-nav-label">Account</div>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
-        <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </nav>
-      <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
-    </aside>
-  </div>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
-      <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
-    </div>
-    <div class="nav-right">
-      <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">
-        <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container">
-    <div class="hero-section">
-      <i class="fas fa-crown crown-icon"></i>
-      <h1>Unlock Your <span class="gradient-text">Full Potential</span></h1>
-      <p class="subtitle">Get access to premium tests, detailed analytics, and exclusive features trusted by <strong>10,000+ students</strong></p>
-      <div class="sale-timer">
-        <span class="pulse-dot"></span>
-        <span>🔥 Special Offer ends in:</span>
-        <span id="timer-clock">04:59:59</span>
-      </div>
-    </div>
-
-    <div class="trust-bar">
-      <div class="trust-item"><i class="fas fa-shield-alt"></i> 100% Secure Payments</div>
-      <div class="trust-item"><i class="fas fa-bolt"></i> Instant Activation*</div>
-      <div class="trust-item"><i class="fas fa-users"></i> 12,450+ Students Enrolled</div>
-      <div class="trust-item"><i class="fas fa-headset"></i> 24/7 Telegram Support</div>
-    </div>
-
-    <div class="active-plan-banner" id="activePlanBanner">
-      <div class="plan-icon"><i class="fas fa-check-circle"></i></div>
-      <div class="plan-info"><div class="plan-name" id="activePlanName">Premium</div><div class="plan-expiry" id="activePlanExpiry">Valid until: --</div></div>
-      <div class="active-badge"><i class="fas fa-crown"></i> Active</div>
-    </div>
-
-    <div class="plans-grid" id="plansGrid">
-      <div style="text-align:center;padding:40px;grid-column:1/-1;color:var(--gray-500);"><i class="fas fa-circle-notch fa-spin"></i> Loading plans...</div>
-    </div>
-
-    <div class="comparison-section" id="comparisonSection">
-      <h3><i class="fas fa-balance-scale" style="color:var(--primary);"></i> Compare Plan Benefits</h3>
-      <div style="overflow-x:auto;" id="comparisonTableContainer"></div>
-    </div>
-
-    <div class="verification-progress" id="verificationProgress" style="display:none;">
-      <div class="progress-step completed" id="stepReceived"><i class="fas fa-check-circle"></i> Received</div>
-      <i class="fas fa-chevron-right progress-arrow"></i>
-      <div class="progress-step active" id="stepVerifying"><i class="fas fa-spinner fa-spin"></i> Verifying</div>
-      <i class="fas fa-chevron-right progress-arrow"></i>
-      <div class="progress-step" id="stepActivated"><i class="fas fa-lock"></i> Activated</div>
-    </div>
-
-    <div class="history-section" id="historySection">
-      <h3><i class="fas fa-history"></i> Payment History</h3>
-      <div id="historyList"><p style="text-align:center;color:var(--gray-500);">No payment history yet</p></div>
-    </div>
-
-    <div class="support-section">
-      <h3><i class="fas fa-headset"></i> Need Help?</h3>
-      <div class="support-links">
-        <a href="https://t.me/cuet007_bot" target="_blank" class="support-link telegram-link"><i class="fab fa-telegram-plane"></i> @cuet007_bot</a>
-        <a href="mailto:testmaster.helpdesk@gmail.com" class="support-link email-link"><i class="fas fa-envelope"></i> testmaster.helpdesk@gmail.com</a>
-      </div>
-      <p style="margin-top:12px; font-size:12px; color:var(--gray-500);">We typically respond within a few hours.</p>
-    </div>
-  </div>
-
-  <!-- Payment Modal -->
-  <div class="payment-modal-overlay hidden" id="paymentModal">
-    <div class="payment-modal">
-      <button class="close-modal-btn" onclick="closePaymentModal()"><i class="fas fa-times"></i></button>
-      <h3><i class="fas fa-lock" style="color:#10b981;"></i> Complete Payment</h3>
-      <div class="modal-plan-name" id="modalPlanName">Premium Plan</div>
-      <div class="amount-display">
-        <div class="big-amount"><span class="original-amount" id="modalOriginalPrice" style="display:none;">₹0</span>₹<span id="modalAmount">99</span></div>
-        <small style="color:var(--gray-500);">One-time payment · <span id="modalDuration">30</span> days access</small>
-      </div>
-      <div class="discount-area">
-        <input type="text" id="discountCodeInput" placeholder="Discount code (if any)">
-        <button id="applyDiscountBtn" onclick="applyDiscountCode()">Apply</button>
-      </div>
-      <div id="discountMessage" class="discount-message"></div>
-      <div class="form-group">
-        <label>📱 Pay via UPI</label>
-        <div class="upi-buttons">
-          <button class="upi-btn" onclick="openUPIApp('gpay')"><i class="fab fa-google"></i> GPay</button>
-          <button class="upi-btn" onclick="openUPIApp('phonepe')"><i class="fas fa-mobile-alt"></i> PhonePe</button>
-          <button class="upi-btn" onclick="openUPIApp('paytm')"><i class="fas fa-wallet"></i> Paytm</button>
-        </div>
-        <div class="upi-id-display" onclick="copyUPI()">
-          <i class="fas fa-copy"></i> UPI: <strong id="upiIdDisplay">testmaster@nyes</strong> <small>(tap to copy)</small>
-        </div>
-      </div>
-      <div class="form-group"><label>🧾 Transaction / Reference ID *</label><input type="text" id="transactionID" placeholder="e.g. UPI123456789" required></div>
-      <div class="form-group"><label>💰 Amount Paid (₹) *</label><input type="number" id="paymentAmount" placeholder="Enter amount you paid" required></div>
-      <div class="form-group"><label>📅 Payment Date</label><input type="date" id="paymentDate" required></div>
-      <div class="form-group"><label>📧 Your Email (for receipt)</label><input type="email" id="paymentEmail" placeholder="you@example.com"></div>
-      <button class="submit-payment-btn" id="submitPaymentBtn" onclick="submitPaymentRequest()">
-        <i class="fas fa-paper-plane"></i> Submit for Verification
-      </button>
-      <p style="text-align:center;font-size:11px;color:var(--gray-500);margin-top:8px;"><i class="fas fa-clock"></i> Verified within 1-4 hours</p>
-    </div>
-  </div>
-
-  <!-- Footer (exactly like dashboard) -->
-  <footer class="pro-footer">
-    <div class="footer-grid">
-      <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
-      <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
-    </div>
-    <div class="footer-install-section">
-      <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
-    </div>
-    <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
-    <div class="footer-social">
-      <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-      <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
-      <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
-    </div>
-    <div class="footer-bottom"><p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
-  </footer>
-
-  <!-- Bottom Navigation (same as dashboard) -->
-  <nav class="bottom-nav">
-    <button class="bottom-nav-item" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
-    <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
-    <button class="bottom-nav-item" onclick="navigate('testseries.html')"><i class="fas fa-layer-group"></i><span>Series</span></button>
-    <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
-  </nav>
-
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyMT8CDc3D8r55NdK_vaJ9uwSArxVkT7s9RkS5CPxehCh0evlH1C71gWm425_zAAdLBog/exec';
-    const UPI_ID = 'testmaster@nyes';
-    const PAYEE_NAME = 'TestMaster Pro';
-    const PLANS_CACHE_KEY = 'cachedPaymentPlans';
-    const PAYMENTS_CACHE_KEY = 'cachedUserPayments';
-    const MOCKS_CACHE_KEY = 'cachedAllMocks';
-
-    // ALWAYS an object with a "plans" array
-    let paymentPlans = { plans: [] };
-    let selectedPlan = null;
-    let userPayments = [];
-    let hasLaunchedConfetti = false;
-    let appliedDiscount = { code: '', percent: 0, discountedAmount: null };
-    let allMocks = [];
-    let isSinglePlanMode = false;
-
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    // Hardcoded fallback plans – guests will always see these
-    const FALLBACK_PLANS = {
-      plans: [
-        {
-          type: "premium_1m",
-          name: "Premium Monthly",
-          price: 99,
-          originalPrice: 199,
-          duration: 30,
-          icon: "fa-crown",
-          color: "#f59e0b",
-          features: [
-            "All premium mock tests",
-            "Detailed performance analytics",
-            "AI‑powered revision plans",
-            "Priority support"
-          ]
-        },
-        {
-          type: "premium_3m",
-          name: "Premium Quarterly",
-          price: 249,
-          originalPrice: 499,
-          duration: 90,
-          icon: "fa-gem",
-          color: "#8b5cf6",
-          features: [
-            "Everything in Monthly",
-            "Exclusive topic‑wise tests",
-            "Downloadable PDF solutions",
-            "Early access to new features"
-          ]
-        }
-      ]
-    };
-
-    // ---------- Helpers ----------
-    function updateOnlineStatus() {
-      const banner = document.getElementById('offlineBanner');
-      if (!navigator.onLine) { banner.classList.add('show'); showToast("You're offline. Using cached data.", 'warning', 4000); }
-      else { banner.classList.remove('show'); }
-    }
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-
-    function showToast(msg, type='info', dur=3000) {
-      const c = document.getElementById('toastContainer');
-      const t = document.createElement('div');
-      t.className = `toast-item ${type}`;
-      const icons = { success:'fa-check-circle', error:'fa-times-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle' };
-      t.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
-      c.appendChild(t);
-      c.classList.add('show');
-      setTimeout(() => {
-        t.style.opacity='0'; t.style.transform='translateY(-10px)'; t.style.transition='0.3s';
-        setTimeout(() => { t.remove(); if(!c.children.length) c.classList.remove('show'); }, 300);
-      }, dur);
-    }
-
-    function navigate(url) { window.location.href = url; }
-
-    // Sidebar logic
-    function openSidebar() {
-      const overlay = document.getElementById('sidebarOverlay');
-      overlay.classList.remove('hidden');
-      requestAnimationFrame(() => overlay.classList.add('active'));
-      document.body.classList.add('sidebar-open');
-    }
-    function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
-    function closeSidebarDirect() {
-      const overlay = document.getElementById('sidebarOverlay');
-      overlay.classList.remove('active');
-      document.body.classList.remove('sidebar-open');
-      setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400);
-    }
-    function sidebarNavigate(action) {
-      closeSidebarDirect();
-      setTimeout(() => {
-        const map = {
-          dashboard:'dashboard.html', mocks:'exam.html', testseries:'testseries.html', aimock:'aimock.html',
-          books:'book.html', study:'book.html', results:'allresult.html', leaderboard:'leaderboard.html',
-          chat:'chat.html', aichat:'aichat.html', streak:'streak.html', 'daily-challenge':'challenge.html',
-          referral:'referral.html', favorites:'favorites.html', coins:'coin-history.html',
-          'coin-use':'usecoin.html', reviews:'reviews.html', premium:'payment.html',
-          profile:'profile.html', instructions:'instructions', logout:'logout'
-        };
-        if (action === 'logout') logout();
-        else if (action === 'instructions') openHowToUse();
-        else if (map[action]) navigate(map[action]);
-      }, 300);
-    }
-    function logout() {
-      Swal.fire({ title:'Logout?', text:'Are you sure?', icon:'question', showCancelButton:true, confirmButtonText:'Yes', cancelButtonText:'No', confirmButtonColor:'#ff4d5a', cancelButtonColor:'#243748' })
-      .then(r => { if(r.isConfirmed) { localStorage.removeItem('user'); showToast('Logged out','success'); setTimeout(()=> navigate('index.html'), 800); } });
-    }
-    function openHowToUse() {
-      Swal.fire({ title:'How to Use', html:'<div style="text-align:left;font-size:13px;"><p><b>1.</b> Select a Category.</p><p><b>2.</b> Use filters.</p><p><b>3.</b> Click Attempt.</p></div>', confirmButtonText:'Got it!', confirmButtonColor:'#243748', icon:'info' });
-    }
-
-    function setAvatar(elId, u) {
-      const el = document.getElementById(elId);
-      if (!el) return;
-      if (u?.avatarUrl) el.innerHTML = `<img src="${u.avatarUrl}" alt="Avatar">`;
-      else if (u?.profilePicUrl) el.innerHTML = `<img src="${u.profilePicUrl}" alt="Avatar">`;
-      else el.textContent = u?.name ? u.name.charAt(0).toUpperCase() : 'G';
-      const badge = document.getElementById('premiumBadge');
-      if (badge) badge.style.display = (u?.isPremium || u?.plan==='premium') ? 'flex' : 'none';
-    }
-    function updateUserUI() {
-      if (user) {
-        setAvatar('userInitial', user);
-        setAvatar('sidebarAvatar', user);
-        document.getElementById('sidebarUserName').textContent = user.name || 'Student';
-        document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
-        document.getElementById('paymentEmail').value = user.email || '';
-        const pb = document.getElementById('premiumBadge');
-        if (pb) pb.style.display = (user?.isPremium || user?.plan==='premium') ? 'flex' : 'none';
-      } else {
-        document.getElementById('userInitial').textContent = 'G';
-        document.getElementById('sidebarAvatar').textContent = 'G';
-        document.getElementById('sidebarUserName').textContent = 'Guest';
-        document.getElementById('sidebarUserTag').textContent = 'Visitor';
-        const pb = document.getElementById('premiumBadge');
-        if (pb) pb.style.display = 'none';
-      }
-      document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('upiIdDisplay').textContent = UPI_ID;
-    }
-
-    // Timer
-    function startTimer(duration, display) {
-      let timer = duration;
-      setInterval(() => {
-        const h = Math.floor(timer/3600), m = Math.floor((timer%3600)/60), s = timer%60;
-        display.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        if (--timer < 0) timer = duration;
-      }, 1000);
-    }
-
-    function copyUPI() {
-      navigator.clipboard.writeText(UPI_ID).then(() => {
-        Swal.fire({title:'📋 Copied!',text:`UPI ID: ${UPI_ID}`,timer:1800,showConfirmButton:false,toast:true,position:'top-end'});
-      }).catch(() => {
-        Swal.fire({title:'UPI ID',text:`Please send payment to: ${UPI_ID}`,confirmButtonText:'OK'});
-      });
-    }
-
-    function openUPIApp(app) {
-      if (!selectedPlan) { Swal.fire({icon:'warning',title:'Select a plan first',toast:true,position:'top-end',timer:2000,showConfirmButton:false}); return; }
-      if (!user) { showLoginPopup(); return; }
-      const amount = appliedDiscount.discountedAmount || selectedPlan.amount;
-      const note = encodeURIComponent(`${selectedPlan.planType}_${user.username}`);
-      const name = encodeURIComponent(PAYEE_NAME);
-      let url = '';
-      switch(app) {
-        case 'gpay': url = `tez://upi/pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`; break;
-        case 'phonepe': url = `phonepe://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`; break;
-        case 'paytm': url = `paytmmp://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`; break;
-        default: url = `upi://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`;
-      }
-      try {
-        window.location.href = url;
-        setTimeout(() => {
-          Swal.fire({
-            title:'💸 Complete Payment',
-            html:`<p>Send <strong>₹${amount}</strong> to:</p><div style="background:#fefce8;padding:12px;border-radius:12px;margin:8px 0;font-size:16px;font-weight:700;color:#243748;">${UPI_ID}</div><p style="font-size:13px;color:var(--gray-600);">${PAYEE_NAME}</p><button onclick="copyUPI()" style="padding:8px 18px;background:#243748;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:600;">📋 Copy UPI ID</button>`,
-            confirmButtonText:'✅ I\'ve Completed Payment', confirmButtonColor:'#10b981', showCancelButton:true, cancelButtonText:'Not Yet'
-          });
-        }, 800);
-      } catch(e) { copyUPI(); }
-    }
-
-    async function applyDiscountCode() {
-      const code = document.getElementById('discountCodeInput').value.trim();
-      const msgEl = document.getElementById('discountMessage');
-      if (!code) { msgEl.textContent='Please enter a code.'; msgEl.className='discount-message error'; return; }
-      if (!selectedPlan) { msgEl.textContent='Please select a plan first.'; msgEl.className='discount-message error'; return; }
-      try {
-        const res = await fetch(`${API_URL}?action=validateDiscountCode&discountCode=${encodeURIComponent(code)}`);
-        const data = await res.json();
-        if (data.success) {
-          const pct = data.discountPercent;
-          const discounted = Math.round(selectedPlan.amount * (1 - pct/100));
-          appliedDiscount = { code, percent: pct, discountedAmount: discounted };
-          document.getElementById('modalAmount').textContent = discounted;
-          document.getElementById('paymentAmount').value = discounted;
-          const origEl = document.getElementById('modalOriginalPrice');
-          origEl.style.display = 'inline';
-          origEl.textContent = '₹' + selectedPlan.amount;
-          msgEl.textContent = `✅ ${pct}% discount applied! You save ₹${selectedPlan.amount - discounted}.`;
-          msgEl.className = 'discount-message success';
-        } else {
-          msgEl.textContent = '❌ Invalid or expired discount code.';
-          msgEl.className = 'discount-message error';
-          resetDiscount();
-        }
-      } catch(e) {
-        msgEl.textContent = '⚠️ Error checking code.';
-        msgEl.className = 'discount-message error';
-        resetDiscount();
-      }
-    }
-    function resetDiscount() {
-      appliedDiscount = { code:'', percent:0, discountedAmount:null };
-      if (selectedPlan) {
-        document.getElementById('modalAmount').textContent = selectedPlan.amount;
-        document.getElementById('paymentAmount').value = selectedPlan.amount;
-        const origEl = document.getElementById('modalOriginalPrice');
-        if (selectedPlan.originalPrice && selectedPlan.originalPrice > selectedPlan.amount) {
-          origEl.style.display = 'inline';
-          origEl.textContent = '₹' + selectedPlan.originalPrice;
-        } else origEl.style.display = 'none';
-      }
-    }
-
-    function showLoginPopup() {
-      Swal.fire({
-        title: 'Login Required',
-        html: '<p>You need to be logged in to purchase a plan.</p>',
-        icon: 'warning',
-        confirmButtonText: 'Go to Login',
-        confirmButtonColor: '#243748',
-        showCancelButton: true,
-        cancelButtonText: 'Cancel',
-        cancelButtonColor: '#94a3b8'
-      }).then(result => {
-        if (result.isConfirmed) {
-          window.location.href = 'index.html';
-        }
-      });
-    }
-
-    // Plan click handler (event delegation)
-    function handlePlanClick(event) {
-      const btn = event.target.closest('.select-plan-btn');
-      if (!btn || btn.classList.contains('btn-disabled')) return;
-      const planType = btn.dataset.planType;
-      const planName = btn.dataset.planName;
-      const price = parseFloat(btn.dataset.price);
-      const duration = parseInt(btn.dataset.duration);
-      const originalPrice = parseFloat(btn.dataset.originalPrice) || 0;
-      if (!user) {
-        showLoginPopup();
-        return;
-      }
-      openPaymentModal(planType, planName, price, duration, originalPrice);
-    }
-    document.getElementById('plansGrid').addEventListener('click', handlePlanClick);
-
-    // ---------- Plan Loading (robust, always shows something) ----------
-    async function loadPaymentPlans() {
-      let loaded = false;
-
-      // 1. Try cached data (only if it contains a valid plans array)
-      try {
-        const cached = JSON.parse(localStorage.getItem(PLANS_CACHE_KEY));
-        if (cached && Array.isArray(cached.plans) && cached.plans.length > 0) {
-          paymentPlans = cached;
-          processPlans();
-          loaded = true;
-        }
-      } catch (e) { /* ignore corrupted cache */ }
-
-      // 2. Try local payment.json
-      try {
-        const res = await fetch('payment.json');
-        if (res.ok) {
-          const data = await res.json();
-          if (data && Array.isArray(data.plans) && data.plans.length > 0) {
-            paymentPlans = data;
-            localStorage.setItem(PLANS_CACHE_KEY, JSON.stringify(data));
-            processPlans();
-            loaded = true;
-            return;  // success, no need to continue
-          }
-        }
-      } catch (e) { /* silent */ }
-
-      // 3. Try Google Sheets API
-      try {
-        const res = await fetch(`${API_URL}?action=getPaymentPlans`);
-        const data = await res.json();
-        if (data.success && Array.isArray(data.plans) && data.plans.length > 0) {
-          paymentPlans = data;
-          localStorage.setItem(PLANS_CACHE_KEY, JSON.stringify(data));
-          processPlans();
-          loaded = true;
-          return;
-        }
-      } catch (e) { /* silent */ }
-
-      // 4. Final fallback – always visible
-      if (!loaded || paymentPlans.plans.length === 0) {
-        paymentPlans = { ...FALLBACK_PLANS };
-        processPlans();
-      }
-    }
-
-    function processPlans() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const filterType = urlParams.get('planType');
-      const seriesCode = urlParams.get('seriesCode');
-      const planNameFromUrl = urlParams.get('planName');
-
-      if (filterType && paymentPlans && Array.isArray(paymentPlans.plans)) {
-        isSinglePlanMode = true;
-        if (seriesCode) sessionStorage.setItem('pendingSeriesCode', seriesCode);
-        if (planNameFromUrl) sessionStorage.setItem('pendingPlanName', planNameFromUrl);
-        const filtered = paymentPlans.plans.filter(p => p.type === filterType);
-        if (filtered.length > 0) {
-          paymentPlans = { ...paymentPlans, plans: filtered };
-        }
-      }
-      renderPlans();
-      renderComparisonTable();
-    }
-
-    async function loadUserPayments() {
-      if (!user) return;
-      let cached = null;
-      try { cached = JSON.parse(localStorage.getItem(PAYMENTS_CACHE_KEY)); } catch(e) {}
-      if (cached) { userPayments = cached; updateUI(); }
-      try {
-        const res = await fetch(`${API_URL}?action=getUserPayments&username=${encodeURIComponent(user.username)}`);
-        const data = await res.json();
-        if (data.success) { userPayments = data.payments; localStorage.setItem(PAYMENTS_CACHE_KEY, JSON.stringify(userPayments)); updateUI(); }
-      } catch(e) {}
-    }
-
-    function updateUI() {
-      updateBanner();
-      updateVerificationProgress();
-      renderHistory();
-      checkForConfetti();
-      if (paymentPlans?.plans?.length) renderPlans();
-    }
-
-    function checkForConfetti() {
-      if (hasLaunchedConfetti) return;
-      const verified = userPayments.filter(p => p.status === 'Verified');
-      if (verified.length && !sessionStorage.getItem('confetti_launched_' + (user?.username || 'guest'))) {
-        const latest = verified.sort((a,b) => new Date(b.verificationDate) - new Date(a.verificationDate))[0];
-        if (new Date() - new Date(latest.verificationDate) < 600000) {
-          launchConfetti();
-          sessionStorage.setItem('confetti_launched_' + (user?.username || 'guest'), 'true');
-        }
-      }
-    }
-    function launchConfetti() {
-      const colors = ['#243748','#10b981','#f59e0b','#06b6d4','#8b5cf6','#fbbf24'];
-      const end = Date.now() + 3000;
-      (function frame() {
-        confetti({ particleCount:3, angle:60, spread:60, origin:{x:0,y:0.7}, colors });
-        confetti({ particleCount:3, angle:120, spread:60, origin:{x:1,y:0.7}, colors });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-      Swal.fire({ title:'🎉 Congratulations!', text:'Your premium access is now active!', icon:'success', timer:3000, confirmButtonColor:'#243748' });
-    }
-
-    function updateBanner() {
-      const active = userPayments.filter(p => p.status==='Verified' && p.validUntil && new Date(p.validUntil) > new Date());
-      const b = document.getElementById('activePlanBanner');
-      if (active.length) {
-        b.style.display = 'flex';
-        const latest = active.sort((a,b) => new Date(b.verificationDate) - new Date(a.verificationDate))[0];
-        document.getElementById('activePlanName').textContent = latest.planName || latest.planType;
-        document.getElementById('activePlanExpiry').textContent = `Valid until: ${new Date(latest.validUntil).toLocaleDateString('en-IN',{weekday:'short',year:'numeric',month:'short',day:'numeric'})}`;
-      } else b.style.display = 'none';
-    }
-    function updateVerificationProgress() {
-      const progress = document.getElementById('verificationProgress');
-      if (!userPayments.length) { progress.style.display='none'; return; }
-      const pending = userPayments.some(p => p.status==='Pending');
-      progress.style.display = pending ? 'flex' : 'none';
-    }
-
-    function renderPlans() {
-      const grid = document.getElementById('plansGrid');
-      if (!paymentPlans?.plans?.length) {
-        grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-500);">No plans available right now.</div>';
-        return;
-      }
-      if (isSinglePlanMode) {
-        grid.style.maxWidth = '450px';
-        grid.style.margin = '0 auto';
-      }
-      grid.innerHTML = paymentPlans.plans.map((p,i) => {
-        const isActive = user && userPayments.some(pp => pp.status==='Verified' && pp.planType===p.type && pp.validUntil && new Date(pp.validUntil) > new Date());
-        const iconClass = p.icon || 'fa-crown';
-        const color = p.color || '#243748';
-        const originalPrice = p.originalPrice || 0;
-        const hasOriginal = originalPrice && originalPrice > p.price;
-        const features = (p.features || []).map(f => typeof f === 'string' ? f : (f.text || f));
-
-        return `<div class="plan-card" style="animation-delay:${i*0.08}s;">
-          <div class="plan-header">
-            <div class="plan-icon-circle" style="background:${color};"><i class="fas ${iconClass}"></i></div>
-            <div class="plan-name">${p.name}</div>
-            <div class="plan-price">
-              ${hasOriginal ? `<span class="original-price">₹${originalPrice}</span>` : ''}
-              ₹${p.price}
-              ${hasOriginal ? `<span class="sale-badge">Save ₹${originalPrice - p.price}</span>` : ''}
+    <!-- Sidebar -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
+        <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo"><i class="fas fa-graduation-cap"></i></div>
+                <div class="sidebar-brand-text">TestMasterPro<small>.space</small></div>
+                <button class="sidebar-close-btn" onclick="closeSidebarDirect()"><i class="fas fa-times"></i></button>
             </div>
-            <div class="plan-duration">⏰ ${p.duration} Days Access</div>
-            ${isActive ? '<div class="active-plan-indicator"><i class="fas fa-check-circle"></i> Currently Active</div>' : ''}
-          </div>
-          <ul class="features-list">
-            ${features.map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}
-          </ul>
-          <button class="select-plan-btn ${isActive?'btn-disabled':''}" style="background:${isActive ? '#e2e8f0' : color}; color:${isActive ? '#94a3b8' : 'white'};"
-            data-plan-type="${p.type}"
-            data-plan-name="${p.name.replace(/"/g, '&quot;')}"
-            data-price="${p.price}"
-            data-duration="${p.duration}"
-            data-original-price="${originalPrice}"
-            ${isActive?'disabled':''}>
-            <i class="fas ${isActive?'fa-check':iconClass}"></i> ${isActive ? 'Already Subscribed' : `Get ${p.name}`}
-          </button>
-        </div>`;
-      }).join('');
+            <div class="sidebar-user-card">
+                <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebarUserName">Student</div>
+                    <span class="tag" id="sidebarUserTag">Learner</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-label">Main Menu</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('dashboard')"><i class="fas fa-th-large"></i> Dashboard</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('mocks')"><i class="fas fa-file-alt"></i> Mock Tests</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('testseries')"><i class="fas fa-layer-group"></i> Test Series</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('streak')"><i class="fas fa-fire"></i> Streak Ranking</button>
+                <div class="sidebar-nav-label">Features</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('daily-challenge')"><i class="fas fa-bolt"></i> Daily Challenge</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('referral')"><i class="fas fa-gift"></i> Referral Rewards</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('favorites')"><i class="fas fa-heart"></i> My Favorites</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('coins')"><i class="fas fa-coins"></i> Coin History</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('coin-use')"><i class="fas fa-exchange-alt"></i> Coin Use Request</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('reviews')"><i class="fas fa-star"></i> Test Reviews</button>
+                <div class="sidebar-nav-label">Premium</div>
+                <button class="sidebar-nav-item active-nav" onclick="sidebarNavigate('premium')"><i class="fas fa-crown"></i> Buy Premium</button>
+                <div class="sidebar-nav-label">Account</div>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('profile')"><i class="fas fa-user-circle"></i> Profile</button>
+                <button class="sidebar-nav-item" onclick="sidebarNavigate('instructions')"><i class="fas fa-question-circle"></i> How to Use</button>
+                <button class="sidebar-nav-item logout-item" onclick="sidebarNavigate('logout')"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </nav>
+            <div class="sidebar-version">TestMasterPro.space v3.0 · © 2026</div>
+        </aside>
+    </div>
 
-      const compSection = document.getElementById('comparisonSection');
-      if (isSinglePlanMode || paymentPlans.plans.length < 2) {
-        compSection.style.display = 'none';
-      } else {
-        compSection.style.display = 'block';
-      }
-    }
+    <!-- Fixed Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand" onclick="navigate('dashboard.html')"><i class="fas fa-graduation-cap"></i> TestMasterPro</div>
+        </div>
+        <div class="nav-right">
+            <div class="user-avatar" id="userInitial" onclick="openSidebar()" title="Menu">
+                <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
+            </div>
+        </div>
+    </nav>
 
-    function renderComparisonTable() {
-      const container = document.getElementById('comparisonTableContainer');
-      if (!paymentPlans?.plans || paymentPlans.plans.length < 2) {
-        container.innerHTML = '';
-        return;
-      }
-      const allFeatures = new Map();
-      paymentPlans.plans.forEach(p => {
-        (p.features || []).forEach(f => {
-          const text = typeof f === 'string' ? f : (f.text || f);
-          if (!allFeatures.has(text)) allFeatures.set(text, {});
-          allFeatures.get(text)[p.type] = true;
-        });
-      });
-      const planTypes = paymentPlans.plans.map(p => p.type);
-      const planNames = paymentPlans.plans.map(p => p.name);
-      let html = '<table class="comparison-table"><thead><tr><th>Feature</th>';
-      planNames.forEach(name => html += `<th>${name}</th>`);
-      html += '</tr></thead><tbody>';
-      allFeatures.forEach((plansMap, featureText) => {
-        html += '<tr><td class="feature-col">' + featureText + '</td>';
-        planTypes.forEach(type => {
-          html += plansMap[type] ? '<td class="check-green"><i class="fas fa-check-circle"></i></td>' : '<td class="cross-gray"><i class="fas fa-times-circle"></i></td>';
-        });
-        html += '</tr>';
-      });
-      html += '<tr><td class="feature-col">Validity Period</td>';
-      paymentPlans.plans.forEach(p => html += `<td>${p.duration} Days</td>`);
-      html += '</tr></tbody></table>';
-      container.innerHTML = html;
-    }
+    <div class="container">
+        <div class="hero-section">
+            <i class="fas fa-crown crown-icon"></i>
+            <h1>Choose Your <span class="gradient-text">Plan</span></h1>
+            <p class="subtitle">Unlock premium tests, AI analytics, and more</p>
+        </div>
 
-    function openPaymentModal(pt,pn,am,dr,origAm) {
-      selectedPlan = {planType:pt, planName:pn, amount:am, duration:dr, originalPrice:origAm};
-      document.getElementById('modalPlanName').textContent = pn;
-      document.getElementById('modalAmount').textContent = am;
-      document.getElementById('modalDuration').textContent = dr;
-      document.getElementById('paymentAmount').value = am;
-      document.getElementById('transactionID').value = '';
-      document.getElementById('discountCodeInput').value = '';
-      document.getElementById('discountMessage').textContent = '';
-      const origEl = document.getElementById('modalOriginalPrice');
-      if (origAm && origAm > am) {
-        origEl.style.display = 'inline';
-        origEl.textContent = '₹' + origAm;
-      } else {
-        origEl.style.display = 'none';
-      }
-      resetDiscount();
-      document.getElementById('paymentModal').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
+        <!-- Guest Info Banner (visible only for guest users) -->
+        <div class="guest-info-banner" id="guestInfoBanner" style="display:none;">
+            <div class="guest-icon"><i class="fas fa-user-lock"></i></div>
+            <div class="guest-info">
+                <div class="guest-title">👋 You're browsing as a guest</div>
+                <div class="guest-subtitle">You can view all plans but need to log in to purchase.</div>
+            </div>
+            <button class="select-plan-btn btn-guest" style="width:auto;padding:10px 18px;font-size:12px;" onclick="showLoginPopup()">
+                <i class="fas fa-sign-in-alt"></i> Login to Buy
+            </button>
+        </div>
 
-    function closePaymentModal() {
-      document.getElementById('paymentModal').classList.add('hidden');
-      document.body.style.overflow = '';
-      selectedPlan = null;
-      resetDiscount();
-    }
+        <div class="active-plan-banner" id="activePlanBanner">
+            <div class="plan-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="plan-info">
+                <div class="plan-name" id="activePlanName">Premium</div>
+                <div class="plan-expiry" id="activePlanExpiry">Valid until: --</div>
+            </div>
+            <div class="active-badge"><i class="fas fa-crown"></i> Active</div>
+        </div>
 
-    async function submitPaymentRequest() {
-      if (!selectedPlan || !user) return;
-      const txnId = document.getElementById('transactionID').value.trim();
-      const amountPaid = document.getElementById('paymentAmount').value.trim();
-      if (!txnId) { Swal.fire({icon:'warning',title:'Missing',text:'Please enter Transaction ID.'}); return; }
-      if (!amountPaid || isNaN(parseFloat(amountPaid))) { Swal.fire({icon:'warning',title:'Missing',text:'Enter amount paid.'}); return; }
-      const btn = document.getElementById('submitPaymentBtn');
-      btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Submitting...';
-      try {
-        const params = new URLSearchParams({
-          action:'submitPayment', username:user.username, planType:selectedPlan.planType,
-          planName:selectedPlan.planName, amount:amountPaid, transactionID:txnId, paymentMethod:'UPI'
-        });
-        if (appliedDiscount.code) params.append('discountCode', appliedDiscount.code);
-        const seriesCode = sessionStorage.getItem('pendingSeriesCode');
-        const pendingPlanName = sessionStorage.getItem('pendingPlanName');
-        if (seriesCode) { params.append('seriesCode', seriesCode); sessionStorage.removeItem('pendingSeriesCode'); }
-        if (pendingPlanName) { params.append('seriesPlanName', pendingPlanName); sessionStorage.removeItem('pendingPlanName'); }
-        const r = await fetch(API_URL, {method:'POST',body:params});
-        const d = await r.json();
-        if (d.success) {
-          Swal.fire({ icon:'success', title:'🎉 Payment Submitted!', html:`<p>Your payment is now under verification.</p><div style="background:#f8fafc;padding:12px;border-radius:12px;margin:10px 0;"><p><strong>Payment ID:</strong> ${d.paymentId}</p><p><strong>Plan:</strong> ${selectedPlan.planName}</p><p><strong>Amount:</strong> ₹${amountPaid}</p></div>`, confirmButtonColor:'#10b981', confirmButtonText:'Got It' });
-          closePaymentModal();
-          await loadUserPayments();
-          document.getElementById('historySection').style.display = 'block';
-          document.getElementById('historySection').scrollIntoView({behavior:'smooth'});
-        } else {
-          Swal.fire({icon:'error',title:'Submission Failed',text:d.error || 'Please try again.'});
+        <!-- Plans container: shows single plan OR all plans grid -->
+        <div id="singlePlanContainer"></div>
+
+        <!-- Other plans section (shown only when a specific plan is preselected via URL) -->
+        <div class="other-plans-section hidden" id="otherPlansSection">
+            <h3><i class="fas fa-layer-group"></i> Other Available Plans</h3>
+            <div class="other-plans-grid" id="otherPlansGrid"></div>
+        </div>
+
+        <div class="history-section" id="historySection">
+            <h3><i class="fas fa-history"></i> Payment History</h3>
+            <div id="historyList">
+                <p style="text-align:center;color:var(--gray-500);">No payment history yet</p>
+            </div>
+        </div>
+
+        <div class="support-section">
+            <h3><i class="fas fa-headset"></i> Need Help?</h3>
+            <div class="support-links">
+                <a href="https://t.me/cuet007_bot" target="_blank" class="support-link telegram-link"><i class="fab fa-telegram-plane"></i> @cuet007_bot</a>
+                <a href="mailto:testmaster.helpdesk@gmail.com" class="support-link email-link"><i class="fas fa-envelope"></i> testmaster.helpdesk@gmail.com</a>
+            </div>
+            <p style="margin-top:12px;font-size:12px;color:var(--gray-500);">We typically respond within a few hours.</p>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="payment-modal-overlay hidden" id="paymentModal">
+        <div class="payment-modal">
+            <button class="close-modal-btn" onclick="closePaymentModal()"><i class="fas fa-times"></i></button>
+            <h3><i class="fas fa-lock" style="color:#10b981;"></i> Complete Payment</h3>
+            <div class="modal-plan-summary" id="modalPlanSummary">
+                <i class="fas fa-shopping-cart"></i> <span id="modalPlanText">Premium Plan</span>
+            </div>
+            <div class="amount-display">
+                <div class="big-amount">
+                    <span class="original-amount" id="modalOriginalPrice" style="display:none;">₹0</span>
+                    ₹<span id="modalAmount">99</span>
+                    <span class="savings-flash" id="savingsBadge" style="display:none;"></span>
+                </div>
+                <small style="color:var(--gray-500);">One-time payment · <span id="modalDuration">30</span> days</small>
+            </div>
+
+            <!-- Beautiful Discount Section -->
+            <div class="discount-section" id="discountSection">
+                <div class="discount-label">
+                    <i class="fas fa-tags"></i> Have a coupon code?
+                </div>
+                <div class="discount-input-group">
+                    <input type="text" id="discountCodeInput" placeholder="Enter your code here...">
+                    <button id="applyDiscountBtn" onclick="applyDiscountCode()">
+                        <i class="fas fa-check"></i> Apply
+                    </button>
+                </div>
+                <div id="discountMessage" class="discount-message"></div>
+                <div class="discount-applied-badge" id="discountAppliedBadge">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="discountBadgeText">20% off · You save ₹40</span>
+                    <button class="remove-discount" onclick="removeDiscount()" title="Remove discount">×</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>📱 Pay via UPI</label>
+                <div class="upi-buttons">
+                    <button class="upi-btn" onclick="openUPIApp('gpay')"><i class="fab fa-google"></i> GPay</button>
+                    <button class="upi-btn" onclick="openUPIApp('phonepe')"><i class="fas fa-mobile-alt"></i> PhonePe</button>
+                    <button class="upi-btn" onclick="openUPIApp('paytm')"><i class="fas fa-wallet"></i> Paytm</button>
+                </div>
+                <div class="upi-id-display" onclick="copyUPI()">
+                    <i class="fas fa-copy"></i> UPI: <strong id="upiIdDisplay">testmaster@nyes</strong> <small>(tap to copy)</small>
+                </div>
+            </div>
+            <div class="form-group"><label>🧾 Transaction / Reference ID *</label><input type="text" id="transactionID" placeholder="e.g. UPI123456789" required></div>
+            <div class="form-group"><label>💰 Amount Paid (₹)</label><input type="number" id="paymentAmount" value="" readonly></div>
+            <div class="form-group"><label>📅 Payment Date</label><input type="date" id="paymentDate" required></div>
+            <div class="form-group"><label>📧 Your Email (for receipt)</label><input type="email" id="paymentEmail" placeholder="you@example.com"></div>
+            <button class="submit-payment-btn" id="submitPaymentBtn" onclick="submitPaymentRequest()">
+                <i class="fas fa-paper-plane"></i> Submit for Verification
+            </button>
+            <p style="text-align:center;font-size:11px;color:var(--gray-500);margin-top:8px;"><i class="fas fa-clock"></i> Verified within 1-4 hours</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="pro-footer">
+        <div class="footer-grid">
+            <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
+            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+        </div>
+        <div class="footer-install-section">
+            <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
+        </div>
+        <div class="footer-email"><a href="mailto:testmasterpro.space">testmasterpro.space</a></div>
+        <div class="footer-social">
+            <a href="https://instagram.com/testmasterpro" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://t.me/MOCK_2026" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+            <a href="mailto:testmaster.helpdesk@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="#" onclick="return false;" title="YouTube Coming Soon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 TestMasterPro.space</p><a href="mailto:testmasterpro.space">testmasterpro.space</a>
+        </div>
+    </footer>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item" onclick="navigate('dashboard.html')"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="bottom-nav-item" onclick="navigate('exam.html')"><i class="fas fa-file-alt"></i><span>Tests</span></button>
+        <button class="bottom-nav-item" onclick="navigate('testseries.html')"><i class="fas fa-layer-group"></i><span>Series</span></button>
+        <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
+    </nav>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyMT8CDc3D8r55NdK_vaJ9uwSArxVkT7s9RkS5CPxehCh0evlH1C71gWm425_zAAdLBog/exec';
+        const UPI_ID = 'testmaster@nyes';
+        const PAYEE_NAME = 'TestMaster Pro';
+        const PLANS_CACHE_KEY = 'cachedPaymentPlans';
+        const PAYMENTS_CACHE_KEY = 'cachedUserPayments';
+        const MOCKS_CACHE_KEY = 'cachedAllMocks';
+
+        let allPlans = { plans: [] };
+        let preselectedPlanType = null;
+        let selectedPlan = null;
+        let userPayments = [];
+        let appliedDiscount = { code: '', percent: 0, discountedAmount: null };
+        let allMocks = [];
+
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        // ---------- Guest Detection ----------
+        const isGuest = !user || user.isGuest === true || user.guest === true ||
+            (user.userId && user.userId.toString().toLowerCase() === 'guest') ||
+            (user.username && user.username.toString().toLowerCase() === 'guest');
+
+        const FALLBACK_PLANS = {
+            plans: [
+                { type: "premium_1m", name: "Premium Monthly", price: 99, originalPrice: 199, duration: 30,
+                    icon: "fa-crown", color: "#f59e0b",
+                    features: ["All premium mock tests", "Detailed performance analytics",
+                        "AI‑powered revision plans", "Priority support"
+                    ] },
+                { type: "premium_3m", name: "Premium Quarterly", price: 249, originalPrice: 499, duration: 90,
+                    icon: "fa-gem", color: "#8b5cf6",
+                    features: ["Everything in Monthly", "Exclusive topic‑wise tests",
+                        "Downloadable PDF solutions", "Early access to new features"
+                    ] }
+            ]
+        };
+
+        // ---------- Helpers ----------
+        function updateOnlineStatus() {
+            const banner = document.getElementById('offlineBanner');
+            if (!navigator.onLine) banner.classList.add('show');
+            else banner.classList.remove('show');
         }
-      } catch(e) {
-        Swal.fire({icon:'error',title:'Network Error',text:'Check your connection.'});
-      } finally {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit for Verification';
-      }
-    }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
 
-    function renderHistory() {
-      const l = document.getElementById('historyList');
-      if (!userPayments.length) { l.innerHTML = '<p style="text-align:center;color:var(--gray-500);">No payment history yet</p>'; return; }
-      l.innerHTML = userPayments.sort((a,b)=>new Date(b.requestDate)-new Date(a.requestDate)).map(p => `
-        <div class="history-item">
-          <div style="flex:1;min-width:120px;"><strong>${p.planName||p.planType}</strong><br><small style="color:var(--gray-500);">${new Date(p.requestDate).toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</small></div>
-          <div style="font-weight:700;">₹${p.amount}</div>
-          <span class="status-badge-mini status-${p.status.toLowerCase()}">${p.status}</span>
-          ${p.status==='Verified' && p.validUntil ? `<small style="color:#10b981;">Till ${new Date(p.validUntil).toLocaleDateString('en-IN')}</small>` : ''}
-        </div>`).join('');
-    }
-
-    // Footer
-    async function loadMocksForFooter() {
-      try {
-        const cached = localStorage.getItem(MOCKS_CACHE_KEY);
-        if (cached) { allMocks = JSON.parse(cached); renderFooterExamCategories(); }
-        const resp = await fetch('./mocks.json', { cache: 'no-store' });
-        if (resp.ok) { const data = await resp.json(); if (Array.isArray(data)) { allMocks = data; localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data)); renderFooterExamCategories(); } }
-      } catch(e) {}
-    }
-    function renderFooterExamCategories() {
-      const c = document.getElementById('footerExamCategories');
-      if (!allMocks.length) { c.innerHTML = '<li><a>No exams</a></li>'; return; }
-      const grouped = {};
-      allMocks.forEach(m => { if (!grouped[m.category]) grouped[m.category] = m; });
-      const cats = Object.keys(grouped).sort();
-      let html = cats.map(cat => `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}')">${cat}</a></li>`).join('');
-      html += `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
-      html += `<li><a onclick="navigate('book.html')"><i class="fas fa-book"></i> Books & PYQ</a></li>`;
-      c.innerHTML = html;
-    }
-    async function renderFooterUpcoming() {
-      const c = document.getElementById('footerUpcomingExams');
-      try {
-        const r = await fetch('./json/upcomingfooter.json', { cache: 'no-store' });
-        if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) { c.innerHTML = d.map(e => `<li><a onclick="showToast('${e.name} – ${e.date}','info',4000)">${e.name}</a></li>`).join(''); return; } }
-      } catch(e) {}
-      c.innerHTML = '<li><a>Loading upcoming exams...</a></li>';
-    }
-    function openInstallPopup() {
-      Swal.fire({
-        title: '📲 Install TestMaster Pro',
-        html: `<div style="text-align:center;"><p style="font-size:14px;font-weight:600;color:#243748;">Get the App Experience!</p><p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file.</p><div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;"><i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i><p style="font-weight:700;">TestMasterPro.apk</p></div></div>`,
-        confirmButtonText: '<i class="fas fa-download"></i> Download APK',
-        confirmButtonColor: '#4f46e5',
-        showCancelButton: true,
-        cancelButtonText: 'Maybe Later',
-        cancelButtonColor: '#94a3b8',
-        footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions</a>'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const link = document.createElement('a');
-          link.href = 'TestMasterPro.apk';
-          link.download = 'TestMasterPro.apk';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          showToast('Downloading TestMasterPro.apk...', 'success', 4000);
+        function showToast(msg, type = 'info', dur = 3000) {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast-item ${type}`;
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle' };
+            t.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
+            c.appendChild(t);
+            c.classList.add('show');
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translateY(-10px)';
+                t.style.transition = '0.3s';
+                setTimeout(() => { t.remove(); if (!c.children.length) c.classList.remove('show'); }, 300);
+            }, dur);
         }
-      });
-    }
 
-    // Init
-    (async function init() {
-      updateOnlineStatus();
-      updateUserUI();
-      startTimer(18000, document.getElementById('timer-clock'));
-      document.getElementById('paymentModal').addEventListener('click', function(e) { if (e.target === this) closePaymentModal(); });
-      document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && !document.getElementById('paymentModal').classList.contains('hidden')) closePaymentModal(); });
-      await loadPaymentPlans();    // always shows plans (fallback if needed)
-      if (user) await loadUserPayments();
-      await loadMocksForFooter();
-      renderFooterUpcoming();
-    })();
-  </script>
+        function navigate(url) { window.location.href = url; }
+
+        // Sidebar
+        function openSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('hidden');
+            requestAnimationFrame(() => overlay.classList.add('active'));
+            document.body.classList.add('sidebar-open');
+        }
+
+        function closeSidebar(e) { if (e.target === document.getElementById('sidebarOverlay')) closeSidebarDirect(); }
+
+        function closeSidebarDirect() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            setTimeout(() => { if (!overlay.classList.contains('active')) overlay.classList.add('hidden'); }, 400);
+        }
+
+        function sidebarNavigate(action) {
+            closeSidebarDirect();
+            setTimeout(() => {
+                const map = {
+                    dashboard: 'dashboard.html',
+                    mocks: 'exam.html',
+                    testseries: 'testseries.html',
+                    aimock: 'aimock.html',
+                    books: 'book.html',
+                    study: 'book.html',
+                    results: 'allresult.html',
+                    leaderboard: 'leaderboard.html',
+                    chat: 'chat.html',
+                    aichat: 'aichat.html',
+                    streak: 'streak.html',
+                    'daily-challenge': 'challenge.html',
+                    referral: 'referral.html',
+                    favorites: 'favorites.html',
+                    coins: 'coin-history.html',
+                    'coin-use': 'usecoin.html',
+                    reviews: 'reviews.html',
+                    premium: 'payment.html',
+                    profile: 'profile.html',
+                    instructions: 'instructions',
+                    logout: 'logout'
+                };
+                if (action === 'logout') logout();
+                else if (action === 'instructions') openHowToUse();
+                else if (map[action]) navigate(map[action]);
+            }, 300);
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Logout?',
+                text: 'Are you sure?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonColor: '#ff4d5a',
+                cancelButtonColor: '#243748'
+            }).then(r => {
+                if (r.isConfirmed) {
+                    localStorage.removeItem('user');
+                    showToast('Logged out', 'success');
+                    setTimeout(() => navigate('index.html'), 800);
+                }
+            });
+        }
+
+        function openHowToUse() {
+            Swal.fire({
+                title: 'How to Use',
+                html: '<div style="text-align:left;font-size:13px;"><p><b>1.</b> Select a Category.</p><p><b>2.</b> Use filters.</p><p><b>3.</b> Click Attempt.</p></div>',
+                confirmButtonText: 'Got it!',
+                confirmButtonColor: '#243748',
+                icon: 'info'
+            });
+        }
+
+        function setAvatar(elId, u) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            if (u?.avatarUrl) el.innerHTML = `<img src="${u.avatarUrl}" alt="Avatar">`;
+            else if (u?.profilePicUrl) el.innerHTML = `<img src="${u.profilePicUrl}" alt="Avatar">`;
+            else el.textContent = u?.name ? u.name.charAt(0).toUpperCase() : 'G';
+            const badge = document.getElementById('premiumBadge');
+            if (badge) badge.style.display = (u?.isPremium || u?.plan === 'premium') ? 'flex' : 'none';
+        }
+
+        function updateUserUI() {
+            if (user && !isGuest) {
+                setAvatar('userInitial', user);
+                setAvatar('sidebarAvatar', user);
+                document.getElementById('sidebarUserName').textContent = user.name || 'Student';
+                document.getElementById('sidebarUserTag').textContent = user.preparingFor || 'Learner';
+                document.getElementById('paymentEmail').value = user.email || '';
+                const pb = document.getElementById('premiumBadge');
+                if (pb) pb.style.display = (user?.isPremium || user?.plan === 'premium') ? 'flex' : 'none';
+                // Hide guest banner for real users
+                document.getElementById('guestInfoBanner').style.display = 'none';
+            } else {
+                // Guest or no user
+                document.getElementById('userInitial').textContent = 'G';
+                document.getElementById('sidebarAvatar').textContent = 'G';
+                document.getElementById('sidebarUserName').textContent = 'Guest';
+                document.getElementById('sidebarUserTag').textContent = 'Login to buy';
+                const pb = document.getElementById('premiumBadge');
+                if (pb) pb.style.display = 'none';
+                // Show guest info banner
+                document.getElementById('guestInfoBanner').style.display = 'flex';
+            }
+            document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('upiIdDisplay').textContent = UPI_ID;
+        }
+
+        function copyUPI() {
+            navigator.clipboard.writeText(UPI_ID).then(() => {
+                Swal.fire({
+                    title: '📋 Copied!',
+                    text: `UPI ID: ${UPI_ID}`,
+                    timer: 1800,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }).catch(() => {
+                Swal.fire({ title: 'UPI ID', text: `Please send payment to: ${UPI_ID}`,
+                    confirmButtonText: 'OK' });
+            });
+        }
+
+        function openUPIApp(app) {
+            if (!selectedPlan) {
+                Swal.fire({ icon: 'warning', title: 'Select a plan first', toast: true, position: 'top-end',
+                    timer: 2000, showConfirmButton: false });
+                return;
+            }
+            if (isGuest) { showLoginPopup(); return; }
+            const amount = appliedDiscount.discountedAmount || selectedPlan.amount;
+            const note = encodeURIComponent(`${selectedPlan.planType}_${user.username}`);
+            const name = encodeURIComponent(PAYEE_NAME);
+            let url = '';
+            switch (app) {
+                case 'gpay':
+                    url =
+                        `tez://upi/pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`;
+                    break;
+                case 'phonepe':
+                    url =
+                        `phonepe://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`;
+                    break;
+                case 'paytm':
+                    url =
+                        `paytmmp://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`;
+                    break;
+                default:
+                    url =
+                        `upi://pay?pa=${UPI_ID}&pn=${name}&am=${amount}&tn=${note}&cu=INR&mc=5411`;
+            }
+            try {
+                window.location.href = url;
+                setTimeout(() => {
+                    Swal.fire({
+                        title: '💸 Complete Payment',
+                        html: `<p>Send <strong>₹${amount}</strong> to:</p><div style="background:#fefce8;padding:12px;border-radius:12px;margin:8px 0;font-size:16px;font-weight:700;color:#243748;">${UPI_ID}</div><p style="font-size:13px;color:var(--gray-600);">${PAYEE_NAME}</p><button onclick="copyUPI()" style="padding:8px 18px;background:#243748;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:600;">📋 Copy UPI ID</button>`,
+                        confirmButtonText: '✅ I\'ve Completed Payment',
+                        confirmButtonColor: '#10b981',
+                        showCancelButton: true,
+                        cancelButtonText: 'Not Yet'
+                    });
+                }, 800);
+            } catch (e) { copyUPI(); }
+        }
+
+        // ---------- Discount Code ----------
+        async function applyDiscountCode() {
+            const code = document.getElementById('discountCodeInput').value.trim();
+            const msgEl = document.getElementById('discountMessage');
+            const discountSection = document.getElementById('discountSection');
+            const badge = document.getElementById('discountAppliedBadge');
+            const badgeText = document.getElementById('discountBadgeText');
+            const savingsBadge = document.getElementById('savingsBadge');
+            const btn = document.getElementById('applyDiscountBtn');
+
+            if (!code) {
+                msgEl.textContent = '⚠️ Please enter a discount code.';
+                msgEl.className = 'discount-message error';
+                return;
+            }
+            if (!selectedPlan) {
+                msgEl.textContent = '⚠️ Please select a plan first.';
+                msgEl.className = 'discount-message error';
+                return;
+            }
+
+            // Show checking animation
+            btn.disabled = true;
+            btn.classList.add('checking');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Checking...';
+            msgEl.textContent = '';
+            msgEl.className = 'discount-message';
+
+            try {
+                const res = await fetch(
+                    `${API_URL}?action=validateDiscountCode&discountCode=${encodeURIComponent(code)}`);
+                const data = await res.json();
+                if (data.success) {
+                    const pct = data.discountPercent;
+                    const discounted = Math.round(selectedPlan.amount * (1 - pct / 100));
+                    const saved = selectedPlan.amount - discounted;
+                    appliedDiscount = { code, percent: pct, discountedAmount: discounted };
+
+                    document.getElementById('modalAmount').textContent = discounted;
+                    document.getElementById('paymentAmount').value = discounted;
+                    const origEl = document.getElementById('modalOriginalPrice');
+                    origEl.style.display = 'inline';
+                    origEl.textContent = '₹' + selectedPlan.amount;
+
+                    // Show savings badge
+                    savingsBadge.style.display = 'inline-block';
+                    savingsBadge.textContent = `Save ₹${saved}`;
+
+                    // Show applied badge
+                    badge.classList.add('show');
+                    badgeText.textContent = `${pct}% off · You save ₹${saved}`;
+
+                    // Update discount section styling
+                    discountSection.classList.add('has-discount');
+                    msgEl.textContent = '';
+                    msgEl.className = 'discount-message';
+
+                    // Mini confetti
+                    if (typeof confetti === 'function') {
+                        confetti({ particleCount: 40, spread: 60, origin: { x: 0.5, y: 0.5 },
+                            colors: ['#10b981', '#7c3aed', '#fbbf24'] });
+                    }
+                    showToast(`🎉 ${pct}% discount applied! You save ₹${saved}`, 'success', 3500);
+                } else {
+                    msgEl.textContent = '❌ Invalid or expired discount code.';
+                    msgEl.className = 'discount-message error';
+                    removeDiscountVisuals();
+                }
+            } catch (e) {
+                msgEl.textContent = '⚠️ Error checking code. Please try again.';
+                msgEl.className = 'discount-message error';
+                removeDiscountVisuals();
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('checking');
+                btn.innerHTML = '<i class="fas fa-check"></i> Apply';
+            }
+        }
+
+        function removeDiscount() {
+            removeDiscountVisuals();
+            resetDiscount();
+            showToast('Discount removed', 'info', 2000);
+        }
+
+        function removeDiscountVisuals() {
+            const discountSection = document.getElementById('discountSection');
+            const badge = document.getElementById('discountAppliedBadge');
+            const savingsBadge = document.getElementById('savingsBadge');
+            const msgEl = document.getElementById('discountMessage');
+            discountSection.classList.remove('has-discount');
+            badge.classList.remove('show');
+            savingsBadge.style.display = 'none';
+            msgEl.textContent = '';
+            msgEl.className = 'discount-message';
+        }
+
+        function resetDiscount() {
+            appliedDiscount = { code: '', percent: 0, discountedAmount: null };
+            if (selectedPlan) {
+                document.getElementById('modalAmount').textContent = selectedPlan.amount;
+                document.getElementById('paymentAmount').value = selectedPlan.amount;
+                const origEl = document.getElementById('modalOriginalPrice');
+                const savingsBadge = document.getElementById('savingsBadge');
+                savingsBadge.style.display = 'none';
+                if (selectedPlan.originalPrice && selectedPlan.originalPrice > selectedPlan.amount) {
+                    origEl.style.display = 'inline';
+                    origEl.textContent = '₹' + selectedPlan.originalPrice;
+                } else {
+                    origEl.style.display = 'none';
+                }
+            }
+            removeDiscountVisuals();
+            document.getElementById('discountCodeInput').value = '';
+            document.getElementById('discountMessage').textContent = '';
+            document.getElementById('discountMessage').className = 'discount-message';
+        }
+
+        function showLoginPopup() {
+            Swal.fire({
+                title: 'Login Required',
+                text: 'You need to be logged in to purchase a plan. Please log in with your real account.',
+                icon: 'warning',
+                confirmButtonText: 'Go to Login',
+                confirmButtonColor: '#243748',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                cancelButtonColor: '#94a3b8'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('user');
+                    navigate('login.html');
+                }
+            });
+        }
+
+        // ---------- Load plans ----------
+        async function loadPaymentPlans() {
+            let loaded = false;
+            try {
+                const cached = JSON.parse(localStorage.getItem(PLANS_CACHE_KEY));
+                if (cached && Array.isArray(cached.plans) && cached.plans.length) {
+                    allPlans = cached;
+                    loaded = true;
+                }
+            } catch (e) {}
+
+            try {
+                const res = await fetch('payment.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && Array.isArray(data.plans) && data.plans.length) {
+                        allPlans = data;
+                        localStorage.setItem(PLANS_CACHE_KEY, JSON.stringify(data));
+                        loaded = true;
+                        return;
+                    }
+                }
+            } catch (e) {}
+
+            try {
+                const res = await fetch(`${API_URL}?action=getPaymentPlans`);
+                const data = await res.json();
+                if (data.success && Array.isArray(data.plans) && data.plans.length) {
+                    allPlans = data;
+                    localStorage.setItem(PLANS_CACHE_KEY, JSON.stringify(data));
+                    loaded = true;
+                    return;
+                }
+            } catch (e) {}
+
+            if (!loaded) {
+                allPlans = { ...FALLBACK_PLANS };
+            }
+        }
+
+        function processURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            const planType = params.get('planType');
+            const seriesCode = params.get('seriesCode');
+            const planNameFromUrl = params.get('planName');
+
+            if (planType) {
+                preselectedPlanType = planType;
+                if (seriesCode) sessionStorage.setItem('pendingSeriesCode', seriesCode);
+                if (planNameFromUrl) sessionStorage.setItem('pendingPlanName', planNameFromUrl);
+            }
+        }
+
+        // ---------- Render Plans ----------
+        function renderPlans() {
+            const container = document.getElementById('singlePlanContainer');
+            const otherSection = document.getElementById('otherPlansSection');
+
+            if (!allPlans.plans.length) {
+                container.innerHTML =
+                    '<div class="plan-card"><p style="text-align:center;color:var(--gray-500);">No plans available right now. Please check back later.</p></div>';
+                otherSection.classList.add('hidden');
+                return;
+            }
+
+            if (preselectedPlanType) {
+                // Show single focused plan + other plans in mini section
+                renderSingleFocusedPlan(container);
+                renderOtherPlans();
+            } else {
+                // Show ALL plans in a beautiful grid
+                renderAllPlansGrid(container);
+                otherSection.classList.add('hidden');
+            }
+        }
+
+        function renderSingleFocusedPlan(container) {
+            const plan = allPlans.plans.find(p => p.type === preselectedPlanType) || allPlans.plans[0];
+            if (!plan) {
+                container.innerHTML =
+                    '<div class="plan-card"><p style="text-align:center;color:var(--gray-500);">Plan not found.</p></div>';
+                return;
+            }
+            const isActive = user && !isGuest && userPayments.some(pp => pp.status === 'Verified' && pp.planType === plan
+                .type && pp
+                .validUntil && new Date(pp.validUntil) > new Date());
+            const iconClass = plan.icon || 'fa-crown';
+            const color = plan.color || '#243748';
+            const originalPrice = plan.originalPrice || 0;
+            const hasOriginal = originalPrice && originalPrice > plan.price;
+            const features = (plan.features || []).map(f => typeof f === 'string' ? f : (f.text || f));
+
+            // Guest users see "Login to Buy" button
+            const btnText = isGuest ?
+                `<i class="fas fa-lock"></i> Login to Buy` :
+                (isActive ? `<i class="fas fa-check"></i> Already Subscribed` :
+                    `<i class="fas fa-shopping-cart"></i> Buy ${plan.name}`);
+            const btnClass = isGuest ? 'select-plan-btn btn-guest' : (isActive ? 'select-plan-btn btn-disabled' :
+                'select-plan-btn');
+            const btnDisabled = (isActive && !isGuest) ? 'disabled' : '';
+            const btnOnclick = isGuest ?
+                `onclick="showLoginPopup()"` :
+                `onclick="openPaymentModalFromPlan('${plan.type}', '${plan.name.replace(/'/g, "\\'")}', ${plan.price}, ${plan.duration}, ${originalPrice})"`;
+
+            container.innerHTML = `
+            <div class="plan-card selected">
+              <div class="plan-header">
+                <div class="plan-icon-circle" style="background:${color};"><i class="fas ${iconClass}"></i></div>
+                <div class="plan-name">${plan.name}</div>
+                <div class="plan-price">
+                  ${hasOriginal ? `<span class="original-price">₹${originalPrice}</span>` : ''}
+                  ₹${plan.price}
+                  ${hasOriginal ? `<span class="sale-badge">Save ₹${originalPrice - plan.price}</span>` : ''}
+                </div>
+                <div class="plan-duration">⏰ ${plan.duration} Days Access</div>
+                ${isActive ? '<div class="active-plan-indicator"><i class="fas fa-check-circle"></i> Currently Active</div>' : ''}
+              </div>
+              <ul class="features-list">
+                ${features.map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}
+              </ul>
+              <button class="${btnClass}" ${btnDisabled} ${btnOnclick}>
+                ${btnText}
+              </button>
+            </div>`;
+        }
+
+        function renderAllPlansGrid(container) {
+            // Find best value plan (highest savings)
+            let bestValueType = null;
+            let maxSaving = 0;
+            allPlans.plans.forEach(p => {
+                const saving = (p.originalPrice || 0) - p.price;
+                if (saving > maxSaving) {
+                    maxSaving = saving;
+                    bestValueType = p.type;
+                }
+            });
+
+            const cardsHTML = allPlans.plans.map(plan => {
+                const isActive = user && !isGuest && userPayments.some(pp => pp.status === 'Verified' && pp
+                    .planType === plan
+                    .type && pp.validUntil && new Date(pp.validUntil) > new Date());
+                const iconClass = plan.icon || 'fa-crown';
+                const color = plan.color || '#243748';
+                const originalPrice = plan.originalPrice || 0;
+                const hasOriginal = originalPrice && originalPrice > plan.price;
+                const features = (plan.features || []).map(f => typeof f === 'string' ? f : (f.text || f));
+                const isBestValue = plan.type === bestValueType && hasOriginal && allPlans.plans.length > 1;
+
+                // Guest users see "Login to Buy" button
+                const btnText = isGuest ?
+                    `<i class="fas fa-lock"></i> Login to Buy` :
+                    (isActive ? `<i class="fas fa-check"></i> Already Subscribed` :
+                        `<i class="fas fa-shopping-cart"></i> Buy ${plan.name}`);
+                const btnClass = isGuest ? 'select-plan-btn btn-guest' : (isActive ?
+                    'select-plan-btn btn-disabled' : 'select-plan-btn');
+                const btnDisabled = (isActive && !isGuest) ? 'disabled' : '';
+                const btnOnclick = isGuest ?
+                    `onclick="showLoginPopup()"` :
+                    `onclick="openPaymentModalFromPlan('${plan.type}', '${plan.name.replace(/'/g, "\\'")}', ${plan.price}, ${plan.duration}, ${originalPrice})"`;
+
+                return `
+              <div class="plan-card ${isBestValue ? 'best-value' : ''}">
+                ${isBestValue ? '<div class="best-value-ribbon">BEST VALUE</div>' : ''}
+                <div class="plan-header">
+                  <div class="plan-icon-circle" style="background:${color};"><i class="fas ${iconClass}"></i></div>
+                  <div class="plan-name">${plan.name}</div>
+                  <div class="plan-price">
+                    ${hasOriginal ? `<span class="original-price">₹${originalPrice}</span>` : ''}
+                    ₹${plan.price}
+                    ${hasOriginal ? `<span class="sale-badge">Save ₹${originalPrice - plan.price}</span>` : ''}
+                  </div>
+                  <div class="plan-duration">⏰ ${plan.duration} Days Access</div>
+                  ${isActive ? '<div class="active-plan-indicator"><i class="fas fa-check-circle"></i> Currently Active</div>' : ''}
+                </div>
+                <ul class="features-list">
+                  ${features.map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}
+                </ul>
+                <button class="${btnClass}" ${btnDisabled} ${btnOnclick}>
+                  ${btnText}
+                </button>
+              </div>`;
+            }).join('');
+
+            container.innerHTML = `
+            <p class="all-plans-section-title">🎯 Select a plan to unlock premium features</p>
+            <div class="all-plans-grid">${cardsHTML}</div>`;
+        }
+
+        function renderOtherPlans() {
+            const section = document.getElementById('otherPlansSection');
+            const grid = document.getElementById('otherPlansGrid');
+            if (!preselectedPlanType || allPlans.plans.length <= 1) {
+                section.classList.add('hidden');
+                return;
+            }
+            const otherPlans = allPlans.plans.filter(p => p.type !== preselectedPlanType);
+            if (!otherPlans.length) {
+                section.classList.add('hidden');
+                return;
+            }
+            section.classList.remove('hidden');
+            grid.innerHTML = otherPlans.map(p => {
+                const icon = p.icon || 'fa-crown';
+                const color = p.color || '#243748';
+                return `
+              <div class="mini-plan-card" onclick="switchToPlan('${p.type}')">
+                <div class="mini-icon" style="background:${color};"><i class="fas ${icon}"></i></div>
+                <div class="mini-plan-info">
+                  <div class="mini-name">${p.name}</div>
+                  <div class="mini-price">₹${p.price} <small style="font-size:11px;color:#64748b;">/ ${p.duration}d</small></div>
+                </div>
+                <i class="fas fa-chevron-right mini-arrow"></i>
+              </div>`;
+            }).join('');
+        }
+
+        function switchToPlan(planType) {
+            preselectedPlanType = planType;
+            renderPlans();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ---------- Payment Modal ----------
+        function openPaymentModalFromPlan(planType, planName, price, duration, originalPrice) {
+            if (isGuest) { showLoginPopup(); return; }
+            if (!user) { showLoginPopup(); return; }
+            selectedPlan = { planType, planName, amount: price, duration, originalPrice };
+            document.getElementById('modalPlanText').textContent = `${planName} · ₹${price} for ${duration} days`;
+            document.getElementById('modalAmount').textContent = price;
+            document.getElementById('modalDuration').textContent = duration;
+            document.getElementById('paymentAmount').value = price;
+            document.getElementById('transactionID').value = '';
+            document.getElementById('discountCodeInput').value = '';
+            document.getElementById('discountMessage').textContent = '';
+            document.getElementById('discountMessage').className = 'discount-message';
+            const origEl = document.getElementById('modalOriginalPrice');
+            const savingsBadge = document.getElementById('savingsBadge');
+            savingsBadge.style.display = 'none';
+            if (originalPrice && originalPrice > price) {
+                origEl.style.display = 'inline';
+                origEl.textContent = '₹' + originalPrice;
+            } else {
+                origEl.style.display = 'none';
+            }
+            resetDiscount();
+            document.getElementById('paymentModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+            document.body.style.overflow = '';
+            selectedPlan = null;
+            resetDiscount();
+        }
+
+        async function submitPaymentRequest() {
+            if (!selectedPlan || !user || isGuest) return;
+            const txnId = document.getElementById('transactionID').value.trim();
+            const amountPaid = document.getElementById('paymentAmount').value.trim();
+            if (!txnId) {
+                Swal.fire({ icon: 'warning', title: 'Missing', text: 'Please enter Transaction ID.' });
+                return;
+            }
+            if (!amountPaid || isNaN(parseFloat(amountPaid))) {
+                Swal.fire({ icon: 'warning', title: 'Missing', text: 'Enter amount paid.' });
+                return;
+            }
+            const btn = document.getElementById('submitPaymentBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Submitting...';
+            try {
+                const params = new URLSearchParams({
+                    action: 'submitPayment',
+                    username: user.username,
+                    planType: selectedPlan.planType,
+                    planName: selectedPlan.planName,
+                    amount: amountPaid,
+                    transactionID: txnId,
+                    paymentMethod: 'UPI'
+                });
+                if (appliedDiscount.code) params.append('discountCode', appliedDiscount.code);
+                const seriesCode = sessionStorage.getItem('pendingSeriesCode');
+                const pendingPlanName = sessionStorage.getItem('pendingPlanName');
+                if (seriesCode) { params.append('seriesCode', seriesCode);
+                    sessionStorage.removeItem('pendingSeriesCode'); }
+                if (pendingPlanName) { params.append('seriesPlanName', pendingPlanName);
+                    sessionStorage.removeItem('pendingPlanName'); }
+                const r = await fetch(API_URL, { method: 'POST', body: params });
+                const d = await r.json();
+                if (d.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '🎉 Payment Submitted!',
+                        html: `<p>Your payment is now under verification.</p><div style="background:#f8fafc;padding:12px;border-radius:12px;margin:10px 0;"><p><strong>Payment ID:</strong> ${d.paymentId}</p><p><strong>Plan:</strong> ${selectedPlan.planName}</p><p><strong>Amount:</strong> ₹${amountPaid}</p></div>`,
+                        confirmButtonColor: '#10b981',
+                        confirmButtonText: 'Got It'
+                    });
+                    closePaymentModal();
+                    await loadUserPayments();
+                    document.getElementById('historySection').style.display = 'block';
+                    document.getElementById('historySection').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Submission Failed', text: d.error ||
+                            'Please try again.' });
+                }
+            } catch (e) {
+                Swal.fire({ icon: 'error', title: 'Network Error', text: 'Check your connection.' });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit for Verification';
+            }
+        }
+
+        // ---------- User Payments ----------
+        async function loadUserPayments() {
+            if (!user || isGuest) return;
+            try { userPayments = JSON.parse(localStorage.getItem(PAYMENTS_CACHE_KEY)) || []; } catch (e) {}
+            try {
+                const res = await fetch(
+                    `${API_URL}?action=getUserPayments&username=${encodeURIComponent(user.username)}`);
+                const data = await res.json();
+                if (data.success) { userPayments = data.payments;
+                    localStorage.setItem(PAYMENTS_CACHE_KEY, JSON.stringify(userPayments)); }
+            } catch (e) {}
+            updateBanner();
+            renderHistory();
+        }
+
+        function updateBanner() {
+            const active = userPayments.filter(p => p.status === 'Verified' && p.validUntil && new Date(p.validUntil) >
+                new Date());
+            const b = document.getElementById('activePlanBanner');
+            if (active.length) {
+                b.style.display = 'flex';
+                const latest = active.sort((a, b) => new Date(b.verificationDate) - new Date(a.verificationDate))[0];
+                document.getElementById('activePlanName').textContent = latest.planName || latest.planType;
+                document.getElementById('activePlanExpiry').textContent =
+                    `Valid until: ${new Date(latest.validUntil).toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}`;
+            } else b.style.display = 'none';
+        }
+
+        function renderHistory() {
+            const l = document.getElementById('historyList');
+            if (!userPayments.length) {
+                l.innerHTML = '<p style="text-align:center;color:var(--gray-500);">No payment history yet</p>';
+                return;
+            }
+            l.innerHTML = userPayments.sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate)).map(p => `
+            <div class="history-item">
+              <div style="flex:1;min-width:120px;"><strong>${p.planName || p.planType}</strong><br><small style="color:var(--gray-500);">${new Date(p.requestDate).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</small></div>
+              <div style="font-weight:700;">₹${p.amount}</div>
+              <span class="status-badge-mini status-${p.status.toLowerCase()}">${p.status}</span>
+              ${p.status === 'Verified' && p.validUntil ? `<small style="color:#10b981;">Till ${new Date(p.validUntil).toLocaleDateString('en-IN')}</small>` : ''}
+            </div>`).join('');
+        }
+
+        // ---------- Footer ----------
+        async function loadMocksForFooter() {
+            try {
+                const cached = localStorage.getItem(MOCKS_CACHE_KEY);
+                if (cached) { allMocks = JSON.parse(cached);
+                    renderFooterExamCategories(); }
+                const resp = await fetch('./mocks.json', { cache: 'no-store' });
+                if (resp.ok) { const data = await resp.json(); if (Array.isArray(data)) { allMocks = data;
+                        localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data));
+                        renderFooterExamCategories(); } }
+            } catch (e) {}
+        }
+
+        function renderFooterExamCategories() {
+            const c = document.getElementById('footerExamCategories');
+            if (!allMocks.length) { c.innerHTML = '<li><a>No exams</a></li>'; return; }
+            const grouped = {};
+            allMocks.forEach(m => { if (!grouped[m.category]) grouped[m.category] = m; });
+            const cats = Object.keys(grouped).sort();
+            let html = cats.map(cat =>
+                `<li><a onclick="navigate('exam2.html?category=${encodeURIComponent(cat)}')">${cat}</a></li>`).join(
+                '');
+            html +=
+                `<li><a onclick="navigate('aimock.html')"><i class="fas fa-robot"></i> AI Mock Test</a></li>`;
+            html +=
+                `<li><a onclick="navigate('book.html')"><i class="fas fa-book"></i> Books & PYQ</a></li>`;
+            c.innerHTML = html;
+        }
+
+        async function renderFooterUpcoming() {
+            const c = document.getElementById('footerUpcomingExams');
+            try {
+                const r = await fetch('./json/upcomingfooter.json', { cache: 'no-store' });
+                if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) { c.innerHTML = d.map(e =>
+                        `<li><a onclick="showToast('${e.name} – ${e.date}','info',4000)">${e.name}</a></li>`).join(
+                        ''); return; } }
+            } catch (e) {}
+            c.innerHTML = '<li><a>Loading upcoming exams...</a></li>';
+        }
+
+        function openInstallPopup() {
+            Swal.fire({
+                title: '📲 Install TestMaster Pro',
+                html: `<div style="text-align:center;"><p style="font-size:14px;font-weight:600;color:#243748;">Get the App Experience!</p><p style="font-size:12px;color:#64748b;">Download the <strong>TestMasterPro.apk</strong> file.</p><div style="background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0;border:1px dashed #cbd5e1;"><i class="fas fa-file-archive" style="font-size:32px;color:#4f46e5;"></i><p style="font-weight:700;">TestMasterPro.apk</p></div></div>`,
+                confirmButtonText: '<i class="fas fa-download"></i> Download APK',
+                confirmButtonColor: '#4f46e5',
+                showCancelButton: true,
+                cancelButtonText: 'Maybe Later',
+                cancelButtonColor: '#94a3b8',
+                footer: '<a href="apk.html" style="font-size:11px;color:#4f46e5;">View install instructions</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const link = document.createElement('a');
+                    link.href = 'TestMasterPro.apk';
+                    link.download = 'TestMasterPro.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Downloading TestMasterPro.apk...', 'success', 4000);
+                }
+            });
+        }
+
+        // ---------- Init ----------
+        (async function init() {
+            updateOnlineStatus();
+            updateUserUI();
+            document.getElementById('paymentModal').addEventListener('click', function(e) {
+                if (e.target === this) closePaymentModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !document.getElementById('paymentModal').classList.contains(
+                        'hidden')) closePaymentModal();
+            });
+            await loadPaymentPlans();
+            processURLParams();
+            renderPlans();
+            if (user && !isGuest) await loadUserPayments();
+            await loadMocksForFooter();
+            renderFooterUpcoming();
+        })();
+    </script>
 </body>
 </html>
