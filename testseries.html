@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -311,7 +312,8 @@
         <button class="sidebar-nav-item" onclick="sidebarNavigate('aimock')"><i class="fas fa-robot"></i> AI Mock Test</button>
         <button class="sidebar-nav-item" onclick="sidebarNavigate('books')"><i class="fas fa-book"></i> Books & PYQ</button>
         <button class="sidebar-nav-item" onclick="sidebarNavigate('study')"><i class="fas fa-folder-open"></i> Study Material</button>
-        <button class="sidebar-nav-item" onclick="sidebarNavigate('results')"><i class="fas fa-chart-bar"></i> My Results</button>
+        <!-- ✅ Modified: My Results now saves page before navigating -->
+        <button class="sidebar-nav-item" onclick="goToResults()"><i class="fas fa-chart-bar"></i> My Results</button>
         <button class="sidebar-nav-item" onclick="sidebarNavigate('leaderboard')"><i class="fas fa-trophy"></i> Leaderboard</button>
         <button class="sidebar-nav-item" onclick="sidebarNavigate('aichat')"><i class="fas fa-robot"></i> AI Chat</button>
         <button class="sidebar-nav-item" onclick="sidebarNavigate('chat')"><i class="fas fa-comments"></i> Support Chat</button>
@@ -404,7 +406,8 @@
   <nav class="bottom-nav">
     <button class="bottom-nav-item" onclick="goHome()"><i class="fas fa-home"></i><span>Home</span></button>
     <button class="bottom-nav-item active"><i class="fas fa-layer-group"></i><span>Test Series</span></button>
-    <button class="bottom-nav-item" onclick="navigate('allresult.html')"><i class="fas fa-chart-bar"></i><span>Results</span></button>
+    <!-- ✅ Modified: Results now saves page before navigating -->
+    <button class="bottom-nav-item" onclick="goToResults()"><i class="fas fa-chart-bar"></i><span>Results</span></button>
     <button class="bottom-nav-item" onclick="navigate('profile.html')"><i class="fas fa-user"></i><span>Profile</span></button>
   </nav>
 
@@ -451,6 +454,12 @@
 
     function goHome() { window.location.href = user ? 'dashboard.html' : 'index.html'; }
     function navigate(url) { window.location.href = url; }
+
+    // ✅ New function: saves current page URL before navigating to results
+    function goToResults() {
+      localStorage.setItem('lastExamPage', window.location.href);
+      navigate('allresult.html');
+    }
 
     // Sidebar & Logout
     function openSidebar() {
