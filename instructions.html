@@ -7,347 +7,547 @@
     <title>Test Instructions · TestMaster Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
     <style>
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #dbeafe;
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
             --success: #22c55e;
+            --success-light: #f0fdf4;
             --danger: #ef4444;
+            --danger-light: #fef2f2;
             --warning: #f59e0b;
+            --warning-light: #fffbeb;
             --bg: #f8fafc;
+            --bg-alt: #f1f5f9;
             --card-bg: #ffffff;
             --text: #1e293b;
             --text-heading: #0f172a;
             --text-secondary: #64748b;
+            --text-muted: #94a3b8;
             --border: #e2e8f0;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-            --radius: 12px;
-            --radius-lg: 16px;
-            --font: 'Poppins', sans-serif;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-light: #f1f5f9;
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.10);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+            --radius-sm: 8px;
+            --radius: 14px;
+            --radius-lg: 18px;
+            --radius-xl: 22px;
+            --font: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: var(--font);
-            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f8fafc 100%);
+            background: #f0f4ff;
+            background-image: radial-gradient(ellipse at 20% 10%, #e8f0fe 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 90%, #dbeafe 0%, transparent 55%),
+                linear-gradient(180deg, #f0f4ff 0%, #f8fafc 40%, #f1f5f9 100%);
             color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 16px;
+            padding: 12px 12px calc(100px + var(--safe-bottom));
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
         }
 
-        /* Top Navigation Bar */
+        /* ========== TOP NAVIGATION ========== */
         .top-nav {
             width: 100%;
-            max-width: 900px;
+            max-width: 960px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             background: var(--card-bg);
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
+            position: sticky;
+            top: 12px;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+        }
+        .top-nav.scrolled {
+            box-shadow: var(--shadow-md);
         }
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 20px;
+            gap: 10px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
             transition: var(--transition);
+            letter-spacing: -0.3px;
         }
-        .logo:hover { transform: scale(1.02); }
+        .logo:hover {
+            transform: scale(1.03);
+        }
         .logo img {
-            height: 40px;
-            width: 40px;
+            height: 36px;
+            width: 36px;
             border-radius: 10px;
             object-fit: cover;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.18);
+            transition: var(--transition);
+        }
+        .logo:hover img {
+            box-shadow: 0 5px 16px rgba(37, 99, 235, 0.28);
         }
         .nav-back {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: var(--bg);
+            gap: 7px;
+            background: var(--bg-alt);
             color: var(--text);
             border: 1px solid var(--border);
-            padding: 10px 18px;
-            border-radius: 8px;
+            padding: 9px 16px;
+            border-radius: 25px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: var(--transition);
             text-decoration: none;
             white-space: nowrap;
+            font-family: var(--font);
         }
         .nav-back:hover {
             background: var(--primary);
             color: #fff;
             border-color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+        .nav-back:active {
+            transform: scale(0.96);
+            transition: var(--transition-fast);
         }
 
-        /* Main Card */
+        /* ========== MAIN CARD ========== */
         .card {
             background: var(--card-bg);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow-lg);
-            padding: 32px 28px;
+            padding: 0;
             width: 100%;
-            max-width: 900px;
+            max-width: 960px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
             border: 1px solid var(--border);
-            animation: slideUp 0.5s ease-out;
+            animation: cardSlideUp 0.5s ease-out;
+            overflow: hidden;
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Exam Header */
-        .exam-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
+        /* ========== HERO SECTION ========== */
+        .hero-section {
+            padding: 28px 28px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
+            border-bottom: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
         }
         .exam-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            padding: 6px 16px;
+            gap: 7px;
+            background: var(--primary-100);
+            color: var(--primary-700);
+            padding: 7px 16px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-        }
-        .exam-image-area img {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            object-fit: cover;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border: 4px solid #fff;
-            background: #f1f5f9;
+            letter-spacing: 0.3px;
+            position: relative;
+            z-index: 1;
             transition: var(--transition);
         }
+        .exam-badge i {
+            font-size: 11px;
+        }
+        .exam-image-area {
+            margin: 14px auto 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .exam-image-area img {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            object-fit: cover;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+            border: 4px solid #fff;
+            background: #f8fafc;
+            transition: var(--transition-smooth);
+        }
         .exam-image-area img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 32px rgba(37,99,235,0.2);
+            transform: scale(1.06);
+            box-shadow: 0 14px 36px rgba(37, 99, 235, 0.18);
         }
         .test-title {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             text-align: center;
             color: var(--text-heading);
             line-height: 1.3;
             word-break: break-word;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.4px;
         }
         .test-subtitle {
-            font-size: 15px;
+            font-size: 13px;
             color: var(--text-secondary);
             text-align: center;
             font-weight: 500;
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Info Grid */
+        /* ========== INFO STATS GRID ========== */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 16px 28px 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-light);
         }
         .info-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            background: var(--bg);
             border-radius: var(--radius);
-            padding: 16px;
+            padding: 14px 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            border: 1px solid var(--border);
+            gap: 5px;
+            border: 1px solid transparent;
             transition: var(--transition);
+            text-align: center;
+            cursor: default;
         }
         .info-card:hover {
             background: #fff;
             box-shadow: var(--shadow-md);
             transform: translateY(-2px);
-            border-color: var(--primary-light);
+            border-color: var(--primary-100);
         }
         .info-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary-light), #bfdbfe);
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, var(--primary-100), #bfdbfe);
             color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 17px;
             flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .info-card:hover .info-icon {
+            background: linear-gradient(135deg, #bfdbfe, var(--primary-100));
+            transform: scale(1.08);
         }
         .info-content h4 {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
+            margin: 0;
         }
         .info-content .val {
             font-size: 17px;
             font-weight: 700;
             color: var(--text-heading);
+            line-height: 1.2;
         }
 
-        /* Breakdown Section */
-        .breakdown-section {
-            background: var(--bg);
-            border-radius: var(--radius);
-            padding: 20px;
-            border: 1px solid var(--border);
-            animation: fadeIn 0.4s ease-out;
+        /* ========== STEP INDICATOR ========== */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding: 18px 28px;
+            background: #fafbff;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .breakdown-section h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 14px;
+        .step-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--text-heading);
-        }
-        .breakdown-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        .breakdown-table th {
-            text-align: left;
-            padding: 10px 8px;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            font-weight: 600;
-            color: var(--text-secondary);
             font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: var(--transition);
+            padding: 6px 8px;
+            border-radius: 20px;
+            cursor: default;
+            position: relative;
         }
-        .breakdown-table td {
-            padding: 10px 8px;
-            border-bottom: 1px solid var(--border);
-            font-weight: 500;
-            color: var(--text);
+        .step-item.active {
+            color: var(--primary);
         }
-        .breakdown-table tr:last-child td { border-bottom: none; }
-        .breakdown-table tr:hover td { background: #f8fafc; }
-        .col-no { width: 50px; text-align: center; color: var(--primary); font-weight: 700; }
-        .col-name { font-weight: 600; }
-        .col-count { text-align: center; font-weight: 700; color: var(--primary); }
+        .step-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--bg-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .step-item.active .step-dot {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+        }
+        .step-line {
+            width: 28px;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .step-line.done {
+            background: var(--primary);
+        }
 
-        /* Dynamic Selection Area */
+        /* ========== CONTENT WRAPPER (Desktop 2-col) ========== */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* ========== MAIN CONTENT COLUMN ========== */
+        .main-column {
+            padding: 20px 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ========== DYNAMIC SELECT AREA ========== */
         .dynamic-select-area {
             display: none;
-            background: linear-gradient(135deg, #f0f4ff, #f8fafc);
-            border: 2px solid var(--primary-light);
-            border-radius: var(--radius);
+            background: #fff;
+            border: 2px solid var(--primary-100);
+            border-radius: var(--radius-lg);
             padding: 20px;
             flex-direction: column;
             gap: 16px;
             animation: fadeIn 0.4s ease-out;
+            box-shadow: var(--shadow-xs);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .dynamic-select-area h3 {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text-heading);
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 0;
+        }
+        .tree-toolbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tree-toolbar button {
+            font-family: var(--font);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 7px 13px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            letter-spacing: 0.2px;
+        }
+        .tree-toolbar button:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-100);
+            color: var(--primary);
+        }
+        .tree-toolbar button:active {
+            transform: scale(0.95);
+            transition: var(--transition-fast);
         }
         .subject-tree {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 350px;
+            max-height: 380px;
             overflow-y: auto;
             padding-right: 4px;
+            scroll-behavior: smooth;
         }
         .subject-tree::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         .subject-tree::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: transparent;
             border-radius: 3px;
         }
         .subject-tree::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #dde4ef;
             border-radius: 3px;
+        }
+        .subject-tree::-webkit-scrollbar-thumb:hover {
+            background: #c4cddb;
         }
         .subject-node {
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: var(--radius);
             overflow: hidden;
             background: #fff;
             transition: var(--transition);
+            box-shadow: var(--shadow-xs);
         }
         .subject-node:hover {
+            box-shadow: var(--shadow);
+            border-color: #d0d7e3;
+        }
+        .subject-node.open {
+            border-color: var(--primary-100);
             box-shadow: var(--shadow);
         }
         .subject-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 16px;
+            padding: 13px 16px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             transition: background 0.2s;
             user-select: none;
             background: #fff;
+            border-radius: var(--radius);
         }
         .subject-header:hover {
-            background: var(--primary-light);
+            background: var(--primary-50);
+        }
+        .subject-node.open .subject-header {
+            background: #fafbff;
+            border-radius: var(--radius) var(--radius) 0 0;
         }
         .subject-header input[type="checkbox"] {
             width: 18px;
             height: 18px;
             accent-color: var(--primary);
             cursor: pointer;
+            flex-shrink: 0;
+            border-radius: 4px;
+            transition: var(--transition-fast);
+        }
+        .subject-header input[type="checkbox"]:indeterminate {
+            accent-color: #f59e0b;
         }
         .subject-header .expand-icon {
             margin-left: auto;
-            transition: transform 0.3s;
-            font-size: 13px;
-            color: var(--text-secondary);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            font-size: 12px;
+            color: var(--text-muted);
+            flex-shrink: 0;
         }
         .subject-node.open .subject-header .expand-icon {
             transform: rotate(90deg);
+            color: var(--primary);
         }
         .chapter-list {
             display: none;
             flex-direction: column;
-            gap: 4px;
-            padding: 8px 16px 14px 40px;
-            background: #f8fafc;
-            border-top: 1px solid var(--border);
+            gap: 2px;
+            padding: 6px 16px 14px 40px;
+            background: #fafbff;
+            border-top: 1px solid var(--border-light);
+            animation: slideDown 0.25s ease-out;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
         }
         .subject-node.open .chapter-list {
             display: flex;
@@ -355,13 +555,17 @@
         .chapter-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            padding: 5px 0;
+            gap: 9px;
+            font-size: 12px;
+            padding: 6px 10px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--transition-fast);
+            border-radius: 6px;
+            font-weight: 500;
+            color: var(--text);
         }
         .chapter-item:hover {
+            background: #eef2ff;
             color: var(--primary);
         }
         .chapter-item input[type="checkbox"] {
@@ -369,28 +573,57 @@
             height: 16px;
             accent-color: var(--primary);
             cursor: pointer;
+            flex-shrink: 0;
+            border-radius: 3px;
         }
 
+        /* ========== SLIDER CONFIG CARD ========== */
+        .slider-config-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: var(--shadow-xs);
+        }
         .slider-row {
             display: flex;
             align-items: center;
             gap: 14px;
             flex-wrap: wrap;
-            background: #fff;
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
         }
         .slider-row label {
             font-weight: 600;
             white-space: nowrap;
             color: var(--text);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         .slider-row input[type="range"] {
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
             accent-color: var(--primary);
             height: 6px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            transition: var(--transition-fast);
+        }
+        .slider-row input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
         }
         .slider-row span {
             font-weight: 700;
@@ -398,261 +631,939 @@
             font-size: 17px;
             min-width: 30px;
             text-align: center;
+            background: var(--primary-50);
+            padding: 4px 10px;
+            border-radius: 8px;
         }
-
+        .slider-progress {
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+        .slider-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #60a5fa);
+            border-radius: 3px;
+            transition: width 0.2s ease-out;
+        }
         .time-calc {
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
             border: 1px solid #bbf7d0;
             border-radius: 10px;
             padding: 12px 16px;
-            font-size: 14px;
+            font-size: 13px;
             color: #166534;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
-        .time-calc i { color: #22c55e; }
+        .time-calc i {
+            color: #22c55e;
+            font-size: 16px;
+        }
 
-        /* Instructions */
-        .instructions-section h2 {
-            font-size: 20px;
+        /* ========== BREAKDOWN CARDS ========== */
+        .breakdown-section {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            animation: fadeIn 0.4s ease-out;
+            box-shadow: var(--shadow-xs);
+        }
+        .breakdown-section h3 {
+            font-size: 15px;
             font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: var(--text-heading);
-            margin-bottom: 14px;
+        }
+        .breakdown-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px;
+        }
+        .breakdown-card {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 13px 14px;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .breakdown-card:hover {
+            background: #fff;
+            border-color: var(--primary-100);
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+        .breakdown-card .bc-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.3;
+        }
+        .breakdown-card .bc-count {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        .breakdown-card .bc-pct {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        /* Fallback table for breakdown */
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            display: none;
+        }
+        .breakdown-table th {
+            text-align: left;
+            padding: 10px 8px;
+            background: var(--bg-alt);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+        }
+        .breakdown-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border-light);
+            font-weight: 500;
+            color: var(--text);
+        }
+        .breakdown-table tr:last-child td {
+            border-bottom: none;
+        }
+        .breakdown-table tr:hover td {
+            background: #fafbff;
+        }
+        .col-no {
+            width: 40px;
+            text-align: center;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .col-name {
+            font-weight: 600;
+        }
+        .col-count {
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* ========== INSTRUCTIONS ACCORDION ========== */
+        .instructions-section {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow-xs);
+        }
+        .instructions-section details {
+            border-bottom: 1px solid var(--border-light);
+        }
+        .instructions-section details:last-child {
+            border-bottom: none;
+        }
+        .instructions-section summary {
+            padding: 15px 18px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            transition: var(--transition);
+            user-select: none;
+            outline: none;
+        }
+        .instructions-section summary::-webkit-details-marker {
+            display: none;
+        }
+        .instructions-section summary::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 700;
+            margin-left: auto;
+            transition: transform 0.3s;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .instructions-section details[open] summary::after {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+        .instructions-section summary:hover {
+            background: #fafbff;
+            color: var(--primary);
+        }
+        .instructions-section .instr-content {
+            padding: 4px 18px 16px 42px;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        .instructions-section .instr-content ol {
+            padding-left: 18px;
+        }
+        .instructions-section .instr-content li {
+            margin-bottom: 5px;
+            padding-left: 2px;
+        }
+        .instructions-section .instr-content li::marker {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .instructions-section h2 {
+            font-size: 16px;
+            font-weight: 700;
+            padding: 16px 18px 8px;
+            color: var(--text-heading);
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .instructions-list {
-            font-size: 15px;
-            line-height: 1.9;
-            color: var(--text);
-            padding-left: 24px;
-        }
-        .instructions-list li {
-            margin-bottom: 6px;
-            padding-left: 4px;
-        }
-        .instructions-list li::marker {
-            color: var(--primary);
-            font-weight: 700;
-        }
 
-        /* Language Selector */
-        .lang-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            background: var(--bg);
-            padding: 14px 18px;
-            border-radius: 10px;
+        /* ========== LANGUAGE CARDS ========== */
+        .lang-section {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 16px 18px;
             border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: var(--shadow-xs);
         }
-        .lang-row label {
+        .lang-section>label {
             font-weight: 600;
             color: var(--text);
-            white-space: nowrap;
+            font-size: 14px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .lang-select {
-            height: 46px;
-            padding: 8px 16px;
-            border: 2px solid var(--border);
+        .lang-cards-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .lang-card-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 16px;
             border-radius: 10px;
-            font-size: 15px;
-            font-weight: 500;
+            border: 2px solid var(--border);
             background: #fff;
-            color: var(--text);
             cursor: pointer;
-            outline: none;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
             transition: var(--transition);
             font-family: var(--font);
-        }
-        .lang-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
-        }
-
-        /* Warning */
-        .warning-note {
-            color: #b91c1c;
-            font-size: 15px;
-            font-weight: 600;
+            color: var(--text);
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: #fef2f2;
-            padding: 14px 18px;
-            border-radius: 10px;
-            border-left: 4px solid #dc2626;
+            justify-content: center;
+            gap: 7px;
+            user-select: none;
         }
-        .warning-note i { font-size: 18px; }
+        .lang-card-btn:hover {
+            border-color: var(--primary-100);
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+        .lang-card-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary-50);
+            color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+        }
+        .lang-card-btn:active {
+            transform: scale(0.96);
+            transition: var(--transition-fast);
+        }
+        .lang-select-hidden {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 1px;
+            height: 1px;
+        }
 
-        /* Declaration */
-        .declaration-box {
+        /* ========== WARNING BANNER ========== */
+        .warning-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid #f59e0b;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #92400e;
+            line-height: 1.5;
+            box-shadow: var(--shadow-xs);
+        }
+        .warning-banner i {
+            font-size: 17px;
+            color: #f59e0b;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ========== DECLARATION CARD ========== */
+        .declaration-card {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text);
             cursor: pointer;
             user-select: none;
-            padding: 14px 18px;
-            background: var(--bg);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        .declaration-box:hover {
-            border-color: var(--primary-light);
+            padding: 16px 18px;
             background: #fff;
+            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            transition: var(--transition);
+            box-shadow: var(--shadow-xs);
         }
-        .declaration-box input[type="checkbox"] {
+        .declaration-card:hover {
+            border-color: var(--primary-100);
+            background: #fafbff;
+        }
+        .declaration-card.checked {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.06);
+        }
+        .declaration-card input[type="checkbox"] {
             width: 20px;
             height: 20px;
-            margin-top: 3px;
+            margin-top: 2px;
             cursor: pointer;
-            accent-color: var(--primary);
+            accent-color: var(--success);
+            flex-shrink: 0;
+            border-radius: 5px;
+        }
+        .declaration-card .decl-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .declaration-card .decl-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-heading);
+            margin-bottom: 2px;
         }
 
-        /* Buttons */
-        .btn-row {
+        /* ========== ACTION AREA (Desktop Sidebar / Mobile Bottom) ========== */
+        .action-area {
+            padding: 16px 28px 20px;
+            background: #fff;
+            border-top: 1px solid var(--border-light);
             display: flex;
-            gap: 16px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
-        .btn-prev, .btn-start {
-            height: 52px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 16px;
+        .btn-prev {
+            height: 48px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            border: none;
+            gap: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text);
+            padding: 0 22px;
             font-family: var(--font);
-        }
-        .btn-prev {
-            background: #e2e8f0;
-            color: #475569;
-            min-width: 150px;
             text-decoration: none;
+            white-space: nowrap;
         }
         .btn-prev:hover {
-            background: #cbd5e1;
+            background: #f1f5f9;
+            border-color: #cbd5e1;
             transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .btn-prev:active {
+            transform: scale(0.96);
+            transition: var(--transition-fast);
         }
         .btn-start {
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            color: #fff;
-            min-width: 200px;
-            opacity: 0.4;
+            height: 48px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border: none;
+            font-family: var(--font);
+            padding: 0 28px;
+            background: #cbd5e1;
+            color: #94a3b8;
             pointer-events: none;
-            box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+            white-space: nowrap;
+            letter-spacing: 0.2px;
         }
         .btn-start.active {
-            opacity: 1;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
             pointer-events: auto;
-            box-shadow: 0 6px 24px rgba(37,99,235,0.4);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+            animation: pulseGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+            }
+            50% {
+                box-shadow: 0 8px 28px rgba(37, 99, 235, 0.5);
+            }
         }
         .btn-start.active:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(37,99,235,0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.45);
             background: linear-gradient(135deg, #1d4ed8, #2563eb);
         }
+        .btn-start.active:active {
+            transform: scale(0.95);
+            transition: var(--transition-fast);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
 
-        /* Loading Overlay */
+        /* ========== LOADING OVERLAY ========== */
         .loading-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.97);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 24px;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--primary);
+            gap: 20px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .loading-logo-pulse {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 26px;
+            animation: logoPulse 1.4s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+        @keyframes logoPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
+            }
+        }
+        .loading-spinner-wrap {
+            position: relative;
+            width: 50px;
+            height: 50px;
         }
         .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid var(--border);
+            border: 4px solid #e2e8f0;
             border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
         .loading-text {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 15px;
         }
         .loading-text small {
-            font-size: 13px;
-            color: var(--text-secondary);
+            font-size: 12px;
+            color: var(--text-muted);
             font-weight: 400;
         }
+        .loading-dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .loading-dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: dotBounce 1.2s ease-in-out infinite;
+        }
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes dotBounce {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
 
-        /* Responsive Enhancements */
-        @media (max-width: 600px) {
-            body { padding: 12px; }
-            .top-nav { padding: 10px 14px; }
-            .logo { font-size: 18px; }
-            .logo img { height: 32px; width: 32px; }
-            .nav-back { padding: 8px 14px; font-size: 13px; }
-            .card { padding: 20px 16px; gap: 20px; }
-            .test-title { font-size: 22px; }
-            .info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .info-card { padding: 12px; gap: 10px; }
-            .info-icon { width: 36px; height: 36px; font-size: 16px; }
-            .info-content h4 { font-size: 10px; }
-            .info-content .val { font-size: 15px; }
-            .btn-row { flex-direction: column; align-items: stretch; }
-            .btn-prev, .btn-start { width: 100%; }
-            .exam-image-area img { width: 64px; height: 64px; }
-            .breakdown-section, .dynamic-select-area { padding: 14px; }
-            .lang-row, .declaration-box, .warning-note { padding: 12px; }
+        /* ========== RESPONSIVE ========== */
+        @media (min-width: 768px) {
+            .content-wrapper {
+                flex-direction: row;
+            }
+            .main-column {
+                flex: 1;
+                min-width: 0;
+                padding: 24px 24px 24px 28px;
+            }
+            .action-area {
+                width: 280px;
+                flex-shrink: 0;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 24px 24px 24px 16px;
+                border-left: 1px solid var(--border-light);
+                border-top: none;
+                position: sticky;
+                top: 90px;
+                align-self: flex-start;
+                max-height: calc(100vh - 110px);
+                overflow-y: auto;
+                gap: 14px;
+                justify-content: flex-start;
+            }
+            .action-area .btn-start {
+                width: 100%;
+            }
+            .action-area .btn-prev {
+                width: 100%;
+            }
+            .sidebar-summary {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                background: var(--bg);
+                border-radius: var(--radius);
+                padding: 16px;
+                border: 1px solid var(--border);
+            }
+            .sidebar-summary h4 {
+                font-size: 13px;
+                font-weight: 700;
+                color: var(--text-heading);
+                margin: 0 0 4px;
+                display: flex;
+                align-items: center;
+                gap: 7px;
+            }
+            .sidebar-stat {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: var(--text-secondary);
+                padding: 4px 0;
+                border-bottom: 1px solid var(--border-light);
+            }
+            .sidebar-stat:last-child {
+                border-bottom: none;
+            }
+            .sidebar-stat strong {
+                color: var(--text);
+                font-weight: 600;
+            }
+            .info-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+            .breakdown-cards {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            body {
+                padding-bottom: 24px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            body {
+                padding: 8px 8px calc(110px + var(--safe-bottom));
+            }
+            .top-nav {
+                padding: 8px 14px;
+                border-radius: var(--radius);
+                top: 8px;
+                margin-bottom: 12px;
+            }
+            .logo {
+                font-size: 16px;
+                gap: 7px;
+            }
+            .logo img {
+                height: 30px;
+                width: 30px;
+                border-radius: 8px;
+            }
+            .nav-back {
+                padding: 7px 12px;
+                font-size: 12px;
+                border-radius: 20px;
+            }
+            .hero-section {
+                padding: 20px 16px 14px;
+            }
+            .test-title {
+                font-size: 20px;
+            }
+            .test-subtitle {
+                font-size: 12px;
+            }
+            .exam-image-area img {
+                width: 60px;
+                height: 60px;
+                border-radius: 14px;
+                border-width: 3px;
+            }
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 12px 16px 14px;
+            }
+            .info-card {
+                padding: 11px 8px;
+                gap: 3px;
+                border-radius: 10px;
+            }
+            .info-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+                border-radius: 8px;
+            }
+            .info-content h4 {
+                font-size: 9px;
+                letter-spacing: 0.4px;
+            }
+            .info-content .val {
+                font-size: 15px;
+            }
+            .step-indicator {
+                padding: 12px 12px;
+                gap: 0;
+                justify-content: flex-start;
+            }
+            .step-item {
+                font-size: 10px;
+                gap: 5px;
+                padding: 4px 5px;
+            }
+            .step-dot {
+                width: 22px;
+                height: 22px;
+                font-size: 10px;
+            }
+            .step-line {
+                width: 16px;
+            }
+            .main-column {
+                padding: 14px 14px 16px;
+                gap: 14px;
+            }
+            .dynamic-select-area {
+                padding: 14px;
+                gap: 12px;
+                border-radius: var(--radius);
+            }
+            .subject-tree {
+                max-height: 280px;
+            }
+            .subject-header {
+                padding: 11px 13px;
+                font-size: 12px;
+                gap: 8px;
+            }
+            .subject-header input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+            }
+            .chapter-item {
+                font-size: 11px;
+                padding: 5px 6px;
+            }
+            .chapter-list {
+                padding: 4px 10px 10px 30px;
+            }
+            .tree-toolbar button {
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+            .slider-config-card {
+                padding: 12px 14px;
+                gap: 8px;
+            }
+            .slider-row {
+                gap: 10px;
+            }
+            .slider-row label {
+                font-size: 12px;
+            }
+            .slider-row span {
+                font-size: 15px;
+                padding: 3px 8px;
+            }
+            .time-calc {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            .breakdown-section {
+                padding: 14px;
+            }
+            .breakdown-cards {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 8px;
+            }
+            .breakdown-card {
+                padding: 10px 12px;
+            }
+            .breakdown-card .bc-name {
+                font-size: 12px;
+            }
+            .breakdown-card .bc-count {
+                font-size: 17px;
+            }
+            .instructions-section summary {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+            .instructions-section .instr-content {
+                padding: 2px 12px 12px 28px;
+                font-size: 12px;
+            }
+            .lang-section {
+                padding: 12px 14px;
+            }
+            .lang-card-btn {
+                padding: 10px 14px;
+                font-size: 12px;
+                border-radius: 8px;
+            }
+            .warning-banner {
+                padding: 10px 12px;
+                font-size: 12px;
+                gap: 8px;
+            }
+            .declaration-card {
+                padding: 12px 14px;
+                gap: 10px;
+            }
+            .declaration-card .decl-title {
+                font-size: 13px;
+            }
+            .declaration-card .decl-text {
+                font-size: 12px;
+            }
+            .action-area {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 200;
+                padding: 10px 14px calc(10px + var(--safe-bottom));
+                border-top: 2px solid var(--border);
+                border-radius: 16px 16px 0 0;
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.10);
+                flex-direction: row;
+                gap: 8px;
+                background: #fff;
+                flex-wrap: nowrap;
+            }
+            .action-area .btn-prev {
+                flex: 1;
+                height: 44px;
+                font-size: 13px;
+                padding: 0 14px;
+                border-radius: 22px;
+            }
+            .action-area .btn-start {
+                flex: 2;
+                height: 44px;
+                font-size: 14px;
+                padding: 0 16px;
+                border-radius: 22px;
+            }
+            .sidebar-summary {
+                display: none;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .info-card {
+                padding: 9px 6px;
+            }
+            .info-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+                border-radius: 7px;
+            }
+            .info-content .val {
+                font-size: 13px;
+            }
+            .test-title {
+                font-size: 18px;
+            }
+            .hero-section {
+                padding: 16px 10px 10px;
+            }
+            .main-column {
+                padding: 10px 10px 12px;
+                gap: 10px;
+            }
+            .step-indicator {
+                padding: 10px 6px;
+            }
+            .step-item {
+                font-size: 9px;
+                gap: 3px;
+            }
+            .step-dot {
+                width: 18px;
+                height: 18px;
+                font-size: 8px;
+            }
+            .step-line {
+                width: 10px;
+            }
+            .action-area {
+                padding: 8px 8px calc(8px + var(--safe-bottom));
+                gap: 6px;
+            }
+            .action-area .btn-prev {
+                height: 40px;
+                font-size: 12px;
+                padding: 0 10px;
+            }
+            .action-area .btn-start {
+                height: 40px;
+                font-size: 13px;
+                padding: 0 12px;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus states for accessibility */
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        summary:focus-visible,
+        a:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.4);
+            outline-offset: 2px;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
+
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+        <div class="loading-logo-pulse">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
         <div class="loading-text">
-            <span>Loading Test Details...</span>
+            <span>Loading Test Details</span>
             <small>Please wait while we prepare your test</small>
+            <div class="loading-dots">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </div>
 
-    <!-- Top Navigation (no "All Tests" button) -->
-    <nav class="top-nav">
+    <!-- Top Navigation -->
+    <nav class="top-nav" id="topNav">
         <a href="dashboard.html" class="logo">
             <img src="image/appicon.jpg" alt="TestMaster Pro Logo" onerror="this.style.display='none';">
             <span>TestMaster Pro</span>
         </a>
-        <button class="nav-back" onclick="history.back()">
+        <button class="nav-back" onclick="history.back()" aria-label="Go back">
             <i class="fas fa-arrow-left"></i> Back
         </button>
     </nav>
 
     <!-- Main Content -->
     <main class="card" id="mainCard" style="visibility:hidden;">
-        <!-- Exam Header -->
-        <div class="exam-header">
+
+        <!-- Hero Section -->
+        <section class="hero-section">
             <div class="exam-badge" id="examBadge" style="display:none;">
                 <i class="fas fa-graduation-cap"></i>
                 <span id="examBadgeText"></span>
@@ -660,9 +1571,9 @@
             <div class="exam-image-area" id="examImageArea"></div>
             <h1 class="test-title" id="testTitle"></h1>
             <p class="test-subtitle" id="testSubtitle"></p>
-        </div>
+        </section>
 
-        <!-- Info Grid -->
+        <!-- Info Stats Grid -->
         <div class="info-grid" id="infoGrid">
             <div class="info-card">
                 <div class="info-icon"><i class="fas fa-clock"></i></div>
@@ -694,81 +1605,151 @@
             </div>
         </div>
 
-        <!-- Dynamic Selection Area (for files with Sub/Chap) -->
-        <div class="dynamic-select-area" id="dynamicArea">
-            <h3><i class="fas fa-check-square"></i> Choose Subjects & Chapters</h3>
-            <div class="subject-tree" id="subjectTree"></div>
-            <div class="slider-row">
-                <label for="numQSlider"><i class="fas fa-sliders-h"></i> Questions:</label>
-                <input type="range" id="numQSlider" min="1" max="100" value="10" step="1">
-                <span id="numQDisplay">10</span>
+        <!-- Step Indicator -->
+        <div class="step-indicator" aria-label="Test setup progress">
+            <div class="step-item active"><span class="step-dot">1</span>Review</div>
+            <div class="step-line"></div>
+            <div class="step-item"><span class="step-dot">2</span>Select</div>
+            <div class="step-line"></div>
+            <div class="step-item"><span class="step-dot">3</span>Configure</div>
+            <div class="step-line"></div>
+            <div class="step-item"><span class="step-dot">4</span>Start</div>
+        </div>
+
+        <!-- Content Wrapper (2-col on desktop) -->
+        <div class="content-wrapper">
+
+            <!-- Main Column -->
+            <div class="main-column">
+
+                <!-- Dynamic Selection Area (for files with Sub/Chap) -->
+                <div class="dynamic-select-area" id="dynamicArea">
+                    <h3><i class="fas fa-check-square"></i> Choose Subjects & Chapters</h3>
+                    <div class="tree-toolbar">
+                        <button onclick="document.querySelectorAll('#subjectTree .subject-header input[type=checkbox]').forEach(cb=>{if(!cb.checked)cb.click();});" title="Select All Subjects"><i class="fas fa-check-double"></i> Select All</button>
+                        <button onclick="document.querySelectorAll('#subjectTree .subject-header input[type=checkbox]').forEach(cb=>{if(cb.checked)cb.click();});" title="Clear All"><i class="fas fa-times-circle"></i> Clear All</button>
+                        <button onclick="document.querySelectorAll('#subjectTree .subject-node').forEach(n=>n.classList.add('open'));" title="Expand All"><i class="fas fa-expand-alt"></i> Expand All</button>
+                        <button onclick="document.querySelectorAll('#subjectTree .subject-node').forEach(n=>n.classList.remove('open'));" title="Collapse All"><i class="fas fa-compress-alt"></i> Collapse All</button>
+                    </div>
+                    <div class="subject-tree" id="subjectTree"></div>
+                    <div class="slider-config-card">
+                        <div class="slider-row">
+                            <label for="numQSlider"><i class="fas fa-sliders-h"></i> Questions:</label>
+                            <input type="range" id="numQSlider" min="1" max="100" value="10" step="1" aria-label="Number of questions slider">
+                            <span id="numQDisplay">10</span>
+                        </div>
+                        <div class="slider-progress">
+                            <div class="slider-progress-fill" id="sliderProgressFill" style="width:10%;"></div>
+                        </div>
+                    </div>
+                    <div class="time-calc" id="timeCalc">
+                        <i class="fas fa-stopwatch"></i>
+                        Total Time: <strong><span id="calcDuration">--</span> min</strong>
+                        <span id="extraTimeNote" style="font-size:12px;margin-left:6px;color:#64748b;"></span>
+                    </div>
+                    <p style="font-size:12px;color:var(--text-muted);margin:0;">
+                        <i class="fas fa-info-circle"></i> Each extra question adds <strong>2 minutes</strong> to the total time.
+                    </p>
+                </div>
+
+                <!-- Subject Breakdown (static) -->
+                <div class="breakdown-section" id="subjectBreakdownArea" style="display:none;">
+                    <h3><i class="fas fa-book"></i> Subject Breakdown</h3>
+                    <div class="breakdown-cards" id="subjectCardsContainer"></div>
+                    <table class="breakdown-table" id="subjectBreakdownTable">
+                        <thead>
+                            <tr><th class="col-no">#</th><th>Subject</th><th class="col-count">Questions</th></tr>
+                        </thead>
+                        <tbody id="subjectTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Chapter Breakdown (static) -->
+                <div class="breakdown-section" id="chapterBreakdownArea" style="display:none;">
+                    <h3><i class="fas fa-layer-group"></i> Chapter Breakdown</h3>
+                    <div class="breakdown-cards" id="chapterCardsContainer"></div>
+                    <table class="breakdown-table" id="chapterBreakdownTable">
+                        <thead>
+                            <tr><th class="col-no">#</th><th>Chapter</th><th class="col-count">Questions</th></tr>
+                        </thead>
+                        <tbody id="chapterTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Instructions Accordion -->
+                <div class="instructions-section" id="instructionsSection">
+                    <h2><i class="fas fa-clipboard-list"></i> Important Instructions</h2>
+                    <details id="instrGeneral" open>
+                        <summary><i class="fas fa-info-circle"></i> General Instructions</summary>
+                        <div class="instr-content">
+                            <ol id="instructionsList"></ol>
+                        </div>
+                    </details>
+                    <details id="instrMarking">
+                        <summary><i class="fas fa-check-circle"></i> Marking Scheme</summary>
+                        <div class="instr-content" id="instrMarkingContent">
+                            <p style="margin:0;color:var(--text-secondary);">Details loaded with test data...</p>
+                        </div>
+                    </details>
+                    <details id="instrNav">
+                        <summary><i class="fas fa-compass"></i> Navigation Rules</summary>
+                        <div class="instr-content">
+                            <p style="margin:0;">You can navigate freely between questions. Use the question palette to jump to any question. Answered questions are marked in green, unanswered in white, and flagged for review in orange.</p>
+                        </div>
+                    </details>
+                    <details id="instrSubmit">
+                        <summary><i class="fas fa-paper-plane"></i> Submission Rules</summary>
+                        <div class="instr-content">
+                            <p style="margin:0;">The test auto-submits when time expires. You may also submit manually before time runs out. Once submitted, the test cannot be retaken. Ensure a stable internet connection throughout.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Language Selection -->
+                <div class="lang-section">
+                    <label><i class="fas fa-language"></i> Choose Language:</label>
+                    <div class="lang-cards-row" id="langCardsRow">
+                        <button class="lang-card-btn selected" data-lang="en" onclick="selectLanguage('en',this);">
+                            <i class="fas fa-flag-usa"></i> English
+                        </button>
+                    </div>
+                    <select id="langSelect" class="lang-select-hidden" aria-hidden="true">
+                        <option value="en">English</option>
+                    </select>
+                </div>
+
+                <!-- Warning Banner -->
+                <div class="warning-banner">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>All questions will appear in your selected language. Once started, <strong>language cannot be changed</strong>.</span>
+                </div>
+
+                <!-- Declaration Card -->
+                <label class="declaration-card" for="agreeCheck" id="declarationCard">
+                    <input type="checkbox" id="agreeCheck" onchange="toggleStartButton();updateDeclCard();">
+                    <div class="decl-text">
+                        <div class="decl-title">Honesty Pledge</div>
+                        I have read and understood all the instructions. I agree to attempt the test honestly and without any unfair means.
+                    </div>
+                </label>
             </div>
-            <div class="time-calc" id="timeCalc">
-                <i class="fas fa-stopwatch"></i>
-                Total Time: <strong><span id="calcDuration">--</span> min</strong>
-                <span id="extraTimeNote" style="font-size:12px; margin-left:8px; color:#64748b;"></span>
+
+            <!-- Action Area (Sidebar on Desktop, Bottom Bar on Mobile) -->
+            <div class="action-area" id="actionArea">
+                <div class="sidebar-summary" id="sidebarSummary">
+                    <h4><i class="fas fa-clipboard-check"></i> Test Summary</h4>
+                    <div class="sidebar-stat"><span>Questions</span><strong id="sidebarQ">--</strong></div>
+                    <div class="sidebar-stat"><span>Duration</span><strong id="sidebarDur">-- min</strong></div>
+                    <div class="sidebar-stat"><span>Max Marks</span><strong id="sidebarMarks">--</strong></div>
+                    <div class="sidebar-stat"><span>Negative</span><strong id="sidebarNeg">--</strong></div>
+                </div>
+                <button class="btn-prev" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </button>
+                <button id="startBtn" class="btn-start" disabled onclick="startTest()">
+                    <i class="fas fa-play-circle"></i> Start Test Now
+                </button>
             </div>
-            <p style="font-size:13px; color:var(--text-secondary);">
-                <i class="fas fa-info-circle"></i> Each extra question adds <strong>2 minutes</strong> to the total time.
-            </p>
-        </div>
-
-        <!-- Subject Breakdown (static) -->
-        <div class="breakdown-section" id="subjectBreakdownArea" style="display:none;">
-            <h3><i class="fas fa-book"></i> Subject Breakdown</h3>
-            <table class="breakdown-table">
-                <thead>
-                    <tr><th class="col-no">#</th><th>Subject</th><th class="col-count">Questions</th></tr>
-                </thead>
-                <tbody id="subjectTableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Chapter Breakdown (static) -->
-        <div class="breakdown-section" id="chapterBreakdownArea" style="display:none;">
-            <h3><i class="fas fa-layer-group"></i> Chapter Breakdown</h3>
-            <table class="breakdown-table">
-                <thead>
-                    <tr><th class="col-no">#</th><th>Chapter</th><th class="col-count">Questions</th></tr>
-                </thead>
-                <tbody id="chapterTableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Instructions -->
-        <div class="instructions-section">
-            <h2><i class="fas fa-clipboard-list"></i> Important Instructions</h2>
-            <ol class="instructions-list" id="instructionsList"></ol>
-        </div>
-
-        <!-- Language Selection -->
-        <div class="lang-row">
-            <label for="langSelect"><i class="fas fa-language"></i> Choose Language:</label>
-            <select id="langSelect" class="lang-select">
-                <option value="en">English</option>
-            </select>
-        </div>
-
-        <!-- Warning -->
-        <div class="warning-note">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>All questions will appear in your selected language. Once started, language cannot be changed.</span>
-        </div>
-
-        <!-- Declaration -->
-        <label class="declaration-box" for="agreeCheck">
-            <input type="checkbox" id="agreeCheck" onchange="toggleStartButton()">
-            <span>I have read and understood all the instructions. I agree to attempt the test honestly and without any unfair means.</span>
-        </label>
-
-        <!-- Action Buttons -->
-        <div class="btn-row">
-            <button class="btn-prev" onclick="history.back()">
-                <i class="fas fa-arrow-left"></i> Go Back
-            </button>
-            <button id="startBtn" class="btn-start" disabled onclick="startTest()">
-                <i class="fas fa-play-circle"></i> Start Test Now
-            </button>
         </div>
     </main>
 
@@ -779,7 +1760,7 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbyB8x80iQRROrRKcAhbTEQszOx2-CqDEbTjWkxb-kQZd_GqzHKJxhnzoQXUS0-MxeE3jQ/exec';
         const urlParams = new URLSearchParams(window.location.search);
         const testCode = urlParams.get('testCode');
-        const source = urlParams.get('source') || 'mocktests'; // 'mocktests' or 'testseries'
+        const source = urlParams.get('source') || 'mocktests';
 
         // ============================================
         // STATE VARIABLES
@@ -807,12 +1788,59 @@
         }
 
         // ============================================
+        // LANGUAGE CARD SYNC (new UI helper)
+        // ============================================
+        function selectLanguage(lang, btnEl) {
+            const select = document.getElementById('langSelect');
+            select.value = lang;
+            // Dispatch change event so any listeners fire
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            // Update card styles
+            document.querySelectorAll('.lang-card-btn').forEach(b => b.classList.remove('selected'));
+            if (btnEl) btnEl.classList.add('selected');
+        }
+
+        // Sync language select changes back to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) {
+                langSelect.addEventListener('change', function() {
+                    document.querySelectorAll('.lang-card-btn').forEach(b => {
+                        b.classList.toggle('selected', b.getAttribute('data-lang') === langSelect
+                            .value);
+                    });
+                });
+            }
+        });
+
+        // Declaration card visual update
+        function updateDeclCard() {
+            const card = document.getElementById('declarationCard');
+            const cb = document.getElementById('agreeCheck');
+            if (card && cb) {
+                card.classList.toggle('checked', cb.checked);
+            }
+        }
+
+        // Update sidebar summary from main values
+        function syncSidebarSummary() {
+            const sq = document.getElementById('sidebarQ');
+            const sd = document.getElementById('sidebarDur');
+            const sm = document.getElementById('sidebarMarks');
+            const sn = document.getElementById('sidebarNeg');
+            if (sq) sq.textContent = document.getElementById('totalQVal')?.textContent || '--';
+            if (sd) sd.textContent = (document.getElementById('durationVal')?.textContent || '--') + ' min';
+            if (sm) sm.textContent = document.getElementById('maxMarksVal')?.textContent || '--';
+            if (sn) sn.textContent = document.getElementById('negVal')?.textContent || '--';
+        }
+
+        // ============================================
         // FETCH TEST DATA FROM CORRECT SHEET
         // ============================================
         async function fetchTestData() {
             try {
                 let action, fallbackAction;
-                
+
                 if (isTestSeries) {
                     action = 'getTestSeriesTest';
                     fallbackAction = 'getMockTest';
@@ -821,15 +1849,13 @@
                     fallbackAction = 'getTestSeriesTest';
                 }
 
-                // Try primary source first
                 let data = await fetchFromAPI(action);
-                
-                // If not found, try fallback source
+
                 if (!data.success) {
                     console.log(`Test not found in ${isTestSeries ? 'TestSeries' : 'MockTests'}, trying fallback...`);
                     data = await fetchFromAPI(fallbackAction);
                     if (data.success) {
-                        isTestSeries = !isTestSeries; // Toggle source
+                        isTestSeries = !isTestSeries;
                     }
                 }
 
@@ -839,20 +1865,18 @@
 
                 testData = data.test;
                 staticQuestions = Array.isArray(testData.questions) ? testData.questions : [];
-                
-                // Parse questionsJSON if provided as string
+
                 if (!staticQuestions.length && testData.questionsJSON) {
                     try {
                         staticQuestions = JSON.parse(testData.questionsJSON);
-                    } catch(e) {
+                    } catch (e) {
                         staticQuestions = [];
                     }
                 }
-                
+
                 originalTotalQ = parseInt(testData.totalQuestions) || staticQuestions.length || 10;
                 baseDuration = parseInt(testData.duration) || 60;
 
-                // If a file URL is provided, load dynamic questions from JSON
                 if (testData.file && testData.file.startsWith('http')) {
                     await loadDynamicQuestions();
                 } else {
@@ -866,7 +1890,8 @@
                     title: 'Failed to Load Test',
                     text: error.message || 'Please check your internet connection and try again.',
                     confirmButtonColor: '#2563eb',
-                    footer: '<small>Test Code: ' + testCode + ' | Source: ' + (isTestSeries ? 'TestSeries' : 'MockTests') + '</small>'
+                    footer: '<small>Test Code: ' + testCode + ' | Source: ' + (isTestSeries ?
+                        'TestSeries' : 'MockTests') + '</small>'
                 }).then(() => { window.location.href = 'exam.html'; });
             }
         }
@@ -880,14 +1905,13 @@
             try {
                 const resp = await fetch(testData.file);
                 const json = await resp.json();
-                
+
                 if (!Array.isArray(json)) {
                     throw new Error('Invalid JSON format: expected an array of questions');
                 }
-                
+
                 dynamicQuestions = json;
 
-                // Check if any question contains Sub/Chap fields
                 const hasSubOrChap = dynamicQuestions.some(q =>
                     q.Sub || q.Chap || q.subject || q.chapter || q.Subject || q.Chapter
                 );
@@ -918,14 +1942,14 @@
             questions.forEach(q => {
                 const sub = (q.Sub || q.subject || q.Subject || 'General').trim();
                 const chap = (q.Chap || q.chapter || q.Chapter || '').trim();
-                
+
                 if (!subjectMap.has(sub)) {
                     subjectMap.set(sub, { count: 0, chapters: new Map() });
                 }
-                
+
                 const subObj = subjectMap.get(sub);
                 subObj.count++;
-                
+
                 if (chap) {
                     if (!subObj.chapters.has(chap)) {
                         subObj.chapters.set(chap, 0);
@@ -942,7 +1966,6 @@
             document.getElementById('loadingOverlay').style.display = 'none';
             document.getElementById('mainCard').style.visibility = 'visible';
 
-            // Exam badge
             const badge = document.getElementById('examBadge');
             const badgeText = document.getElementById('examBadgeText');
             if (testData.exam) {
@@ -950,19 +1973,17 @@
                 badgeText.textContent = testData.exam;
             }
 
-            // Exam image
             const imgArea = document.getElementById('examImageArea');
             if (testData.imageurl) {
-                imgArea.innerHTML = `<img src="${testData.imageurl}" alt="${testData.exam || 'Exam'}" onerror="this.style.display='none';">`;
+                imgArea.innerHTML =
+                    `<img src="${testData.imageurl}" alt="${testData.exam || 'Exam'}" onerror="this.style.display='none';">`;
             } else {
                 imgArea.innerHTML = '';
             }
 
-            // Title
-            document.getElementById('testTitle').textContent = 
+            document.getElementById('testTitle').textContent =
                 testData.testName || `${testData.exam || 'Exam'} - ${testData.subject || 'Mock Test'}`;
-            
-            // Subtitle
+
             const subtitleParts = [];
             if (testData.exam) subtitleParts.push(testData.exam);
             if (testData.subject) subtitleParts.push(testData.subject);
@@ -970,12 +1991,11 @@
             if (testData.difficulty) subtitleParts.push(testData.difficulty);
             document.getElementById('testSubtitle').textContent = subtitleParts.join(' • ');
 
-            // Info values
             const marksPerQ = parseFloat(testData.marksPerQuestion) || 1;
             const negative = parseFloat(testData.negativeMarking) || 0;
             document.getElementById('negVal').textContent = negative.toFixed(2);
 
-            // Instructions
+            // Build instructions list
             const instrList = document.getElementById('instructionsList');
             instrList.innerHTML = `
                 <li>The test contains <strong><span id="instrTotalQ">--</span> questions</strong> to be completed in <strong><span id="instrDuration">--</span> minutes</strong>.</li>
@@ -987,25 +2007,49 @@
                 <li>Once submitted, the test cannot be retaken.</li>
             `;
 
+            // Update marking scheme details
+            const markingContent = document.getElementById('instrMarkingContent');
+            if (markingContent) {
+                markingContent.innerHTML = `
+                    <p style="margin:0 0 4px;"><strong>Correct Answer:</strong> +${marksPerQ} mark(s)</p>
+                    <p style="margin:0 0 4px;"><strong>Wrong Answer:</strong> -${negative} mark(s)</p>
+                    <p style="margin:0;"><strong>Unattempted:</strong> 0 marks (no deduction)</p>
+                `;
+            }
+
             // Language dropdown
             const langSelect = document.getElementById('langSelect');
+            const langCardsRow = document.getElementById('langCardsRow');
             if (testData.language && testData.language.toLowerCase().includes('hindi')) {
                 const opt = document.createElement('option');
                 opt.value = 'hi';
                 opt.textContent = 'हिन्दी (Hindi)';
                 langSelect.appendChild(opt);
+                // Add Hindi card
+                const hindiBtn = document.createElement('button');
+                hindiBtn.className = 'lang-card-btn';
+                hindiBtn.setAttribute('data-lang', 'hi');
+                hindiBtn.onclick = function() { selectLanguage('hi', this); };
+                hindiBtn.innerHTML = '<i class="fas fa-flag"></i> हिन्दी (Hindi)';
+                langCardsRow.appendChild(hindiBtn);
             }
             const savedLang = localStorage.getItem('mock_lang');
             if (savedLang && [...langSelect.options].some(o => o.value === savedLang)) {
                 langSelect.value = savedLang;
+                // Update card selection
+                document.querySelectorAll('.lang-card-btn').forEach(b => {
+                    b.classList.toggle('selected', b.getAttribute('data-lang') === savedLang);
+                });
             }
 
-            // Determine display mode
             if (dynamicMode && hasChapters) {
                 setupDynamicMode();
             } else {
                 setupStaticOrSimpleFileMode();
             }
+
+            // Sync sidebar after UI build
+            setTimeout(syncSidebarSummary, 100);
         }
 
         function setupStaticOrSimpleFileMode() {
@@ -1021,6 +2065,7 @@
             document.getElementById('instrDuration').textContent = baseDuration;
 
             buildBreakdowns(questions);
+            setTimeout(syncSidebarSummary, 100);
         }
 
         function setupDynamicMode() {
@@ -1034,13 +2079,12 @@
             tree.innerHTML = '';
 
             const sortedSubjects = [...subjectMap.keys()].sort();
-            
+
             sortedSubjects.forEach(sub => {
                 const subObj = subjectMap.get(sub);
                 const node = document.createElement('div');
                 node.className = 'subject-node';
 
-                // Subject header
                 const header = document.createElement('div');
                 header.className = 'subject-header';
 
@@ -1076,45 +2120,43 @@
 
                 node.appendChild(header);
 
-                // Chapter list
                 if (subObj.chapters.size > 0) {
                     const chapList = document.createElement('div');
                     chapList.className = 'chapter-list';
-                    
+
                     const sortedChaps = [...subObj.chapters.keys()].sort();
                     sortedChaps.forEach(chap => {
                         const count = subObj.chapters.get(chap);
                         const item = document.createElement('label');
                         item.className = 'chapter-item';
-                        
+
                         const chCb = document.createElement('input');
                         chCb.type = 'checkbox';
                         chCb.value = chap;
                         chCb.dataset.subject = sub;
-                        chCb.addEventListener('change', () => onChapterCheckboxChange(sub, chap, chCb));
-                        
+                        chCb.addEventListener('change', () => onChapterCheckboxChange(sub, chap,
+                            chCb));
+
                         item.appendChild(chCb);
                         item.appendChild(document.createTextNode(`${chap} (${count})`));
                         chapList.appendChild(item);
                     });
-                    
+
                     node.appendChild(chapList);
                 }
 
                 tree.appendChild(node);
             });
 
-            // Auto-open if only one subject
             if (sortedSubjects.length === 1 && subjectMap.get(sortedSubjects[0]).chapters.size > 0) {
                 const onlyNode = tree.querySelector('.subject-node');
                 if (onlyNode) onlyNode.classList.add('open');
             }
 
-            // Setup slider
             const totalAvail = getSelectedQuestionsCount();
             const slider = document.getElementById('numQSlider');
             const display = document.getElementById('numQDisplay');
-            
+
             slider.min = Math.min(originalTotalQ, totalAvail);
             slider.max = Math.min(totalAvail, 200);
             slider.value = Math.min(originalTotalQ, slider.max);
@@ -1122,10 +2164,22 @@
 
             slider.addEventListener('input', () => {
                 display.textContent = slider.value;
+                updateSliderProgress();
                 updateDynamicTotals();
             });
 
+            updateSliderProgress();
             updateDynamicTotals();
+            setTimeout(syncSidebarSummary, 100);
+        }
+
+        function updateSliderProgress() {
+            const slider = document.getElementById('numQSlider');
+            const fill = document.getElementById('sliderProgressFill');
+            if (slider && fill) {
+                const pct = ((slider.value - slider.min) / (slider.max - slider.min || 1)) * 100;
+                fill.style.width = Math.min(100, Math.max(0, pct)) + '%';
+            }
         }
 
         // ============================================
@@ -1143,13 +2197,13 @@
         function onChapterCheckboxChange(sub, chap, cb) {
             const node = cb.closest('.subject-node');
             if (!node) return;
-            
+
             const subCb = node.querySelector('.subject-header input[type="checkbox"]');
             if (!subCb) return;
-            
+
             const allChCbs = node.querySelectorAll('.chapter-item input[type="checkbox"]');
             const checkedCount = [...allChCbs].filter(c => c.checked).length;
-            
+
             if (checkedCount === 0) {
                 subCb.checked = false;
                 subCb.indeterminate = false;
@@ -1160,38 +2214,37 @@
                 subCb.checked = false;
                 subCb.indeterminate = true;
             }
-            
+
             updateSliderRangeAndSnapToMax();
         }
 
         function updateSliderRangeAndSnapToMax() {
             const totalAvail = getSelectedQuestionsCount();
             const slider = document.getElementById('numQSlider');
-            
+
             slider.min = Math.min(originalTotalQ, totalAvail);
             slider.max = Math.min(totalAvail, 200);
             slider.value = slider.max;
             document.getElementById('numQDisplay').textContent = slider.value;
-            
+            updateSliderProgress();
             updateDynamicTotals();
         }
 
         function getSelectedQuestionsCount() {
             if (!dynamicMode || !hasChapters) return 0;
-            
+
             const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
-            
+
             if (chCbs.length === 0) {
-                // Only subjects, no chapters
                 const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
                 const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
-                
+
                 if (checkedSubs.length === 0) {
                     let total = 0;
                     subjectMap.forEach(obj => total += obj.count);
                     return total;
                 }
-                
+
                 let total = 0;
                 checkedSubs.forEach(sub => {
                     if (subjectMap.has(sub)) total += subjectMap.get(sub).count;
@@ -1200,7 +2253,7 @@
             }
 
             const checkedChaps = [...chCbs].filter(cb => cb.checked);
-            
+
             if (checkedChaps.length === 0) {
                 let total = 0;
                 subjectMap.forEach(obj => total += obj.count);
@@ -1223,14 +2276,14 @@
                     total++;
                 }
             });
-            
+
             return total;
         }
 
         function updateDynamicTotals() {
             const slider = document.getElementById('numQSlider');
             const numQ = parseInt(slider.value);
-            
+
             document.getElementById('numQDisplay').textContent = numQ;
             document.getElementById('totalQVal').textContent = numQ;
             document.getElementById('maxMarksVal').textContent = numQ * (parseFloat(testData.marksPerQuestion) || 1);
@@ -1238,7 +2291,7 @@
 
             const extraQ = Math.max(0, numQ - originalTotalQ);
             const totalTime = baseDuration + extraQ * 2;
-            
+
             document.getElementById('durationVal').textContent = totalTime;
             document.getElementById('calcDuration').textContent = totalTime;
             document.getElementById('instrDuration').textContent = totalTime;
@@ -1249,6 +2302,8 @@
             } else {
                 extraNote.textContent = '';
             }
+            updateSliderProgress();
+            syncSidebarSummary();
         }
 
         // ============================================
@@ -1261,19 +2316,42 @@
                 const s = (q.Sub || q.subject || q.Subject || '').trim();
                 if (s) subMap.set(s, (subMap.get(s) || 0) + 1);
             });
-            
+
             const subArea = document.getElementById('subjectBreakdownArea');
             const subBody = document.getElementById('subjectTableBody');
-            
+            const subCards = document.getElementById('subjectCardsContainer');
+            const totalQ = questions.length;
+
             if (subMap.size > 0) {
                 subArea.style.display = 'block';
-                subBody.innerHTML = '';
-                let idx = 1;
-                for (const [name, count] of subMap) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td class="col-no">${idx}</td><td class="col-name">${name}</td><td class="col-count">${count}</td>`;
-                    subBody.appendChild(row);
-                    idx++;
+                // Populate cards
+                if (subCards) {
+                    subCards.innerHTML = '';
+                    let idx = 1;
+                    for (const [name, count] of subMap) {
+                        const pct = totalQ > 0 ? Math.round((count / totalQ) * 100) : 0;
+                        const card = document.createElement('div');
+                        card.className = 'breakdown-card';
+                        card.innerHTML = `
+                            <span class="bc-name">${idx}. ${name}</span>
+                            <span class="bc-count">${count}</span>
+                            <span class="bc-pct">${pct}% of total</span>
+                        `;
+                        subCards.appendChild(card);
+                        idx++;
+                    }
+                }
+                // Also populate table for fallback
+                if (subBody) {
+                    subBody.innerHTML = '';
+                    let idx = 1;
+                    for (const [name, count] of subMap) {
+                        const row = document.createElement('tr');
+                        row.innerHTML =
+                            `<td class="col-no">${idx}</td><td class="col-name">${name}</td><td class="col-count">${count}</td>`;
+                        subBody.appendChild(row);
+                        idx++;
+                    }
                 }
             } else {
                 subArea.style.display = 'none';
@@ -1285,19 +2363,39 @@
                 const c = (q.Chap || q.chapter || q.Chapter || '').trim();
                 if (c) chapMap.set(c, (chapMap.get(c) || 0) + 1);
             });
-            
+
             const chapArea = document.getElementById('chapterBreakdownArea');
             const chapBody = document.getElementById('chapterTableBody');
-            
+            const chapCards = document.getElementById('chapterCardsContainer');
+
             if (chapMap.size > 0) {
                 chapArea.style.display = 'block';
-                chapBody.innerHTML = '';
-                let idx = 1;
-                for (const [name, count] of chapMap) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td class="col-no">${idx}</td><td class="col-name">${name}</td><td class="col-count">${count}</td>`;
-                    chapBody.appendChild(row);
-                    idx++;
+                if (chapCards) {
+                    chapCards.innerHTML = '';
+                    let idx = 1;
+                    for (const [name, count] of chapMap) {
+                        const pct = totalQ > 0 ? Math.round((count / totalQ) * 100) : 0;
+                        const card = document.createElement('div');
+                        card.className = 'breakdown-card';
+                        card.innerHTML = `
+                            <span class="bc-name">${idx}. ${name}</span>
+                            <span class="bc-count">${count}</span>
+                            <span class="bc-pct">${pct}% of total</span>
+                        `;
+                        chapCards.appendChild(card);
+                        idx++;
+                    }
+                }
+                if (chapBody) {
+                    chapBody.innerHTML = '';
+                    let idx = 1;
+                    for (const [name, count] of chapMap) {
+                        const row = document.createElement('tr');
+                        row.innerHTML =
+                            `<td class="col-no">${idx}</td><td class="col-name">${name}</td><td class="col-count">${count}</td>`;
+                        chapBody.appendChild(row);
+                        idx++;
+                    }
                 }
             } else {
                 chapArea.style.display = 'none';
@@ -1310,7 +2408,7 @@
         function toggleStartButton() {
             const btn = document.getElementById('startBtn');
             const checkbox = document.getElementById('agreeCheck');
-            
+
             if (checkbox.checked) {
                 btn.classList.add('active');
                 btn.disabled = false;
@@ -1318,6 +2416,7 @@
                 btn.classList.remove('active');
                 btn.disabled = true;
             }
+            updateDeclCard();
         }
 
         function startTest() {
@@ -1330,7 +2429,7 @@
                 });
                 return;
             }
-            
+
             const lang = document.getElementById('langSelect').value;
             localStorage.setItem('mock_lang', lang);
 
@@ -1352,12 +2451,11 @@
                 totalDuration = baseDuration + extraQ * 2;
 
                 const chCbs = document.querySelectorAll('#subjectTree .chapter-item input[type="checkbox"]');
-                
+
                 if (chCbs.length === 0) {
-                    // Only subjects, no chapters
                     const cbs = document.querySelectorAll('#subjectTree .subject-header input[type="checkbox"]');
                     const checkedSubs = [...cbs].filter(cb => cb.checked).map(cb => cb.value);
-                    
+
                     if (checkedSubs.length === 0) {
                         filtered = [...dynamicQuestions];
                     } else {
@@ -1368,7 +2466,7 @@
                     }
                 } else {
                     const checkedChaps = [...chCbs].filter(cb => cb.checked);
-                    
+
                     if (checkedChaps.length === 0) {
                         filtered = [...dynamicQuestions];
                     } else {
@@ -1379,11 +2477,12 @@
                             if (!selectedSubChaps.has(sub)) selectedSubChaps.set(sub, new Set());
                             selectedSubChaps.get(sub).add(chap);
                         });
-                        
+
                         filtered = dynamicQuestions.filter(q => {
                             const sub = (q.Sub || q.subject || q.Subject || 'General').trim();
                             const chap = (q.Chap || q.chapter || q.Chapter || '').trim();
-                            return selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(chap);
+                            return selectedSubChaps.has(sub) && selectedSubChaps.get(sub).has(
+                                chap);
                         });
                     }
                 }
@@ -1403,7 +2502,6 @@
                 return;
             }
 
-            // Shuffle and select
             const shuffled = [...filtered].sort(() => Math.random() - 0.5);
             const selectedQuestions = shuffled.slice(0, Math.min(numQ, shuffled.length));
 
@@ -1431,7 +2529,8 @@
 
         function startStaticTest() {
             sessionStorage.setItem('testSource', isTestSeries ? 'testseries' : 'mocktests');
-            window.location.href = `test2.html?testCode=${encodeURIComponent(testCode)}&source=${isTestSeries ? 'testseries' : 'mocktests'}`;
+            window.location.href =
+                `test2.html?testCode=${encodeURIComponent(testCode)}&source=${isTestSeries ? 'testseries' : 'mocktests'}`;
         }
 
         // ============================================
@@ -1439,22 +2538,42 @@
         // ============================================
         window.addEventListener('load', () => {
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            // Add source info to loading text
+
             const sourceLabel = isTestSeries ? 'Test Series' : 'Mock Test';
-            document.querySelector('.loading-text small').textContent = 
-                `Loading ${sourceLabel} • ${testCode}`;
-            
+            const loadingSmall = document.querySelector('.loading-text small');
+            if (loadingSmall) {
+                loadingSmall.textContent = `Loading ${sourceLabel} • ${testCode}`;
+            }
+
             fetchTestData();
         });
 
-        // Handle back button with source awareness
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
                 const savedSource = sessionStorage.getItem('testSource');
                 if (savedSource && savedSource !== source) {
                     window.location.reload();
                 }
+            }
+        });
+
+        // Scroll effect for top nav
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('topNav');
+            if (nav && window.scrollY > 10) {
+                nav.classList.add('scrolled');
+            } else if (nav) {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Initialize declaration card state
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDeclCard();
+            // Open general instructions by default on desktop, collapse on mobile
+            const generalDetails = document.getElementById('instrGeneral');
+            if (generalDetails && window.innerWidth < 768) {
+                generalDetails.removeAttribute('open');
             }
         });
     </script>
