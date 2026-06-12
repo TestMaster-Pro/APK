@@ -36,7 +36,6 @@
     </script>
 
     <style>
-        /* ─────────── ALL PREVIOUS CSS (unchanged) ─────────── */
         :root {
             --primary: #4f46e5; --primary-dark: #4338ca; --primary-light: #818cf8;
             --accent: #f59e0b; --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
@@ -457,8 +456,8 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        const API_URL =
-            'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
+        // ✅ Updated API URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycbynfCY3gp2dsDBTLZMB9yurx1UnWsp3sgCliD92jKL-lNfy3hVmfFHZgY0p0zvocYKrow/exec';
         const urlParams = new URLSearchParams(window.location.search);
         const isDynamic = urlParams.get('dynamic') === '1';
         const testCode = urlParams.get('testCode') || sessionStorage.getItem('dynamicTestCode');
@@ -980,7 +979,7 @@
             setTimeout(() => submitTest(true), 1500);
         }
 
-        // ─────────── MODIFIED submitTest (adds subject & chapter) ───────────
+        // ─────────── SUBMIT TEST (now handles multiple subject/chapter field names) ───────────
         async function submitTest(skipConfirm = false) {
             if (state.testSubmitted) return;
             if (!questions.length) { showToast('No test data loaded'); return; }
@@ -1055,8 +1054,9 @@
                         correctIndex: q.c,
                         explanation: q.exp || q.explanation || 'No explanation provided.',
                         userAnswer: state.answers[idx] !== undefined ? state.answers[idx] : null,
-                        subject: q.Sub || q.subject || '',   // ← ADDED
-                        chapter: q.Chap || q.chapter || ''   // ← ADDED
+                        // Handle Sub/Subject/subject and Chap/Chapter/chapter variations
+                        subject: q.Sub || q.Subject || q.subject || '',
+                        chapter: q.Chap || q.Chapter || q.chapter || ''
                     })),
                     score: result.score,
                     total: result.total,
