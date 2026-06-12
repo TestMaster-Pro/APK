@@ -461,6 +461,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isDynamic = urlParams.get('dynamic') === '1';
         const testCode = urlParams.get('testCode') || sessionStorage.getItem('dynamicTestCode');
+        const source = urlParams.get('source') || 'mocktests';  // 'mocktests' or 'testseries'
 
         if (!testCode) {
             Swal.fire({
@@ -591,8 +592,15 @@
             }
 
             try {
-                const res = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
-                const data = await res.json();
+                // Use the source parameter to select the correct action
+                let action = source === 'testseries' ? 'getTestSeriesTest' : 'getMockTest';
+                let fallbackAction = source === 'testseries' ? 'getMockTest' : 'getTestSeriesTest';
+
+                let data = await fetchFromAPI(action);
+                if (!data.success) {
+                    console.log(`Not found in ${source}, trying fallback...`);
+                    data = await fetchFromAPI(fallbackAction);
+                }
                 if (!data.success) {
                     await Swal.fire({
                         icon: 'error',
@@ -603,9 +611,20 @@
                     window.location.href = 'dashboard.html';
                     return;
                 }
+
                 testConfig = data.test;
-                questions = testConfig.questions;
-                if (!Array.isArray(questions) || questions.length === 0) {
+
+                // Parse questions: try array first, then questionsJSON string
+                let rawQuestions = testConfig.questions;
+                if (!Array.isArray(rawQuestions) && testConfig.questionsJSON) {
+                    try {
+                        rawQuestions = JSON.parse(testConfig.questionsJSON);
+                    } catch (e) {
+                        rawQuestions = [];
+                    }
+                }
+
+                if (!Array.isArray(rawQuestions) || rawQuestions.length === 0) {
                     await Swal.fire({
                         icon: 'error',
                         title: 'No questions',
@@ -615,6 +634,7 @@
                     window.location.href = 'dashboard.html';
                     return;
                 }
+                questions = rawQuestions;
                 state.timeLeft = (testConfig.duration || 10) * 60;
                 fillTestUI();
             } catch (err) {
@@ -627,6 +647,11 @@
                 });
                 window.location.href = 'dashboard.html';
             }
+        }
+
+        async function fetchFromAPI(action) {
+            const resp = await fetch(`${API_URL}?action=${action}&testCode=${encodeURIComponent(testCode)}`);
+            return await resp.json();
         }
 
         function fillTestUI() {
@@ -979,7 +1004,6 @@
             setTimeout(() => submitTest(true), 1500);
         }
 
-        // ─────────── SUBMIT TEST (now handles multiple subject/chapter field names) ───────────
         async function submitTest(skipConfirm = false) {
             if (state.testSubmitted) return;
             if (!questions.length) { showToast('No test data loaded'); return; }
@@ -1054,7 +1078,6 @@
                         correctIndex: q.c,
                         explanation: q.exp || q.explanation || 'No explanation provided.',
                         userAnswer: state.answers[idx] !== undefined ? state.answers[idx] : null,
-                        // Handle Sub/Subject/subject and Chap/Chapter/chapter variations
                         subject: q.Sub || q.Subject || q.subject || '',
                         chapter: q.Chap || q.Chapter || q.chapter || ''
                     })),
