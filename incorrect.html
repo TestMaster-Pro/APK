@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Practice Incorrect · TestMasterPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['\\[','\\]']], processEscapes: true, processEnvironments: true },
+            startup: { ready() { MathJax.startup.defaultReady(); } },
+            options: { skipHtmlTags: ['script','noscript','style','textarea','pre'], ignoreHtmlClass: 'no-mathjax' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5; --primary-dark: #4338ca; --primary-light: #818cf8;
+            --accent: #f59e0b; --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
+            --bg: #f8fafc; --bg2: #ffffff; --card: #ffffff; --card-border: #e2e8f0;
+            --text: #1e293b; --text-heading: #0f172a; --text-secondary: #64748b; --text-muted: #94a3b8;
+            --border: #e2e8f0; --option-bg: #f1f5f9; --hover-bg: rgba(79,70,229,0.06);
+            --glass-bg: rgba(255,255,255,0.85); --glass-border: rgba(226,232,240,0.8);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08),0 4px 6px -4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08),0 8px 10px -6px rgba(0,0,0,0.02);
+            --overlay-bg: rgba(15,23,42,0.75); --sidebar-bg: #ffffff; --sidebar-border: #e2e8f0;
+            --badge-bg: rgba(79,70,229,0.08); --badge-text: #4f46e5; --countdown-color: #0f172a;
+            --toast-bg: #ffffff; --btn-glass-bg: #f8fafc; --btn-glass-border: #e2e8f0; --btn-glass-text: #475569;
+            --radius: 16px; --radius-sm: 12px; --radius-xs: 8px;
+            --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+        }
+        [data-theme="dark"] {
+            --primary: #6366f1; --primary-dark: #4f46e5; --primary-light: #818cf8; --accent: #fbbf24;
+            --bg: #0f172a; --bg2: #1e293b; --card: #1e293b; --card-border: #334155; --text: #e2e8f0;
+            --text-heading: #f8fafc; --text-secondary: #94a3b8; --text-muted: #64748b; --border: #334155;
+            --option-bg: #1e293b; --hover-bg: rgba(99,102,241,0.12); --glass-bg: rgba(30,41,59,0.85);
+            --glass-border: rgba(51,65,85,0.8); --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.4); --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.5);
+            --overlay-bg: rgba(2,6,23,0.85); --sidebar-bg: #1e293b; --sidebar-border: #334155;
+            --badge-bg: rgba(99,102,241,0.15); --badge-text: #818cf8; --countdown-color: #f8fafc;
+            --toast-bg: #1e293b; --btn-glass-bg: #1e293b; --btn-glass-border: #334155; --btn-glass-text: #cbd5e1;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter','Noto Sans Devanagari',-apple-system,BlinkMacSystemFont,sans-serif;
+            background: var(--bg); color: var(--text); min-height: 100vh; min-height: 100dvh; padding: 0;
+            transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden; line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .sidebar-backdrop { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+        .sidebar-panel { position: fixed; top: 0; right: 0; width: 380px; max-width: 90vw; height: 100%; height: 100dvh; z-index: 9001; background: var(--sidebar-bg); border-left: 1px solid var(--sidebar-border); box-shadow: -8px 0 40px rgba(0,0,0,0.15); transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; overflow-x: hidden; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .sidebar-panel.active { transform: translateX(0); }
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+        .sidebar-header h2 { font-size: 18px; font-weight: 700; color: var(--text-heading); }
+        .sidebar-close { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border); background: var(--option-bg); color: var(--text-secondary); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0; }
+        .sidebar-close:hover { background: var(--danger); color: white; border-color: transparent; transform: rotate(90deg); }
+        .sidebar-section { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 20px; transition: var(--transition); }
+        .sidebar-section h3 { font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .sidebar-section h3 i { font-size: 13px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: var(--badge-bg); border-radius: 6px; color: var(--badge-text); }
+        .sidebar-info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); gap: 12px; }
+        .sidebar-info-row:last-child { border-bottom: none; }
+        .sidebar-info-label { color: var(--text-secondary); font-weight: 500; font-size: 12px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
+        .sidebar-info-value { font-weight: 700; text-align: right; color: var(--text-heading); word-break: break-word; font-size: 13px; }
+        .sidebar-info-value.highlight { color: var(--primary); }
+        .sidebar-steps { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .sidebar-steps li { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--text); line-height: 1.6; }
+        .sidebar-steps li .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+        .sidebar-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; color: var(--text-secondary); }
+        .sidebar-legend span { display: flex; align-items: center; gap: 8px; }
+        .legend-dot-sidebar { width: 12px; height: 12px; border-radius: 4px; display: inline-block; flex-shrink: 0; }
+        .mock-container { max-width: 1100px; margin: 0 auto; padding: 16px; padding-bottom: 24px; }
+        @media (max-width: 768px) { .mock-container { padding: 8px; } }
+        .top-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; background: var(--card); padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--card-border); box-shadow: var(--shadow); transition: var(--transition); overflow: hidden; }
+        @media (max-width: 768px) { .top-bar { border-radius: var(--radius); margin: 0 0 12px 0; padding: 12px 14px; } }
+        .top-bar-row1 { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .top-bar-row2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--border); }
+        .test-title-group { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+        .exam-icon-top { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 18px; color: white; flex-shrink: 0; overflow: hidden; box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
+        .exam-icon-top img { width: 100%; height: 100%; object-fit: cover; }
+        .test-title { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+        .test-title .exam-name-line { font-size: 11px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .test-title .test-name-line { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-heading); }
+        .practice-badge { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; background: rgba(16,185,129,0.1); border: 1.5px solid rgba(16,185,129,0.3); border-radius: 24px; padding: 5px 14px; font-weight: 700; font-size: 11px; color: var(--success); white-space: nowrap; }
+        .top-actions-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .icon-btn { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--btn-glass-border); background: var(--btn-glass-bg); color: var(--btn-glass-text); cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0; }
+        .icon-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
+        .icon-btn.danger:hover { background: var(--danger); border-color: var(--danger); box-shadow: 0 4px 12px rgba(239,68,68,0.25); }
+        .progress-card { background: var(--card); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 16px; border: 1px solid var(--card-border); box-shadow: var(--shadow); transition: var(--transition); overflow: hidden; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; flex-wrap: wrap; gap: 6px; }
+        .progress-header span:last-child { color: var(--primary); }
+        .progress-bar { height: 6px; background: var(--option-bg); border-radius: 100px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 100px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); position: relative; }
+        .question-card { background: var(--card); border-radius: var(--radius); padding: 28px; margin-bottom: 16px; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1); transition: var(--transition); width: 100%; position: relative; overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; max-width: 100%; min-width: 0; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .question-card { padding: 16px 12px; border-radius: var(--radius-sm); } }
+        .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .q-badge { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 6px 16px; border-radius: 100px; font-weight: 700; font-size: 12px; box-shadow: 0 4px 12px rgba(79,70,229,0.25); letter-spacing: 0.3px; white-space: nowrap; }
+        .q-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+        .q-marks { font-weight: 700; font-size: 12px; color: var(--accent); background: rgba(245,158,11,0.1); padding: 6px 14px; border-radius: 100px; border: 1px solid rgba(245,158,11,0.2); white-space: nowrap; }
+        .question-text { font-size: 15px; font-weight: 500; line-height: 1.8; color: var(--text-heading); background: var(--option-bg); padding: 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--primary); margin-bottom: 24px; word-wrap: break-word; word-break: break-word; overflow-wrap: anywhere; overflow-x: auto; overflow-y: visible; flex-shrink: 0; transition: var(--transition); white-space: pre-line; max-width: 100%; -webkit-overflow-scrolling: touch; }
+        @media (max-width: 768px) { .question-text { font-size: 14px; padding: 14px; line-height: 1.7; margin-bottom: 16px; border-left-width: 3px; } }
+        .question-text img { display: block; max-width: 100%; height: auto; border-radius: 12px; margin: 18px auto 0; box-shadow: var(--shadow); }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; }
+        @media (max-width: 640px) { .options-grid { grid-template-columns: 1fr; gap: 10px; } }
+        .option-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--option-bg); border: 2px solid transparent; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); font-size: 14px; font-weight: 500; color: var(--text); position: relative; overflow: hidden; user-select: none; word-break: break-word; overflow-wrap: anywhere; min-width: 0; }
+        @media (max-width: 768px) { .option-card { padding: 14px 16px; font-size: 13px; gap: 10px; } }
+        .option-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary); border-radius: var(--radius-sm) 0 0 var(--radius-sm); opacity: 0; transition: opacity 0.2s; }
+        .option-card:hover { border-color: var(--primary-light); background: var(--hover-bg); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .option-card:hover::before { opacity: 0.5; }
+        .option-card.selected { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-color: transparent; transform: scale(1.01); box-shadow: 0 8px 24px rgba(79,70,229,0.35); }
+        .option-card.selected::before { opacity: 1; background: rgba(255,255,255,0.4); }
+        .option-card.correct { background: #f0fdf4 !important; border-color: var(--success) !important; color: #065f46 !important; }
+        .option-card.wrong { background: #fef2f2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
+        .option-card.disabled { pointer-events: none; opacity: 0.85; }
+        .option-letter { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.15); border-radius: 10px; font-weight: 800; font-size: 13px; color: var(--primary); flex-shrink: 0; transition: var(--transition); border: 1.5px solid var(--border); }
+        @media (max-width: 768px) { .option-letter { width: 30px; height: 30px; font-size: 11px; border-radius: 8px; } }
+        .option-card.selected .option-letter { background: rgba(255,255,255,0.25); color: white; border-color: rgba(255,255,255,0.3); }
+        .option-card.correct .option-letter { background: rgba(16,185,129,0.15); color: #065f46; border-color: rgba(16,185,129,0.3); }
+        .option-card.wrong .option-letter { background: rgba(239,68,68,0.15); color: #991b1b; border-color: rgba(239,68,68,0.3); }
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; display: none; line-height: 1.6; }
+        .feedback.correct { background: #f0fdf4; color: #065f46; border: 1px solid #bbf7d0; display: block; }
+        .feedback.wrong { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+        .action-row { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; flex-shrink: 0; }
+        @media (max-width: 768px) { .action-row { gap: 8px; margin-top: 18px; } }
+        .btn { padding: 10px 16px; border-radius: var(--radius-xs); border: 1.5px solid var(--border); font-weight: 600; font-size: 12px; cursor: pointer; transition: var(--transition); font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--btn-glass-bg); color: var(--btn-glass-text); flex: 1; min-width: 70px; white-space: nowrap; letter-spacing: 0.2px; user-select: none; }
+        .btn:disabled { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+        .btn:active:not(:disabled) { transform: scale(0.96); }
+        .btn-nav:hover:not(:disabled) { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
+        .btn-back-result { flex: 0.7; background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3); color: var(--success); min-width: 50px; }
+        .btn-back-result:hover { background: var(--success); color: white; border-color: var(--success); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16,185,129,0.25); }
+        .palette-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--card-border); transition: var(--transition); overflow: hidden; }
+        @media (max-width: 768px) { .palette-card { padding: 14px; border-radius: var(--radius-sm); } }
+        .palette-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .palette-title { font-weight: 700; color: var(--text-heading); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .palette-stats { display: flex; gap: 12px; font-size: 11px; font-weight: 600; flex-wrap: wrap; }
+        .palette-stat { display: flex; align-items: center; gap: 4px; }
+        .palette-stat-dot { width: 8px; height: 8px; border-radius: 3px; }
+        .palette-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin-bottom: 16px; }
+        @media (max-width: 500px) { .palette-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; } }
+        .palette-num { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: var(--option-bg); border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer; transition: var(--transition); border: 2px solid transparent; color: var(--text); min-width: 28px; min-height: 28px; position: relative; user-select: none; }
+        .palette-num:hover { background: var(--hover-bg); transform: scale(1.08); border-color: var(--primary-light); z-index: 1; }
+        .palette-num.answered { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(79,70,229,0.3); }
+        .palette-num.current { border-color: var(--primary); background: var(--hover-bg); transform: scale(1.1); box-shadow: 0 0 0 3px rgba(79,70,229,0.15); z-index: 2; }
+        .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--text-secondary); font-weight: 500; padding-top: 12px; border-top: 1px solid var(--border); }
+        .legend span { display: flex; align-items: center; gap: 6px; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+        .toast { position: fixed; top: 20px; right: 20px; background: var(--toast-bg); backdrop-filter: blur(20px); padding: 14px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); z-index: 10000; font-weight: 600; font-size: 13px; display: none; border: 1px solid var(--card-border); color: var(--text); animation: toastSlide 0.35s cubic-bezier(0.4,0,0.2,1); max-width: 320px; line-height: 1.5; }
+        @keyframes toastSlide { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        .sidebar-panel::-webkit-scrollbar { width: 5px; }
+        .sidebar-panel::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .summary-card { background: var(--card); border-radius: var(--radius); padding: 40px 28px; text-align: center; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); }
+        .summary-card h2 { font-size: 22px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
+        .summary-card p { color: var(--text-secondary); margin-bottom: 20px; }
+        .summary-card .summary-icon { font-size: 56px; margin-bottom: 16px; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+    <div class="sidebar-panel" id="sidebarPanel">
+        <div class="sidebar-header">
+            <h2>Practice Info</h2>
+            <button class="sidebar-close" onclick="closeSidebar()" title="Close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="sidebar-section">
+            <h3><i class="fas fa-info-circle"></i> About Practice Mode</h3>
+            <ul class="sidebar-steps">
+                <li><span class="step-num">1</span> These are the questions you got <strong>wrong</strong> in your last attempt.</li>
+                <li><span class="step-num">2</span> Click an option to answer. Correct/wrong feedback is shown instantly.</li>
+                <li><span class="step-num">3</span> <strong>No marks are saved</strong> — this is just for practice.</li>
+                <li><span class="step-num">4</span> Use <strong>Prev / Next</strong> or swipe to navigate.</li>
+                <li><span class="step-num">5</span> Click <strong>Back to Result</strong> when done.</li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3><i class="fas fa-palette"></i> Palette Legend</h3>
+            <div class="sidebar-legend">
+                <span><span class="legend-dot-sidebar" style="background:var(--primary);"></span> Attempted</span>
+                <span><span class="legend-dot-sidebar" style="border:2px solid var(--primary);background:transparent;"></span> Current</span>
+                <span><span class="legend-dot-sidebar" style="background:var(--option-bg);border:1px solid var(--border);"></span> Unvisited</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mock-container" id="mainContainer">
+        <div class="top-bar">
+            <div class="top-bar-row1">
+                <div class="test-title-group">
+                    <div class="exam-icon-top" id="examIconTop"><i class="fas fa-redo-alt"></i></div>
+                    <div class="test-title">
+                        <span class="exam-name-line" id="examNameLine">Practice Mode</span>
+                        <span class="test-name-line" id="testNameLine">Incorrect Questions</span>
+                    </div>
+                </div>
+                <div class="practice-badge"><i class="fas fa-pencil-alt"></i> Practice</div>
+            </div>
+            <div class="top-bar-row2">
+                <div class="top-actions-left">
+                    <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Mode">
+                        <i class="fas fa-sun" id="themeIcon"></i>
+                    </button>
+                    <button class="icon-btn" onclick="openSidebar()" title="Info & Help"><i class="fas fa-circle-info"></i></button>
+                </div>
+                <button class="btn btn-back-result" onclick="goBackToResult()" style="flex:0 0 auto; padding:8px 16px; border-radius:20px;">
+                    <i class="fas fa-arrow-left"></i> Back to Result
+                </button>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-header">
+                <span>📊 Progress</span>
+                <span id="progressText">0/0 attempted</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width:0%"></div>
+            </div>
+        </div>
+
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-badge" id="qNumber">Q 1/0</span>
+                <div class="q-header-right">
+                    <span class="q-marks">Practice</span>
+                </div>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div id="feedbackArea"></div>
+            <div class="action-row">
+                <button class="btn btn-nav" onclick="navigate(-1)" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="btn btn-nav" onclick="navigate(1)" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="palette-card" id="paletteCard">
+            <div class="palette-header">
+                <div class="palette-title">📋 Question Palette</div>
+                <div class="palette-stats">
+                    <span class="palette-stat"><span class="palette-stat-dot" style="background:var(--primary);"></span><span id="statAttempted">0</span></span>
+                    <span class="palette-stat"><span class="palette-stat-dot" style="background:var(--option-bg);border:1px solid var(--border);"></span><span id="statUnattempted">0</span></span>
+                </div>
+            </div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="legend">
+                <span><span class="legend-dot" style="background:var(--primary);"></span> Attempted</span>
+                <span><span class="legend-dot" style="border:2px solid var(--primary);background:transparent;"></span> Current</span>
+                <span><span class="legend-dot" style="background:var(--option-bg);border:1px solid var(--border);"></span> Unvisited</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const testCode = params.get('testCode') || '';
+        const timestamp = params.get('timestamp') || '';
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        const username = storedUser.username || 'guest';
+
+        if (!testCode || !timestamp) {
+            Swal.fire({ icon: 'error', title: 'Missing Data', text: 'Cannot load practice. Missing parameters.', confirmButtonColor: '#4f46e5' }).then(() => {
+                window.location.href = 'result.html';
+            });
+        }
+
+        const reviewKey = `reviewData_${username}_${testCode}_${timestamp}`;
+        let incorrectQuestions = [];
+        let currentIndex = 0;
+        let userAttempts = {}; // { questionIndex: selectedOptionIndex }
+        let correctAnswersMap = {}; // { questionIndex: correctIndex }
+
+        function loadData() {
+            const raw = localStorage.getItem(reviewKey);
+            if (!raw) {
+                Swal.fire({ icon: 'error', title: 'No Review Data', text: 'Unable to retrieve review data.', confirmButtonColor: '#4f46e5' }).then(() => goBackToResult());
+                return;
+            }
+            const reviewData = JSON.parse(raw);
+            const allQuestions = reviewData.questions || [];
+            // Filter incorrect: userAnswer !== correctIndex
+            incorrectQuestions = allQuestions.filter((q, idx) => {
+                const correctIdx = q.correctIndex !== undefined ? q.correctIndex : (q.correctAnswer ? (q.correctAnswer.charCodeAt(0) - 65) : null);
+                const userAns = q.userAnswer !== undefined && q.userAnswer !== null ? q.userAnswer : null;
+                return userAns !== correctIdx;
+            }).map((q, i) => ({ ...q, _origIdx: i }));
+
+            if (incorrectQuestions.length === 0) {
+                Swal.fire({ icon: 'success', title: 'Perfect Score!', text: 'You answered all questions correctly. Nothing to practice!', confirmButtonColor: '#4f46e5' }).then(() => goBackToResult());
+                return;
+            }
+
+            // Build correct answers map
+            incorrectQuestions.forEach((q, i) => {
+                const correctIdx = q.correctIndex !== undefined ? q.correctIndex : (q.correctAnswer ? (q.correctAnswer.charCodeAt(0) - 65) : null);
+                correctAnswersMap[i] = correctIdx;
+            });
+
+            // Set test info in header
+            document.getElementById('examNameLine').textContent = reviewData.exam || 'Practice';
+            document.getElementById('testNameLine').textContent = reviewData.testName || 'Incorrect Questions';
+
+            renderQuestion();
+            renderPalette();
+            updateProgress();
+        }
+
+        function goBackToResult() {
+            const lastResultPage = sessionStorage.getItem('lastResultPage');
+            if (lastResultPage) {
+                window.location.href = lastResultPage;
+            } else {
+                window.location.href = `result.html?testCode=${encodeURIComponent(testCode)}&timestamp=${encodeURIComponent(timestamp)}`;
+            }
+        }
+
+        function renderQuestion() {
+            if (currentIndex >= incorrectQuestions.length) return;
+            const q = incorrectQuestions[currentIndex];
+            const qNum = currentIndex + 1;
+            const total = incorrectQuestions.length;
+            document.getElementById('qNumber').textContent = `Q ${qNum}/${total}`;
+
+            // Question text
+            const questionText = q.question || q.Question || 'Question text unavailable';
+            let questionHTML = `<div style="font-weight:600;">${questionText}</div>`;
+            if (q.image_url) {
+                const imgUrl = `https://testmaster-pro.github.io/Questions-image/${q.image_url}`;
+                questionHTML += `<div style="margin-top:18px;text-align:center;"><img src="${imgUrl}" alt="Question image" style="max-width:100%;height:auto;border-radius:12px;box-shadow:var(--shadow);" onerror="this.style.display='none';" loading="lazy" /></div>`;
+            }
+            document.getElementById('questionText').innerHTML = questionHTML;
+
+            // Options
+            const options = q.options || q.oEn || [];
+            const correctIdx = correctAnswersMap[currentIndex];
+            const userSelected = userAttempts[currentIndex] !== undefined ? userAttempts[currentIndex] : null;
+            const isAnswered = userSelected !== null;
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            if (Array.isArray(options)) {
+                options.forEach((opt, i) => {
+                    const card = document.createElement('div');
+                    let cls = 'option-card';
+                    if (isAnswered) {
+                        cls += ' disabled';
+                        if (i === correctIdx) cls += ' correct';
+                        else if (userSelected === i && userSelected !== correctIdx) cls += ' wrong';
+                    } else if (userSelected === i) {
+                        cls += ' selected';
+                    }
+                    card.className = cls;
+                    card.setAttribute('tabindex', isAnswered ? '-1' : '0');
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('aria-label', `Option ${letters[i]}`);
+                    if (!isAnswered) {
+                        card.onclick = () => selectOption(i);
+                        card.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOption(i); } };
+                    }
+                    card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt || 'Option ' + letters[i]}</span>`;
+                    grid.appendChild(card);
+                });
+            }
+
+            // Feedback
+            const feedbackArea = document.getElementById('feedbackArea');
+            if (isAnswered) {
+                const isCorrect = userSelected === correctIdx;
+                feedbackArea.innerHTML = `<div class="feedback ${isCorrect ? 'correct' : 'wrong'}">
+                    <strong>${isCorrect ? '✓ Correct!' : '✗ Incorrect.'}</strong> The correct answer is <strong>${letters[correctIdx]}</strong>.
+                    ${q.explanation ? `<br><span style="opacity:0.85;">${q.explanation}</span>` : ''}
+                </div>`;
+            } else {
+                feedbackArea.innerHTML = '';
+            }
+
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === incorrectQuestions.length - 1;
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([document.getElementById('questionCard')]).catch(() => {});
+            }
+        }
+
+        function selectOption(index) {
+            if (userAttempts[currentIndex] !== undefined) return;
+            userAttempts[currentIndex] = index;
+            renderQuestion();
+            renderPalette();
+            updateProgress();
+            showToast('✅ Answer recorded!');
+        }
+
+        function navigate(dir) {
+            const idx = currentIndex + dir;
+            if (idx >= 0 && idx < incorrectQuestions.length) {
+                currentIndex = idx;
+                renderQuestion();
+                renderPaletteHighlight();
+                document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            if (!incorrectQuestions.length) return;
+            for (let i = 0; i < incorrectQuestions.length; i++) {
+                const num = document.createElement('div');
+                num.className = 'palette-num';
+                num.setAttribute('tabindex', '0');
+                num.setAttribute('role', 'button');
+                num.setAttribute('aria-label', `Question ${i + 1}`);
+                num.textContent = i + 1;
+                if (userAttempts[i] !== undefined) num.classList.add('answered');
+                if (i === currentIndex) num.classList.add('current');
+                num.onclick = () => {
+                    currentIndex = i;
+                    renderQuestion();
+                    renderPaletteHighlight();
+                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                num.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        currentIndex = i;
+                        renderQuestion();
+                        renderPaletteHighlight();
+                        document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                };
+                grid.appendChild(num);
+            }
+            updatePaletteStats();
+        }
+
+        function renderPaletteHighlight() {
+            document.querySelectorAll('.palette-num').forEach((num, i) => {
+                num.classList.remove('current', 'answered');
+                if (userAttempts[i] !== undefined) num.classList.add('answered');
+                if (i === currentIndex) num.classList.add('current');
+            });
+            updatePaletteStats();
+        }
+
+        function updatePaletteStats() {
+            const attempted = Object.keys(userAttempts).length;
+            const unattempted = incorrectQuestions.length - attempted;
+            document.getElementById('statAttempted').textContent = attempted;
+            document.getElementById('statUnattempted').textContent = unattempted;
+        }
+
+        function updateProgress() {
+            if (!incorrectQuestions.length) return;
+            const attempted = Object.keys(userAttempts).length;
+            const pct = (attempted / incorrectQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = `${attempted}/${incorrectQuestions.length} attempted (${Math.round(pct)}%)`;
+        }
+
+        // Sidebar
+        function openSidebar() {
+            document.getElementById('sidebarPanel').classList.add('active');
+            document.getElementById('sidebarBackdrop').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSidebar() {
+            document.getElementById('sidebarPanel').classList.remove('active');
+            document.getElementById('sidebarBackdrop').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+        // Theme
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            document.getElementById('themeIcon').className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('mock_theme', theme);
+        }
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme') || 'light';
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        }
+        (function loadTheme() {
+            const saved = localStorage.getItem('mock_theme');
+            if (saved) applyTheme(saved);
+            else applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        })();
+
+        // Touch swipe
+        let touchStartX = 0, touchStartY = 0;
+        const questionCard = document.getElementById('questionCard');
+        questionCard.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        questionCard.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+                navigate(dx > 0 ? -1 : 1);
+            }
+        }, { passive: true });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (document.getElementById('sidebarPanel').classList.contains('active')) return;
+            switch (e.key) {
+                case 'ArrowLeft': e.preventDefault(); navigate(-1); break;
+                case 'ArrowRight': e.preventDefault(); navigate(1); break;
+                case 'a': case 'A': case '1': selectOption(0); break;
+                case 'b': case 'B': case '2': selectOption(1); break;
+                case 'c': case 'C': case '3': selectOption(2); break;
+                case 'd': case 'D': case '4': selectOption(3); break;
+            }
+        });
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'flex';
+            clearTimeout(t._t);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2200);
+        }
+
+        // Init
+        loadData();
+    </script>
+</body>
+</html>
