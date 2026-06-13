@@ -655,11 +655,20 @@
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyky_KwdIlrFqzBsiRvejHIeuoA35aWr-IXaVXutOB5LrcfgkscXuO5dqbXOhs6M-NXuw/exec';
+        // ==================== UNIFIED API ENDPOINT (same as instruction.html & test2.html) ====================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbynfCY3gp2dsDBTLZMB9yurx1UnWsp3sgCliD92jKL-lNfy3hVmfFHZgY0p0zvocYKrow/exec';
+        
         const urlParams = new URLSearchParams(window.location.search);
         const testCode = urlParams.get('testCode');
         const timestamp = urlParams.get('timestamp');
-        const storedUser = JSON.parse(localStorage.getItem('user')) || { username: 'guest', name: 'Guest' };
+        
+        // Robust user extraction
+        const storedUserRaw = JSON.parse(localStorage.getItem('user')) || {};
+        const storedUser = {
+            username: storedUserRaw.username || 'guest',
+            name: storedUserRaw.name || 'Guest',
+            avatarCode: storedUserRaw.avatarCode || 'AVATAR001'
+        };
         const username = storedUser.username;
         const reviewKey = `reviewData_${username}_${testCode}_${timestamp}`;
 
@@ -705,26 +714,42 @@
             else applyTheme('light');
         }
 
-        // ---------- LOAD DATA (FIXED) ----------
+        // ==================== FIXED DATA LOADER ====================
         async function loadReviewData() {
-            // Fetch test metadata only for top bar / sidebar (not for questions)
+            // 1. Try to load test metadata from MockTests first, then TestSeries
+            let testMetaData = null;
             try {
-                const res = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
-                const data = await res.json();
-                if (!data.success) throw new Error(data.error || 'Test not found');
+                // Try MockTests first
+                let res = await fetch(`${API_URL}?action=getMockTest&testCode=${encodeURIComponent(testCode)}`);
+                let data = await res.json();
+                if (!data.success) {
+                    // Fallback to TestSeries
+                    res = await fetch(`${API_URL}?action=getTestSeriesTest&testCode=${encodeURIComponent(testCode)}`);
+                    data = await res.json();
+                    if (!data.success) throw new Error(data.error || 'Test not found in any sheet');
+                }
                 testConfig = data.test;
             } catch (err) {
-                document.body.innerHTML = `<div style="text-align:center;padding:60px 20px;"><h2>❌ Error loading test</h2><p>${err.message}</p><button class="btn-back-result" onclick="goBackToResult()">Back to Result</button></div>`;
-                return;
+                // Even if metadata fails, we can still show the review (questions are saved in localStorage)
+                console.warn('Could not load test metadata, showing review without header info:', err.message);
+                // Set fallback values so the rest of the page still works
+                testConfig = {
+                    exam: '',
+                    testName: testCode,
+                    subject: '',
+                    duration: 0,
+                    marksPerQuestion: 0,
+                    negativeMarking: 0,
+                    language: ''
+                };
             }
 
-            // Load saved review data – this contains the exact questions & answers
+            // 2. Load saved review data – this works regardless of metadata
             const stored = JSON.parse(localStorage.getItem(reviewKey) || 'null');
             if (!stored || !stored.questions || !Array.isArray(stored.questions)) {
                 document.body.innerHTML = `<div style="text-align:center;padding:60px 20px;"><h2>❌ Review data not found</h2><p>Your answers for this attempt could not be loaded.</p><button class="btn-back-result" onclick="goBackToResult()">Back to Result</button></div>`;
                 return;
             }
-
             reviewQuestions = stored.questions;
 
             populateTopBar();
