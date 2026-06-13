@@ -2953,11 +2953,17 @@
                 } });
         }
 
-        function startTest(testCode, file, source) { if (!testCode) return showToast('Test code missing.', 'error'); if (
-                source === 'json' && file) { localStorage.setItem('last_mock_file', file);
+        function startTest(testCode, file, source) {
+            if (!testCode) return showToast('Test code missing.', 'error');
+            localStorage.setItem('lastExamPage', window.location.href); // ADDED: remember current page
+            if (source === 'json' && file) {
+                localStorage.setItem('last_mock_file', file);
                 window.location.href =
-                    `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(testCode)}`; } else { window
-                    .location.href = `instructions.html?testCode=${encodeURIComponent(testCode)}`; } }
+                    `test.html?file=${encodeURIComponent(file)}&testCode=${encodeURIComponent(testCode)}`;
+            } else {
+                window.location.href = `instructions.html?testCode=${encodeURIComponent(testCode)}`;
+            }
+        }
 
         function shareTestLink(testCode) { const link =
                 `${window.location.origin}/exam2.html?testCode=${encodeURIComponent(testCode)}`; if (navigator.share) {
