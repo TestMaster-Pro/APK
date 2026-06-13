@@ -1769,7 +1769,10 @@
                         <i class="fas fa-share-alt"></i> Share Result
                     </button>
                 </div>
-                <!-- Removed the "View Reviews" button as requested -->
+                <!-- New button: Practice Incorrect Questions -->
+                <button class="btn btn-accent" id="incorrectBtn" onclick="navigateToIncorrect()">
+                    <i class="fas fa-redo-alt"></i> Practice Incorrect Questions
+                </button>
                 <button class="btn btn-outline" onclick="navigate(getTestsPageUrl())">
                     <i class="fas fa-home"></i> Back to Exams
                 </button>
@@ -2379,32 +2382,39 @@
             window.location.href = reviewUrl;
         }
 
-        // Check if review data exists
-        (function checkReviewDataAvailability() {
-            if (!attemptTimestamp) {
-                const btn = document.getElementById('reviewAnswersBtn');
-                const stickyBtn = document.querySelector('.btn-sticky-review');
-                if (btn) { btn.disabled = true;
-                    btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Review unavailable';
-                    btn.title = 'No timestamp provided for review data'; }
-                if (stickyBtn) { stickyBtn.disabled = true;
-                    stickyBtn.style.opacity = '0.45';
-                    stickyBtn.title = 'No timestamp provided'; }
+        // New function for incorrect practice
+        function navigateToIncorrect() {
+            if (!attemptTimestamp || !testCode) {
+                Swal.fire({ icon: 'error', title: 'Missing Data', text: 'No attempt timestamp found.' });
                 return;
             }
             const storedUser = JSON.parse(localStorage.getItem('user')) || { username: 'guest' };
             const username = storedUser.username;
             const key = `reviewData_${username}_${testCode}_${attemptTimestamp}`;
+            const reviewData = JSON.parse(localStorage.getItem(key) || 'null');
+            if (!reviewData || !reviewData.questions || !reviewData.questions.length) {
+                Swal.fire({ icon: 'warning', title: 'No Review Data', text: 'Review data not found. Cannot practice incorrect questions.' });
+                return;
+            }
+            // Save the current result URL so we can come back
+            sessionStorage.setItem('lastResultPage', window.location.href);
+            window.location.href = `incorrect.html?testCode=${encodeURIComponent(testCode)}&timestamp=${encodeURIComponent(attemptTimestamp)}`;
+        }
+
+        // Check if review data exists and enable/disable buttons
+        (function checkReviewDataAvailability() {
+            const storedUser = JSON.parse(localStorage.getItem('user')) || { username: 'guest' };
+            const username = storedUser.username;
+            const key = `reviewData_${username}_${testCode}_${attemptTimestamp}`;
             const data = JSON.parse(localStorage.getItem(key) || 'null');
-            if (!data) {
-                const btn = document.getElementById('reviewAnswersBtn');
-                const stickyBtn = document.querySelector('.btn-sticky-review');
-                if (btn) { btn.disabled = true;
-                    btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Review unavailable';
-                    btn.title = 'Review data not found in local storage'; }
-                if (stickyBtn) { stickyBtn.disabled = true;
-                    stickyBtn.style.opacity = '0.45';
-                    stickyBtn.title = 'Review data not found'; }
+            const noData = !data || !data.questions || !data.questions.length;
+            const btnReview = document.getElementById('reviewAnswersBtn');
+            const stickyBtnReview = document.querySelector('.btn-sticky-review');
+            const btnIncorrect = document.getElementById('incorrectBtn');
+            if (noData) {
+                if (btnReview) { btnReview.disabled = true; btnReview.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Review unavailable'; }
+                if (stickyBtnReview) { stickyBtnReview.disabled = true; stickyBtnReview.style.opacity = '0.45'; }
+                if (btnIncorrect) { btnIncorrect.disabled = true; btnIncorrect.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Incorrect Practice unavailable'; }
             }
         })();
 
