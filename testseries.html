@@ -6,7 +6,18 @@
     <meta name="theme-color" content="#243748">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Test Series · TestMasterPro.space</title>
+    <!-- ===== META TAGS ADDED START ===== -->
+    <title>Free SSC Mock Test Series 2026 | SSC CGL, CHSL, GD, MTS | TestMasterPro</title>
+    <meta name="description" content="Practice free SSC CGL, CHSL, GD, MTS and other competitive exam mock test series with detailed solutions, performance analysis and latest exam pattern on TestMasterPro.">
+    <meta name="keywords" content="SSC Mock Test, Free SSC Mock Test 2026, SSC CGL Mock Test, SSC CHSL Mock Test, SSC GD Mock Test, SSC MTS Mock Test, Online Test Series, TestMasterPro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://testmasterpro.space/testseries.html">
+    <meta property="og:title" content="Free SSC Mock Test Series 2026 | TestMasterPro">
+    <meta property="og:description" content="Practice SSC CGL, CHSL, GD and MTS mock tests with detailed solutions and performance analysis.">
+    <meta property="og:url" content="https://testmasterpro.space/testseries.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TestMasterPro">
+    <!-- ===== META TAGS ADDED END ===== -->
     <link rel="manifest" href="./json/manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -456,6 +467,14 @@
             font-size: 13px;
         }
 
+        /* Refresh badge */
+        .page-refresh-badge {
+            text-align: center; padding: 6px 0; font-size: 11px;
+            color: var(--gray-500); display: flex; align-items: center;
+            justify-content: center; gap: 5px;
+        }
+        .page-refresh-badge i { font-size: 11px; }
+
         /* Footer */
         .pro-footer {
             background: var(--secondary); color: var(--text-light);
@@ -579,6 +598,11 @@
     <!-- Toast container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- Refresh badge for background data updates -->
+    <div class="page-refresh-badge hidden" id="pageRefreshBadge">
+        <i class="fas fa-sync-alt fa-spin"></i> <span>Refreshing latest data…</span>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar(event)">
         <aside class="sidebar" id="sidebar" onclick="event.stopPropagation()">
@@ -701,7 +725,11 @@
     <footer class="pro-footer">
         <div class="footer-grid">
             <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
-            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul>
+                <div class="page-refresh-badge" id="footerUpcomingRefresh" hidden>
+                    <i class="fas fa-sync-alt fa-spin"></i> Refreshing
+                </div>
+            </div>
         </div>
         <div class="footer-install-section">
             <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
@@ -734,6 +762,7 @@
         const TEST_SERIES_DETAILS_JSON = './json/testseriesdetails.json';
         const MOCKS_CACHE_KEY = 'cachedAllMocks';
         const SERIES_CACHE_KEY = 'cachedTestSeries';
+        const FOOTER_UPCOMING_CACHE_KEY = 'cachedFooterUpcoming';
         const OWNED_SERIES_KEY = 'ownedSeries';
         const SELECTED_CATEGORY_KEY = 'selectedTestSeriesCategory';
 
@@ -772,6 +801,19 @@
         function goHome() { window.location.href = user ? 'dashboard.html' : 'index.html'; }
         function navigate(url) { window.location.href = url; }
         function goToResults() { localStorage.setItem('lastExamPage', window.location.href); navigate('allresult.html'); }
+
+        // ========== CACHE HELPERS ==========
+        function loadCache(key) {
+            try { const raw = localStorage.getItem(key); if (raw) return JSON.parse(raw); } catch(e) {}
+            return null;
+        }
+        function saveCache(key, data) {
+            try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+        }
+
+        function showPageRefreshBadge(show = true) {
+            document.getElementById('pageRefreshBadge').classList.toggle('hidden', !show);
+        }
 
         // ========== SIDEBAR ==========
         function openSidebar() {
@@ -839,7 +881,7 @@
             }
         }
 
-        // ========== DATA LOADING ==========
+        // ========== DATA LOADING (with caching) ==========
         async function loadUserPremium() {
             if (!user || !user.username) { userPremiumPlans = []; return; }
             try {
@@ -854,11 +896,9 @@
         }
 
         function updateOwnedSeries() {
-            // Free series are owned by default
             allSeries.forEach(s => {
                 if (!s.plan || s.plan === 'free') ownedSeriesSet.add(s.code);
             });
-            // Premium plans owned via user subscription
             if (userPremiumPlans.length) {
                 allSeries.forEach(s => {
                     if (s.plan && s.plan !== 'free') {
@@ -871,39 +911,36 @@
             localStorage.setItem(OWNED_SERIES_KEY, JSON.stringify([...ownedSeriesSet]));
         }
 
-        function cacheSeries(data) { try { localStorage.setItem(SERIES_CACHE_KEY, JSON.stringify(data)); } catch(e) {} }
-        function loadSeriesFromCache() {
-            try {
-                const c = localStorage.getItem(SERIES_CACHE_KEY);
-                if (c) { const p = JSON.parse(c); if (p?.series?.length) return p.series; }
-            } catch(e) {}
-            return null;
-        }
-
         async function loadSeries() {
-            let cachedSeries = loadSeriesFromCache();
-            if (cachedSeries) {
-                allSeries = cachedSeries;
+            // 1. Display from cache instantly if available
+            const cached = loadCache(SERIES_CACHE_KEY);
+            if (cached && cached.series && cached.series.length) {
+                allSeries = cached.series;
                 postSeriesLoad();
             }
+            // 2. Show refresh indicator
+            showPageRefreshBadge(true);
             try {
                 const resp = await fetch(TEST_SERIES_JSON, { cache: 'no-store' });
                 if (resp.ok) {
                     const data = await resp.json();
                     if (data.series && Array.isArray(data.series)) {
+                        // update if different
                         if (JSON.stringify(data.series) !== JSON.stringify(allSeries)) {
                             allSeries = data.series;
-                            cacheSeries(data);
+                            saveCache(SERIES_CACHE_KEY, data);
                             postSeriesLoad();
                         }
-                        return;
                     }
                 }
             } catch(e) {}
-            if (!allSeries.length) {
-                document.getElementById('categoryGrid').innerHTML =
-                    '<div class="empty-state">⚠️ Could not load test series. Please try again later.</div>';
-                showToast('Could not load test series', 'error');
+            finally {
+                showPageRefreshBadge(false);
+                if (!allSeries.length) {
+                    document.getElementById('categoryGrid').innerHTML =
+                        '<div class="empty-state">⚠️ Could not load test series. Please try again later.</div>';
+                    showToast('Could not load test series', 'error');
+                }
             }
         }
 
@@ -913,9 +950,9 @@
         }
 
         async function loadMocksForFooter() {
-            const cached = localStorage.getItem(MOCKS_CACHE_KEY);
+            const cached = loadCache(MOCKS_CACHE_KEY);
             if (cached) {
-                allMocks = JSON.parse(cached);
+                allMocks = cached;
                 renderFooterExamCategories();
             }
             try {
@@ -925,7 +962,7 @@
                     if (Array.isArray(data)) {
                         if (JSON.stringify(data) !== JSON.stringify(allMocks)) {
                             allMocks = data;
-                            localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data));
+                            saveCache(MOCKS_CACHE_KEY, data);
                             renderFooterExamCategories();
                         }
                     }
@@ -1016,12 +1053,10 @@
             renderContinueLearning();
             renderTrending();
             handleShareLink();
-            // Restore saved category if any
             const savedCat = localStorage.getItem(SELECTED_CATEGORY_KEY);
             if (!window.location.search.includes('series') && savedCat && categories.includes(savedCat)) {
                 selectCategory(savedCat);
             }
-            // Update stats
             document.getElementById('statTests').textContent = `${allSeries.length}+`;
         }
 
@@ -1065,20 +1100,16 @@
         }
 
         function renderTrending() {
-            // ONLY show series that have Trending:"yes" in the JSON
             const trendingSeries = allSeries.filter(s =>
                 s.Trending === 'yes' || s.trending === 'yes'
             );
             const section = document.getElementById('trendingSection');
             const container = document.getElementById('trendingContainer');
-
             if (!trendingSeries.length) {
                 section.classList.add('hidden');
                 return;
             }
             section.classList.remove('hidden');
-
-            // Carousel if more than 1 trending series, else single card grid
             if (trendingSeries.length > 1) {
                 container.innerHTML = `<div class="trending-carousel">${trendingSeries.map(s => renderSeriesCard(s, true)).join('')}</div>`;
             } else {
@@ -1117,23 +1148,17 @@
             const isPaid = (s.plan && s.plan !== 'free');
             const userOwns = ownedSeriesSet.has(s.code);
             const image = s.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop';
-
-            // Determine top badge
             let topBadgeHtml = '';
             if (isTrending) {
                 topBadgeHtml = `<div class="series-badge-top trending-badge-card"><i class="fas fa-fire"></i> TRENDING</div>`;
             } else if (isPaid) {
                 topBadgeHtml = `<div class="series-badge-top premium"><i class="fas fa-crown"></i> PREMIUM</div>`;
             }
-
-            // Feature chips
             let chipsHtml = '';
             if (s.language) chipsHtml += `<span class="chip"><i class="fas fa-language"></i> ${s.language}</span>`;
             if (s.containsPYQ || s.PYQ) chipsHtml += `<span class="chip"><i class="fas fa-history"></i> PYQ</span>`;
             if (s.isLatest || s.Latest) chipsHtml += `<span class="chip"><i class="fas fa-star"></i> Latest</span>`;
             if (s.totalTests) chipsHtml += `<span class="chip"><i class="fas fa-list-ol"></i> ${s.totalTests} Tests</span>`;
-
-            // Action buttons
             let actionsHtml = '';
             if (userOwns) {
                 actionsHtml = `
@@ -1149,7 +1174,6 @@
                     <button class="btn btn-primary" onclick="event.stopPropagation();attemptSeries('${s.code}')"><i class="fas fa-play"></i> View Tests</button>
                     <button class="btn btn-details" onclick="event.stopPropagation();showSeriesDetails('${s.code}')"><i class="fas fa-info-circle"></i> Details</button>`;
             }
-
             return `
                 <div class="series-card">
                     <div class="card-img-wrapper">
@@ -1268,20 +1292,34 @@
             html += `<li><a onclick="navigate('apk.html')">📱 Get APK</a></li>`;
             container.innerHTML = html;
         }
+
         async function renderFooterUpcoming() {
             const container = document.getElementById('footerUpcomingExams');
+            const refreshBadge = document.getElementById('footerUpcomingRefresh');
+            // Show cached instantly
+            const cached = loadCache(FOOTER_UPCOMING_CACHE_KEY);
+            if (cached && cached.length) {
+                container.innerHTML = cached.map(e => `<li><a>${e.name}</a></li>`).join('');
+                refreshBadge.hidden = true;
+            }
+            refreshBadge.hidden = false;
             try {
                 const resp = await fetch('./json/upcomingfooter.json', { cache: 'no-store' });
                 if (resp.ok) {
                     const data = await resp.json();
                     if (Array.isArray(data) && data.length) {
-                        container.innerHTML = data.map(e => `<li><a>${e.name}</a></li>`).join('');
+                        if (JSON.stringify(data) !== JSON.stringify(cached)) {
+                            saveCache(FOOTER_UPCOMING_CACHE_KEY, data);
+                            container.innerHTML = data.map(e => `<li><a>${e.name}</a></li>`).join('');
+                        }
                         return;
                     }
                 }
             } catch(e) {}
-            container.innerHTML = '<li><a>Loading upcoming exams...</a></li>';
+            if (!cached) container.innerHTML = '<li><a>Loading upcoming exams...</a></li>';
+            refreshBadge.hidden = true;
         }
+
         function openInstallPopup() {
             Swal.fire({
                 title: '📲 Install TestMaster Pro',
@@ -1315,7 +1353,13 @@
         // ========== INIT ==========
         (async function init() {
             updateUserUI();
-            loadSeries();
+            // Show cached series immediately if available (flicker-free)
+            const cachedSeries = loadCache(SERIES_CACHE_KEY);
+            if (cachedSeries?.series?.length) {
+                allSeries = cachedSeries.series;
+                postSeriesLoad();
+            }
+            loadSeries(); // silently updates in background
             loadUserPremium().then(() => {
                 updateOwnedSeries();
                 renderAll();
