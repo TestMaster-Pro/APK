@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== ADDED META TAGS START ===== -->
+    <meta property="og:title" content="TestMasterPro Dashboard">
+    <meta property="og:description" content="Track your SSC preparation and mock test performance on TestMasterPro.">
+    <meta property="og:url" content="https://testmasterpro.space/dashboard.html">
+    <meta property="og:type" content="website">
+    <!-- ===== ADDED META TAGS END ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#243748">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TestMasterPro.space · Dashboard</title>
+    <title>TestMasterPro Dashboard | TestMasterPro.space</title>
+    <meta name="description" content="Access your TestMasterPro dashboard to track mock test performance, view results, monitor streaks, and continue your SSC exam preparation.">
+    <meta name="keywords" content="TestMasterPro Dashboard, SSC Dashboard, SSC Mock Test, TestMasterPro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://testmasterpro.space/dashboard.html">
     <link rel="manifest" href="./json/manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -379,6 +389,20 @@
 
         .hidden { display: none !important; }
 
+        /* Refresh indicator */
+        .refresh-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--gray-500);
+            background: var(--gray-100);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            opacity: 0.8;
+        }
+
         @media (min-width:600px) {
             .bottom-nav { display: none; }
             body { padding-bottom: 0; }
@@ -469,6 +493,7 @@
         <div class="hero-slider-wrap" id="heroWrap">
             <div class="hero-slider" id="heroSlider"><div style="min-width:100%;height:200px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse"></i> Loading banners...</div></div>
             <div class="hero-dots" id="heroDots"></div>
+            <div class="hero-refresh" id="heroRefresh" style="display:none; position:absolute; top:8px; right:12px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:2px 8px; border-radius:10px;"><i class="fas fa-sync-alt fa-spin"></i> Refreshing</div>
         </div>
 
         <!-- Quick Actions Grid (smaller) -->
@@ -501,6 +526,7 @@
             <div class="popular-slider-wrap" id="popularSliderWrap">
                 <div class="popular-slider" id="popularSlider"><div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div></div>
                 <div class="popular-dots" id="popularDots"></div>
+                <div style="text-align:center; padding:4px 0 0;" id="popularRefresh" hidden><span class="refresh-badge"><i class="fas fa-sync-alt fa-spin"></i> Refreshing</span></div>
             </div>
         </section>
 
@@ -519,6 +545,7 @@
         <section style="margin-bottom:24px;">
             <div class="section-header"><div class="section-icon"><i class="fas fa-calendar-alt"></i></div><h2>Upcoming Exams</h2><span class="badge-tag">NEW</span></div>
             <div class="upcoming-scroll" id="upcomingScroll">Loading...</div>
+            <div style="text-align:center; padding:4px 0 0;" id="upcomingRefresh" hidden><span class="refresh-badge"><i class="fas fa-sync-alt fa-spin"></i> Refreshing</span></div>
         </section>
 
         <!-- Free Mock Tests -->
@@ -543,6 +570,7 @@
                 <div class="stat-card"><i class="fas fa-trophy"></i><div class="number" id="userRank">--</div><div class="label">Rank</div></div>
                 <div class="stat-card"><i class="fas fa-coins"></i><div class="number" id="coinBalance">--</div><div class="label">Coins Earned</div></div>
             </div>
+            <div style="text-align:center; padding:4px 0 0;" id="perfRefresh" hidden><span class="refresh-badge"><i class="fas fa-sync-alt fa-spin"></i> Refreshing</span></div>
         </section>
 
         <!-- Community / Social -->
@@ -582,7 +610,7 @@
     <footer class="pro-footer">
         <div class="footer-grid">
             <div class="footer-col"><h3>Exams</h3><ul id="footerExamCategories"></ul></div>
-            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul></div>
+            <div class="footer-col"><h3>Upcoming Exam</h3><ul id="footerUpcomingExams"></ul><div style="text-align:left; padding-top:4px;" id="footerUpcomingRefresh" hidden><span class="refresh-badge" style="color:var(--text-muted); background:rgba(255,255,255,0.08);"><i class="fas fa-sync-alt fa-spin"></i> Refreshing</span></div></div>
         </div>
         <div class="footer-install-section">
             <button class="footer-install-btn" onclick="openInstallPopup()"><i class="fas fa-download"></i> Download APK</button>
@@ -708,6 +736,15 @@
             return Object.keys(map).sort().map(cat => ({ category: cat, exams: map[cat].exams }));
         }
 
+        // ---------- Caching helpers ----------
+        function loadCache(key) {
+            try { const raw = localStorage.getItem(key); if (raw) return JSON.parse(raw); } catch(e) {}
+            return null;
+        }
+        function saveCache(key, data) {
+            try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+        }
+
         // ---------- Mock Data ----------
         let allMocks = [];
         const FALLBACK_MOCKS = [
@@ -736,10 +773,7 @@
         ];
 
         function saveMocksToCache(data) { try { localStorage.setItem(MOCKS_CACHE_KEY, JSON.stringify(data)); } catch (e) {} }
-        function loadMocksFromCache() {
-            try { const cached = localStorage.getItem(MOCKS_CACHE_KEY); if (cached) { const parsed = JSON.parse(cached); if (Array.isArray(parsed) && parsed.length > 0) return parsed; } } catch (e) {}
-            return null;
-        }
+        function loadMocksFromCache() { return loadCache(MOCKS_CACHE_KEY); }
 
         async function loadAllMocks() {
             const mockLoadingEl = document.getElementById('mockLoading');
@@ -785,7 +819,6 @@
                 </div>
             `).join('');
             attachMockHoverEvents();
-            // Open first category by default
             setTimeout(() => toggleMockAccordion(0), 100);
         }
 
@@ -834,11 +867,8 @@
         let allTestSeries = [];
         const SERIES_FALLBACK = [];
 
-        function cacheTestSeries(data) { try { localStorage.setItem(SERIES_CACHE_KEY, JSON.stringify(data)); } catch(e) {} }
-        function loadTestSeriesFromCache() {
-            try { const c = localStorage.getItem(SERIES_CACHE_KEY); if(c) { const p = JSON.parse(c); if(p?.series?.length) return p.series; } } catch(e) {}
-            return null;
-        }
+        function cacheTestSeries(data) { saveCache(SERIES_CACHE_KEY, data); }
+        function loadTestSeriesFromCache() { return loadCache(SERIES_CACHE_KEY)?.series; }
 
         async function loadTestSeries() {
             const cached = loadTestSeriesFromCache();
@@ -889,34 +919,86 @@
             }).join('');
         }
 
-        // ---------- Upcoming Exams ----------
-        async function renderUpcomingExams() {
-            const c = document.getElementById('upcomingScroll');
+        // ---------- Upcoming Exams with caching and silent refresh ----------
+        async function renderUpcomingExams(forceRefresh = false) {
+            const container = document.getElementById('upcomingScroll');
+            const refreshEl = document.getElementById('upcomingRefresh');
+            const CACHE_KEY = 'cachedUpcomingExams';
+            const cached = forceRefresh ? null : loadCache(CACHE_KEY);
+            if (cached) {
+                renderUpcomingCards(container, cached);
+                refreshEl.hidden = true;
+            } else {
+                container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);"><i class="fas fa-spinner fa-pulse"></i> Loading...</div>';
+            }
+            refreshEl.hidden = false;
             try {
-                const d = await fetchJSON(JSON_PATHS.upcoming, null);
-                if (!d || !d.length) { c.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);">No upcoming exams available</div>'; return; }
-                c.innerHTML = d.map(ex =>
-                    `<div class="upcoming-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">${ex.type==='free'?'<div class="uc-badge">FREE</div>':''}<div class="uc-top"><div class="uc-img">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-calendar-check"></i>'}</div><div class="uc-info"><h4>${ex.testName||ex.exam||'Untitled'}</h4><span><i class="fas fa-clock"></i> ${ex.date||'TBA'}</span></div></div><div class="uc-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-star"></i> +${ex.marksPerQuestion||'?'}</span><span><i class="fas fa-hourglass-half"></i> ${ex.duration||'?'}m</span></div></div>`
-                ).join('');
-            } catch (e) { c.innerHTML = '<div style="padding:20px;text-align:center;color:var(--red);">Failed to load upcoming exams.</div>'; showToast('Could not load upcoming exams', 'error'); }
+                const data = await fetchJSON(JSON_PATHS.upcoming, null);
+                if (data && data.length) {
+                    saveCache(CACHE_KEY, data);
+                    renderUpcomingCards(container, data);
+                } else if (!cached) {
+                    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);">No upcoming exams available</div>';
+                }
+            } catch (e) {
+                if (!cached) {
+                    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--red);">Failed to load upcoming exams.</div>';
+                }
+            } finally {
+                refreshEl.hidden = true;
+            }
         }
 
-        // ---------- Popular Slider ----------
+        function renderUpcomingCards(container, data) {
+            container.innerHTML = data.map(ex =>
+                `<div class="upcoming-card" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')">${ex.type==='free'?'<div class="uc-badge">FREE</div>':''}<div class="uc-top"><div class="uc-img">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-calendar-check"></i>'}</div><div class="uc-info"><h4>${ex.testName||ex.exam||'Untitled'}</h4><span><i class="fas fa-clock"></i> ${ex.date||'TBA'}</span></div></div><div class="uc-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-star"></i> +${ex.marksPerQuestion||'?'}</span><span><i class="fas fa-hourglass-half"></i> ${ex.duration||'?'}m</span></div></div>`
+            ).join('');
+        }
+
+        // ---------- Popular Slider with caching ----------
         const popularSlider = document.getElementById('popularSlider'), popularDots = document.getElementById('popularDots'), popularWrap = document.getElementById('popularSliderWrap');
         let popularSlidesData = [], popularCurrent = 0, popularAutoInterval, popularDragging = false, popularStartX = 0, popularSliderX = 0;
+
         async function renderPopularSlider() {
-            const data = await fetchJSON(JSON_PATHS.popular, FALLBACK_POPULAR);
-            const grouped = groupByCategoryUniqueExams(data);
-            const allExams = [];
-            grouped.forEach(cat => cat.exams.forEach(ex => allExams.push(ex)));
-            if (!allExams.length) { popularSlider.innerHTML = '<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);">No popular tests</div>'; return; }
-            popularSlidesData = allExams;
-            popularSlider.innerHTML = allExams.map(ex =>
+            const CACHE_KEY = 'cachedPopularSlides';
+            const cached = loadCache(CACHE_KEY);
+            const refreshEl = document.getElementById('popularRefresh');
+            if (cached) {
+                setPopularData(cached);
+                refreshEl.hidden = true;
+            } else {
+                popularSlider.innerHTML = '<div style="min-width:100%;padding:30px;text-align:center;color:var(--gray-400);"><i class="fas fa-spinner fa-pulse"></i> Loading popular tests...</div>';
+            }
+            refreshEl.hidden = false;
+            try {
+                const data = await fetchJSON(JSON_PATHS.popular, FALLBACK_POPULAR);
+                const grouped = groupByCategoryUniqueExams(data);
+                const allExams = [];
+                grouped.forEach(cat => cat.exams.forEach(ex => allExams.push(ex)));
+                if (allExams.length) {
+                    saveCache(CACHE_KEY, allExams);
+                    setPopularData(allExams);
+                } else if (!cached) {
+                    setPopularData(FALLBACK_POPULAR);
+                }
+            } catch (e) {
+                if (!cached) {
+                    setPopularData(FALLBACK_POPULAR);
+                }
+            } finally {
+                refreshEl.hidden = true;
+            }
+        }
+
+        function setPopularData(data) {
+            popularSlidesData = data;
+            popularSlider.innerHTML = data.map(ex =>
                 `<div class="popular-slide" onclick="navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')"><div class="popular-card">${ex.badge?`<div class="pop-badge">${ex.badge}</div>`:''}<div class="pop-icon">${ex.imageurl?`<img src="${ex.imageurl}" alt="${ex.exam}" loading="lazy">`:'<i class="fas fa-star"></i>'}</div><h4>${ex.exam||'Untitled'}</h4>${ex.attempts?`<div class="pop-attempts"><i class="fas fa-users"></i> ${ex.attempts}</div>`:''}<div class="pop-meta"><span><i class="fas fa-question-circle"></i> ${ex.totalQuestions||'?'} Qs</span><span><i class="fas fa-trophy"></i> +${ex.marksPerQuestion||'?'} Marks</span><span><i class="fas fa-clock"></i> ${ex.duration||'?'}m</span></div><button class="pop-explore" onclick="event.stopPropagation();navigate('exam2.html?testCode=${encodeURIComponent(ex.testCode||'')}')"><i class="fas fa-play"></i> Explore</button></div></div>`
             ).join('');
-            popularDots.innerHTML = allExams.map((_, i) => `<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join('');
+            popularDots.innerHTML = data.map((_, i) => `<button class="popular-dot ${i===0?'active':''}" onclick="goToPopularSlide(${i})"></button>`).join('');
             startPopularAutoSlide();
         }
+
         function goToPopularSlide(idx) { popularCurrent = idx; popularSlider.style.transform = `translateX(${-idx*100}%)`; document.querySelectorAll('.popular-dot').forEach((d, i) => d.classList.toggle('active', i === idx)); }
         function nextPopularSlide() { if (!popularSlidesData.length) return; popularCurrent = (popularCurrent + 1) % popularSlidesData.length; goToPopularSlide(popularCurrent); }
         function startPopularAutoSlide() { if (popularSlidesData.length) popularAutoInterval = setInterval(nextPopularSlide, 5000); }
@@ -929,13 +1011,49 @@
         function popDragEnd(e) { if (!popularDragging) return; popularDragging = false; popularWrap.classList.remove('dragging'); const x = e.type.includes('mouse') ? e.pageX : (e.changedTouches ? e.changedTouches[0].pageX : popularStartX); const walk = x - popularStartX; const threshold = popularWrap.offsetWidth * 0.2; if (walk < -threshold && popularCurrent < popularSlidesData.length - 1) popularCurrent++; else if (walk > threshold && popularCurrent > 0) popularCurrent--; goToPopularSlide(popularCurrent); startPopularAutoSlide(); }
         document.addEventListener('visibilitychange', () => { if (document.hidden) stopPopularAutoSlide(); else startPopularAutoSlide(); });
 
-        // ---------- Hero Slider ----------
+        // ---------- Hero Slider with caching ----------
         const heroSlider = document.getElementById('heroSlider'), heroDots = document.getElementById('heroDots'), heroWrap = document.getElementById('heroWrap');
+        const heroRefreshEl = document.getElementById('heroRefresh');
         let slidesData = [], currentSlide = 0, autoSlideInterval, isDragging = false, startX = 0, sliderX = 0;
+
         async function loadHeroSlides() {
-            try { const res = await fetch('./json/frontpage.json', { cache: 'no-store' }); if (!res.ok) throw new Error('Failed'); slidesData = await res.json(); renderSlides(); startAutoSlide(); }
-            catch (e) { heroSlider.innerHTML = `<div class="hero-slide" onclick="location.href='exam.html?id=1'"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default"><div class="hero-overlay"><div class="hero-title">SSC JE Tier-I 2026</div><div class="hero-subtitle">15 Full Length Test • Bilingual</div></div><span class="hero-badge">NEW</span></div>`; }
+            const CACHE_KEY = 'cachedHeroSlides';
+            const cached = loadCache(CACHE_KEY);
+            if (cached) {
+                renderHeroWithData(cached);
+                heroRefreshEl.style.display = 'none';
+            } else {
+                heroSlider.innerHTML = `<div style="min-width:100%;height:200px;background:linear-gradient(135deg,#243748,#1f3140);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;"><i class="fas fa-spinner fa-pulse"></i> Loading banners...</div>`;
+            }
+            heroRefreshEl.style.display = 'block';
+            try {
+                const res = await fetch('./json/frontpage.json', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.length) {
+                        saveCache(CACHE_KEY, data);
+                        renderHeroWithData(data);
+                    } else if (!cached) {
+                        renderHeroFallback();
+                    }
+                } else throw new Error('Failed');
+            } catch (e) {
+                if (!cached) renderHeroFallback();
+            } finally {
+                heroRefreshEl.style.display = 'none';
+            }
         }
+
+        function renderHeroWithData(data) {
+            slidesData = data;
+            renderSlides();
+            startAutoSlide();
+        }
+
+        function renderHeroFallback() {
+            heroSlider.innerHTML = `<div class="hero-slide" onclick="location.href='exam.html?id=1'"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=400&fit=crop" alt="Default"><div class="hero-overlay"><div class="hero-title">SSC JE Tier-I 2026</div><div class="hero-subtitle">15 Full Length Test • Bilingual</div></div><span class="hero-badge">NEW</span></div>`;
+        }
+
         function renderSlides() { if (!slidesData.length) return; heroSlider.innerHTML = slidesData.map(s => `<div class="hero-slide" onclick="location.href='${s.link||'#'}'"><img src="${s.image}" alt="${s.title}" loading="lazy"><div class="hero-overlay"><div class="hero-title">${s.title}</div><div class="hero-subtitle">${s.subtitle}</div></div>${s.badge?`<span class="hero-badge">${s.badge}</span>`:''}</div>`).join(''); heroDots.innerHTML = slidesData.map((_, i) => `<button class="hero-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></button>`).join(''); }
         function goToSlide(idx) { currentSlide = idx; heroSlider.style.transform = `translateX(${-idx*100}%)`; document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx)); }
         function nextSlide() { currentSlide = (currentSlide + 1) % slidesData.length; goToSlide(currentSlide); }
@@ -1007,7 +1125,7 @@
             });
         }
 
-        // ---------- Footer Categories ----------
+        // ---------- Footer Categories & Upcoming with caching ----------
         async function renderFooterExamCategories() {
             const c = document.getElementById('footerExamCategories');
             const grouped = groupByCategoryUniqueExams(allMocks);
@@ -1023,14 +1141,39 @@
             html += `<li><a onclick="navigate('apk.html')">Get APK</a></li>`;
             c.innerHTML = html;
         }
+
         async function renderFooterUpcoming() {
-            const c = document.getElementById('footerUpcomingExams');
-            const d = await fetchJSON(JSON_PATHS.upcomingfooter, FALLBACK_UPCOMING_FOOTER);
-            if (!d.length) { c.innerHTML = '<li><a>No upcoming exams</a></li>'; return; }
-            c.innerHTML = d.map(e => `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
+            const container = document.getElementById('footerUpcomingExams');
+            const refreshEl = document.getElementById('footerUpcomingRefresh');
+            const CACHE_KEY = 'cachedFooterUpcoming';
+            const cached = loadCache(CACHE_KEY);
+            if (cached) {
+                renderFooterUpcomingCards(container, cached);
+                refreshEl.hidden = true;
+            } else {
+                container.innerHTML = '<li><a>Loading...</a></li>';
+            }
+            refreshEl.hidden = false;
+            try {
+                const data = await fetchJSON(JSON_PATHS.upcomingfooter, FALLBACK_UPCOMING_FOOTER);
+                if (data.length) {
+                    saveCache(CACHE_KEY, data);
+                    renderFooterUpcomingCards(container, data);
+                } else if (!cached) {
+                    renderFooterUpcomingCards(container, FALLBACK_UPCOMING_FOOTER);
+                }
+            } catch(e) {
+                if (!cached) renderFooterUpcomingCards(container, FALLBACK_UPCOMING_FOOTER);
+            } finally {
+                refreshEl.hidden = true;
+            }
         }
 
-        // ---------- New Features ----------
+        function renderFooterUpcomingCards(container, data) {
+            container.innerHTML = data.map(e => `<li><a onclick="showToast('${e.name} – Expected Date: ${e.date}','info',4000)">${e.name}</a></li>`).join('');
+        }
+
+        // ---------- Continue Learning ----------
         function loadContinueLearning() {
             const lastTest = JSON.parse(localStorage.getItem('lastTest') || '{}');
             if (lastTest && lastTest.testCode) {
@@ -1044,32 +1187,63 @@
             if (lastTest.testCode) navigate(`exam2.html?testCode=${lastTest.testCode}`);
         };
 
+        // ---------- Performance with caching ----------
         async function loadPerformance() {
             if (!user) return;
+            const container = document.getElementById('statsGrid');
+            const refreshEl = document.getElementById('perfRefresh');
+            const CACHE_KEY = 'cachedPerformance';
+            const cached = loadCache(CACHE_KEY);
+            if (cached) {
+                updatePerformanceCards(cached.testsTaken, cached.avgAccuracy, cached.userRank, cached.coinBalance);
+                refreshEl.hidden = true;
+            }
+            refreshEl.hidden = false;
             try {
+                let testsTaken = 0, avgAccuracy = 0, rank = '--', coins = 0;
                 const res = await fetch(`${API_URL}?action=getUserResults&username=${encodeURIComponent(user.username)}`);
                 const data = await res.json();
                 if (data.success && data.results.length) {
                     const results = data.results;
-                    const testsAttempted = results.length;
-                    const avgAccuracy = (results.reduce((sum, r) => sum + parseFloat(r.accuracy), 0) / testsAttempted).toFixed(1);
-                    document.getElementById('testsTaken').textContent = testsAttempted;
-                    document.getElementById('avgAccuracy').textContent = avgAccuracy + '%';
-                    document.getElementById('userRank').textContent = 'Top 20%';
+                    testsTaken = results.length;
+                    avgAccuracy = (results.reduce((sum, r) => sum + parseFloat(r.accuracy), 0) / testsTaken).toFixed(1);
+                    rank = 'Top 20%';
                 }
                 const coinRes = await fetch(`${API_URL}?action=getCoinBalance&username=${user.username}`);
                 const coinData = await coinRes.json();
-                if (coinData.success) document.getElementById('coinBalance').textContent = coinData.balance || 0;
-            } catch(e) {}
+                if (coinData.success) coins = coinData.balance || 0;
+                const perfData = { testsTaken, avgAccuracy, userRank: rank, coinBalance: coins };
+                saveCache(CACHE_KEY, perfData);
+                updatePerformanceCards(testsTaken, avgAccuracy, rank, coins);
+            } catch(e) {
+                if (!cached) {
+                    document.getElementById('testsTaken').textContent = '--';
+                    document.getElementById('avgAccuracy').textContent = '--%';
+                    document.getElementById('userRank').textContent = '--';
+                    document.getElementById('coinBalance').textContent = '--';
+                }
+            } finally {
+                refreshEl.hidden = true;
+            }
+        }
+
+        function updatePerformanceCards(testsTaken, avgAccuracy, rank, coins) {
+            document.getElementById('testsTaken').textContent = testsTaken || '--';
+            document.getElementById('avgAccuracy').textContent = (avgAccuracy ? avgAccuracy + '%' : '--%');
+            document.getElementById('userRank').textContent = rank || '--';
+            document.getElementById('coinBalance').textContent = coins || '0';
         }
 
         function renderTestimonials() {
             const container = document.getElementById('testimonialsSwipe');
-            const testimonials = [
+            const CACHE_KEY = 'cachedTestimonials';
+            const cached = loadCache(CACHE_KEY);
+            const defaultTestimonials = [
                 { name: 'Aditi Sharma', role: 'SSC CGL', rating: 5, text: 'The mock tests helped me crack the exam. The detailed analysis is a gamechanger!' },
                 { name: 'Rahul Verma', role: 'IBPS PO', rating: 5, text: 'Best platform for banking mocks. I improved my speed drastically.' },
                 { name: 'Priya Patel', role: 'UPSC', rating: 5, text: 'The test series is very close to the real exam. Highly recommended!' }
             ];
+            const testimonials = cached || defaultTestimonials;
             container.innerHTML = testimonials.map(t => `
                 <div class="testimonial-card-swipe">
                     <div class="t-stars">${'<i class="fas fa-star"></i>'.repeat(t.rating)}</div>
@@ -1078,6 +1252,7 @@
                     <div class="t-role">${t.role}</div>
                 </div>
             `).join('');
+            if (!cached) saveCache(CACHE_KEY, defaultTestimonials);
         }
 
         function filterMockAccordion() {
