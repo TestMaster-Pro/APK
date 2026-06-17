@@ -350,7 +350,12 @@
         .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--primary-light); }
         .timeline-item { position: relative; margin-bottom: 20px; }
         .timeline-dot { position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--blue); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--blue); }
-        .timeline-content { background: #fff; border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid #e8ecf0; }
+        .timeline-content { 
+            background: #fff; border-radius: 14px; padding: 16px; 
+            box-shadow: var(--shadow-sm); border: 1px solid #e8ecf0; 
+            cursor: pointer; transition: all 0.2s; 
+        }
+        .timeline-content:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
         .timeline-content strong { display: block; font-size: 15px; margin-bottom: 6px; }
         .timeline-content span { font-size: 13px; color: var(--gray-500); }
 
@@ -562,7 +567,7 @@
 
         <section>
             <h2 class="section-title"><i class="fas fa-calendar-alt"></i> SSC CGL Exam Updates</h2>
-            <p class="section-desc">Latest notifications, exam dates, application dates, and vacancies</p>
+            <p class="section-desc">Latest notifications, exam dates, application dates, and vacancies – tap to see full details</p>
             <div class="timeline" id="upcomingTimeline">
                 <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Loading updates...</div>
             </div>
@@ -1001,14 +1006,43 @@
                 return;
             }
             container.innerHTML = upcomingExams.map((e, idx) => `
-                <div class="timeline-item">
+                <div class="timeline-item" data-index="${idx}">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-content">
+                    <div class="timeline-content" onclick="showExamDetails(upcomingExams[${idx}])">
                         <strong>${e.testName || e.exam || 'SSC CGL Exam'}</strong>
                         <span>Expected: ${e.date || 'TBA'}</span>
                     </div>
                 </div>
             `).join('');
+        }
+
+        // New function to show full exam details when a card is clicked
+        function showExamDetails(exam) {
+            if (!exam) return;
+            let html = `
+                <div style="text-align:left; font-size:14px;">
+                    <p style="font-weight:700; font-size:16px; margin-bottom:12px; color:var(--primary);">${exam.testName || exam.exam || 'Exam Details'}</p>
+                    ${exam.date ? `<p><i class="fas fa-calendar-alt" style="color:var(--blue); margin-right:6px;"></i> <b>Exam Date:</b> ${exam.date}</p>` : ''}
+                    ${exam.applicationDate ? `<p><i class="fas fa-file-signature" style="color:var(--green); margin-right:6px;"></i> <b>Application Window:</b> ${exam.applicationDate}</p>` : ''}
+                    ${exam.vacancy ? `<p><i class="fas fa-users" style="color:var(--accent); margin-right:6px;"></i> <b>Vacancy:</b> ${exam.vacancy}</p>` : ''}
+                    ${exam.notification ? `<p><i class="fas fa-bell" style="color:var(--red); margin-right:6px;"></i> <b>Notification:</b> <a href="${exam.notification}" target="_blank" style="color:var(--blue);">Official Link</a></p>` : ''}
+                    ${exam.description ? `<p style="margin-top:8px; line-height:1.5; color:var(--gray-600);"><i class="fas fa-info-circle" style="color:var(--blue); margin-right:6px;"></i>${exam.description}</p>` : ''}
+                    ${exam.eligibility ? `<p style="margin-top:8px; color:var(--gray-600);"><i class="fas fa-check-circle" style="color:var(--green); margin-right:6px;"></i> <b>Eligibility:</b> ${exam.eligibility}</p>` : ''}
+                    ${exam.ageLimit ? `<p style="margin-top:4px; color:var(--gray-600);"><i class="fas fa-birthday-cake" style="color:var(--accent); margin-right:6px;"></i> <b>Age Limit:</b> ${exam.ageLimit}</p>` : ''}
+                    ${exam.salary ? `<p style="margin-top:4px; color:var(--gray-600);"><i class="fas fa-money-bill-wave" style="color:var(--green); margin-right:6px;"></i> <b>Salary:</b> ${exam.salary}</p>` : ''}
+                    ${exam.officialWebsite ? `<p style="margin-top:8px;"><i class="fas fa-globe" style="color:var(--blue); margin-right:6px;"></i> <b>Official Website:</b> <a href="${exam.officialWebsite}" target="_blank" style="color:var(--blue);">${exam.officialWebsite}</a></p>` : ''}
+                </div>
+            `;
+            Swal.fire({
+                title: exam.testName || exam.exam || 'SSC CGL Update',
+                html: html,
+                confirmButtonText: 'Got it',
+                confirmButtonColor: '#243748',
+                width: '90%',
+                maxWidth: '500px',
+                background: '#fff',
+                customClass: { popup: 'swal-exam-details' }
+            });
         }
 
         async function fetchTrending() {
