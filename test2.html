@@ -456,21 +456,18 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // ✅ Updated API URL
+        // -----------------------------------------------------------------
+        //  CONFIG & CONSTANTS
+        // -----------------------------------------------------------------
         const API_URL = 'https://script.google.com/macros/s/AKfycbynfCY3gp2dsDBTLZMB9yurx1UnWsp3sgCliD92jKL-lNfy3hVmfFHZgY0p0zvocYKrow/exec';
         const urlParams = new URLSearchParams(window.location.search);
         const isDynamic = urlParams.get('dynamic') === '1';
         const testCode = urlParams.get('testCode') || sessionStorage.getItem('dynamicTestCode');
-        const source = urlParams.get('source') || 'mocktests';  // 'mocktests' or 'testseries'
+        const source = urlParams.get('source') || 'mocktests';
 
         if (!testCode) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Test code missing',
-                confirmButtonColor: '#4f46e5'
-            }).then(() => {
-                window.location.href = 'dashboard.html';
-            });
+            Swal.fire({ icon: 'error', title: 'Test code missing', confirmButtonColor: '#4f46e5' })
+                .then(() => { window.location.href = 'dashboard.html'; });
         }
 
         const LANG_MAP = {
@@ -481,14 +478,16 @@
             'tamil': { code: 'ta', native: 'தமிழ்', english: 'English' },
             'telugu': { code: 'te', native: 'తెలుగు', english: 'English' },
         };
-
         const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
+        // -----------------------------------------------------------------
+        //  STATE OBJECT
+        // -----------------------------------------------------------------
         let testConfig = null;
         let questions = [];
         const state = {
             currentIndex: 0,
-            answers: {},
+            answers: {},                // number -> option index
             markedQuestions: new Set(),
             timeLeft: 0,
             timerInterval: null,
@@ -500,6 +499,57 @@
             candidateName: 'Candidate'
         };
 
+        // -----------------------------------------------------------------
+        //  RESUME / PROGRESS PERSISTENCE
+        // -----------------------------------------------------------------
+        function getProgressKey() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const username = user ? user.username : 'guest';
+            return `testProgress_${username}_${testCode}`;
+        }
+
+        function saveProgress() {
+            if (state.testSubmitted) return;
+            const key = getProgressKey();
+            const data = {
+                currentIndex: state.currentIndex,
+                answers: state.answers,
+                markedQuestions: Array.from(state.markedQuestions),
+                timeLeft: state.timeLeft,
+                savedAt: Date.now()
+            };
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function loadProgress() {
+            const key = getProgressKey();
+            const raw = localStorage.getItem(key);
+            if (!raw) return null;
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function clearProgress() {
+            localStorage.removeItem(getProgressKey());
+        }
+
+        // Auto-save every 5 seconds and on important actions
+        let autoSaveInterval = null;
+        function startAutoSave() {
+            if (autoSaveInterval) clearInterval(autoSaveInterval);
+            autoSaveInterval = setInterval(saveProgress, 5000);
+        }
+
+        function stopAutoSave() {
+            if (autoSaveInterval) { clearInterval(autoSaveInterval); autoSaveInterval = null; }
+        }
+
+        // -----------------------------------------------------------------
+        //  WELCOME SEQUENCE (kept original)
+        // -----------------------------------------------------------------
         function runWelcomeSequence() {
             const overlay = document.getElementById('welcomeOverlay');
             const welcomeIcon = document.getElementById('welcomeExamIcon');
@@ -510,16 +560,13 @@
 
             const seq = ['3', '2', 'Go!'];
             let step = 0;
-
             function showCountdown() {
                 if (step >= seq.length) {
                     overlay.classList.add('white-bg');
                     overlay.classList.add('fading-out');
                     state.welcomeDone = true;
-                    if (testConfig && !state.timerInterval && !state.testSubmitted) startTimer();
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 600);
+                    if (!state.timerInterval && !state.testSubmitted) startTimer();
+                    setTimeout(() => { overlay.style.display = 'none'; }, 600);
                     return;
                 }
                 const countdownEl = document.getElementById('countdownNumber');
@@ -528,7 +575,6 @@
                 countdownEl.classList.remove('countdown-pop');
                 void countdownEl.offsetWidth;
                 countdownEl.classList.add('countdown-pop');
-
                 if (step === seq.length - 1) {
                     countdownLabel.textContent = "🎉 LET'S GO!";
                     countdownEl.style.color = 'var(--success)';
@@ -539,36 +585,32 @@
             setTimeout(showCountdown, 500);
         }
 
+        // -----------------------------------------------------------------
+        //  SIDEBAR & THEME
+        // -----------------------------------------------------------------
         function openSidebar() {
             document.getElementById('sidebarPanel').classList.add('active');
             document.getElementById('sidebarBackdrop').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
         function closeSidebar() {
             document.getElementById('sidebarPanel').classList.remove('active');
             document.getElementById('sidebarBackdrop').classList.remove('active');
             document.body.style.overflow = '';
         }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeSidebar();
-        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
 
         function applyTheme(theme) {
             state.theme = theme;
             document.body.setAttribute('data-theme', theme);
             document.getElementById('themeIcon').className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-            document.getElementById('themeToggle').title =
-                theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+            document.getElementById('themeToggle').title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
             localStorage.setItem('mock_theme', theme);
         }
-
         function toggleTheme() {
             const newTheme = state.theme === 'dark' ? 'light' : 'dark';
             applyTheme(newTheme);
         }
-
         function loadTheme() {
             const saved = localStorage.getItem('mock_theme');
             if (saved) {
@@ -579,7 +621,11 @@
             }
         }
 
+        // -----------------------------------------------------------------
+        //  LOAD TEST DATA (with resume prompt)
+        // -----------------------------------------------------------------
         async function loadTestData() {
+            // 1. Load the actual test config & questions
             if (isDynamic) {
                 const stored = sessionStorage.getItem('dynamicTestData');
                 if (!stored) throw new Error('No dynamic test data');
@@ -587,66 +633,64 @@
                 testConfig = config;
                 questions = config.questions;
                 state.timeLeft = (config.duration || 10) * 60;
-                fillTestUI();
-                return;
-            }
-
-            try {
-                // Use the source parameter to select the correct action
+            } else {
                 let action = source === 'testseries' ? 'getTestSeriesTest' : 'getMockTest';
                 let fallbackAction = source === 'testseries' ? 'getMockTest' : 'getTestSeriesTest';
-
                 let data = await fetchFromAPI(action);
                 if (!data.success) {
                     console.log(`Not found in ${source}, trying fallback...`);
                     data = await fetchFromAPI(fallbackAction);
                 }
                 if (!data.success) {
-                    await Swal.fire({
-                        icon: 'error',
-                        title: 'Test not found',
-                        text: data.error || 'Invalid test code',
-                        confirmButtonColor: '#4f46e5'
-                    });
+                    await Swal.fire({ icon: 'error', title: 'Test not found', text: data.error || 'Invalid test code', confirmButtonColor: '#4f46e5' });
                     window.location.href = 'dashboard.html';
                     return;
                 }
-
                 testConfig = data.test;
-
-                // Parse questions: try array first, then questionsJSON string
                 let rawQuestions = testConfig.questions;
                 if (!Array.isArray(rawQuestions) && testConfig.questionsJSON) {
-                    try {
-                        rawQuestions = JSON.parse(testConfig.questionsJSON);
-                    } catch (e) {
-                        rawQuestions = [];
-                    }
+                    try { rawQuestions = JSON.parse(testConfig.questionsJSON); } catch (e) { rawQuestions = []; }
                 }
-
                 if (!Array.isArray(rawQuestions) || rawQuestions.length === 0) {
-                    await Swal.fire({
-                        icon: 'error',
-                        title: 'No questions',
-                        text: 'This test has no questions.',
-                        confirmButtonColor: '#4f46e5'
-                    });
+                    await Swal.fire({ icon: 'error', title: 'No questions', text: 'This test has no questions.', confirmButtonColor: '#4f46e5' });
                     window.location.href = 'dashboard.html';
                     return;
                 }
                 questions = rawQuestions;
                 state.timeLeft = (testConfig.duration || 10) * 60;
-                fillTestUI();
-            } catch (err) {
-                console.error('Load test error:', err);
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Connection error',
-                    text: 'Could not load test data.',
-                    confirmButtonColor: '#4f46e5'
-                });
-                window.location.href = 'dashboard.html';
             }
+
+            // 2. Check for saved progress
+            const saved = loadProgress();
+            if (saved && saved.answers) {
+                // Show resume dialog
+                const result = await Swal.fire({
+                    title: 'Resume Previous Attempt?',
+                    html: `You have unfinished progress from <b>${new Date(saved.savedAt).toLocaleString()}</b>.<br>Time remaining: <b>${Math.floor(saved.timeLeft/60)} min ${saved.timeLeft%60} sec</b>.`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Resume',
+                    cancelButtonText: 'Start Fresh',
+                    confirmButtonColor: '#10b981',
+                    cancelButtonColor: '#64748b',
+                    reverseButtons: true
+                });
+                if (result.isConfirmed) {
+                    // Restore state
+                    state.currentIndex = saved.currentIndex || 0;
+                    state.answers = saved.answers || {};
+                    state.markedQuestions = new Set(saved.markedQuestions || []);
+                    state.timeLeft = saved.timeLeft || state.timeLeft;
+                    // Apply immediately
+                } else {
+                    // Discard saved progress
+                    clearProgress();
+                }
+            }
+
+            // 3. Render UI (common part)
+            fillTestUI();
+            startAutoSave();   // begin periodic saving
         }
 
         async function fetchFromAPI(action) {
@@ -654,6 +698,9 @@
             return await resp.json();
         }
 
+        // -----------------------------------------------------------------
+        //  FILL UI / RENDER FUNCTIONS
+        // -----------------------------------------------------------------
         function fillTestUI() {
             const examIconTop = document.getElementById('examIconTop');
             if (testConfig.imageurl) {
@@ -712,6 +759,7 @@
                 langSelector.style.display = 'none';
             }
 
+            // Start timer only if welcome sequence is done and not submitted
             if (state.welcomeDone && !state.timerInterval && !state.testSubmitted) startTimer();
             renderQuestion();
             renderPalette();
@@ -727,11 +775,8 @@
         }
 
         function toggleSingleLanguage(altLang) {
-            if (state.lang === 'en') {
-                state.lang = altLang.code;
-            } else {
-                state.lang = 'en';
-            }
+            if (state.lang === 'en') { state.lang = altLang.code; }
+            else { state.lang = 'en'; }
             localStorage.setItem('mock_lang', state.lang);
             const btn = document.querySelector('#langSelector .lang-btn');
             if (btn) {
@@ -781,20 +826,16 @@
                 document.getElementById('pyqTag').style.display = 'none';
                 return;
             }
-
             const q = questions[state.currentIndex];
             document.getElementById('qNumber').textContent = `Q ${state.currentIndex + 1}/${questions.length}`;
-
             const useLang = state.lang;
             const isEnglish = (useLang === 'en');
-
             let questionHTML;
             if (!isEnglish && q[useLang]) {
                 questionHTML = `<div style="font-weight:600;">${q[useLang]}</div>`;
             } else {
                 questionHTML = `<div style="font-weight:600;">${q.en || 'Question text unavailable'}</div>`;
             }
-
             if (q.image_url) {
                 const imgUrl = `https://testmaster-pro.github.io/Questions-image/${q.image_url}`;
                 questionHTML += `<div style="margin-top:18px; text-align:center;">
@@ -810,7 +851,6 @@
             } else {
                 opts = q.oEn || [];
             }
-
             const grid = document.getElementById('optionsGrid');
             grid.innerHTML = '';
             const letters = ['A', 'B', 'C', 'D'];
@@ -823,14 +863,8 @@
                     card.setAttribute('aria-label', `Option ${letters[i]}`);
                     if (state.answers[state.currentIndex] === i) card.classList.add('selected');
                     card.onclick = () => selectOption(i);
-                    card.onkeydown = (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            selectOption(i);
-                        }
-                    };
-                    card.innerHTML =
-                        `<div class="option-letter">${letters[i]}</div><span>${opt || 'Option ' + letters[i]}</span>`;
+                    card.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOption(i); } };
+                    card.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt || 'Option ' + letters[i]}</span>`;
                     grid.appendChild(card);
                 });
             }
@@ -850,17 +884,16 @@
             renderPaletteHighlight();
 
             if (window.MathJax && MathJax.typesetPromise) {
-                MathJax.typesetPromise([document.getElementById('questionCard')]).catch(err =>
-                    console.warn('MathJax typeset error:', err));
+                MathJax.typesetPromise([document.getElementById('questionCard')]).catch(err => console.warn('MathJax typeset error:', err));
             }
         }
 
         function selectOption(index) {
             if (state.testSubmitted) return;
-            if (!questions.length) return;
             state.answers[state.currentIndex] = index;
             state.markedQuestions.delete(state.currentIndex);
             renderQuestion();
+            saveProgress();   // immediate save
             showToast('✅ Answer saved!');
         }
 
@@ -870,6 +903,7 @@
             if (idx >= 0 && idx < questions.length) {
                 state.currentIndex = idx;
                 renderQuestion();
+                saveProgress();
                 document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else if (dir < 0 && state.currentIndex === 0) {
                 showToast('Already at the first question');
@@ -880,7 +914,6 @@
 
         function toggleMark() {
             if (state.testSubmitted) return;
-            if (!questions.length) return;
             const idx = state.currentIndex;
             if (state.markedQuestions.has(idx)) {
                 state.markedQuestions.delete(idx);
@@ -891,14 +924,15 @@
             }
             renderPalette();
             renderQuestion();
+            saveProgress();
         }
 
         function clearAnswer() {
             if (state.testSubmitted) return;
-            if (!questions.length) return;
             if (state.answers[state.currentIndex] !== undefined) {
                 delete state.answers[state.currentIndex];
                 renderQuestion();
+                saveProgress();
                 showToast('🧹 Answer cleared');
             } else {
                 showToast('No answer to clear');
@@ -919,19 +953,8 @@
                 if (state.answers[i] !== undefined) num.classList.add('answered');
                 if (state.markedQuestions.has(i)) num.classList.add('marked');
                 if (i === state.currentIndex) num.classList.add('current');
-                num.onclick = () => {
-                    state.currentIndex = i;
-                    renderQuestion();
-                    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                };
-                num.onkeydown = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        state.currentIndex = i;
-                        renderQuestion();
-                        document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                };
+                num.onclick = () => { state.currentIndex = i; renderQuestion(); saveProgress(); document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+                num.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); state.currentIndex = i; renderQuestion(); saveProgress(); document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); } };
                 grid.appendChild(num);
             }
             updatePaletteStats();
@@ -957,23 +980,20 @@
         }
 
         function updateProgress() {
-            if (!questions.length) return;
             const answered = Object.keys(state.answers).length;
             const pct = (answered / questions.length) * 100;
             document.getElementById('progressFill').style.width = pct + '%';
-            document.getElementById('progressText').textContent =
-                `${answered}/${questions.length} answered (${Math.round(pct)}%)`;
+            document.getElementById('progressText').textContent = `${answered}/${questions.length} answered (${Math.round(pct)}%)`;
         }
 
+        // -----------------------------------------------------------------
+        //  TIMER
+        // -----------------------------------------------------------------
         function startTimer() {
             updateTimerDisplay();
             if (state.timerInterval) clearInterval(state.timerInterval);
             state.timerInterval = setInterval(() => {
-                if (state.testSubmitted) {
-                    clearInterval(state.timerInterval);
-                    state.timerInterval = null;
-                    return;
-                }
+                if (state.testSubmitted) { clearInterval(state.timerInterval); state.timerInterval = null; return; }
                 state.timeLeft--;
                 updateTimerDisplay();
                 if (state.timeLeft <= 0) {
@@ -981,22 +1001,18 @@
                     state.timerInterval = null;
                     autoSubmit();
                 }
+                saveProgress();  // save periodically inside timer too
             }, 1000);
         }
 
         function updateTimerDisplay() {
             const m = Math.floor(state.timeLeft / 60);
             const s = state.timeLeft % 60;
-            document.getElementById('timerText').textContent =
-                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            document.getElementById('timerText').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             const pill = document.getElementById('timerPill');
-            if (state.timeLeft < 300) {
-                pill.classList.add('warning');
-            } else {
-                pill.classList.remove('warning');
-            }
-            document.title =
-                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} — Mock Test`;
+            if (state.timeLeft < 300) pill.classList.add('warning');
+            else pill.classList.remove('warning');
+            document.title = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} — Mock Test`;
         }
 
         function autoSubmit() {
@@ -1004,6 +1020,9 @@
             setTimeout(() => submitTest(true), 1500);
         }
 
+        // -----------------------------------------------------------------
+        //  SUBMIT TEST
+        // -----------------------------------------------------------------
         async function submitTest(skipConfirm = false) {
             if (state.testSubmitted) return;
             if (!questions.length) { showToast('No test data loaded'); return; }
@@ -1018,52 +1037,36 @@
                 const unanswered = questions.length - answered;
 
                 if (!skipConfirm && unanswered > 0) {
-                    submitBtn.innerHTML = originalHTML;
-                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalHTML; submitBtn.disabled = false;
                     const result = await Swal.fire({
                         title: 'Submit Test?',
                         html: `<b>${unanswered}</b> question(s) are still unanswered.<br>Submit anyway?`,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#4f46e5',
-                        cancelButtonColor: '#ef4444',
-                        confirmButtonText: 'Yes, submit!',
-                        cancelButtonText: 'Go back'
+                        icon: 'warning', showCancelButton: true,
+                        confirmButtonColor: '#4f46e5', cancelButtonColor: '#ef4444',
+                        confirmButtonText: 'Yes, submit!', cancelButtonText: 'Go back'
                     });
-                    if (!result.isConfirmed) {
-                        submitBtn.innerHTML = originalHTML;
-                        submitBtn.disabled = false;
-                        return;
-                    }
+                    if (!result.isConfirmed) return;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
                     submitBtn.disabled = true;
                 }
 
                 if (!skipConfirm && unanswered === 0) {
-                    submitBtn.innerHTML = originalHTML;
-                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalHTML; submitBtn.disabled = false;
                     const result = await Swal.fire({
-                        title: 'Submit Test?',
-                        text: 'All questions answered. Are you ready to submit?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#4f46e5',
-                        cancelButtonColor: '#64748b',
-                        confirmButtonText: 'Yes, submit!',
-                        cancelButtonText: 'Review again'
+                        title: 'Submit Test?', text: 'All questions answered. Are you ready to submit?',
+                        icon: 'question', showCancelButton: true,
+                        confirmButtonColor: '#4f46e5', cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Yes, submit!', cancelButtonText: 'Review again'
                     });
-                    if (!result.isConfirmed) {
-                        submitBtn.innerHTML = originalHTML;
-                        submitBtn.disabled = false;
-                        return;
-                    }
+                    if (!result.isConfirmed) return;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
                     submitBtn.disabled = true;
                 }
 
                 state.testSubmitted = true;
-                clearInterval(state.timerInterval);
-                state.timerInterval = null;
+                clearInterval(state.timerInterval); state.timerInterval = null;
+                stopAutoSave();
+                clearProgress();   // remove saved progress on successful submission
 
                 const result = calculateScore();
                 const effectiveTestCode = testCode || testConfig.testCode;
@@ -1088,7 +1091,6 @@
                 };
 
                 localStorage.setItem('last_review_data', JSON.stringify(reviewData));
-
                 const timestamp = Date.now().toString();
                 reviewData.timestamp = timestamp;
                 const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -1098,17 +1100,10 @@
 
                 const results = JSON.parse(localStorage.getItem('test_results') || '[]');
                 results.push({
-                    testCode: effectiveTestCode,
-                    score: result.score,
-                    total: result.total,
-                    accuracy: result.accuracy,
-                    date: new Date().toISOString().split('T')[0],
-                    timeTaken: reviewData.timeTaken,
-                    correct: result.correct,
-                    wrong: result.wrong,
-                    attempted: result.attempted,
-                    unanswered: result.unanswered,
-                    examType: testConfig.exam
+                    testCode: effectiveTestCode, score: result.score, total: result.total,
+                    accuracy: result.accuracy, date: new Date().toISOString().split('T')[0],
+                    timeTaken: reviewData.timeTaken, correct: result.correct, wrong: result.wrong,
+                    attempted: result.attempted, unanswered: result.unanswered, examType: testConfig.exam
                 });
                 if (results.length > 50) results.shift();
                 localStorage.setItem('test_results', JSON.stringify(results));
@@ -1117,38 +1112,28 @@
                 if (user) {
                     const params = new URLSearchParams({
                         action: 'submitResult',
-                        username: user.username,
-                        name: user.name,
+                        username: user.username, name: user.name,
                         testCode: effectiveTestCode,
-                        score: result.score,
-                        totalMarks: result.total,
-                        accuracy: result.accuracy,
-                        correct: result.correct,
-                        wrong: result.wrong,
-                        attempted: result.attempted,
-                        unanswered: result.unanswered,
+                        score: result.score, totalMarks: result.total,
+                        accuracy: result.accuracy, correct: result.correct, wrong: result.wrong,
+                        attempted: result.attempted, unanswered: result.unanswered,
                         timeTaken: reviewData.timeTaken,
-                        date: new Date().toISOString().split('T')[0],
-                        examType: testConfig.exam
+                        date: new Date().toISOString().split('T')[0], examType: testConfig.exam
                     });
                     fetch(API_URL + '?' + params.toString()).catch(() => {});
                 }
 
-                const timeTaken = reviewData.timeTaken;
-                const redirectUrl =
-                    `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(effectiveTestCode)}&timeTaken=${timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}&timestamp=${timestamp}`;
+                const redirectUrl = `result.html?score=${result.score}&total=${result.total}&accuracy=${result.accuracy}&testCode=${encodeURIComponent(effectiveTestCode)}&timeTaken=${reviewData.timeTaken}&correct=${result.correct}&wrong=${result.wrong}&attempted=${result.attempted}&unanswered=${result.unanswered}&examType=${encodeURIComponent(testConfig.exam || '')}&timestamp=${timestamp}`;
                 setTimeout(() => { window.location.href = redirectUrl; }, 800);
             } catch (err) {
                 console.error('Submit error:', err);
-                submitBtn.innerHTML = originalHTML;
-                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalHTML; submitBtn.disabled = false;
                 showToast('Error submitting. Please try again.');
             }
         }
 
         function calculateScore() {
-            let correct = 0,
-                wrong = 0;
+            let correct = 0, wrong = 0;
             questions.forEach((q, idx) => {
                 if (state.answers[idx] === q.c) correct++;
                 else if (state.answers[idx] !== undefined) wrong++;
@@ -1159,22 +1144,22 @@
             return {
                 score: Math.max(0, raw),
                 total: questions.length * pos,
-                correct,
-                wrong,
+                correct, wrong,
                 attempted: correct + wrong,
                 unanswered: questions.length - (correct + wrong),
                 accuracy: ((correct / Math.max(1, correct + wrong)) * 100).toFixed(2)
             };
         }
 
+        // -----------------------------------------------------------------
+        //  EXIT CONFIRMATION
+        // -----------------------------------------------------------------
         async function confirmExit() {
-            if (state.testSubmitted) {
-                window.location.href = 'dashboard.html';
-                return;
-            }
+            if (state.testSubmitted) { window.location.href = 'dashboard.html'; return; }
+            saveProgress();  // ensure latest progress is saved
             const result = await Swal.fire({
                 title: 'Exit Test?',
-                text: 'All progress will be lost. Are you sure you want to leave?',
+                text: 'Your progress will be saved. You can resume later.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ef4444',
@@ -1184,102 +1169,72 @@
             });
             if (result.isConfirmed) {
                 clearInterval(state.timerInterval);
-                state.timerInterval = null;
+                stopAutoSave();
                 window.location.href = 'dashboard.html';
             }
         }
 
-        let touchStartX = 0;
-        let touchStartY = 0;
-        const questionCard = document.getElementById('questionCard');
-
-        questionCard.addEventListener('touchstart', e => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        questionCard.addEventListener('touchend', e => {
-            const dx = e.changedTouches[0].clientX - touchStartX;
-            const dy = e.changedTouches[0].clientY - touchStartY;
-            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
-                if (dx > 0) navigate(-1);
-                else navigate(1);
-            }
-        }, { passive: true });
-
-        document.addEventListener('keydown', e => {
-            if (state.testSubmitted ||
-                document.getElementById('sidebarPanel').classList.contains('active') ||
-                !state.welcomeDone) return;
-
-            switch (e.key) {
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    navigate(-1);
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    navigate(1);
-                    break;
-                case 'a':
-                case 'A':
-                case '1':
-                    selectOption(0);
-                    break;
-                case 'b':
-                case 'B':
-                case '2':
-                    selectOption(1);
-                    break;
-                case 'c':
-                case 'C':
-                case '3':
-                    selectOption(2);
-                    break;
-                case 'd':
-                case 'D':
-                case '4':
-                    selectOption(3);
-                    break;
-                case 'm':
-                case 'M':
-                    toggleMark();
-                    break;
-                case 'Backspace':
-                    e.preventDefault();
-                    clearAnswer();
-                    break;
-            }
-        });
-
-        window.addEventListener('beforeunload', e => {
-            if (!state.testSubmitted && Object.keys(state.answers).length > 0) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-
+        // -----------------------------------------------------------------
+        //  TOAST & UTIL
+        // -----------------------------------------------------------------
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.style.display = 'flex';
             clearTimeout(t._t);
-            t._t = setTimeout(() => {
-                t.style.display = 'none';
-            }, 2200);
+            t._t = setTimeout(() => { t.style.display = 'none'; }, 2200);
         }
 
+        // -----------------------------------------------------------------
+        //  SWIPE & KEYBOARD SHORTCUTS
+        // -----------------------------------------------------------------
+        let touchStartX = 0, touchStartY = 0;
+        const questionCard = document.getElementById('questionCard');
+        questionCard.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
+        questionCard.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+                if (dx > 0) navigate(-1); else navigate(1);
+            }
+        }, { passive: true });
+
+        document.addEventListener('keydown', e => {
+            if (state.testSubmitted || document.getElementById('sidebarPanel').classList.contains('active') || !state.welcomeDone) return;
+            switch (e.key) {
+                case 'ArrowLeft': e.preventDefault(); navigate(-1); break;
+                case 'ArrowRight': e.preventDefault(); navigate(1); break;
+                case 'a': case 'A': case '1': selectOption(0); break;
+                case 'b': case 'B': case '2': selectOption(1); break;
+                case 'c': case 'C': case '3': selectOption(2); break;
+                case 'd': case 'D': case '4': selectOption(3); break;
+                case 'm': case 'M': toggleMark(); break;
+                case 'Backspace': e.preventDefault(); clearAnswer(); break;
+            }
+        });
+
+        window.addEventListener('beforeunload', e => {
+            if (!state.testSubmitted && Object.keys(state.answers).length > 0) {
+                saveProgress();   // final save before leaving
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // -----------------------------------------------------------------
+        //  INITIALIZATION
+        // -----------------------------------------------------------------
         async function init() {
             loadTheme();
             const storedUser = JSON.parse(localStorage.getItem('user'));
             if (storedUser && storedUser.name) {
                 state.candidateName = storedUser.name;
-                document.getElementById('welcomeCandidateLine').textContent =
-                    'Welcome, ' + state.candidateName + '!';
+                document.getElementById('welcomeCandidateLine').textContent = 'Welcome, ' + state.candidateName + '!';
             }
-            await loadTestData();
+            await loadTestData();       // will prompt resume if needed
             updateCandidateBadge();
-            runWelcomeSequence();
+            runWelcomeSequence();      // starts timer after countdown
+            window.addEventListener('beforeunload', saveProgress);
         }
 
         init();
